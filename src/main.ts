@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import started from 'electron-squirrel-startup';
 import path from 'node:path';
+import { registerEmployeeIpcHandlers } from './main/ipc/registerEmployeeIpcHandlers';
 
 if (started) {
   app.quit();
@@ -38,7 +39,10 @@ const createWindow = (): void => {
   }
 };
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  registerEmployeeIpcHandlers();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   app.quit();
