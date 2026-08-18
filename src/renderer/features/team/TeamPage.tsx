@@ -14,6 +14,7 @@ import {
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
 import { EmployeeDialog } from './EmployeeDialog';
+import { DeleteEmployeeDialog } from './DeleteEmployeeDialog';
 
 function formatWeeklyWorkingTime(minutes: number): string {
   const hours = minutes / 60;
@@ -127,7 +128,7 @@ export function TeamPage() {
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
                       Status
                     </th>
-                    <th className="w-16 px-4 py-3 text-right">
+                    <th className="w-24 px-4 py-3 text-right">
                       <span className="sr-only">Aktionen</span>
                     </th>
                   </tr>
@@ -170,25 +171,39 @@ export function TeamPage() {
                         </td>
 
                         <td className="px-4 py-3 text-right">
-                          <EmployeeDialog
-                            employee={employee}
-                            trigger={
-                              <IconButton
-                                label={`${employee.firstName} ${employee.lastName} bearbeiten`}
-                              >
-                                <Pencil aria-hidden="true" size={17} />
-                              </IconButton>
-                            }
-                            onSaved={(updatedEmployee) =>
-                              setEmployees((currentEmployees) =>
-                                currentEmployees.map((currentEmployee) =>
-                                  currentEmployee.id === updatedEmployee.id
-                                    ? updatedEmployee
-                                    : currentEmployee,
-                                ),
-                              )
-                            }
-                          />
+                          <div className="flex justify-end gap-1">
+                            <EmployeeDialog
+                              employee={employee}
+                              trigger={
+                                <IconButton
+                                  label={`${employee.firstName} ${employee.lastName} bearbeiten`}
+                                >
+                                  <Pencil aria-hidden="true" size={17} />
+                                </IconButton>
+                              }
+                              onSaved={(updatedEmployee) =>
+                                setEmployees((currentEmployees) =>
+                                  currentEmployees.map((currentEmployee) =>
+                                    currentEmployee.id === updatedEmployee.id
+                                      ? updatedEmployee
+                                      : currentEmployee,
+                                  ),
+                                )
+                              }
+                            />
+
+                            <DeleteEmployeeDialog
+                              employee={employee}
+                              onDeleted={(deletedEmployeeId) =>
+                                setEmployees((currentEmployees) =>
+                                  currentEmployees.filter(
+                                    (currentEmployee) =>
+                                      currentEmployee.id !== deletedEmployeeId,
+                                  ),
+                                )
+                              }
+                            />
+                          </div>
                         </td>
                       </tr>
                     );

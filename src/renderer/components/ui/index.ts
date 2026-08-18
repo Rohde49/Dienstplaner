@@ -21,6 +21,14 @@ export {
   DialogTrigger,
 } from './Dialog';
 
+export {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogRoot,
+  AlertDialogTrigger,
+} from './AlertDialog';
+
 export { EmptyState } from './EmptyState';
 export { FormField } from './FormField';
 
