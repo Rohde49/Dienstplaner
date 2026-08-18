@@ -11,9 +11,11 @@ export const EMPLOYEE_COLOR_KEYS = [
 
 export const employeeColorKeySchema = z.enum(EMPLOYEE_COLOR_KEYS);
 
+export const employeeIdSchema = z.string().uuid();
+
 export const employeeSchema = z
   .object({
-    id: z.string().uuid(),
+    id: employeeIdSchema,
     firstName: z
       .string()
       .trim()

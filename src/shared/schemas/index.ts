@@ -3,6 +3,7 @@ export {
   employeeColorKeySchema,
   employeeInputSchema,
   employeeSchema,
+  employeeIdSchema,
   employeesFileSchema,
 } from './employee';
 
