@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
-import { AppShell, type AppPage } from './components/layout/AppShell';
+import {
+  AppShell,
+  PageHeader,
+  Toolbar,
+  type AppPage,
+} from './components/layout';
 import {
   Alert,
   Badge,
@@ -40,17 +45,27 @@ export function App() {
   return (
     <>
       <AppShell activePage={activePage} onNavigate={setActivePage}>
-        <header className="border-app-border bg-app-surface border-b px-6 py-5 lg:px-8">
-          <h1 className="text-app-text text-2xl font-semibold tracking-tight">
-            {currentPage.title}
-          </h1>
+        <PageHeader
+          title={currentPage.title}
+          description={currentPage.description}
+        />
 
-          <p className="text-app-muted mt-1 text-sm">
-            {currentPage.description}
-          </p>
-        </header>
+        <div className="space-y-4 p-6 lg:p-8">
+          <Toolbar
+            actions={
+              <Button
+                onClick={() =>
+                  toast.success('Visuelles Feedback funktioniert.')
+                }
+              >
+                Feedback testen
+              </Button>
+            }
+          >
+            <span className="text-app-muted text-sm">Aktiver Bereich:</span>
+            <Badge variant="primary">{currentPage.title}</Badge>
+          </Toolbar>
 
-        <div className="p-6 lg:p-8">
           <Card>
             <CardHeader>
               <Badge variant="success">UI-Grundlage eingerichtet</Badge>
@@ -61,19 +76,11 @@ export function App() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-5">
+            <CardContent>
               <Alert title="Komponentenbasis aktiv">
                 Globale Oberflächen- und Feedback-Komponenten können jetzt
                 einheitlich verwendet werden.
               </Alert>
-
-              <Button
-                onClick={() =>
-                  toast.success('Visuelles Feedback funktioniert.')
-                }
-              >
-                Benachrichtigung testen
-              </Button>
             </CardContent>
           </Card>
         </div>
