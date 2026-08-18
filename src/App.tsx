@@ -2,9 +2,7 @@ export function App() {
   return (
     <main className="min-h-screen bg-slate-50 p-8 text-slate-900">
       <section className="mx-auto max-w-4xl rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="mb-2 text-sm font-medium text-blue-600">
-          Dienstplaner
-        </p>
+        <p className="mb-2 text-sm font-medium text-blue-600">Dienstplaner</p>
 
         <h1 className="text-2xl font-semibold">
           React und Tailwind CSS sind eingerichtet.
