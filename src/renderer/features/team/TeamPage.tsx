@@ -12,6 +12,7 @@ import {
   Spinner,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
+import { EmployeeDialog } from './EmployeeDialog';
 
 function formatWeeklyWorkingTime(minutes: number): string {
   const hours = minutes / 60;
@@ -55,6 +56,16 @@ export function TeamPage() {
       <PageHeader
         title="Team"
         description="Mitarbeiter und ihre Planungsdaten verwalten."
+        actions={
+          <EmployeeDialog
+            onCreated={(employee) =>
+              setEmployees((currentEmployees) => [
+                ...currentEmployees,
+                employee,
+              ])
+            }
+          />
+        }
       />
 
       <div className="space-y-4 p-6 lg:p-8">

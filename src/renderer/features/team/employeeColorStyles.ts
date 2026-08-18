@@ -1,4 +1,7 @@
-import type { EmployeeColorKey } from '../../../shared/schemas';
+import {
+  EMPLOYEE_COLOR_KEYS,
+  type EmployeeColorKey,
+} from '../../../shared/schemas';
 
 type EmployeeColorStyle = {
   label: string;
@@ -34,3 +37,8 @@ export const EMPLOYEE_COLOR_STYLES: Record<
     dotClass: 'bg-cyan-500',
   },
 };
+
+export const EMPLOYEE_COLOR_OPTIONS = EMPLOYEE_COLOR_KEYS.map((key) => ({
+  key,
+  ...EMPLOYEE_COLOR_STYLES[key],
+}));

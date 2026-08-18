@@ -14,6 +14,13 @@ export {
 } from './Card';
 export type { CardProps } from './Card';
 
+export {
+  DialogClose,
+  DialogContent,
+  DialogRoot,
+  DialogTrigger,
+} from './Dialog';
+
 export { EmptyState } from './EmptyState';
 export { FormField } from './FormField';
 
