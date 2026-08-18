@@ -17,20 +17,17 @@ import {
   CardHeader,
   CardTitle,
 } from './components/ui';
+import { TeamPage } from './features/team/TeamPage';
 
 type PageInformation = {
   title: string;
   description: string;
 };
 
-const pageInformation: Record<AppPage, PageInformation> = {
+const pageInformation: Record<Exclude<AppPage, 'team'>, PageInformation> = {
   planner: {
     title: 'Dienstplan',
     description: 'Monatspläne erstellen, bearbeiten und auswerten.',
-  },
-  team: {
-    title: 'Team',
-    description: 'Mitarbeiter und ihre Planungsdaten verwalten.',
   },
   'entry-types': {
     title: 'Planungseinträge',
@@ -38,52 +35,58 @@ const pageInformation: Record<AppPage, PageInformation> = {
   },
 };
 
+function PlaceholderPage({ title, description }: PageInformation) {
+  return (
+    <>
+      <PageHeader title={title} description={description} />
+
+      <div className="space-y-4 p-6 lg:p-8">
+        <Toolbar
+          actions={
+            <Button
+              onClick={() => toast.success('Visuelles Feedback funktioniert.')}
+            >
+              Feedback testen
+            </Button>
+          }
+        >
+          <span className="text-app-muted text-sm">Aktiver Bereich:</span>
+          <Badge variant="primary">{title}</Badge>
+        </Toolbar>
+
+        <Card>
+          <CardHeader>
+            <Badge variant="success">UI-Grundlage eingerichtet</Badge>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>
+              Dieser Bereich wird später mit den zugehörigen Komponenten und
+              Funktionen aufgebaut.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <Alert title="Komponentenbasis aktiv">
+              Globale Oberflächen- und Feedback-Komponenten können einheitlich
+              verwendet werden.
+            </Alert>
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
+}
+
 export function App() {
   const [activePage, setActivePage] = useState<AppPage>('planner');
-  const currentPage = pageInformation[activePage];
 
   return (
     <>
       <AppShell activePage={activePage} onNavigate={setActivePage}>
-        <PageHeader
-          title={currentPage.title}
-          description={currentPage.description}
-        />
-
-        <div className="space-y-4 p-6 lg:p-8">
-          <Toolbar
-            actions={
-              <Button
-                onClick={() =>
-                  toast.success('Visuelles Feedback funktioniert.')
-                }
-              >
-                Feedback testen
-              </Button>
-            }
-          >
-            <span className="text-app-muted text-sm">Aktiver Bereich:</span>
-            <Badge variant="primary">{currentPage.title}</Badge>
-          </Toolbar>
-
-          <Card>
-            <CardHeader>
-              <Badge variant="success">UI-Grundlage eingerichtet</Badge>
-              <CardTitle>{currentPage.title}</CardTitle>
-              <CardDescription>
-                Dieser Bereich wird im nächsten Schritt mit den zugehörigen
-                Komponenten und Funktionen aufgebaut.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent>
-              <Alert title="Komponentenbasis aktiv">
-                Globale Oberflächen- und Feedback-Komponenten können jetzt
-                einheitlich verwendet werden.
-              </Alert>
-            </CardContent>
-          </Card>
-        </div>
+        {activePage === 'team' ? (
+          <TeamPage />
+        ) : (
+          <PlaceholderPage {...pageInformation[activePage]} />
+        )}
       </AppShell>
 
       <Toaster position="bottom-right" theme="light" richColors closeButton />
