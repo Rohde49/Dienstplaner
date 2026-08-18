@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 
 import { AppShell, type AppPage } from './components/layout/AppShell';
+import { Button } from './components/ui';
 
 type PageInformation = {
   title: string;
@@ -54,6 +55,16 @@ export function App() {
               Dieser Bereich wird im nächsten Schritt mit den zugehörigen
               Komponenten und Funktionen aufgebaut.
             </p>
+
+            <div className="mt-5">
+              <Button
+                onClick={() =>
+                  toast.success('Visuelles Feedback funktioniert.')
+                }
+              >
+                Benachrichtigung testen
+              </Button>
+            </div>
           </section>
         </div>
       </AppShell>
