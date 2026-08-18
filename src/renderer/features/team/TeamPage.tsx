@@ -1,4 +1,4 @@
-import { Users } from 'lucide-react';
+import { Pencil, UserPlus, Users } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import type { Employee } from '../../../shared/schemas';
@@ -10,6 +10,7 @@ import {
   Card,
   EmptyState,
   Spinner,
+  IconButton,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
 import { EmployeeDialog } from './EmployeeDialog';
@@ -58,10 +59,16 @@ export function TeamPage() {
         description="Mitarbeiter und ihre Planungsdaten verwalten."
         actions={
           <EmployeeDialog
-            onCreated={(employee) =>
+            trigger={
+              <Button>
+                <UserPlus aria-hidden="true" size={17} />
+                Mitarbeiter hinzufügen
+              </Button>
+            }
+            onSaved={(createdEmployee) =>
               setEmployees((currentEmployees) => [
                 ...currentEmployees,
-                employee,
+                createdEmployee,
               ])
             }
           />
@@ -120,6 +127,9 @@ export function TeamPage() {
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
                       Status
                     </th>
+                    <th className="w-16 px-4 py-3 text-right">
+                      <span className="sr-only">Aktionen</span>
+                    </th>
                   </tr>
                 </thead>
 
@@ -157,6 +167,28 @@ export function TeamPage() {
                           >
                             {employee.active ? 'Aktiv' : 'Inaktiv'}
                           </Badge>
+                        </td>
+
+                        <td className="px-4 py-3 text-right">
+                          <EmployeeDialog
+                            employee={employee}
+                            trigger={
+                              <IconButton
+                                label={`${employee.firstName} ${employee.lastName} bearbeiten`}
+                              >
+                                <Pencil aria-hidden="true" size={17} />
+                              </IconButton>
+                            }
+                            onSaved={(updatedEmployee) =>
+                              setEmployees((currentEmployees) =>
+                                currentEmployees.map((currentEmployee) =>
+                                  currentEmployee.id === updatedEmployee.id
+                                    ? updatedEmployee
+                                    : currentEmployee,
+                                ),
+                              )
+                            }
+                          />
                         </td>
                       </tr>
                     );

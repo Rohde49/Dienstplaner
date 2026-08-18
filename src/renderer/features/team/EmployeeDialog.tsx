@@ -1,5 +1,4 @@
-import { UserPlus } from 'lucide-react';
-import type { FormEvent } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -22,7 +21,9 @@ import {
 import { EMPLOYEE_COLOR_OPTIONS } from './employeeColorStyles';
 
 type EmployeeDialogProps = {
-  onCreated: (employee: Employee) => void;
+  employee?: Employee;
+  trigger: ReactNode;
+  onSaved: (employee: Employee) => void;
 };
 
 type EmployeeFormState = {
@@ -36,14 +37,27 @@ type EmployeeFormState = {
 
 type EmployeeFormErrors = Partial<Record<keyof EmployeeFormState, string>>;
 
-const INITIAL_FORM_STATE: EmployeeFormState = {
-  firstName: '',
-  lastName: '',
-  role: '',
-  weeklyWorkingHours: '',
-  colorKey: 'blue',
-  active: true,
-};
+function createInitialFormState(employee?: Employee): EmployeeFormState {
+  if (employee) {
+    return {
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+      role: employee.role,
+      weeklyWorkingHours: String(employee.weeklyWorkingMinutes / 60),
+      colorKey: employee.colorKey,
+      active: employee.active,
+    };
+  }
+
+  return {
+    firstName: '',
+    lastName: '',
+    role: '',
+    weeklyWorkingHours: '',
+    colorKey: 'blue',
+    active: true,
+  };
+}
 
 const schemaPathToFormField: Record<string, keyof EmployeeFormState> = {
   firstName: 'firstName',
@@ -60,16 +74,21 @@ function getErrorMessage(error: unknown): string {
     : 'Der Mitarbeiter konnte nicht gespeichert werden.';
 }
 
-export function EmployeeDialog({ onCreated }: EmployeeDialogProps) {
+export function EmployeeDialog({
+  employee,
+  trigger,
+  onSaved,
+}: EmployeeDialogProps) {
   const [open, setOpen] = useState(false);
-  const [formState, setFormState] =
-    useState<EmployeeFormState>(INITIAL_FORM_STATE);
+  const [formState, setFormState] = useState<EmployeeFormState>(() =>
+    createInitialFormState(employee),
+  );
   const [formErrors, setFormErrors] = useState<EmployeeFormErrors>({});
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   function resetForm(): void {
-    setFormState(INITIAL_FORM_STATE);
+    setFormState(createInitialFormState(employee));
     setFormErrors({});
     setSubmissionError(null);
   }
@@ -79,11 +98,8 @@ export function EmployeeDialog({ onCreated }: EmployeeDialogProps) {
       return;
     }
 
+    resetForm();
     setOpen(nextOpen);
-
-    if (!nextOpen) {
-      resetForm();
-    }
   }
 
   function updateField<Key extends keyof EmployeeFormState>(
@@ -145,13 +161,19 @@ export function EmployeeDialog({ onCreated }: EmployeeDialogProps) {
     setIsSaving(true);
 
     try {
-      const employee = await window.dienstplaner.employees.create(
-        validationResult.data,
-      );
+      const savedEmployee = employee
+        ? await window.dienstplaner.employees.update(
+            employee.id,
+            validationResult.data,
+          )
+        : await window.dienstplaner.employees.create(validationResult.data);
 
-      onCreated(employee);
+      onSaved(savedEmployee);
+
       toast.success(
-        `${employee.firstName} ${employee.lastName} wurde angelegt.`,
+        employee
+          ? `${savedEmployee.firstName} ${savedEmployee.lastName} wurde aktualisiert.`
+          : `${savedEmployee.firstName} ${savedEmployee.lastName} wurde angelegt.`,
       );
 
       setOpen(false);
@@ -165,16 +187,15 @@ export function EmployeeDialog({ onCreated }: EmployeeDialogProps) {
 
   return (
     <DialogRoot open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <UserPlus aria-hidden="true" size={17} />
-          Mitarbeiter hinzufügen
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
 
       <DialogContent
-        title="Mitarbeiter hinzufügen"
-        description="Erfasse die grundlegenden Daten für die Dienstplanung."
+        title={employee ? 'Mitarbeiter bearbeiten' : 'Mitarbeiter hinzufügen'}
+        description={
+          employee
+            ? 'Passe die Daten des Mitarbeiters für die Dienstplanung an.'
+            : 'Erfasse die grundlegenden Daten für die Dienstplanung.'
+        }
       >
         <form onSubmit={(event) => void handleSubmit(event)}>
           <div className="space-y-5 p-6">
@@ -364,6 +385,8 @@ export function EmployeeDialog({ onCreated }: EmployeeDialogProps) {
                   />
                   Wird gespeichert …
                 </>
+              ) : employee ? (
+                'Änderungen speichern'
               ) : (
                 'Mitarbeiter speichern'
               )}
