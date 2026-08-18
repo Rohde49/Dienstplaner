@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import { AppShell, type AppPage } from './components/layout/AppShell';
-import { Button } from './components/ui';
+import {
+  Alert,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './components/ui';
 
 type PageInformation = {
   title: string;
@@ -42,21 +51,22 @@ export function App() {
         </header>
 
         <div className="p-6 lg:p-8">
-          <section className="border-app-border bg-app-surface rounded-lg border p-6 shadow-sm">
-            <p className="text-app-primary text-sm font-medium">
-              UI-Grundlage eingerichtet
-            </p>
+          <Card>
+            <CardHeader>
+              <Badge variant="success">UI-Grundlage eingerichtet</Badge>
+              <CardTitle>{currentPage.title}</CardTitle>
+              <CardDescription>
+                Dieser Bereich wird im nächsten Schritt mit den zugehörigen
+                Komponenten und Funktionen aufgebaut.
+              </CardDescription>
+            </CardHeader>
 
-            <h2 className="text-app-text mt-2 text-lg font-semibold">
-              {currentPage.title}
-            </h2>
+            <CardContent className="space-y-5">
+              <Alert title="Komponentenbasis aktiv">
+                Globale Oberflächen- und Feedback-Komponenten können jetzt
+                einheitlich verwendet werden.
+              </Alert>
 
-            <p className="text-app-muted mt-2 max-w-2xl text-sm leading-6">
-              Dieser Bereich wird im nächsten Schritt mit den zugehörigen
-              Komponenten und Funktionen aufgebaut.
-            </p>
-
-            <div className="mt-5">
               <Button
                 onClick={() =>
                   toast.success('Visuelles Feedback funktioniert.')
@@ -64,8 +74,8 @@ export function App() {
               >
                 Benachrichtigung testen
               </Button>
-            </div>
-          </section>
+            </CardContent>
+          </Card>
         </div>
       </AppShell>
 
