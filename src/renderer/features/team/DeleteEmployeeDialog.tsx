@@ -71,7 +71,7 @@ export function DeleteEmployeeDialog({
       <AlertDialogTrigger asChild>
         <IconButton
           label={`${employeeName} löschen`}
-          className="text-app-danger hover:bg-red-50 hover:text-red-700"
+          className="text-app-danger hover:bg-app-danger-subtle hover:text-app-danger-hover"
         >
           <Trash2 aria-hidden="true" size={17} />
         </IconButton>
@@ -89,7 +89,7 @@ export function DeleteEmployeeDialog({
           </div>
         ) : null}
 
-        <div className="border-app-border flex justify-end gap-3 border-t bg-slate-50 px-6 py-4">
+        <div className="border-app-border bg-app-surface-muted flex justify-end gap-3 border-t px-6 py-4">
           <AlertDialogCancel asChild>
             <Button variant="secondary" disabled={isDeleting}>
               Abbrechen

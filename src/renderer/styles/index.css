@@ -5,20 +5,41 @@
 
   --color-app-background: #f8fafc;
   --color-app-surface: #ffffff;
+  --color-app-surface-muted: #f8fafc;
+  --color-app-surface-hover: #f1f5f9;
+  --color-app-surface-disabled: #f1f5f9;
   --color-app-border: #e2e8f0;
+  --color-app-border-strong: #cbd5e1;
   --color-app-text: #0f172a;
   --color-app-muted: #475569;
+  --color-app-text-disabled: #94a3b8;
 
   --color-app-primary: #2563eb;
   --color-app-primary-hover: #1d4ed8;
+  --color-app-primary-active: #1e40af;
   --color-app-primary-subtle: #eff6ff;
+  --color-app-primary-selected: #dbeafe;
+  --color-app-primary-border: #bfdbfe;
+  --color-app-primary-foreground: #1d4ed8;
+  --color-app-on-primary: #ffffff;
 
+  --color-app-info: #1e40af;
+  --color-app-info-subtle: #eff6ff;
+  --color-app-info-border: #bfdbfe;
   --color-app-success: #047857;
   --color-app-success-subtle: #ecfdf5;
+  --color-app-success-border: #a7f3d0;
   --color-app-warning: #b45309;
   --color-app-warning-subtle: #fffbeb;
+  --color-app-warning-border: #fde68a;
   --color-app-danger: #dc2626;
+  --color-app-danger-hover: #b91c1c;
+  --color-app-danger-active: #991b1b;
   --color-app-danger-subtle: #fef2f2;
+  --color-app-danger-border: #fecaca;
+  --color-app-on-danger: #ffffff;
+
+  --color-app-overlay: #020617;
 }
 
 @layer base {
@@ -30,6 +51,10 @@
   body,
   #root {
     min-height: 100%;
+  }
+
+  html {
+    color-scheme: light;
   }
 
   body {
@@ -52,5 +77,16 @@
   :focus-visible {
     outline: 2px solid var(--color-app-primary);
     outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

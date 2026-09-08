@@ -26,7 +26,7 @@ export function DialogContent({
 }: DialogContentProps) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-[1px]" />
+      <DialogPrimitive.Overlay className="bg-app-overlay/40 fixed inset-0 z-50 backdrop-blur-[1px]" />
 
       <DialogPrimitive.Content
         className={[

@@ -325,8 +325,8 @@ export function EmployeeDialog({
                       key={option.key}
                       className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
                         selected
-                          ? 'border-app-primary bg-app-primary-subtle text-app-text'
-                          : 'border-app-border text-app-muted hover:bg-slate-50'
+                          ? 'border-app-primary bg-app-primary-selected text-app-text'
+                          : 'border-app-border text-app-muted hover:bg-app-surface-muted'
                       }`}
                     >
                       <input
@@ -352,7 +352,7 @@ export function EmployeeDialog({
 
             <label className="border-app-border flex items-start gap-3 rounded-md border p-3">
               <input
-                className="mt-0.5 size-4 accent-blue-600"
+                className="accent-app-primary mt-0.5 size-4"
                 type="checkbox"
                 checked={formState.active}
                 onChange={(event) =>
@@ -371,7 +371,7 @@ export function EmployeeDialog({
             </label>
           </div>
 
-          <div className="border-app-border flex justify-end gap-2 border-t bg-slate-50 px-6 py-4">
+          <div className="border-app-border bg-app-surface-muted flex justify-end gap-2 border-t px-6 py-4">
             <DialogClose asChild>
               <Button variant="secondary" disabled={isSaving}>
                 Abbrechen
@@ -384,7 +384,7 @@ export function EmployeeDialog({
                   <Spinner
                     size="sm"
                     label="Mitarbeiter wird gespeichert"
-                    className="text-white"
+                    className="text-app-on-primary"
                   />
                   Wird gespeichert …
                 </>

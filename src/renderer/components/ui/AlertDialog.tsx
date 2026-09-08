@@ -24,7 +24,7 @@ export function AlertDialogContent({
 }: AlertDialogContentProps) {
   return (
     <AlertDialogPrimitive.Portal>
-      <AlertDialogPrimitive.Overlay className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-[1px]" />
+      <AlertDialogPrimitive.Overlay className="bg-app-overlay/40 fixed inset-0 z-50 backdrop-blur-[1px]" />
 
       <AlertDialogPrimitive.Content
         className={[

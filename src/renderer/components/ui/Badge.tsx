@@ -7,11 +7,12 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 };
 
 const variantClasses: Record<BadgeVariant, string> = {
-  neutral: 'border-slate-200 bg-slate-100 text-slate-700',
-  primary: 'border-blue-200 bg-app-primary-subtle text-blue-700',
-  success: 'border-emerald-200 bg-app-success-subtle text-app-success',
-  warning: 'border-amber-200 bg-app-warning-subtle text-app-warning',
-  danger: 'border-red-200 bg-app-danger-subtle text-app-danger',
+  neutral: 'border-app-border bg-app-surface-hover text-app-muted',
+  primary:
+    'border-app-primary-border bg-app-primary-subtle text-app-primary-foreground',
+  success: 'border-app-success-border bg-app-success-subtle text-app-success',
+  warning: 'border-app-warning-border bg-app-warning-subtle text-app-warning',
+  danger: 'border-app-danger-border bg-app-danger-subtle text-app-danger',
 };
 
 /** Zeigt eine kurze Information als farbige Markierung an. */

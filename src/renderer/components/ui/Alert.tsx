@@ -22,19 +22,19 @@ type AlertConfiguration = {
 const variantConfiguration: Record<AlertVariant, AlertConfiguration> = {
   info: {
     icon: Info,
-    classes: 'border-blue-200 bg-blue-50 text-blue-800',
+    classes: 'border-app-info-border bg-app-info-subtle text-app-info',
   },
   success: {
     icon: CircleCheck,
-    classes: 'border-emerald-200 bg-app-success-subtle text-app-success',
+    classes: 'border-app-success-border bg-app-success-subtle text-app-success',
   },
   warning: {
     icon: TriangleAlert,
-    classes: 'border-amber-200 bg-app-warning-subtle text-app-warning',
+    classes: 'border-app-warning-border bg-app-warning-subtle text-app-warning',
   },
   danger: {
     icon: CircleX,
-    classes: 'border-red-200 bg-app-danger-subtle text-app-danger',
+    classes: 'border-app-danger-border bg-app-danger-subtle text-app-danger',
   },
 };
 

@@ -9,11 +9,14 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-app-primary text-white hover:bg-app-primary-hover',
+  primary:
+    'bg-app-primary text-app-on-primary hover:bg-app-primary-hover active:bg-app-primary-active',
   secondary:
-    'border border-app-border bg-app-surface text-app-text hover:bg-slate-50',
-  danger: 'bg-app-danger text-white hover:bg-red-700',
-  ghost: 'text-app-muted hover:bg-slate-100 hover:text-app-text',
+    'border border-app-border bg-app-surface text-app-text hover:bg-app-surface-muted active:bg-app-surface-hover',
+  danger:
+    'bg-app-danger text-app-on-danger hover:bg-app-danger-hover active:bg-app-danger-active',
+  ghost:
+    'text-app-muted hover:bg-app-surface-hover hover:text-app-text active:bg-app-surface-disabled',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

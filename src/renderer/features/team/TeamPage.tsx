@@ -117,7 +117,7 @@ export function TeamPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
-                <thead className="border-app-border border-b bg-slate-50">
+                <thead className="border-app-border bg-app-surface-muted border-b">
                   <tr>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
                       Mitarbeiter
@@ -142,7 +142,10 @@ export function TeamPage() {
                     const colorStyle = EMPLOYEE_COLOR_STYLES[employee.colorKey];
 
                     return (
-                      <tr key={employee.id} className="hover:bg-slate-50">
+                      <tr
+                        key={employee.id}
+                        className="hover:bg-app-surface-muted"
+                      >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
                             <span

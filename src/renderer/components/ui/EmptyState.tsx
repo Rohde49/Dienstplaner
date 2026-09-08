@@ -27,7 +27,7 @@ export function EmptyState({
         .join(' ')}
       {...props}
     >
-      <div className="text-app-muted flex size-10 items-center justify-center rounded-lg bg-slate-100">
+      <div className="text-app-muted bg-app-surface-hover flex size-10 items-center justify-center rounded-lg">
         <Icon aria-hidden="true" size={20} />
       </div>
 

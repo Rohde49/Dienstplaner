@@ -45,7 +45,7 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
     <div className="bg-app-background grid min-h-screen grid-cols-[14rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)]">
       <aside className="border-app-border bg-app-surface flex min-h-screen flex-col border-r">
         <div className="border-app-border flex h-16 items-center gap-3 border-b px-5">
-          <div className="bg-app-primary flex size-9 items-center justify-center rounded-lg text-white">
+          <div className="bg-app-primary text-app-on-primary flex size-9 items-center justify-center rounded-lg">
             <CalendarDays aria-hidden="true" size={20} strokeWidth={1.8} />
           </div>
 
@@ -68,8 +68,8 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
                     aria-current={isActive ? 'page' : undefined}
                     className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-app-primary-subtle text-app-primary'
-                        : 'text-app-muted hover:text-app-text hover:bg-slate-100'
+                        ? 'bg-app-primary-selected text-app-primary-foreground'
+                        : 'text-app-muted hover:text-app-text hover:bg-app-surface-hover'
                     }`}
                     onClick={() => onNavigate(item.id)}
                   >
