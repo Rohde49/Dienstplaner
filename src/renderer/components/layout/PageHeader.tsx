@@ -6,6 +6,7 @@ type PageHeaderProps = {
   actions?: ReactNode;
 };
 
+/** Zeigt Titel, Beschreibung und mögliche Aktionen einer Seite an. */
 export function PageHeader({ title, description, actions }: PageHeaderProps) {
   return (
     <header className="border-app-border bg-app-surface flex min-h-20 items-start justify-between gap-6 border-b px-6 py-5 lg:px-8">

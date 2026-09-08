@@ -14,6 +14,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   danger: 'border-red-200 bg-app-danger-subtle text-app-danger',
 };
 
+/** Zeigt eine kurze Information als farbige Markierung an. */
 export function Badge({
   className,
   variant = 'neutral',

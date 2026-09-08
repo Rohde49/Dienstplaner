@@ -37,6 +37,7 @@ type EmployeeFormState = {
 
 type EmployeeFormErrors = Partial<Record<keyof EmployeeFormState, string>>;
 
+/** Erstellt die leeren oder bereits vorhandenen Werte für das Formular. */
 function createInitialFormState(employee?: Employee): EmployeeFormState {
   if (employee) {
     return {
@@ -74,6 +75,7 @@ function getErrorMessage(error: unknown): string {
     : 'Der Mitarbeiter konnte nicht gespeichert werden.';
 }
 
+/** Zeigt das Formular zum Anlegen oder Bearbeiten eines Mitarbeiters an. */
 export function EmployeeDialog({
   employee,
   trigger,
@@ -117,6 +119,7 @@ export function EmployeeDialog({
     }));
   }
 
+  /** Prüft das Formular und speichert den neuen oder geänderten Mitarbeiter. */
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> {

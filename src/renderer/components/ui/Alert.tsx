@@ -38,6 +38,7 @@ const variantConfiguration: Record<AlertVariant, AlertConfiguration> = {
   },
 };
 
+/** Zeigt eine hervorgehobene Information, Warnung oder Fehlermeldung an. */
 export function Alert({
   title,
   children,

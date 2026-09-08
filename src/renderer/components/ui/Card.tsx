@@ -2,6 +2,7 @@ import type { HTMLAttributes } from 'react';
 
 export type CardProps = HTMLAttributes<HTMLDivElement>;
 
+/** Zeigt Inhalte in einem abgegrenzten Kartenbereich an. */
 export function Card({ className, ...props }: CardProps) {
   return (
     <div
@@ -16,6 +17,7 @@ export function Card({ className, ...props }: CardProps) {
   );
 }
 
+/** Ordnet Überschrift und Beschreibung am Anfang einer Karte an. */
 export function CardHeader({
   className,
   ...props
@@ -28,6 +30,7 @@ export function CardHeader({
   );
 }
 
+/** Zeigt die Überschrift einer Karte an. */
 export function CardTitle({
   className,
   ...props
@@ -42,6 +45,7 @@ export function CardTitle({
   );
 }
 
+/** Zeigt einen kurzen Beschreibungstext innerhalb einer Karte an. */
 export function CardDescription({
   className,
   ...props
@@ -56,6 +60,7 @@ export function CardDescription({
   );
 }
 
+/** Enthält den hauptsächlichen Inhalt einer Karte. */
 export function CardContent({
   className,
   ...props
@@ -68,6 +73,7 @@ export function CardContent({
   );
 }
 
+/** Ordnet abschließende Informationen oder Aktionen am Ende einer Karte an. */
 export function CardFooter({
   className,
   ...props

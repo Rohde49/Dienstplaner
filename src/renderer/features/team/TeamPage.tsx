@@ -16,6 +16,7 @@ import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
 import { EmployeeDialog } from './EmployeeDialog';
 import { DeleteEmployeeDialog } from './DeleteEmployeeDialog';
 
+/** Wandelt die gespeicherte Minutenanzahl in eine lesbare Stundenangabe um. */
 function formatWeeklyWorkingTime(minutes: number): string {
   const hours = minutes / 60;
 
@@ -30,11 +31,13 @@ function getErrorMessage(error: unknown): string {
     : 'Die Mitarbeiterdaten konnten nicht geladen werden.';
 }
 
+/** Lädt und verwaltet die sichtbare Mitarbeiterübersicht. */
 export function TeamPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  /** Lädt die Mitarbeiter neu und aktualisiert Lade- und Fehlerzustand. */
   const loadEmployees = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     setErrorMessage(null);

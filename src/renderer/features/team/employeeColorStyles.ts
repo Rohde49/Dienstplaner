@@ -8,6 +8,7 @@ type EmployeeColorStyle = {
   dotClass: string;
 };
 
+/** Ordnet jeder Mitarbeiterfarbe eine Bezeichnung und Darstellung zu. */
 export const EMPLOYEE_COLOR_STYLES: Record<
   EmployeeColorKey,
   EmployeeColorStyle
@@ -38,6 +39,7 @@ export const EMPLOYEE_COLOR_STYLES: Record<
   },
 };
 
+/** Stellt alle Mitarbeiterfarben als auswählbare Optionen bereit. */
 export const EMPLOYEE_COLOR_OPTIONS = EMPLOYEE_COLOR_KEYS.map((key) => ({
   key,
   ...EMPLOYEE_COLOR_STYLES[key],

@@ -21,6 +21,10 @@ const employeeStore = new JsonFileStore<EmployeesFile>({
 
 let mutationQueue: Promise<void> = Promise.resolve();
 
+/**
+ * Führt Schreibvorgänge nacheinander aus.
+ * Dadurch überschreiben sich gleichzeitige Änderungen nicht gegenseitig.
+ */
 function runMutation<T>(operation: () => Promise<T>): Promise<T> {
   const result = mutationQueue.then(operation);
 
@@ -32,11 +36,13 @@ function runMutation<T>(operation: () => Promise<T>): Promise<T> {
   return result;
 }
 
+/** Lädt alle gespeicherten Mitarbeiter. */
 export async function listEmployees(): Promise<Employee[]> {
   const file = await employeeStore.read();
   return file.employees;
 }
 
+/** Prüft die Eingaben und speichert einen neuen Mitarbeiter. */
 export function createEmployee(input: unknown): Promise<Employee> {
   return runMutation(async () => {
     const validatedInput = employeeInputSchema.parse(input);
@@ -60,6 +66,7 @@ export function createEmployee(input: unknown): Promise<Employee> {
   });
 }
 
+/** Prüft und aktualisiert einen vorhandenen Mitarbeiter. */
 export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
   return runMutation(async () => {
     const validatedId = employeeIdSchema.parse(id);
@@ -97,6 +104,7 @@ export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
   });
 }
 
+/** Entfernt einen Mitarbeiter dauerhaft aus der Datendatei. */
 export function deleteEmployee(id: unknown): Promise<void> {
   return runMutation(async () => {
     const validatedId = employeeIdSchema.parse(id);

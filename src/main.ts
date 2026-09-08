@@ -7,6 +7,7 @@ if (started) {
   app.quit();
 }
 
+/** Erstellt und öffnet das abgesicherte Hauptfenster der Anwendung. */
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     title: 'Dienstplaner',

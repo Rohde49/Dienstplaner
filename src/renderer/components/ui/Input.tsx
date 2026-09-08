@@ -2,6 +2,7 @@ import { forwardRef, type InputHTMLAttributes } from 'react';
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
+/** Zeigt ein einheitlich gestaltetes einzeiliges Eingabefeld an. */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { className, ...props },
   ref,

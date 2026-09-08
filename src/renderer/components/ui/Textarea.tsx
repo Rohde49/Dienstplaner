@@ -2,6 +2,7 @@ import { forwardRef, type TextareaHTMLAttributes } from 'react';
 
 export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+/** Zeigt ein einheitlich gestaltetes mehrzeiliges Eingabefeld an. */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   function Textarea({ className, ...props }, ref) {
     return (

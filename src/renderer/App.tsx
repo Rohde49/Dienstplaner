@@ -35,6 +35,7 @@ const pageInformation: Record<Exclude<AppPage, 'team'>, PageInformation> = {
   },
 };
 
+/** Zeigt für einen noch nicht umgesetzten Bereich eine Vorschauseite an. */
 function PlaceholderPage({ title, description }: PageInformation) {
   return (
     <>
@@ -76,6 +77,7 @@ function PlaceholderPage({ title, description }: PageInformation) {
   );
 }
 
+/** Steuert die Seitennavigation und zeigt den aktuell gewählten Bereich an. */
 export function App() {
   const [activePage, setActivePage] = useState<AppPage>('planner');
 

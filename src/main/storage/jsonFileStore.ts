@@ -33,6 +33,7 @@ function isFileNotFound(error: unknown): boolean {
   return isNodeError(error) && error.code === 'ENOENT';
 }
 
+/** Speichert geprüfte JSON-Daten und verwaltet eine Sicherungsdatei. */
 export class JsonFileStore<T> {
   private readonly fileName: string;
   private readonly schema: ZodType<T>;
@@ -56,6 +57,10 @@ export class JsonFileStore<T> {
     return `${this.filePath}.backup`;
   }
 
+  /**
+   * Liest und prüft eine einzelne JSON-Datei.
+   * Das Ergebnis unterscheidet gültige, fehlende und fehlerhafte Daten.
+   */
   private async readCandidate(filePath: string): Promise<ReadResult<T>> {
     try {
       const content = await readFile(filePath, 'utf8');
@@ -85,6 +90,10 @@ export class JsonFileStore<T> {
     }
   }
 
+  /**
+   * Liest die gespeicherten Daten.
+   * Falls die Hauptdatei beschädigt ist, wird die Sicherung verwendet.
+   */
   async read(): Promise<T> {
     await mkdir(this.directoryPath, { recursive: true });
 
@@ -120,6 +129,10 @@ export class JsonFileStore<T> {
     );
   }
 
+  /**
+   * Prüft und speichert die Daten über eine temporäre Datei.
+   * Die bisherige gültige Datei wird vorher gesichert.
+   */
   async write(value: T): Promise<void> {
     const validatedValue = this.schema.parse(value);
 

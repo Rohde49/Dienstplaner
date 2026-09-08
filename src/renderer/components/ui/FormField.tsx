@@ -9,6 +9,7 @@ type FormFieldProps = {
   required?: boolean;
 };
 
+/** Verbindet ein Formularfeld mit Beschriftung, Hinweis und Fehlermeldung. */
 export function FormField({
   htmlFor,
   label,

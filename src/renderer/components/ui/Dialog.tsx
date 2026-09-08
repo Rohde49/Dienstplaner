@@ -16,6 +16,7 @@ type DialogContentProps = Omit<
   description: string;
 };
 
+/** Zeigt den einheitlich gestalteten Inhalt eines Eingabedialogs an. */
 export function DialogContent({
   title,
   description,

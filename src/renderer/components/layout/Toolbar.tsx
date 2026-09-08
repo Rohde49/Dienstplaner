@@ -6,6 +6,7 @@ type ToolbarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   label?: string;
 };
 
+/** Ordnet Informationen und Aktionen in einer gemeinsamen Werkzeugleiste an. */
 export function Toolbar({
   children,
   actions,

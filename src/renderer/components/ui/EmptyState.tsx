@@ -8,6 +8,7 @@ type EmptyStateProps = HTMLAttributes<HTMLDivElement> & {
   icon?: LucideIcon;
 };
 
+/** Zeigt einen verständlichen Hinweis, wenn noch keine Inhalte vorhanden sind. */
 export function EmptyState({
   title,
   description,

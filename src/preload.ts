@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 import { EMPLOYEE_IPC_CHANNELS, type DienstplanerApi } from './shared/ipc';
 
+/** Stellt der Oberfläche nur die freigegebenen Mitarbeiterfunktionen bereit. */
 const dienstplanerApi: DienstplanerApi = {
   employees: {
     list: () => ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.list),

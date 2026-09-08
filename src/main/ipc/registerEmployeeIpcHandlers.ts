@@ -8,6 +8,7 @@ import {
   updateEmployee,
 } from '../storage/employeesRepository';
 
+/** Registriert alle Anfragen der Oberfläche zur Mitarbeiterverwaltung. */
 export function registerEmployeeIpcHandlers(): void {
   ipcMain.handle(EMPLOYEE_IPC_CHANNELS.list, () => listEmployees());
 

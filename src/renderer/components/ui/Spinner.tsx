@@ -14,6 +14,7 @@ const sizeClasses: Record<SpinnerSize, string> = {
   lg: 'size-7',
 };
 
+/** Zeigt einen zugänglichen Ladeindikator an. */
 export function Spinner({
   className,
   label = 'Wird geladen',

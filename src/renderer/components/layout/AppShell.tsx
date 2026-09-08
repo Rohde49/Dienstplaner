@@ -39,6 +39,7 @@ const navigationItems: NavigationItem[] = [
   },
 ];
 
+/** Zeigt den festen Seitenrahmen mit Navigation und aktuellem Seiteninhalt. */
 export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
   return (
     <div className="bg-app-background grid min-h-screen grid-cols-[14rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)]">

@@ -25,6 +25,7 @@ function getErrorMessage(error: unknown): string {
     : 'Der Mitarbeiter konnte nicht gelöscht werden.';
 }
 
+/** Fragt vor dem endgültigen Löschen eines Mitarbeiters nach Bestätigung. */
 export function DeleteEmployeeDialog({
   employee,
   onDeleted,
@@ -42,6 +43,7 @@ export function DeleteEmployeeDialog({
     setOpen(nextOpen);
   }
 
+  /** Löscht den Mitarbeiter und entfernt ihn anschließend aus der Ansicht. */
   async function handleDelete(): Promise<void> {
     setIsDeleting(true);
     setErrorMessage(null);

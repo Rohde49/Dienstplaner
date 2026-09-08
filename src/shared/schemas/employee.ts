@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+/** Enthält alle Farben, die einem Mitarbeiter zugeordnet werden können. */
 export const EMPLOYEE_COLOR_KEYS = [
   'blue',
   'emerald',
@@ -13,6 +14,7 @@ export const employeeColorKeySchema = z.enum(EMPLOYEE_COLOR_KEYS);
 
 export const employeeIdSchema = z.string().uuid();
 
+/** Prüft einen vollständig gespeicherten Mitarbeiter. */
 export const employeeSchema = z
   .object({
     id: employeeIdSchema,
@@ -46,12 +48,14 @@ export const employeeSchema = z
   })
   .strict();
 
+/** Prüft die Eingaben zum Anlegen oder Bearbeiten eines Mitarbeiters. */
 export const employeeInputSchema = employeeSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
+/** Prüft den vollständigen Aufbau der lokalen Mitarbeiterdatei. */
 export const employeesFileSchema = z
   .object({
     schemaVersion: z.literal(1),

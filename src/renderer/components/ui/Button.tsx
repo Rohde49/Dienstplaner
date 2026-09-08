@@ -22,6 +22,7 @@ const sizeClasses: Record<ButtonSize, string> = {
   icon: 'size-9 p-0',
 };
 
+/** Zeigt eine einheitlich gestaltete Schaltfläche an. */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     { className, type = 'button', variant = 'primary', size = 'md', ...props },
@@ -50,6 +51,7 @@ type IconButtonProps = Omit<ButtonProps, 'aria-label' | 'children' | 'size'> & {
   children: ReactNode;
 };
 
+/** Zeigt eine zugängliche Schaltfläche an, die nur ein Symbol enthält. */
 export function IconButton({
   label,
   children,

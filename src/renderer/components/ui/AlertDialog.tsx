@@ -14,6 +14,7 @@ type AlertDialogContentProps = Omit<
   description: string;
 };
 
+/** Zeigt den einheitlich gestalteten Inhalt eines Bestätigungsdialogs an. */
 export function AlertDialogContent({
   title,
   description,
