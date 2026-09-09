@@ -13,3 +13,24 @@ export type {
   EmployeeInput,
   EmployeesFile,
 } from './employee';
+
+export {
+  CALCULATION_TYPES,
+  ENTRY_CATEGORIES,
+  calculationTypeSchema,
+  entryCategorySchema,
+  entryTypeIdSchema,
+  entryTypeInputSchema,
+  entryTypeSchema,
+  entryTypesFileSchema,
+  timeValuesSchema,
+} from './entryType';
+
+export type {
+  CalculationType,
+  EntryCategory,
+  EntryType,
+  EntryTypeInput,
+  EntryTypesFile,
+  TimeValues,
+} from './entryType';

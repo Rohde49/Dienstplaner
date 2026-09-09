@@ -18,20 +18,17 @@ import {
   CardTitle,
 } from './components/ui';
 import { TeamPage } from './features/team/TeamPage';
+import { EntryTypesPage } from './features/entry-types/EntryTypesPage';
 
 type PageInformation = {
   title: string;
   description: string;
 };
 
-const pageInformation: Record<Exclude<AppPage, 'team'>, PageInformation> = {
+const pageInformation: Record<'planner', PageInformation> = {
   planner: {
     title: 'Dienstplan',
     description: 'Monatspläne erstellen, bearbeiten und auswerten.',
-  },
-  'entry-types': {
-    title: 'Planungseinträge',
-    description: 'Dienste, Abwesenheiten und weitere Eintragsarten verwalten.',
   },
 };
 
@@ -86,6 +83,8 @@ export function App() {
       <AppShell activePage={activePage} onNavigate={setActivePage}>
         {activePage === 'team' ? (
           <TeamPage />
+        ) : activePage === 'entry-types' ? (
+          <EntryTypesPage />
         ) : (
           <PlaceholderPage {...pageInformation[activePage]} />
         )}
