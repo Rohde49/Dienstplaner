@@ -60,7 +60,7 @@ export function TeamPage() {
     <>
       <PageHeader
         title="Team"
-        description="Mitarbeiter und ihre Planungsdaten verwalten."
+        description="Mitarbeiter-Stammdaten verwalten"
         actions={
           <EmployeeDialog
             trigger={

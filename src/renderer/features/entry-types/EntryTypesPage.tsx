@@ -65,7 +65,7 @@ export function EntryTypesPage() {
     <>
       <PageHeader
         title="Planungseinträge"
-        description="Dienste, Abwesenheiten und freie Tage verwalten."
+        description="Planungseinträge-Stammdaten verwalten"
         actions={
           <EntryTypeDialog
             trigger={
