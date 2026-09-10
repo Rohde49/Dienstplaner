@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import {
   entryTypeInputSchema,
   type CalculationType,
-  type EntryCategory,
   type EntryType,
   type TimeValues,
 } from '../../../shared/schemas';
@@ -17,14 +16,12 @@ import {
   DialogRoot,
   DialogTrigger,
   FormField,
+  InfoPopover,
   Input,
   Select,
   Spinner,
 } from '../../components/ui';
-import {
-  CALCULATION_TYPE_LABELS,
-  ENTRY_CATEGORY_LABELS,
-} from './entryTypeLabels';
+import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
 import {
   formatDuration,
   normalizeClockTime,
@@ -47,7 +44,6 @@ type DurationFormField =
 type EntryTypeFormState = {
   code: string;
   name: string;
-  category: EntryCategory;
   calculationType: CalculationType;
   startTime: string;
   endTime: string;
@@ -67,7 +63,13 @@ type DurationFieldDefinition = {
   label: string;
 };
 
-const durationFields: DurationFieldDefinition[] = [
+const primaryDurationField: DurationFieldDefinition = {
+  field: 'workingWithoutNightReadinessDuration',
+  schemaField: 'workingWithoutNightReadinessMinutes',
+  label: 'reine Arbeitszeit',
+};
+
+const additionalDurationFields: DurationFieldDefinition[] = [
   {
     field: 'attendanceDuration',
     schemaField: 'attendanceMinutes',
@@ -76,12 +78,7 @@ const durationFields: DurationFieldDefinition[] = [
   {
     field: 'workingDuration',
     schemaField: 'workingMinutes',
-    label: 'Arbeitszeit',
-  },
-  {
-    field: 'workingWithoutNightReadinessDuration',
-    schemaField: 'workingWithoutNightReadinessMinutes',
-    label: 'Arbeitszeit ohne Nachtbereitschaft',
+    label: 'Arbeitszeit (mit NB)',
   },
   {
     field: 'nightReadinessDuration',
@@ -95,10 +92,11 @@ const durationFields: DurationFieldDefinition[] = [
   },
 ];
 
+const durationFields = [primaryDurationField, ...additionalDurationFields];
+
 const schemaPathToFormField: Record<string, keyof EntryTypeFormState> = {
   code: 'code',
   name: 'name',
-  category: 'category',
   calculationType: 'calculationType',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -111,6 +109,35 @@ const schemaPathToFormField: Record<string, keyof EntryTypeFormState> = {
   active: 'active',
 };
 
+const formFieldIds: Record<keyof EntryTypeFormState, string> = {
+  code: 'entry-type-code',
+  name: 'entry-type-name',
+  calculationType: 'entry-type-calculation',
+  startTime: 'entry-type-start-time',
+  endTime: 'entry-type-end-time',
+  attendanceDuration: 'entry-type-attendanceDuration',
+  workingDuration: 'entry-type-workingDuration',
+  workingWithoutNightReadinessDuration:
+    'entry-type-workingWithoutNightReadinessDuration',
+  nightReadinessDuration: 'entry-type-nightReadinessDuration',
+  nightWorkDuration: 'entry-type-nightWorkDuration',
+  active: 'entry-type-active',
+};
+
+/** Setzt den Fokus nach einer fehlgeschlagenen Prüfung auf das erste Feld. */
+function focusFirstInvalidField(errors: EntryTypeFormErrors): void {
+  const firstField = Object.keys(errors)[0] as
+    keyof EntryTypeFormState | undefined;
+
+  if (!firstField) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    document.getElementById(formFieldIds[firstField])?.focus();
+  }, 0);
+}
+
 /** Erstellt die leeren oder bereits vorhandenen Formularwerte. */
 function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
   if (entryType) {
@@ -120,7 +147,6 @@ function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
     return {
       code: entryType.code,
       name: entryType.name,
-      category: entryType.category,
       calculationType: entryType.calculationType,
       startTime: entryType.startTime ?? '',
       endTime: entryType.endTime ?? '',
@@ -148,15 +174,14 @@ function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
   return {
     code: '',
     name: '',
-    category: 'duty',
     calculationType: 'fixed',
     startTime: '',
     endTime: '',
-    attendanceDuration: '00:00',
-    workingDuration: '00:00',
-    workingWithoutNightReadinessDuration: '00:00',
-    nightReadinessDuration: '00:00',
-    nightWorkDuration: '00:00',
+    attendanceDuration: '',
+    workingDuration: '',
+    workingWithoutNightReadinessDuration: '',
+    nightReadinessDuration: '',
+    nightWorkDuration: '',
     active: true,
   };
 }
@@ -263,6 +288,7 @@ export function EntryTypeDialog({
     setSubmissionError(null);
 
     const nextErrors: EntryTypeFormErrors = {};
+
     const startTimeInput = formState.startTime.trim();
     const endTimeInput = formState.endTime.trim();
     const startTime =
@@ -315,13 +341,13 @@ export function EntryTypeDialog({
 
     if (Object.keys(nextErrors).length > 0) {
       setFormErrors(nextErrors);
+      focusFirstInvalidField(nextErrors);
       return;
     }
 
     const validationResult = entryTypeInputSchema.safeParse({
       code: formState.code,
       name: formState.name,
-      category: formState.category,
       calculationType: formState.calculationType,
       startTime: usesWeeklyWorkingTime ? null : startTime,
       endTime: usesWeeklyWorkingTime ? null : endTime,
@@ -340,6 +366,7 @@ export function EntryTypeDialog({
       }
 
       setFormErrors(nextErrors);
+      focusFirstInvalidField(nextErrors);
       return;
     }
 
@@ -384,8 +411,12 @@ export function EntryTypeDialog({
             : 'Erfasse eine wiederverwendbare Eintragsart für die Dienstplanung.'
         }
       >
-        <form onSubmit={(event) => void handleSubmit(event)}>
-          <div className="space-y-5 p-6">
+        <form
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+          noValidate
+          onSubmit={(event) => void handleSubmit(event)}
+        >
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-6">
             {submissionError ? (
               <Alert title="Speichern fehlgeschlagen" variant="danger">
                 {submissionError}
@@ -396,9 +427,7 @@ export function EntryTypeDialog({
               <FormField
                 htmlFor="entry-type-code"
                 label="Kürzel"
-                required
                 error={formErrors.code}
-                hint="Zum Beispiel SN/F, D1 oder U"
               >
                 <Input
                   id="entry-type-code"
@@ -413,7 +442,6 @@ export function EntryTypeDialog({
               <FormField
                 htmlFor="entry-type-name"
                 label="Bezeichnung"
-                required
                 error={formErrors.name}
               >
                 <Input
@@ -427,35 +455,46 @@ export function EntryTypeDialog({
               </FormField>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                htmlFor="entry-type-category"
-                label="Kategorie"
-                required
-                error={formErrors.category}
-              >
-                <Select
-                  id="entry-type-category"
-                  value={formState.category}
-                  onChange={(event) =>
-                    updateField('category', event.target.value as EntryCategory)
-                  }
-                >
-                  {Object.entries(ENTRY_CATEGORY_LABELS).map(
-                    ([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ),
-                  )}
-                </Select>
-              </FormField>
-
+            <div className="max-w-sm">
               <FormField
                 htmlFor="entry-type-calculation"
                 label="Berechnungsart"
-                required
                 error={formErrors.calculationType}
+                labelAction={
+                  <InfoPopover
+                    title="Bedeutung der Berechnungsarten"
+                    triggerLabel="Bedeutung der Berechnungsarten anzeigen"
+                  >
+                    <dl className="space-y-2.5">
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Feste Zeitwerte:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Uhrzeiten und Zeitwerte werden manuell eingegeben und
+                          beim Einplanen unverändert übernommen.
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Wochenarbeitszeit:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Die anrechenbare Arbeitszeit wird beim Einplanen aus
+                          der Wochenarbeitszeit des Mitarbeiters berechnet.
+                          Uhrzeiten und feste Zeitwerte sind für diese Auswahl
+                          deaktiviert.
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <p className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
+                      Allein die Berechnungsart steuert, ob die Uhrzeit- und
+                      Zeitwertfelder verfügbar sind.
+                    </p>
+                  </InfoPopover>
+                }
               >
                 <Select
                   id="entry-type-calculation"
@@ -475,14 +514,6 @@ export function EntryTypeDialog({
               </FormField>
             </div>
 
-            {usesWeeklyWorkingTime ? (
-              <Alert title="Automatische Zeitberechnung">
-                Die Arbeitszeit wird beim Einplanen aus der Wochenarbeitszeit
-                des Mitarbeiters berechnet. Uhrzeiten und feste Zeitwerte werden
-                nicht gespeichert.
-              </Alert>
-            ) : null}
-
             <fieldset className="border-app-border rounded-lg border p-4">
               <legend className="text-app-text px-1 text-sm font-semibold">
                 Uhrzeiten
@@ -493,7 +524,6 @@ export function EntryTypeDialog({
                   htmlFor="entry-type-start-time"
                   label="Startzeit"
                   error={formErrors.startTime}
-                  hint="Optional, zum Beispiel 13:00"
                 >
                   <Input
                     id="entry-type-start-time"
@@ -513,7 +543,6 @@ export function EntryTypeDialog({
                   htmlFor="entry-type-end-time"
                   label="Endzeit"
                   error={formErrors.endTime}
-                  hint="Nur gemeinsam mit der Startzeit"
                 >
                   <Input
                     id="entry-type-end-time"
@@ -532,22 +561,111 @@ export function EntryTypeDialog({
             </fieldset>
 
             <fieldset className="border-app-border rounded-lg border p-4">
-              <legend className="text-app-text px-1 text-sm font-semibold">
-                Zeitwerte
+              <legend className="px-1">
+                <span className="text-app-text flex items-center gap-1.5 text-sm font-semibold">
+                  Zeitwerte
+                  <InfoPopover
+                    title="Bedeutung der Zeitwerte"
+                    triggerLabel="Bedeutung der Zeitwerte anzeigen"
+                  >
+                    <dl className="space-y-2.5">
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Anwesenheitszeit:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Gesamter Zeitraum aus reiner Arbeitszeit,
+                          Nachtbereitschaft und Pausen.
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Arbeitszeit (mit NB):
+                        </dt>{' '}
+                        <dd className="inline">
+                          Summe aus reiner Arbeitszeit und Nachtbereitschaft.
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Reine Arbeitszeit:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Tatsächlich geleistete aktive Arbeitszeit. Die
+                          Nachtarbeit ist darin als gesondert ausgewiesener
+                          Anteil enthalten.
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Nachtarbeit:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Anteil der reinen Arbeitszeit, der zwischen 21:00 und
+                          06:00 Uhr geleistet wird.
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Nachtbereitschaft:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Passive Arbeitszeit während eines Nachtdienstes.
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <p className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
+                      Die Eingabe erfolgt im Format HH:mm. Punkt und Komma
+                      werden ebenfalls als Trennzeichen akzeptiert.
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5">
+                      Die Zeitwerte werden separat eingegeben. Die dargestellten
+                      Zusammenhänge dienen als Eingabehilfe und werden nicht
+                      automatisch geprüft.
+                    </p>
+                  </InfoPopover>
+                </span>
               </legend>
 
-              <p className="text-app-muted mb-4 text-xs">
-                Eingabe als HH:mm. Punkt und Komma werden ebenfalls als
-                Trennzeichen akzeptiert.
-              </p>
+              <div className="border-app-primary-border bg-app-primary-subtle mb-4 rounded-md border p-3">
+                <FormField
+                  htmlFor={`entry-type-${primaryDurationField.field}`}
+                  label={primaryDurationField.label}
+                  error={formErrors[primaryDurationField.field]}
+                  hint="Zentraler Wert für spätere Arbeitszeitberechnungen"
+                >
+                  <Input
+                    id={`entry-type-${primaryDurationField.field}`}
+                    inputMode="decimal"
+                    placeholder="HH:mm"
+                    disabled={usesWeeklyWorkingTime}
+                    required={!usesWeeklyWorkingTime}
+                    value={formState[primaryDurationField.field]}
+                    onBlur={() =>
+                      normalizeDurationField(primaryDurationField.field)
+                    }
+                    onChange={(event) =>
+                      updateField(
+                        primaryDurationField.field,
+                        event.target.value,
+                      )
+                    }
+                  />
+                </FormField>
+              </div>
 
               <div className="grid grid-cols-2 gap-4">
-                {durationFields.map((definition) => (
+                {additionalDurationFields.map((definition) => (
                   <FormField
                     key={definition.field}
                     htmlFor={`entry-type-${definition.field}`}
                     label={definition.label}
-                    required={!usesWeeklyWorkingTime}
                     error={formErrors[definition.field]}
                   >
                     <Input
@@ -590,7 +708,7 @@ export function EntryTypeDialog({
             </label>
           </div>
 
-          <div className="border-app-border bg-app-surface-muted flex justify-end gap-2 border-t px-6 py-4">
+          <div className="border-app-border bg-app-surface-muted flex shrink-0 justify-end gap-2 border-t px-6 py-4">
             <DialogClose asChild>
               <Button variant="secondary" disabled={isSaving}>
                 Abbrechen

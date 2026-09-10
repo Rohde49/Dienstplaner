@@ -16,9 +16,7 @@ export type {
 
 export {
   CALCULATION_TYPES,
-  ENTRY_CATEGORIES,
   calculationTypeSchema,
-  entryCategorySchema,
   entryTypeIdSchema,
   entryTypeInputSchema,
   entryTypeSchema,
@@ -28,7 +26,6 @@ export {
 
 export type {
   CalculationType,
-  EntryCategory,
   EntryType,
   EntryTypeInput,
   EntryTypesFile,

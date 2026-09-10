@@ -84,18 +84,12 @@ Gespeichert wird nur der kontrollierte Farbschlüssel. Die tatsächlichen
 Darstellungsfarben werden zentral in der Oberfläche zugeordnet. Dadurch bleiben
 die gespeicherten Daten unabhängig von konkreten CSS-Farbwerten.
 
-### Kategorien und Berechnungsarten
+### Berechnungsarten
 
 ```ts
-type EntryCategory = 'duty' | 'absence' | 'free';
-
 type CalculationType = 'fixed' | 'weeklyWorkingTime';
 ```
 
-- `duty` bezeichnet einen Dienst.
-- `absence` bezeichnet beispielsweise Urlaub oder Krankheit.
-- `free` bezeichnet einen freien Tag oder einen vergleichbaren Eintrag ohne
-  Arbeitszeit.
 - `fixed` verwendet die in der Eintragsart hinterlegten festen Zeitwerte.
 - `weeklyWorkingTime` ermittelt die anrechenbare Arbeitszeit beim Setzen des
   Planeintrags aus der im Plan gespeicherten Wochenarbeitszeit des Mitarbeiters.
@@ -115,9 +109,10 @@ interface TimeValues {
 Die fünf Werte haben folgende Bedeutung:
 
 - `attendanceMinutes`: gesamte Anwesenheitsdauer einschließlich Pausen,
-- `workingMinutes`: insgesamt angerechnete Arbeitszeit,
-- `workingWithoutNightReadinessMinutes`: Arbeitszeit ohne
-  Nachtbereitschaft,
+- `workingMinutes`: insgesamt angerechnete Arbeitszeit einschließlich
+  Nachtbereitschaft; in der Oberfläche „Arbeitszeit (mit NB)“,
+- `workingWithoutNightReadinessMinutes`: reine Arbeitszeit ohne
+  Nachtbereitschaft; in der Oberfläche „Reine Arbeitszeit“,
 - `nightReadinessMinutes`: enthaltene Nachtbereitschaft,
 - `nightWorkMinutes`: enthaltene Nachtarbeit.
 
@@ -185,7 +180,6 @@ interface EntryType {
   id: string;
   code: string;
   name: string;
-  category: EntryCategory;
   calculationType: CalculationType;
   startTime: string | null;
   endTime: string | null;
@@ -322,7 +316,6 @@ interface PlanEntry {
   sourceEntryTypeId: string;
   code: string;
   name: string;
-  category: EntryCategory;
   startTime: string | null;
   endTime: string | null;
   timeValues: TimeValues;
@@ -335,7 +328,7 @@ interface PlanEntry {
   nicht unmittelbar auf die aktuellen Mitarbeiterstammdaten.
 - `sourceEntryTypeId` dokumentiert die ursprüngliche Eintragsart, stellt aber
   keine lebende Abhängigkeit dar.
-- Kürzel, Name, Kategorie, Uhrzeiten und Zeitwerte werden beim Setzen in den
+- Kürzel, Name, Uhrzeiten und Zeitwerte werden beim Setzen in den
   Planeintrag kopiert. Nachträgliche Änderungen oder eine Deaktivierung der
   Eintragsart ändern den Monatsplan daher nicht.
 - Pro `PlanDay` darf es höchstens einen `PlanEntry` je `planEmployeeId` geben.

@@ -144,23 +144,21 @@ Mitarbeiter werden vorzugsweise deaktiviert statt endgültig gelöscht, damit vo
 
 | Spalte      | Inhalt                              |
 | ----------- | ----------------------------------- |
-| Kürzel      | beispielsweise SN/F, D1 oder U      |
-| Bezeichnung | vollständiger Name                  |
-| Kategorie   | Dienst, Abwesenheit oder frei       |
-| Uhrzeit     | Start- und Endzeit, falls vorhanden |
-| Zeitwert    | anrechenbare Arbeitszeit            |
-| Status      | Aktiv oder Inaktiv                  |
-| Aktionen    | Bearbeiten und Deaktivieren         |
+| Planungseintrag | Kürzel und vollständige Bezeichnung       |
+| Uhrzeiten       | Beginn und Ende, falls vorhanden          |
+| Berechnungsart  | feste Zeitwerte oder Wochenarbeitszeit    |
+| Reine Arbeitszeit | maßgeblicher Zeitwert für Auswertungen  |
+| Status          | Aktiv oder Inaktiv                        |
+| Aktionen        | Bearbeiten und Löschen                    |
 
 ### Bearbeitungsbereich
 
-Bei großen Fenstern erscheint das Formular neben der Liste. Bei kleineren Fenstern wird es als Dialog geöffnet.
+Das Formular wird wie in der Teamverwaltung immer als Dialog geöffnet.
 
 Das Formular enthält:
 
 * Kürzel
 * Bezeichnung
-* Kategorie
 * optionale Startzeit
 * optionale Endzeit
 * benötigte Zeitwerte

@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
-export const ENTRY_CATEGORIES = ['duty', 'absence', 'free'] as const;
 export const CALCULATION_TYPES = ['fixed', 'weeklyWorkingTime'] as const;
 
-export const entryCategorySchema = z.enum(ENTRY_CATEGORIES);
 export const calculationTypeSchema = z.enum(CALCULATION_TYPES);
 export const entryTypeIdSchema = z.string().uuid();
 
@@ -47,7 +45,6 @@ const entryTypeObjectSchema = z
       .trim()
       .min(1, 'Die Bezeichnung ist erforderlich.')
       .max(100, 'Die Bezeichnung darf höchstens 100 Zeichen enthalten.'),
-    category: entryCategorySchema,
     calculationType: calculationTypeSchema,
     startTime: clockTimeSchema,
     endTime: clockTimeSchema,
@@ -58,7 +55,12 @@ const entryTypeObjectSchema = z
   })
   .strict();
 
-type EntryTypeValidationValue = z.infer<typeof entryTypeObjectSchema>;
+type EntryTypeValidationValue = {
+  calculationType: z.infer<typeof calculationTypeSchema>;
+  startTime?: string | null;
+  endTime?: string | null;
+  timeValues: z.infer<typeof timeValuesSchema>;
+};
 
 /** Prüft Regeln, die mehrere Felder einer Eintragsart betreffen. */
 function validateEntryTypeRelations(
@@ -119,7 +121,6 @@ export const entryTypesFileSchema = z
   })
   .strict();
 
-export type EntryCategory = z.infer<typeof entryCategorySchema>;
 export type CalculationType = z.infer<typeof calculationTypeSchema>;
 export type TimeValues = z.infer<typeof timeValuesSchema>;
 export type EntryType = z.infer<typeof entryTypeSchema>;

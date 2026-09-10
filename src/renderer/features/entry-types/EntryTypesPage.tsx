@@ -1,4 +1,4 @@
-import { ClipboardList, ListPlus, Pencil } from 'lucide-react';
+import { ClipboardList, Clock3, ListPlus, Pencil } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import type { EntryType } from '../../../shared/schemas';
@@ -14,7 +14,7 @@ import {
 } from '../../components/ui';
 import { DeleteEntryTypeDialog } from './DeleteEntryTypeDialog';
 import { EntryTypeDialog } from './EntryTypeDialog';
-import { ENTRY_CATEGORY_LABELS } from './entryTypeLabels';
+import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
 import { formatDuration } from './entryTypeTime';
 
 function getErrorMessage(error: unknown): string {
@@ -23,18 +23,42 @@ function getErrorMessage(error: unknown): string {
     : 'Die Planungseinträge konnten nicht geladen werden.';
 }
 
-function formatClockRange(entryType: EntryType): string {
+function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
   if (entryType.startTime === null || entryType.endTime === null) {
-    return '–';
+    return (
+      <span className="text-app-muted flex items-center gap-2 text-sm">
+        <Clock3 aria-hidden="true" size={16} />
+        Keine Uhrzeit
+      </span>
+    );
   }
 
-  return `${entryType.startTime}–${entryType.endTime}`;
+  return (
+    <div className="flex items-start gap-2">
+      <Clock3
+        aria-hidden="true"
+        className="text-app-muted mt-0.5 shrink-0"
+        size={16}
+      />
+
+      <dl className="grid grid-cols-[auto_auto] gap-x-2 gap-y-0.5 text-xs">
+        <dt className="text-app-muted">Beginn:</dt>
+        <dd className="text-app-text font-medium tabular-nums">
+          {entryType.startTime}
+        </dd>
+        <dt className="text-app-muted">Ende:</dt>
+        <dd className="text-app-text font-medium tabular-nums">
+          {entryType.endTime}
+        </dd>
+      </dl>
+    </div>
+  );
 }
 
-function formatWorkingTime(entryType: EntryType): string {
+function formatPureWorkingTime(entryType: EntryType): string {
   return entryType.calculationType === 'weeklyWorkingTime'
     ? 'Wochenarbeitszeit ÷ 5'
-    : formatDuration(entryType.timeValues.workingMinutes);
+    : formatDuration(entryType.timeValues.workingWithoutNightReadinessMinutes);
 }
 
 /** Lädt und verwaltet die sichtbare Übersicht der Eintragsarten. */
@@ -125,19 +149,16 @@ export function EntryTypesPage() {
                 <thead className="border-app-border bg-app-surface-muted border-b">
                   <tr>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
-                      Kürzel
+                      Planungseintrag
                     </th>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
-                      Bezeichnung
+                      Uhrzeiten
                     </th>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
-                      Kategorie
+                      Berechnungsart
                     </th>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
-                      Uhrzeit
-                    </th>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
-                      Arbeitszeit
+                      Reine Arbeitszeit
                     </th>
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
                       Status
@@ -154,22 +175,26 @@ export function EntryTypesPage() {
                       key={entryType.id}
                       className="hover:bg-app-surface-muted"
                     >
-                      <td className="text-app-text px-4 py-3 font-semibold">
-                        {entryType.code}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <Badge variant="primary" className="shrink-0">
+                            {entryType.code}
+                          </Badge>
+                          <span className="text-app-text text-sm font-medium">
+                            {entryType.name}
+                          </span>
+                        </div>
                       </td>
-                      <td className="text-app-text px-4 py-3 text-sm">
-                        {entryType.name}
+                      <td className="px-4 py-3">
+                        <EntryTypeClockTimes entryType={entryType} />
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant="neutral">
-                          {ENTRY_CATEGORY_LABELS[entryType.category]}
+                          {CALCULATION_TYPE_LABELS[entryType.calculationType]}
                         </Badge>
                       </td>
                       <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
-                        {formatClockRange(entryType)}
-                      </td>
-                      <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
-                        {formatWorkingTime(entryType)}
+                        {formatPureWorkingTime(entryType)}
                       </td>
                       <td className="px-4 py-3">
                         <Badge

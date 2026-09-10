@@ -69,6 +69,28 @@ const schemaPathToFormField: Record<string, keyof EmployeeFormState> = {
   active: 'active',
 };
 
+const formFieldIds: Partial<Record<keyof EmployeeFormState, string>> = {
+  firstName: 'employee-first-name',
+  lastName: 'employee-last-name',
+  role: 'employee-role',
+  weeklyWorkingHours: 'employee-weekly-hours',
+};
+
+/** Setzt den Fokus nach einer fehlgeschlagenen Prüfung auf das erste Feld. */
+function focusFirstInvalidField(errors: EmployeeFormErrors): void {
+  const firstField = Object.keys(errors)[0] as
+    keyof EmployeeFormState | undefined;
+  const fieldId = firstField ? formFieldIds[firstField] : undefined;
+
+  if (!fieldId) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    document.getElementById(fieldId)?.focus();
+  }, 0);
+}
+
 function getErrorMessage(error: unknown): string {
   return error instanceof Error
     ? error.message
@@ -158,6 +180,7 @@ export function EmployeeDialog({
       }
 
       setFormErrors(nextErrors);
+      focusFirstInvalidField(nextErrors);
       return;
     }
 
@@ -200,8 +223,12 @@ export function EmployeeDialog({
             : 'Erfasse die grundlegenden Daten für die Dienstplanung.'
         }
       >
-        <form onSubmit={(event) => void handleSubmit(event)}>
-          <div className="space-y-5 p-6">
+        <form
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+          noValidate
+          onSubmit={(event) => void handleSubmit(event)}
+        >
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-6">
             {submissionError ? (
               <Alert title="Speichern fehlgeschlagen" variant="danger">
                 {submissionError}
@@ -212,7 +239,6 @@ export function EmployeeDialog({
               <FormField
                 htmlFor="employee-first-name"
                 label="Vorname"
-                required
                 error={formErrors.firstName}
               >
                 <Input
@@ -236,7 +262,6 @@ export function EmployeeDialog({
               <FormField
                 htmlFor="employee-last-name"
                 label="Nachname"
-                required
                 error={formErrors.lastName}
               >
                 <Input
@@ -260,7 +285,6 @@ export function EmployeeDialog({
               <FormField
                 htmlFor="employee-role"
                 label="Rolle"
-                required
                 error={formErrors.role}
               >
                 <Input
@@ -280,7 +304,6 @@ export function EmployeeDialog({
               <FormField
                 htmlFor="employee-weekly-hours"
                 label="Wochenarbeitszeit"
-                required
                 error={formErrors.weeklyWorkingHours}
                 hint="Angabe in Stunden, zum Beispiel 39,5"
               >
@@ -371,7 +394,7 @@ export function EmployeeDialog({
             </label>
           </div>
 
-          <div className="border-app-border bg-app-surface-muted flex justify-end gap-2 border-t px-6 py-4">
+          <div className="border-app-border bg-app-surface-muted flex shrink-0 justify-end gap-2 border-t px-6 py-4">
             <DialogClose asChild>
               <Button variant="secondary" disabled={isSaving}>
                 Abbrechen

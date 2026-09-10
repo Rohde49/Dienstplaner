@@ -30,14 +30,14 @@ export function DialogContent({
 
       <DialogPrimitive.Content
         className={[
-          'border-app-border bg-app-surface fixed top-1/2 left-1/2 z-50 max-h-[calc(100vh-3rem)] w-[calc(100%-3rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border shadow-xl',
+          'border-app-border bg-app-surface fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100vh-3rem)] w-[calc(100%-3rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border shadow-xl',
           className,
         ]
           .filter(Boolean)
           .join(' ')}
         {...props}
       >
-        <div className="border-app-border border-b px-6 py-5 pr-14">
+        <div className="border-app-border shrink-0 border-b px-6 py-5 pr-14">
           <DialogPrimitive.Title className="text-app-text text-lg font-semibold">
             {title}
           </DialogPrimitive.Title>

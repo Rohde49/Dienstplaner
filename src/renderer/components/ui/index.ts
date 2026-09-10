@@ -35,6 +35,8 @@ export { FormField } from './FormField';
 export { Input } from './Input';
 export type { InputProps } from './Input';
 
+export { InfoPopover } from './InfoPopover';
+
 export { Spinner } from './Spinner';
 
 export { Select } from './Select';

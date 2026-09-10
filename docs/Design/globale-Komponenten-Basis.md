@@ -35,6 +35,7 @@ Der Dienstplan selbst wird keine universelle `Table`-Komponente, sondern eine ei
 | `DropdownMenu`    | `DropdownMenu`  | zusätzliche Aktionen eines Datensatzes                  |
 | `Tooltip`         | `Tooltip`       | Erklärung von Icon-Buttons                              |
 | `Popover`         | `Popover`       | kompakte Auswahl innerhalb des Dienstplans              |
+| `InfoPopover`     | `Popover`       | zusätzliche Erklärungen zu Fachbegriffen und Bereichen  |
 
 Normale Navigation, Buttons, Eingabefelder und Tabellen benötigen kein Radix Primitive.
 
@@ -163,6 +164,7 @@ components/
 │   ├── EmptyState
 │   ├── FormField
 │   ├── IconButton
+│   ├── InfoPopover
 │   ├── Input
 │   ├── Panel
 │   ├── Popover

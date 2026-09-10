@@ -87,7 +87,6 @@ Deaktivierte Mitarbeiter bleiben gespeichert, erscheinen aber nicht mehr bei der
       "id": "2b681e33-606f-42e7-bde9-a5de5efba002",
       "code": "SN/F",
       "name": "Spät-Nacht-Früh",
-      "category": "duty",
       "startTime": "13:00",
       "endTime": "13:00",
       "calculationType": "fixed",
@@ -102,12 +101,6 @@ Deaktivierte Mitarbeiter bleiben gespeichert, erscheinen aber nicht mehr bei der
     }
   ]
 }
-```
-
-Kategorien:
-
-```ts
-"duty" | "absence" | "free"
 ```
 
 Berechnungsarten:
@@ -175,7 +168,6 @@ Dadurch verändert eine spätere Änderung der Mitarbeiterdaten keinen bereits b
       "sourceEntryTypeId": "entry-type-id",
       "code": "SN/F",
       "name": "Spät-Nacht-Früh",
-      "category": "duty",
       "startTime": "13:00",
       "endTime": "13:00",
       "timeValues": {
