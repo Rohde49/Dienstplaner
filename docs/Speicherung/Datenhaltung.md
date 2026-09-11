@@ -29,6 +29,8 @@ nicht erforderlich.
   Mitarbeiter-Snapshots und allen Kalendertagen,
 - gemeinsame reine Erzeugung von Planungseintrag-Snapshots sowie validierte
   Zelloperationen im Main Process,
+- gemeinsame reine Monatsauswertung ausschließlich aus den gespeicherten
+  Snapshots und Kalenderdaten,
 - der bestätigte Reset der bisherigen Prototypdaten auf die neuen
   Schema-Versionen.
 

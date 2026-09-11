@@ -16,6 +16,7 @@ fachlichen Formeln Vorrang.
 | Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
 | Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
 | Monatsplan und Snapshots | Schemas, Konsistenzprüfung, Erzeugung der Snapshots und Zelloperationen sind umgesetzt |
+| Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                          |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -411,6 +412,9 @@ gültigen Sicherung wiederhergestellt und niemals nur teilweise ausgewertet.
 7. Laden und Auswerten verwenden ausschließlich die gespeicherten Snapshots.
 
 ## 13. Gespeicherte und berechnete Werte
+
+Status: **Die festgelegten Monatskennzahlen werden aus dem vollständigen
+Monatsplan berechnet; ihre Darstellung in der Oberfläche folgt später**.
 
 ### Gespeichert
 

@@ -149,34 +149,34 @@ Die Funktionen dieses Schritts erhalten einen Monatsplan beziehungsweise klar ab
 
 ### Tagesbezogene Kennzahlen
 
-- [ ] SN/F-Dienste anhand der exakten Snapshot-Kürzel `SN/F` und `SN` zählen.
-- [ ] Freie Tage anhand des exakten Snapshot-Kürzels `/` zählen.
-- [ ] Freie Samstage und freie Sonntage als Teilmengen der freien Tage zählen.
-- [ ] Rufbereitschaften je Mitarbeiter zählen.
-- [ ] Rufbereitschaften ausschließlich für Mitarbeiter mit der Snapshot-Rolle `Erzieher` zulassen.
+- [x] SN/F-Dienste anhand der exakten Snapshot-Kürzel `SN/F` und `SN` zählen.
+- [x] Freie Tage anhand des exakten Snapshot-Kürzels `/` zählen.
+- [x] Freie Samstage und freie Sonntage als Teilmengen der freien Tage zählen.
+- [x] Rufbereitschaften je Mitarbeiter zählen.
+- [x] Rufbereitschaften ausschließlich für Mitarbeiter mit der Snapshot-Rolle `Erzieher` zulassen.
 
 ### Zeitbezogene Monatskennzahlen
 
-- [ ] Arbeitszeit (mit NB), reine Arbeitszeit, Nachtbereitschaft und Nachtarbeit jeweils monatlich summieren.
-- [ ] Die gemeinsame Sonntags-/Feiertagskennzahl aus der reinen Arbeitszeit bilden.
-- [ ] Einen Sonntag, der zugleich Feiertag ist, nur einmal berücksichtigen.
-- [ ] Den Nachtzuschlag einmal aus der vollständigen monatlichen Nachtarbeit berechnen und runden.
-- [ ] Den Nachtbereitschaftszuschlag einmal aus der vollständigen monatlichen Nachtbereitschaft berechnen und runden.
+- [x] Arbeitszeit (mit NB), reine Arbeitszeit, Nachtbereitschaft und Nachtarbeit jeweils monatlich summieren.
+- [x] Die gemeinsame Sonntags-/Feiertagskennzahl aus der reinen Arbeitszeit bilden.
+- [x] Einen Sonntag, der zugleich Feiertag ist, nur einmal berücksichtigen.
+- [x] Den Nachtzuschlag einmal aus der vollständigen monatlichen Nachtarbeit berechnen und runden.
+- [x] Den Nachtbereitschaftszuschlag einmal aus der vollständigen monatlichen Nachtbereitschaft berechnen und runden.
 
 ### Soll, Ist und Differenz
 
-- [ ] Soll als `Arbeitstage × Wochenarbeitszeit aus dem Mitarbeiter-Snapshot / 5` berechnen.
-- [ ] Ist als `monatliche reine Arbeitszeit + Nachtbereitschaftszuschlag` berechnen.
-- [ ] Den Nachtzuschlag nicht zum Ist addieren.
-- [ ] Die Differenz als `Ist − Soll` berechnen.
-- [ ] Alle Formeln rollenunabhängig halten.
+- [x] Soll als `Arbeitstage × Wochenarbeitszeit aus dem Mitarbeiter-Snapshot / 5` berechnen.
+- [x] Ist als `monatliche reine Arbeitszeit + Nachtbereitschaftszuschlag` berechnen.
+- [x] Den Nachtzuschlag nicht zum Ist addieren.
+- [x] Die Differenz als `Ist − Soll` berechnen.
+- [x] Alle Formeln rollenunabhängig halten.
 
 Abnahmekriterien:
 
-- [ ] Leere Zellen, exakte und abweichende Kürzel sowie Feiertagsüberschneidungen sind getestet.
-- [ ] Zuschläge werden nach der Monatssumme genau einmal gerundet.
-- [ ] Positive, negative und ausgeglichene Soll-/Ist-Differenzen sind getestet.
-- [ ] Das durchgängige Monatsbeispiel aus `06-Soll-Ist-Auswertung.md` läuft als übergreifender Akzeptanztest erfolgreich.
+- [x] Leere Zellen, exakte und abweichende Kürzel sowie Feiertagsüberschneidungen sind getestet.
+- [x] Zuschläge werden nach der Monatssumme genau einmal gerundet.
+- [x] Positive, negative und ausgeglichene Soll-/Ist-Differenzen sind getestet.
+- [x] Das durchgängige Monatsbeispiel aus `06-Soll-Ist-Auswertung.md` läuft als übergreifender Akzeptanztest erfolgreich.
 
 ## Schritt 7: Monatsplan speichern und über die Anwendungsschnittstelle bereitstellen
 
