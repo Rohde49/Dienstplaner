@@ -1,6 +1,6 @@
 # Analyseprotokoll: Berechnungen im Altsystem
 
-> Temporäres Arbeitsdokument. Die hier festgehaltenen Quellcodebefunde sind noch keine verbindlichen fachlichen Entscheidungen. Verbindliche Regeln werden nach gemeinsamer Prüfung in `docs/Berechnungen.md` übernommen.
+> Temporäres Arbeitsdokument. Die hier festgehaltenen Quellcodebefunde sind noch keine verbindlichen fachlichen Entscheidungen. Verbindliche Regeln werden nach gemeinsamer Prüfung in `docs/Berechnungen/` übernommen.
 
 ## Zweck
 
@@ -154,7 +154,7 @@ Das ist kein Rechenfehler der einzelnen Funktionen, sondern die Folge unterschie
 
 ### Status von Schritt 2
 
-Die Analyse des implementierten Zeitmodells ist abgeschlossen. Die Empfehlungen sind noch keine verbindlichen Regeln; die oben genannten Entscheidungen müssen vor einer Übernahme in `docs/Berechnungen.md` gemeinsam bestätigt werden.
+Die Analyse des implementierten Zeitmodells ist abgeschlossen. Die Empfehlungen sind noch keine verbindlichen Regeln; die oben genannten Entscheidungen müssen vor einer Übernahme in `docs/Berechnungen/` gemeinsam bestätigt werden.
 
 ### Bereits verbindlich entschieden
 
@@ -196,7 +196,7 @@ Für die Ergebnisdarstellung wurde festgelegt:
 - Positive Soll-/Ist-Differenzen erhalten ein Pluszeichen, negative ein Minuszeichen.
 - Ein exakter Ausgleich wird als `00:00` ohne Vorzeichen dargestellt. Die abweichende Darstellung `0:00` des Altsystems wird nicht übernommen.
 
-Diese Entscheidungen wurden in `docs/Berechnungen.md` übernommen. Schritt 2 ist damit fachlich abgeschlossen. Berechnungsspezifische Rundungszeitpunkte werden in den jeweils zugehörigen späteren Schritten festgelegt.
+Diese Entscheidungen wurden in `docs/Berechnungen/` übernommen. Schritt 2 ist damit fachlich abgeschlossen. Berechnungsspezifische Rundungszeitpunkte werden in den jeweils zugehörigen späteren Schritten festgelegt.
 
 ## Ergebnis von Schritt 3: Kalender, Feiertage und Arbeitstage
 
@@ -327,7 +327,7 @@ Für gültige Kalendereingaben wurde festgelegt:
 - Kalender- und Feiertagsberechnungen müssen für jedes in der Anwendung auswählbare Jahr funktionieren.
 - Der konkrete Auswahlbereich der Oberfläche ist keine Berechnungsregel und wird bei der fachlichen Beschreibung der Planungsseite festgelegt.
 
-Diese Entscheidungen wurden in `docs/Berechnungen.md` übernommen. Schritt 3 ist damit auch fachlich vollständig abgeschlossen.
+Diese Entscheidungen wurden in `docs/Berechnungen/` übernommen. Schritt 3 ist damit auch fachlich vollständig abgeschlossen.
 
 ## Ergebnis von Schritt 4: Berechnungsarten und Snapshot-Verhalten
 
@@ -481,7 +481,7 @@ Für deaktivierte oder gelöschte Eintragsdefinitionen wurde festgelegt:
 
 Damit weicht die neue Regel bewusst vom Altsystem ab: Dort wurde bei der mitarbeiterabhängigen Berechnung nur die Arbeitszeit ohne Nachtbereitschaft gesetzt, während das Feld Arbeitszeit `0` blieb. Mit der fachlichen Bedeutung „Arbeitszeit (mit NB) = reine Arbeitszeit + Nachtbereitschaft“ wäre dieser alte Stand widersprüchlich.
 
-Diese Entscheidungen wurden in `docs/Berechnungen.md` übernommen. Schritt 4 ist damit auch fachlich vollständig abgeschlossen.
+Diese Entscheidungen wurden in `docs/Berechnungen/` übernommen. Schritt 4 ist damit auch fachlich vollständig abgeschlossen.
 
 ## Ergebnis von Schritt 5: Tagesbezogene Zählungen
 
@@ -743,7 +743,7 @@ Für den Berechnungsstand während der Bearbeitung wurde festgelegt:
 - Ein Entwurf mit ungespeicherten Änderungen muss deshalb vor einer verbindlichen Ausgabe gespeichert werden.
 - Entwurfsstand und gespeicherter Stand müssen für den Benutzer eindeutig unterscheidbar sein.
 
-Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 ## Ergebnis von Schritt 6: Zeitbezogene Monatssummen und Zuschläge
 
@@ -1050,7 +1050,7 @@ Für die Behandlung von Sonntagen und gesetzlichen Feiertagen wurde festgelegt:
 - Für die Sonntags-/Feiertagskennzahl ist ausschließlich der Kalendertag der Planungszelle maßgeblich; die vollständige reine Arbeitszeit wird diesem einen Tag zugerechnet.
 - Ein am Sonntag zugeordneter und laut Uhrzeiten am Montag endender Dienst zählt deshalb vollständig zum Sonntag. Ein am gewöhnlichen Samstag zugeordneter Dienst zählt nicht allein wegen einer Ende-Uhrzeit am Sonntag.
 
-Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für den Nachtzuschlag wurde festgelegt:
 
@@ -1061,7 +1061,7 @@ Für den Nachtzuschlag wurde festgelegt:
 - Die Formel lautet: `Nachtzuschlag = Rundung(monatliche Nachtarbeit × 20 %)`.
 - Die damals noch offene Folgewirkung wurde in Schritt 7 entschieden: Der Nachtzuschlag fließt nicht in die Ist-Arbeitszeit ein.
 
-Damit wurden Berechnungsgrundlage, Prozentsatz, Einheit und Rundungszeitpunkt des Altsystems übernommen. Die zu diesem Zeitpunkt noch zurückgestellte Ist-Wirkung wurde später in Schritt 7 entschieden. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Damit wurden Berechnungsgrundlage, Prozentsatz, Einheit und Rundungszeitpunkt des Altsystems übernommen. Die zu diesem Zeitpunkt noch zurückgestellte Ist-Wirkung wurde später in Schritt 7 entschieden. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für den Nachtbereitschaftszuschlag wurde festgelegt:
 
@@ -1072,7 +1072,7 @@ Für den Nachtbereitschaftszuschlag wurde festgelegt:
 - Die Formel lautet: `Nachtbereitschaftszuschlag = Rundung(monatliche Nachtbereitschaft × 25 %)`.
 - Die damals noch offene Folgewirkung wurde in Schritt 7 entschieden: Der Nachtbereitschaftszuschlag fließt vollständig in die Ist-Arbeitszeit ein.
 
-Damit wurden auch für den Nachtbereitschaftszuschlag Berechnungsgrundlage, Prozentsatz, Einheit und Rundungszeitpunkt des Altsystems übernommen. Die zu diesem Zeitpunkt noch zurückgestellte Ist-Wirkung wurde später in Schritt 7 entschieden. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Damit wurden auch für den Nachtbereitschaftszuschlag Berechnungsgrundlage, Prozentsatz, Einheit und Rundungszeitpunkt des Altsystems übernommen. Die zu diesem Zeitpunkt noch zurückgestellte Ist-Wirkung wurde später in Schritt 7 entschieden. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für die Darstellung und Datenkonsistenz der Arbeitszeit (mit NB) wurde ergänzend festgelegt:
 
@@ -1287,7 +1287,7 @@ Für die monatliche Soll-Arbeitszeit wurde festgelegt:
 - Wegen der verbindlichen Teilbarkeit der Wochenarbeitszeit durch fünf entsteht eine ganze Minutenzahl; eine Rundung ist nicht erforderlich.
 - Spätere Änderungen am Mitarbeiter-Stammdatensatz verändern das Soll eines bestehenden Monatsplans nicht rückwirkend.
 
-Damit wird die Soll-Grundformel des Altsystems übernommen, aber entsprechend dem neuen Snapshot-Modell auf die im Monatsplan gespeicherte Wochenarbeitszeit gestützt. Die im Altsystem vorsorglich ausgeführte Rundung entfällt im Zielmodell, weil sie bei gültigen Daten rechnerisch wirkungslos wäre. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Damit wird die Soll-Grundformel des Altsystems übernommen, aber entsprechend dem neuen Snapshot-Modell auf die im Monatsplan gespeicherte Wochenarbeitszeit gestützt. Die im Altsystem vorsorglich ausgeführte Rundung entfällt im Zielmodell, weil sie bei gültigen Daten rechnerisch wirkungslos wäre. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für die monatliche Ist-Arbeitszeit wurde festgelegt, die Formel des Altsystems unverändert zu übernehmen:
 
@@ -1301,7 +1301,7 @@ Für die monatliche Ist-Arbeitszeit wurde festgelegt, die Formel des Altsystems 
 - Nach der Addition der beiden bereits ganzzahligen Summanden findet keine weitere Rundung statt.
 - Arbeitszeit (mit NB) bleibt eine separate Informationskennzahl.
 
-Damit wurde die Empfehlung des Schritt-7-Analyseabschnitts, beide Zeitgutschriften in das Ist aufzunehmen, ausdrücklich verworfen. Verbindlich ist stattdessen die bisherige Formel des Altsystems. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Damit wurde die Empfehlung des Schritt-7-Analyseabschnitts, beide Zeitgutschriften in das Ist aufzunehmen, ausdrücklich verworfen. Verbindlich ist stattdessen die bisherige Formel des Altsystems. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für die monatliche Soll-/Ist-Differenz wurde festgelegt:
 
@@ -1313,7 +1313,7 @@ Für die monatliche Soll-/Ist-Differenz wurde festgelegt:
 - Da Soll und Ist bereits ganze Minutenwerte sind, findet keine weitere Rundung statt.
 - Die bereits in Schritt 2 verbindlich festgelegte Darstellung bleibt bestehen: positive Werte erhalten ein Pluszeichen, negative ein Minuszeichen und der exakte Ausgleich wird als `00:00` ohne Vorzeichen angezeigt.
 
-Damit werden Formel und Vorzeichenrichtung des Altsystems übernommen; ausschließlich dessen abweichende Nulldarstellung `0:00` bleibt wie bereits entschieden verworfen. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Damit werden Formel und Vorzeichenrichtung des Altsystems übernommen; ausschließlich dessen abweichende Nulldarstellung `0:00` bleibt wie bereits entschieden verworfen. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für den Rollenbezug der globalen Berechnungsformeln wurde festgelegt:
 
@@ -1325,7 +1325,7 @@ Für den Rollenbezug der globalen Berechnungsformeln wurde festgelegt:
 - Welche konkrete Seite oder Tabelle Soll, Ist und Differenz später zeigt, wird bei der betreffenden Oberflächenfunktion entschieden und ist keine offene Berechnungsregel.
 - Rollenabhängige Fachprüfungen bleiben möglich, wenn sie ausdrücklich beschlossen wurden. Die Beschränkung der Rufbereitschaft auf Erzieher ist eine solche Zulässigkeitsregel, aber kein Gegenbeispiel zur Rollenunabhängigkeit der allgemeinen Monatsformeln.
 
-Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für den Berechnungsstand von Soll-Arbeitszeit, Ist-Arbeitszeit und Differenz wurde festgelegt:
 
@@ -1336,7 +1336,7 @@ Für den Berechnungsstand von Soll-Arbeitszeit, Ist-Arbeitszeit und Differenz wu
 - Verbindliche Ausgaben, insbesondere Export, Druck oder ein als abgeschlossen behandelter Monatsplan, dürfen ausschließlich den gespeicherten Stand verwenden.
 - Ein Entwurf mit ungespeicherten Änderungen muss vor einer verbindlichen Ausgabe gespeichert werden; Entwurfsstand und gespeicherter Stand müssen erkennbar unterscheidbar sein.
 
-Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für eine Wochenarbeitszeit von `0:00` wurde festgelegt:
 
@@ -1347,7 +1347,7 @@ Für eine Wochenarbeitszeit von `0:00` wurde festgelegt:
 - Feste Planungseinträge mit positiver reiner Arbeitszeit dürfen weiterhin ein positives Ist erzeugen. Die Differenz entspricht dann der Ist-Arbeitszeit.
 - Aus einer Wochenarbeitszeit von `0:00` werden weder Rolle noch Beschäftigungsstatus oder Aktivierung eines Mitarbeiters abgeleitet.
 
-Die positive Mindestgrenze des Altsystems war für die Rechenformeln nicht erforderlich und wird deshalb nicht als zusätzliche Fachregel in das Zielmodell übernommen. Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Die positive Mindestgrenze des Altsystems war für die Rechenformeln nicht erforderlich und wird deshalb nicht als zusätzliche Fachregel in das Zielmodell übernommen. Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Für fehlende oder doppelte Plantage wurde nach Abgleich mit dem Altsystem festgelegt:
 
@@ -1358,7 +1358,7 @@ Für fehlende oder doppelte Plantage wurde nach Abgleich mit dem Altsystem festg
 - Das zufällige technische Verhalten des Altsystems bei doppelten Datumswerten wird nicht als gewünschte Fachregel übernommen.
 - Der Umgang mit beschädigten oder manuell veränderten gespeicherten Daten wird als technische Robustheitsfrage behandelt und verändert die regulären Berechnungsformeln nicht.
 
-Diese Entscheidung wurde in `docs/Berechnungen.md` übernommen.
+Diese Entscheidung wurde in `docs/Berechnungen/` übernommen.
 
 Die im Analyseabschnitt genannte Farbkennzeichnung ist keine Berechnungsregel. Wert, Vorzeichen und Nulldarstellung der Differenz sind bereits verbindlich festgelegt; konkrete Farben oder andere visuelle Hervorhebungen werden bei der Gestaltung der jeweiligen Oberfläche entschieden.
 
@@ -1397,7 +1397,7 @@ Nicht als fachliche Berechnungen eingestuft wurden insbesondere:
 
 ### Prüfgrundlage und Einordnung
 
-Für die Gesamtprüfung wurden `docs/Berechnungen.md`, dieses Analyseprotokoll und `docs/temp/Sitzungsuebergabe-Berechnungen.md` vollständig gelesen und miteinander abgeglichen. Geprüft wurden insbesondere die Rechenkette, Minutenbasis und Rundungszeitpunkte, Kalender- und Tageszuordnung, Planungseintrag- und Mitarbeiter-Snapshots, Rollenbezug, Entwurfsstand sowie die Trennung zwischen verbindlichem Zielmodell und historischem Altbefund.
+Für die Gesamtprüfung wurden `docs/Berechnungen/`, dieses Analyseprotokoll und `docs/temp/Sitzungsuebergabe-Berechnungen.md` vollständig gelesen und miteinander abgeglichen. Geprüft wurden insbesondere die Rechenkette, Minutenbasis und Rundungszeitpunkte, Kalender- und Tageszuordnung, Planungseintrag- und Mitarbeiter-Snapshots, Rollenbezug, Entwurfsstand sowie die Trennung zwischen verbindlichem Zielmodell und historischem Altbefund.
 
 Der alte Quellcode musste für Schritt 8 nicht erneut geöffnet werden. Die für den Abgleich benötigten Altbefunde sind in den vollständig gelesenen Analyseabschnitten mit Quellstellen dokumentiert; keiner der nachfolgenden Befunde hängt von einer neuen oder strittigen Interpretation des Altsystems ab.
 
@@ -1430,7 +1430,7 @@ Es wurde **kein Befund der Kategorie (a)** gefunden. Ebenso fehlt **keine fachli
 
 **Kategorie: (c) redaktionelle Unklarheit.**
 
-- In den Abschnitten `Nachtzuschlag` und `Nachtbereitschaftszuschlag` von `docs/Berechnungen.md` stand noch, die Wirkung des jeweiligen Zuschlags auf das Ist werde erst in Schritt 7 festgelegt.
+- In den Abschnitten `Nachtzuschlag` und `Nachtbereitschaftszuschlag` von `docs/Berechnungen/` stand noch, die Wirkung des jeweiligen Zuschlags auf das Ist werde erst in Schritt 7 festgelegt.
 - Entsprechende historische Formulierungen stehen in diesem Protokoll unter anderem bei den bisherigen Zeilen 978, 1009, 1062 bis 1075 und 1085.
 - In `docs/temp/Sitzungsuebergabe-Berechnungen.md` wurde die Einbeziehung beider Zuschläge ebenfalls noch als Schritt 7 vorbehalten bezeichnet, obwohl dieselbe Übergabe bereits die endgültige Ist-Formel nannte.
 
@@ -1442,7 +1442,7 @@ Diese Korrektur verändert keine Formel und benötigt keine neue Fachentscheidun
 
 **Kategorie: (c) redaktionelle Unklarheit.**
 
-Im Begriffsabschnitt von `docs/Berechnungen.md` wurde Arbeitszeit (mit NB) als „insgesamt angerechnete Arbeitszeit einschließlich Nachtbereitschaft“ beschrieben. Das Wort „angerechnet“ konnte fälschlich nahelegen, diese vollständige Größe gehe in die Ist-Arbeitszeit ein. Die verbindliche Ist-Regel schließt dies ausdrücklich aus.
+Im Begriffsabschnitt von `docs/Berechnungen/` wurde Arbeitszeit (mit NB) als „insgesamt angerechnete Arbeitszeit einschließlich Nachtbereitschaft“ beschrieben. Das Wort „angerechnet“ konnte fälschlich nahelegen, diese vollständige Größe gehe in die Ist-Arbeitszeit ein. Die verbindliche Ist-Regel schließt dies ausdrücklich aus.
 
 Umgesetzte neutrale Definition:
 
@@ -1466,13 +1466,13 @@ Die verbindliche Datei ist an dieser Stelle bereits richtig; nur die Übergabe s
 
 **Kategorie: (c) redaktionelle Unklarheit.**
 
-Die verbindlichen Namen lauten in `docs/Berechnungen.md` **`Feste Zeitwerte`** und **`Wochenarbeitszeit`**. Die Übergabe nannte dagegen „Fest“ und „Wöchentlich“. Für spätere Datenmodelle, Oberflächen und Tests werden nun überall die verbindlichen Namen verwendet.
+Die verbindlichen Namen lauten in `docs/Berechnungen/` **`Feste Zeitwerte`** und **`Wochenarbeitszeit`**. Die Übergabe nannte dagegen „Fest“ und „Wöchentlich“. Für spätere Datenmodelle, Oberflächen und Tests werden nun überall die verbindlichen Namen verwendet.
 
 #### Priorität 2 — Rollenfilter ist fachlich richtig, aber sprachlich unnötig schwer abzugrenzen — erledigt
 
 **Kategorie: (c) redaktionelle Unklarheit, kein Rollenwiderspruch.**
 
-Der Rollenabschnitt in `docs/Berechnungen.md` enthält gleichzeitig zwei richtige Regeln: Alle globalen Zeit-, Soll-, Ist- und Differenzformeln sind rollenunabhängig; eine vorgesehene zeitbezogene Oberfläche listet nur Mitarbeiter mit der Snapshot-Rolle `Erzieher`. Die wechselnden Formulierungen „die zeitbezogene Auswertung“, „diese Oberfläche“ und „eine konkrete Seite“ erschwerten jedoch die Abgrenzung.
+Der Rollenabschnitt in `docs/Berechnungen/` enthält gleichzeitig zwei richtige Regeln: Alle globalen Zeit-, Soll-, Ist- und Differenzformeln sind rollenunabhängig; eine vorgesehene zeitbezogene Oberfläche listet nur Mitarbeiter mit der Snapshot-Rolle `Erzieher`. Die wechselnden Formulierungen „die zeitbezogene Auswertung“, „diese Oberfläche“ und „eine konkrete Seite“ erschwerten jedoch die Abgrenzung.
 
 Umgesetzt wurde die Trennung in zwei klar benannte Absätze:
 
@@ -1485,7 +1485,7 @@ Die bereits beschlossene Rufbereitschaftsregel bleibt eine eigenständige Zuläs
 
 **Kategorie: (c) redaktionell-technische Unklarheit, keine fehlende Berechnungsentscheidung.**
 
-`docs/Berechnungen.md` legt fest, dass Arbeitszeit (mit NB) im Planungseintrag-Snapshot gespeichert wird. Die Konsistenzprüfung begann dagegen bedingt mit „Enthält … einen Wert“. Dadurch blieb sprachlich offen, ob ein Snapshot ohne dieses verbindlich vorgesehene Feld zulässig wäre.
+`docs/Berechnungen/` legt fest, dass Arbeitszeit (mit NB) im Planungseintrag-Snapshot gespeichert wird. Die Konsistenzprüfung begann dagegen bedingt mit „Enthält … einen Wert“. Dadurch blieb sprachlich offen, ob ein Snapshot ohne dieses verbindlich vorgesehene Feld zulässig wäre.
 
 Für die fachliche Berechnung ist das Ergebnis trotzdem eindeutig, weil der Wert immer aus reiner Arbeitszeit und Nachtbereitschaft berechnet werden kann. Für den Planungseintrag-Snapshot wurde deshalb ausdrücklich festgehalten, dass der abgeleitete Wert vorhanden sein muss und exakt der Summe entspricht. Ob eine Eintragsdefinition denselben abgeleiteten Wert zusätzlich dauerhaft speichert oder für ihre schreibgeschützte Anzeige jeweils neu berechnet, ist eine technische Datenmodellentscheidung; in beiden Fällen muss die Formel gelten.
 
@@ -1503,7 +1503,7 @@ Umgesetzt wurde ein vollständiges Beispiel mit nicht ganzzahligen Zuschlags-Zwi
 
 **Kategorie: (c) redaktionelle Wiederholung beziehungsweise veralteter Arbeitsstand.**
 
-- `docs/Berechnungen.md` führte Schritt 8 noch als offen.
+- `docs/Berechnungen/` führte Schritt 8 noch als offen.
 - Dieses Protokoll führte Schritt 8 ebenfalls als offen und als nächsten Schritt.
 - `docs/temp/Sitzungsuebergabe-Berechnungen.md` bezeichnete Schritt 8 noch als nächsten Schritt.
 
@@ -1530,13 +1530,13 @@ Die folgenden Punkte sind **Kategorie (d)**. Sie bleiben auffällig, sind aber d
 - Nachtzuschlag und Nachtbereitschaftszuschlag werden jeweils erst aus ihrer vollständigen Monatssumme gebildet und danach genau einmal gerundet.
 - Ist und Differenz addieren beziehungsweise subtrahieren bereits ganzzahlige Minuten und werden nicht erneut gerundet.
 - Negative Werte entstehen ausschließlich bei der Differenz; die allgemeine Rundungsregel muss deshalb keine negativen Zuschlags- oder Dauerwerte behandeln.
-- Für Stundenfelder bestehen weiterhin keine allgemeinen fachlichen Obergrenzen. Das ist in `docs/Berechnungen.md:65-69` ausdrücklich so abgegrenzt. Technische sichere Zahlenbereiche und feldbezogene Maximalwerte sind bei der späteren Validierung zu bestimmen, verändern aber die dokumentierten Formeln nicht.
+- Für Stundenfelder bestehen weiterhin keine allgemeinen fachlichen Obergrenzen. Das ist in `docs/Berechnungen/01-Zeitbasis-und-Rundung.md` ausdrücklich so abgegrenzt. Technische sichere Zahlenbereiche und feldbezogene Maximalwerte sind bei der späteren Validierung zu bestimmen, verändern aber die dokumentierten Formeln nicht.
 
 ### Entscheidung zum fachlichen Abschluss
 
 **Keine neue Berechnungsentscheidung.** Die Gesamtprüfung hat keine konkurrierenden Formeln und keinen fehlenden Grenzfall gefunden, der das Ergebnis einer regulären Berechnung uneindeutig macht.
 
-Der Benutzer hat bestätigt, dass die vorgeschlagenen redaktionellen Klarstellungen ohne fachliche Änderung in `docs/Berechnungen.md` und die Sitzungsübergabe übernommen werden dürfen. Die technische Entscheidung, ob Arbeitszeit (mit NB) zusätzlich in einer Eintragsdefinition gespeichert oder dort nur für die Anzeige berechnet wird, kann vor der Implementierung des Datenmodells getroffen werden; im Planungseintrag-Snapshot und in allen Berechnungen bleibt die verbindliche Summe unverändert.
+Der Benutzer hat bestätigt, dass die vorgeschlagenen redaktionellen Klarstellungen ohne fachliche Änderung in `docs/Berechnungen/` und die Sitzungsübergabe übernommen werden dürfen. Die technische Entscheidung, ob Arbeitszeit (mit NB) zusätzlich in einer Eintragsdefinition gespeichert oder dort nur für die Anzeige berechnet wird, kann vor der Implementierung des Datenmodells getroffen werden; im Planungseintrag-Snapshot und in allen Berechnungen bleibt die verbindliche Summe unverändert.
 
 ### Umgesetzter Abschluss von Schritt 8
 

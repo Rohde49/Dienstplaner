@@ -4,7 +4,7 @@ Projektordner:
 E:\Programmieren\Projects\Dienstplaner
 
 Ziel:
-Alle im alten Projekt implementierten fachlichen Berechnungen sollen nachvollziehbar analysiert und anschließend als verbindliche Regeln in `docs/Berechnungen.md` festgehalten werden.
+Alle im alten Projekt implementierten fachlichen Berechnungen sollen nachvollziehbar analysiert und anschließend als verbindliche Regeln unter `docs/Berechnungen/` festgehalten werden.
 
 Wichtige Quellenregel:
 Das alte Projekt befindet sich unter:
@@ -14,12 +14,12 @@ Im alten Projekt darf ausschließlich der Ordner `src` als fachliche Quelle unte
 
 Lies zu Beginn vollständig:
 
-1. `docs/Berechnungen.md`
+1. `docs/Berechnungen/README.md` und sämtliche dort verlinkten Regeldokumente
 2. `docs/temp/Analyse-Altsystem-Berechnungen.md`
 
 Bedeutung der Dateien:
 
-- `docs/Berechnungen.md` enthält die gemeinsam bestätigten und damit verbindlichen fachlichen Regeln des neuen Projekts.
+- Die Dokumente unter `docs/Berechnungen/` enthalten die gemeinsam bestätigten und damit verbindlichen fachlichen Regeln des neuen Projekts; `docs/Berechnungen/README.md` ist der zentrale Einstiegspunkt.
 - `docs/temp/Analyse-Altsystem-Berechnungen.md` enthält den technischen Befund aus dem Quellcode des Altsystems, offene Fragen und den schrittweisen Arbeitsnachweis.
 - Der technische Befund des Altsystems ist nicht automatisch eine neue fachliche Regel. Verbindlich wird eine Regel erst nach ausdrücklicher Bestätigung durch den Benutzer.
 
@@ -33,7 +33,7 @@ Bisheriger Arbeitsstand:
 - Schritt 6: zeitbezogene Monatssummen, Sonntags- und Feiertagsstunden, Nachtarbeit, Nachtbereitschaft und Zuschläge vollständig analysiert und fachlich entschieden.
 - Schritt 7: Soll-Arbeitszeit, Ist-Arbeitszeit und Differenz vollständig analysiert und fachlich entschieden.
 - Schritt 8: Gesamtprüfung und redaktionelle Bereinigung abgeschlossen. Es wurden keine fachlichen Widersprüche und keine zwingend fehlenden Berechnungsentscheidungen gefunden.
-- Die schrittweise Fachanalyse der Berechnungen ist damit abgeschlossen. Als nächster Arbeitsabschnitt kann die technische Umsetzung auf Grundlage von `docs/Berechnungen.md` geplant werden.
+- Die schrittweise Fachanalyse der Berechnungen ist damit abgeschlossen. Als nächster Arbeitsabschnitt kann die technische Umsetzung auf Grundlage der Dokumente unter `docs/Berechnungen/` geplant werden.
 
 Bereits verbindliche Kernaussagen:
 
@@ -98,7 +98,7 @@ Arbeitsweise:
 - Arbeite in kleinen, nachvollziehbaren Schritten.
 - Besprich fachliche Entscheidungen einzeln mit dem Benutzer.
 - Stelle bei einer offenen Entscheidung jeweils eine konkrete Frage und warte auf die Antwort.
-- Übernimm eine Regel erst nach Zustimmung des Benutzers in `docs/Berechnungen.md`.
+- Übernimm eine Regel erst nach Zustimmung des Benutzers in das fachlich zuständige Dokument unter `docs/Berechnungen/`.
 - Halte technische Erkenntnisse und den Arbeitsstand zusätzlich in der temporären Analysedatei fest.
 - Unterscheide stets klar zwischen:
   1. Verhalten des Altsystems,
