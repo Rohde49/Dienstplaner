@@ -14,7 +14,7 @@ const minuteValueSchema = z
     'Der Zeitwert ist zu groß, um zuverlässig gespeichert zu werden.',
   );
 
-export const timeValuesSchema = z
+const timeValuesObjectSchema = z
   .object({
     attendanceMinutes: minuteValueSchema,
     workingMinutes: minuteValueSchema,
@@ -23,6 +23,43 @@ export const timeValuesSchema = z
     nightWorkMinutes: minuteValueSchema,
   })
   .strict();
+
+/** Addiert reine Arbeitszeit und Nachtbereitschaft zur Arbeitszeit mit NB. */
+export function calculateWorkingMinutes(
+  workingWithoutNightReadinessMinutes: number,
+  nightReadinessMinutes: number,
+): number {
+  return workingWithoutNightReadinessMinutes + nightReadinessMinutes;
+}
+
+/** Prüft die verbindliche Ableitung der Arbeitszeit einschließlich Nachtbereitschaft. */
+export const timeValuesSchema = timeValuesObjectSchema.superRefine(
+  (value, context) => {
+    const workingMinutes = calculateWorkingMinutes(
+      value.workingWithoutNightReadinessMinutes,
+      value.nightReadinessMinutes,
+    );
+
+    if (!Number.isSafeInteger(workingMinutes)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['workingMinutes'],
+        message:
+          'Die Summe aus reiner Arbeitszeit und Nachtbereitschaft ist zu groß, um zuverlässig gespeichert zu werden.',
+      });
+      return;
+    }
+
+    if (value.workingMinutes !== workingMinutes) {
+      context.addIssue({
+        code: 'custom',
+        path: ['workingMinutes'],
+        message:
+          'Die Arbeitszeit (mit NB) muss der Summe aus reiner Arbeitszeit und Nachtbereitschaft entsprechen.',
+      });
+    }
+  },
+);
 
 const clockTimeSchema = z
   .string()
@@ -115,11 +152,27 @@ export const entryTypeInputSchema = entryTypeObjectSchema
 /** Prüft den vollständigen Aufbau der lokalen Eintragsartendatei. */
 export const entryTypesFileSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     updatedAt: z.string().datetime(),
     entryTypes: z.array(entryTypeSchema),
   })
-  .strict();
+  .strict()
+  .superRefine((file, context) => {
+    const knownIds = new Set<string>();
+
+    file.entryTypes.forEach((entryType, index) => {
+      if (knownIds.has(entryType.id)) {
+        context.addIssue({
+          code: 'custom',
+          path: ['entryTypes', index, 'id'],
+          message:
+            'Eintragsarten-IDs müssen innerhalb der Datei eindeutig sein.',
+        });
+      }
+
+      knownIds.add(entryType.id);
+    });
+  });
 
 export type CalculationType = z.infer<typeof calculationTypeSchema>;
 export type TimeValues = z.infer<typeof timeValuesSchema>;

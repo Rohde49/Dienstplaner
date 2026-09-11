@@ -14,6 +14,15 @@ export const employeeColorKeySchema = z.enum(EMPLOYEE_COLOR_KEYS);
 
 export const employeeIdSchema = z.string().uuid();
 
+/** Enthält alle fachlich zulässigen Mitarbeiterrollen. */
+export const EMPLOYEE_ROLES = [
+  'Erzieher',
+  'Wirtschaftskraft',
+  'Praktikant',
+] as const;
+
+export const employeeRoleSchema = z.enum(EMPLOYEE_ROLES);
+
 /** Prüft einen vollständig gespeicherten Mitarbeiter. */
 export const employeeSchema = z
   .object({
@@ -28,11 +37,7 @@ export const employeeSchema = z
       .trim()
       .min(1, 'Der Nachname ist erforderlich.')
       .max(100, 'Der Nachname darf höchstens 100 Zeichen enthalten.'),
-    role: z
-      .string()
-      .trim()
-      .min(1, 'Die Rolle ist erforderlich.')
-      .max(100, 'Die Rolle darf höchstens 100 Zeichen enthalten.'),
+    role: employeeRoleSchema,
     weeklyWorkingMinutes: z
       .number()
       .int('Die Wochenarbeitszeit muss minutengenau angegeben werden.')
@@ -40,6 +45,10 @@ export const employeeSchema = z
       .max(
         10_080,
         'Die Wochenarbeitszeit darf 168 Stunden nicht überschreiten.',
+      )
+      .multipleOf(
+        5,
+        'Die Wochenarbeitszeit muss in Fünf-Minuten-Schritten angegeben werden.',
       ),
     colorKey: employeeColorKeySchema,
     active: z.boolean(),
@@ -58,13 +67,29 @@ export const employeeInputSchema = employeeSchema.omit({
 /** Prüft den vollständigen Aufbau der lokalen Mitarbeiterdatei. */
 export const employeesFileSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     updatedAt: z.string().datetime(),
     employees: z.array(employeeSchema),
   })
-  .strict();
+  .strict()
+  .superRefine((file, context) => {
+    const knownIds = new Set<string>();
+
+    file.employees.forEach((employee, index) => {
+      if (knownIds.has(employee.id)) {
+        context.addIssue({
+          code: 'custom',
+          path: ['employees', index, 'id'],
+          message: 'Mitarbeiter-IDs müssen innerhalb der Datei eindeutig sein.',
+        });
+      }
+
+      knownIds.add(employee.id);
+    });
+  });
 
 export type EmployeeColorKey = z.infer<typeof employeeColorKeySchema>;
+export type EmployeeRole = z.infer<typeof employeeRoleSchema>;
 export type Employee = z.infer<typeof employeeSchema>;
 export type EmployeeInput = z.infer<typeof employeeInputSchema>;
 export type EmployeesFile = z.infer<typeof employeesFileSchema>;

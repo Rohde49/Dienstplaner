@@ -46,31 +46,31 @@ Abnahmekriterien:
 
 ### Mitarbeiterrollen
 
-- [ ] Die Rolle von einem freien Textfeld auf einen fest definierten Rollentyp umstellen.
-- [ ] Die Rolle `Erzieher` eindeutig im gemeinsamen Schema abbilden.
-- [ ] Die Teamverwaltung auf eine kontrollierte Rollenauswahl umstellen.
-- [ ] Rollenwerte an der Speichergrenze validieren.
+- [x] Die Rolle von einem freien Textfeld auf einen fest definierten Rollentyp umstellen.
+- [x] Die Rolle `Erzieher` eindeutig im gemeinsamen Schema abbilden.
+- [x] Die Teamverwaltung auf eine kontrollierte Rollenauswahl umstellen.
+- [x] Rollenwerte an der Speichergrenze validieren.
 
 ### Wochenarbeitszeit
 
-- [ ] Nichtnegative ganze Minuten als interne Einheit beibehalten.
-- [ ] Die Teilbarkeit der Wochenarbeitszeit durch fünf im gemeinsamen Schema prüfen.
-- [ ] Die Eingabe so anpassen, dass alle zulässigen Fünf-Minuten-Schritte erfasst werden können.
-- [ ] `0:00` als gültigen Wert unterstützen.
+- [x] Nichtnegative ganze Minuten als interne Einheit beibehalten.
+- [x] Die Teilbarkeit der Wochenarbeitszeit durch fünf im gemeinsamen Schema prüfen.
+- [x] Die Eingabe so anpassen, dass alle zulässigen Fünf-Minuten-Schritte erfasst werden können.
+- [x] `0:00` als gültigen Wert unterstützen.
 
 ### Eintragsarten und Zeitwerte
 
-- [ ] Reine Arbeitszeit und Nachtbereitschaft als unabhängig pflegbare Werte beibehalten.
-- [ ] Arbeitszeit (mit NB) als `reine Arbeitszeit + Nachtbereitschaft` berechnen.
-- [ ] Arbeitszeit (mit NB) in der Eintragsartenverwaltung sichtbar, aber nicht änderbar darstellen.
-- [ ] Die Summenbeziehung an der fachlichen Speichergrenze validieren, sofern der Wert in der Eintragsdefinition gespeichert wird.
-- [ ] Für `Wochenarbeitszeit` weiterhin keine festen Uhrzeiten und keine festen Zeitwerte in der Eintragsdefinition speichern.
+- [x] Reine Arbeitszeit und Nachtbereitschaft als unabhängig pflegbare Werte beibehalten.
+- [x] Arbeitszeit (mit NB) als `reine Arbeitszeit + Nachtbereitschaft` berechnen.
+- [x] Arbeitszeit (mit NB) in der Eintragsartenverwaltung sichtbar, aber nicht änderbar darstellen.
+- [x] Die Summenbeziehung an der fachlichen Speichergrenze validieren, sofern der Wert in der Eintragsdefinition gespeichert wird.
+- [x] Für `Wochenarbeitszeit` weiterhin keine festen Uhrzeiten und keine festen Zeitwerte in der Eintragsdefinition speichern.
 
 Abnahmekriterien:
 
-- [ ] Ungültige Rollen und nicht durch fünf teilbare Wochenarbeitszeiten werden abgelehnt.
-- [ ] Die Oberfläche kann keinen von der Formel abweichenden Wert für Arbeitszeit (mit NB) speichern.
-- [ ] Bestehende Team- und Eintragsartenfunktionen arbeiten nach der Umstellung weiterhin korrekt.
+- [x] Ungültige Rollen und nicht durch fünf teilbare Wochenarbeitszeiten werden abgelehnt.
+- [x] Die Oberfläche kann keinen von der Formel abweichenden Wert für Arbeitszeit (mit NB) speichern.
+- [x] Bestehende Team- und Eintragsartenfunktionen arbeiten nach der Umstellung weiterhin korrekt.
 
 ## Schritt 3: Gemeinsame Zeit- und Kalenderfunktionen umsetzen
 

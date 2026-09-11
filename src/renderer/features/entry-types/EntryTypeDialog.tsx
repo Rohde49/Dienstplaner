@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import {
+  calculateWorkingMinutes,
   entryTypeInputSchema,
   type CalculationType,
   type EntryType,
@@ -36,7 +37,6 @@ type EntryTypeDialogProps = {
 
 type DurationFormField =
   | 'attendanceDuration'
-  | 'workingDuration'
   | 'workingWithoutNightReadinessDuration'
   | 'nightReadinessDuration'
   | 'nightWorkDuration';
@@ -48,14 +48,15 @@ type EntryTypeFormState = {
   startTime: string;
   endTime: string;
   attendanceDuration: string;
-  workingDuration: string;
   workingWithoutNightReadinessDuration: string;
   nightReadinessDuration: string;
   nightWorkDuration: string;
   active: boolean;
 };
 
-type EntryTypeFormErrors = Partial<Record<keyof EntryTypeFormState, string>>;
+type EntryTypeFormField = keyof EntryTypeFormState | 'workingDuration';
+
+type EntryTypeFormErrors = Partial<Record<EntryTypeFormField, string>>;
 
 type DurationFieldDefinition = {
   field: DurationFormField;
@@ -76,11 +77,6 @@ const additionalDurationFields: DurationFieldDefinition[] = [
     label: 'Anwesenheitszeit',
   },
   {
-    field: 'workingDuration',
-    schemaField: 'workingMinutes',
-    label: 'Arbeitszeit (mit NB)',
-  },
-  {
     field: 'nightReadinessDuration',
     schemaField: 'nightReadinessMinutes',
     label: 'Nachtbereitschaft',
@@ -94,7 +90,7 @@ const additionalDurationFields: DurationFieldDefinition[] = [
 
 const durationFields = [primaryDurationField, ...additionalDurationFields];
 
-const schemaPathToFormField: Record<string, keyof EntryTypeFormState> = {
+const schemaPathToFormField: Record<string, EntryTypeFormField> = {
   code: 'code',
   name: 'name',
   calculationType: 'calculationType',
@@ -109,7 +105,7 @@ const schemaPathToFormField: Record<string, keyof EntryTypeFormState> = {
   active: 'active',
 };
 
-const formFieldIds: Record<keyof EntryTypeFormState, string> = {
+const formFieldIds: Record<EntryTypeFormField, string> = {
   code: 'entry-type-code',
   name: 'entry-type-name',
   calculationType: 'entry-type-calculation',
@@ -126,8 +122,7 @@ const formFieldIds: Record<keyof EntryTypeFormState, string> = {
 
 /** Setzt den Fokus nach einer fehlgeschlagenen Prüfung auf das erste Feld. */
 function focusFirstInvalidField(errors: EntryTypeFormErrors): void {
-  const firstField = Object.keys(errors)[0] as
-    keyof EntryTypeFormState | undefined;
+  const firstField = Object.keys(errors)[0] as EntryTypeFormField | undefined;
 
   if (!firstField) {
     return;
@@ -153,9 +148,6 @@ function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
       attendanceDuration: usesWeeklyWorkingTime
         ? ''
         : formatDuration(entryType.timeValues.attendanceMinutes),
-      workingDuration: usesWeeklyWorkingTime
-        ? ''
-        : formatDuration(entryType.timeValues.workingMinutes),
       workingWithoutNightReadinessDuration: usesWeeklyWorkingTime
         ? ''
         : formatDuration(
@@ -178,12 +170,32 @@ function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
     startTime: '',
     endTime: '',
     attendanceDuration: '',
-    workingDuration: '',
     workingWithoutNightReadinessDuration: '',
     nightReadinessDuration: '',
     nightWorkDuration: '',
     active: true,
   };
+}
+
+/** Ermittelt die nur angezeigte Arbeitszeit (mit NB) aus den beiden Eingabewerten. */
+function calculateWorkingDuration(formState: EntryTypeFormState): string {
+  const workingWithoutNightReadiness = parseDurationInput(
+    formState.workingWithoutNightReadinessDuration,
+  );
+  const nightReadiness = parseDurationInput(formState.nightReadinessDuration);
+
+  if (!workingWithoutNightReadiness || !nightReadiness) {
+    return '';
+  }
+
+  const workingMinutes = calculateWorkingMinutes(
+    workingWithoutNightReadiness.minutes,
+    nightReadiness.minutes,
+  );
+
+  return Number.isSafeInteger(workingMinutes)
+    ? formatDuration(workingMinutes)
+    : '';
 }
 
 function getErrorMessage(error: unknown): string {
@@ -208,6 +220,9 @@ export function EntryTypeDialog({
 
   const usesWeeklyWorkingTime =
     formState.calculationType === 'weeklyWorkingTime';
+  const calculatedWorkingDuration = usesWeeklyWorkingTime
+    ? ''
+    : calculateWorkingDuration(formState);
 
   function resetForm(): void {
     setFormState(createInitialFormState(entryType));
@@ -248,7 +263,6 @@ export function EntryTypeDialog({
             startTime: '',
             endTime: '',
             attendanceDuration: '',
-            workingDuration: '',
             workingWithoutNightReadinessDuration: '',
             nightReadinessDuration: '',
             nightWorkDuration: '',
@@ -336,6 +350,23 @@ export function EntryTypeDialog({
         }
 
         timeValues[definition.schemaField] = parsedValue.minutes;
+      }
+
+      if (
+        !nextErrors.workingWithoutNightReadinessDuration &&
+        !nextErrors.nightReadinessDuration
+      ) {
+        const workingMinutes = calculateWorkingMinutes(
+          timeValues.workingWithoutNightReadinessMinutes,
+          timeValues.nightReadinessMinutes,
+        );
+
+        if (!Number.isSafeInteger(workingMinutes)) {
+          nextErrors.workingDuration =
+            'Die Summe ist zu groß, um zuverlässig gespeichert zu werden.';
+        } else {
+          timeValues.workingMinutes = workingMinutes;
+        }
       }
     }
 
@@ -625,9 +656,9 @@ export function EntryTypeDialog({
                     </p>
 
                     <p className="mt-2 text-xs leading-5">
-                      Die Zeitwerte werden separat eingegeben. Die dargestellten
-                      Zusammenhänge dienen als Eingabehilfe und werden nicht
-                      automatisch geprüft.
+                      Die Arbeitszeit (mit NB) wird automatisch aus reiner
+                      Arbeitszeit und Nachtbereitschaft berechnet. Die übrigen
+                      Zeitwerte werden separat eingegeben.
                     </p>
                   </InfoPopover>
                 </span>
@@ -647,6 +678,9 @@ export function EntryTypeDialog({
                     disabled={usesWeeklyWorkingTime}
                     required={!usesWeeklyWorkingTime}
                     value={formState[primaryDurationField.field]}
+                    aria-invalid={Boolean(
+                      formErrors[primaryDurationField.field],
+                    )}
                     onBlur={() =>
                       normalizeDurationField(primaryDurationField.field)
                     }
@@ -683,6 +717,23 @@ export function EntryTypeDialog({
                     />
                   </FormField>
                 ))}
+
+                <FormField
+                  htmlFor="entry-type-workingDuration"
+                  label="Arbeitszeit (mit NB)"
+                  error={formErrors.workingDuration}
+                  hint="Wird aus reiner Arbeitszeit und Nachtbereitschaft berechnet"
+                >
+                  <Input
+                    id="entry-type-workingDuration"
+                    inputMode="decimal"
+                    placeholder="HH:mm"
+                    disabled={usesWeeklyWorkingTime}
+                    readOnly
+                    value={calculatedWorkingDuration}
+                    aria-invalid={Boolean(formErrors.workingDuration)}
+                  />
+                </FormField>
               </div>
             </fieldset>
 

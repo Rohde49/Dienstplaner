@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import {
+  EMPLOYEE_ROLES,
   employeeInputSchema,
   type Employee,
   type EmployeeColorKey,
+  type EmployeeRole,
 } from '../../../shared/schemas';
 import {
   Alert,
@@ -16,9 +18,14 @@ import {
   DialogTrigger,
   FormField,
   Input,
+  Select,
   Spinner,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_OPTIONS } from './employeeColorStyles';
+import {
+  formatEmployeeWorkingDuration,
+  parseEmployeeWorkingDuration,
+} from './employeeWorkingTime';
 
 type EmployeeDialogProps = {
   employee?: Employee;
@@ -29,7 +36,7 @@ type EmployeeDialogProps = {
 type EmployeeFormState = {
   firstName: string;
   lastName: string;
-  role: string;
+  role: EmployeeRole | '';
   weeklyWorkingHours: string;
   colorKey: EmployeeColorKey;
   active: boolean;
@@ -44,7 +51,9 @@ function createInitialFormState(employee?: Employee): EmployeeFormState {
       firstName: employee.firstName,
       lastName: employee.lastName,
       role: employee.role,
-      weeklyWorkingHours: String(employee.weeklyWorkingMinutes / 60),
+      weeklyWorkingHours: formatEmployeeWorkingDuration(
+        employee.weeklyWorkingMinutes,
+      ),
       colorKey: employee.colorKey,
       active: employee.active,
     };
@@ -141,6 +150,19 @@ export function EmployeeDialog({
     }));
   }
 
+  function normalizeWeeklyWorkingHours(): void {
+    const weeklyWorkingMinutes = parseEmployeeWorkingDuration(
+      formState.weeklyWorkingHours,
+    );
+
+    if (weeklyWorkingMinutes !== null) {
+      updateField(
+        'weeklyWorkingHours',
+        formatEmployeeWorkingDuration(weeklyWorkingMinutes),
+      );
+    }
+  }
+
   /** Prüft das Formular und speichert den neuen oder geänderten Mitarbeiter. */
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
@@ -148,18 +170,15 @@ export function EmployeeDialog({
     event.preventDefault();
     setSubmissionError(null);
 
-    const normalizedHours = formState.weeklyWorkingHours
-      .trim()
-      .replace(',', '.');
-
-    const weeklyHours =
-      normalizedHours === '' ? Number.NaN : Number(normalizedHours);
+    const weeklyWorkingHours = formState.weeklyWorkingHours.trim();
+    const weeklyWorkingMinutes =
+      parseEmployeeWorkingDuration(weeklyWorkingHours);
 
     const validationResult = employeeInputSchema.safeParse({
       firstName: formState.firstName,
       lastName: formState.lastName,
       role: formState.role,
-      weeklyWorkingMinutes: Math.round(weeklyHours * 60),
+      weeklyWorkingMinutes: weeklyWorkingMinutes ?? Number.NaN,
       colorKey: formState.colorKey,
       active: formState.active,
     });
@@ -172,9 +191,16 @@ export function EmployeeDialog({
         const formField = schemaPathToFormField[schemaField];
 
         if (formField && !nextErrors[formField]) {
+          if (formField === 'role') {
+            nextErrors[formField] = 'Bitte wähle eine Rolle aus.';
+            continue;
+          }
+
           nextErrors[formField] =
-            formField === 'weeklyWorkingHours' && !Number.isFinite(weeklyHours)
-              ? 'Die Wochenarbeitszeit ist erforderlich.'
+            formField === 'weeklyWorkingHours' && weeklyWorkingMinutes === null
+              ? weeklyWorkingHours === ''
+                ? 'Die Wochenarbeitszeit ist erforderlich.'
+                : 'Bitte gib die Wochenarbeitszeit im Format H:MM ein, zum Beispiel 39:00.'
               : issue.message;
         }
       }
@@ -287,34 +313,40 @@ export function EmployeeDialog({
                 label="Rolle"
                 error={formErrors.role}
               >
-                <Input
+                <Select
                   id="employee-role"
                   name="role"
-                  autoComplete="organization-title"
                   required
                   value={formState.role}
                   aria-invalid={Boolean(formErrors.role)}
                   aria-describedby={
                     formErrors.role ? 'employee-role-error' : undefined
                   }
-                  onChange={(event) => updateField('role', event.target.value)}
-                />
+                  onChange={(event) =>
+                    updateField('role', event.target.value as EmployeeRole | '')
+                  }
+                >
+                  <option value="">Bitte auswählen</option>
+                  {EMPLOYEE_ROLES.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </Select>
               </FormField>
 
               <FormField
                 htmlFor="employee-weekly-hours"
                 label="Wochenarbeitszeit"
                 error={formErrors.weeklyWorkingHours}
-                hint="Angabe in Stunden, zum Beispiel 39,5"
+                hint="Zeitdauer im Format H:MM, zum Beispiel 39:00"
               >
                 <Input
                   id="employee-weekly-hours"
                   name="weeklyWorkingHours"
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  max="168"
-                  step="0.25"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="39:00"
                   required
                   value={formState.weeklyWorkingHours}
                   aria-invalid={Boolean(formErrors.weeklyWorkingHours)}
@@ -326,6 +358,7 @@ export function EmployeeDialog({
                   onChange={(event) =>
                     updateField('weeklyWorkingHours', event.target.value)
                   }
+                  onBlur={normalizeWeeklyWorkingHours}
                 />
               </FormField>
             </div>

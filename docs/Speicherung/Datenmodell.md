@@ -11,11 +11,11 @@ fachlichen Formeln Vorrang.
 
 ## 1. Umsetzungsstand
 
-| Bereich                  | Stand                                                                                                               |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| Mitarbeiter              | Grundmodell und vollständiger Datenfluss sind umgesetzt; Rollen-Enum und Fünf-Minuten-Regel fehlen noch             |
-| Eintragsarten            | Grundmodell und vollständiger Datenfluss sind umgesetzt; die verbindliche Ableitung von `workingMinutes` fehlt noch |
-| Monatsplan und Snapshots | Zielmodell festgelegt, noch nicht im Anwendungscode umgesetzt                                                       |
+| Bereich                  | Stand                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
+| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
+| Monatsplan und Snapshots | Zielmodell festgelegt, noch nicht im Anwendungscode umgesetzt                          |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -166,8 +166,7 @@ seine ausdrücklich gespeicherten Minutenwerte beschrieben werden.
 
 ## 5. Mitarbeiter (`Employee`)
 
-Status: **teilweise umgesetzt**. Die Struktur existiert; Rollen-Enum und
-Fünf-Minuten-Regel sind noch umzusetzen.
+Status: **für den aktuellen Stammdatenumfang umgesetzt**.
 
 ```ts
 interface Employee {
@@ -199,8 +198,7 @@ Die Mitarbeiter-IDs innerhalb der Datei müssen eindeutig sein.
 
 ## 6. Eintragsart (`EntryType`)
 
-Status: **teilweise umgesetzt**. Die Struktur und beide Berechnungsarten
-existieren; die Summenbeziehung von `workingMinutes` ist noch umzusetzen.
+Status: **für den aktuellen Stammdatenumfang umgesetzt**.
 
 ```ts
 interface EntryType {

@@ -13,7 +13,7 @@ const entryTypeStore = new JsonFileStore<EntryTypesFile>({
   fileName: 'entry-types.json',
   schema: entryTypesFileSchema,
   createDefault: () => ({
-    schemaVersion: 1,
+    schemaVersion: 2,
     updatedAt: new Date().toISOString(),
     entryTypes: [],
   }),

@@ -13,17 +13,9 @@ import {
   IconButton,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
+import { formatWeeklyWorkingTime } from './employeeWorkingTime';
 import { EmployeeDialog } from './EmployeeDialog';
 import { DeleteEmployeeDialog } from './DeleteEmployeeDialog';
-
-/** Wandelt die gespeicherte Minutenanzahl in eine lesbare Stundenangabe um. */
-function formatWeeklyWorkingTime(minutes: number): string {
-  const hours = minutes / 60;
-
-  return `${new Intl.NumberFormat('de-DE', {
-    maximumFractionDigits: 2,
-  }).format(hours)} Std./Woche`;
-}
 
 function getErrorMessage(error: unknown): string {
   return error instanceof Error
