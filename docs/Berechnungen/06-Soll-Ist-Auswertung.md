@@ -18,7 +18,7 @@ Die monatliche Soll-Arbeitszeit eines Mitarbeiters wird aus der vom System berec
 
 ## Monatliche Ist-Arbeitszeit
 
-Die monatliche Ist-Arbeitszeit eines Mitarbeiters wird wie im Altsystem aus seiner monatlichen reinen Arbeitszeit und seinem Nachtbereitschaftszuschlag gebildet:
+Die monatliche Ist-Arbeitszeit eines Mitarbeiters wird aus seiner monatlichen reinen Arbeitszeit und seinem Nachtbereitschaftszuschlag gebildet:
 
 `Monatliche Ist-Arbeitszeit = monatliche reine Arbeitszeit + Nachtbereitschaftszuschlag`
 

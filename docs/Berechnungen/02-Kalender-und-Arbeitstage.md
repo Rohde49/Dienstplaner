@@ -71,4 +71,4 @@ Die monatliche Arbeitstagszahl entspricht somit der Anzahl aller Tage von Montag
 - Dadurch enthält ein regulär erzeugter Monatsplan sämtliche Kalendertage des Monats und keine doppelten Datumswerte.
 - Es wird keine zusätzliche fachliche Regel eingeführt, nach der ein gespeicherter Monatsplan wegen fehlender oder doppelter Plantage ausdrücklich abgelehnt werden muss.
 - Das Verhalten bei beschädigten oder manuell veränderten gespeicherten Daten ist keine eigene fachliche Berechnungsregel und wird bei der technischen Umsetzung behandelt.
-- Insbesondere wird das zufällige Auswahlverhalten des Altsystems bei doppelten Datumswerten nicht als gewünschtes Fachverhalten übernommen.
+- Bei doppelten Datumswerten wird insbesondere kein zufälliges Auswahlverhalten als gewünschtes Fachverhalten festgelegt.
