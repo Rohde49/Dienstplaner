@@ -32,15 +32,15 @@ Abnahmekriterien:
 
 Die reinen Berechnungsfunktionen sollen von Beginn an unabhängig von der Oberfläche geprüft werden können.
 
-- [ ] Einen zum bestehenden Vite-/TypeScript-Projekt passenden Test-Runner einrichten.
-- [ ] Einen getrennten Ort für fachliche Unit-Tests festlegen.
-- [ ] Testbefehle in `package.json` ergänzen.
-- [ ] Sicherstellen, dass Tests keine echten Anwendungsdaten im Electron-Benutzerordner verwenden.
+- [x] Einen zum bestehenden Vite-/TypeScript-Projekt passenden Test-Runner einrichten.
+- [x] Einen getrennten Ort für fachliche Unit-Tests festlegen.
+- [x] Testbefehle in `package.json` ergänzen.
+- [x] Sicherstellen, dass Tests keine echten Anwendungsdaten im Electron-Benutzerordner verwenden.
 
 Abnahmekriterien:
 
-- [ ] Ein einfacher Beispieltest läuft lokal erfolgreich.
-- [ ] Typecheck, Lint und bestehende Formatierungsprüfungen bleiben getrennt ausführbar.
+- [x] Ein einfacher Beispieltest läuft lokal erfolgreich.
+- [x] Typecheck, Lint und bestehende Formatierungsprüfungen bleiben getrennt ausführbar.
 
 ## Schritt 2: Bestehende Stammdatenmodelle vorbereiten
 
