@@ -2,6 +2,7 @@ import { ClipboardList, Clock3, ListPlus, Pencil } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import type { EntryType } from '../../../shared/schemas';
+import { formatDuration } from '../../../shared/calculations';
 import { PageHeader, Toolbar } from '../../components/layout';
 import {
   Alert,
@@ -15,7 +16,6 @@ import {
 import { DeleteEntryTypeDialog } from './DeleteEntryTypeDialog';
 import { EntryTypeDialog } from './EntryTypeDialog';
 import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
-import { formatDuration } from './entryTypeTime';
 
 function getErrorMessage(error: unknown): string {
   return error instanceof Error

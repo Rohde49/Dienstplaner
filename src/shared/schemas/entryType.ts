@@ -65,7 +65,7 @@ const clockTimeSchema = z
   .string()
   .regex(
     /^(?:[01]\d|2[0-3]):[0-5]\d$/,
-    'Bitte geben Sie eine gültige Uhrzeit im Format HH:mm ein.',
+    'Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.',
   )
   .nullable();
 

@@ -9,6 +9,7 @@ import {
   type EmployeeColorKey,
   type EmployeeRole,
 } from '../../../shared/schemas';
+import { formatDuration, parseDuration } from '../../../shared/calculations';
 import {
   Alert,
   Button,
@@ -22,10 +23,6 @@ import {
   Spinner,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_OPTIONS } from './employeeColorStyles';
-import {
-  formatEmployeeWorkingDuration,
-  parseEmployeeWorkingDuration,
-} from './employeeWorkingTime';
 
 type EmployeeDialogProps = {
   employee?: Employee;
@@ -51,9 +48,7 @@ function createInitialFormState(employee?: Employee): EmployeeFormState {
       firstName: employee.firstName,
       lastName: employee.lastName,
       role: employee.role,
-      weeklyWorkingHours: formatEmployeeWorkingDuration(
-        employee.weeklyWorkingMinutes,
-      ),
+      weeklyWorkingHours: formatDuration(employee.weeklyWorkingMinutes),
       colorKey: employee.colorKey,
       active: employee.active,
     };
@@ -151,15 +146,10 @@ export function EmployeeDialog({
   }
 
   function normalizeWeeklyWorkingHours(): void {
-    const weeklyWorkingMinutes = parseEmployeeWorkingDuration(
-      formState.weeklyWorkingHours,
-    );
+    const weeklyWorkingMinutes = parseDuration(formState.weeklyWorkingHours);
 
     if (weeklyWorkingMinutes !== null) {
-      updateField(
-        'weeklyWorkingHours',
-        formatEmployeeWorkingDuration(weeklyWorkingMinutes),
-      );
+      updateField('weeklyWorkingHours', formatDuration(weeklyWorkingMinutes));
     }
   }
 
@@ -171,8 +161,7 @@ export function EmployeeDialog({
     setSubmissionError(null);
 
     const weeklyWorkingHours = formState.weeklyWorkingHours.trim();
-    const weeklyWorkingMinutes =
-      parseEmployeeWorkingDuration(weeklyWorkingHours);
+    const weeklyWorkingMinutes = parseDuration(weeklyWorkingHours);
 
     const validationResult = employeeInputSchema.safeParse({
       firstName: formState.firstName,

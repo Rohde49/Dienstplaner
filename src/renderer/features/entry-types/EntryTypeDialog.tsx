@@ -10,6 +10,11 @@ import {
   type TimeValues,
 } from '../../../shared/schemas';
 import {
+  formatDuration,
+  normalizeClockTime,
+  parseDurationInput,
+} from '../../../shared/calculations';
+import {
   Alert,
   Button,
   DialogClose,
@@ -23,11 +28,6 @@ import {
   Spinner,
 } from '../../components/ui';
 import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
-import {
-  formatDuration,
-  normalizeClockTime,
-  parseDurationInput,
-} from './entryTypeTime';
 
 type EntryTypeDialogProps = {
   entryType?: EntryType;
@@ -312,12 +312,12 @@ export function EntryTypeDialog({
 
     if (startTimeInput !== '' && startTime === null) {
       nextErrors.startTime =
-        'Bitte geben Sie eine gültige Uhrzeit im Format HH:mm ein.';
+        'Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.';
     }
 
     if (endTimeInput !== '' && endTime === null) {
       nextErrors.endTime =
-        'Bitte geben Sie eine gültige Uhrzeit im Format HH:mm ein.';
+        'Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.';
     }
 
     if ((startTime === null) !== (endTime === null)) {
@@ -345,7 +345,7 @@ export function EntryTypeDialog({
           nextErrors[definition.field] =
             formState[definition.field].trim() === ''
               ? 'Der Zeitwert ist erforderlich.'
-              : 'Bitte geben Sie eine Dauer im Format HH:mm ein.';
+              : 'Bitte geben Sie eine Dauer im Format H:MM ein.';
           continue;
         }
 
@@ -559,7 +559,7 @@ export function EntryTypeDialog({
                   <Input
                     id="entry-type-start-time"
                     inputMode="decimal"
-                    placeholder="HH:mm"
+                    placeholder="HH:MM"
                     disabled={usesWeeklyWorkingTime}
                     value={formState.startTime}
                     aria-invalid={Boolean(formErrors.startTime)}
@@ -578,7 +578,7 @@ export function EntryTypeDialog({
                   <Input
                     id="entry-type-end-time"
                     inputMode="decimal"
-                    placeholder="HH:mm"
+                    placeholder="HH:MM"
                     disabled={usesWeeklyWorkingTime}
                     value={formState.endTime}
                     aria-invalid={Boolean(formErrors.endTime)}
@@ -651,8 +651,8 @@ export function EntryTypeDialog({
                     </dl>
 
                     <p className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
-                      Die Eingabe erfolgt im Format HH:mm. Punkt und Komma
-                      werden ebenfalls als Trennzeichen akzeptiert.
+                      Die Eingabe erfolgt als Zeitdauer im Format H:MM, zum
+                      Beispiel 5:30 oder 120:15.
                     </p>
 
                     <p className="mt-2 text-xs leading-5">
@@ -674,7 +674,7 @@ export function EntryTypeDialog({
                   <Input
                     id={`entry-type-${primaryDurationField.field}`}
                     inputMode="decimal"
-                    placeholder="HH:mm"
+                    placeholder="H:MM"
                     disabled={usesWeeklyWorkingTime}
                     required={!usesWeeklyWorkingTime}
                     value={formState[primaryDurationField.field]}
@@ -705,7 +705,7 @@ export function EntryTypeDialog({
                     <Input
                       id={`entry-type-${definition.field}`}
                       inputMode="decimal"
-                      placeholder="HH:mm"
+                      placeholder="H:MM"
                       disabled={usesWeeklyWorkingTime}
                       required={!usesWeeklyWorkingTime}
                       value={formState[definition.field]}
@@ -727,7 +727,7 @@ export function EntryTypeDialog({
                   <Input
                     id="entry-type-workingDuration"
                     inputMode="decimal"
-                    placeholder="HH:mm"
+                    placeholder="H:MM"
                     disabled={usesWeeklyWorkingTime}
                     readOnly
                     value={calculatedWorkingDuration}

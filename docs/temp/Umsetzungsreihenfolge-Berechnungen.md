@@ -76,27 +76,27 @@ Abnahmekriterien:
 
 ### Zeitfunktionen
 
-- [ ] Zeitdauern zwischen Eingabeformat und ganzen Minuten umwandeln.
-- [ ] Zeitdauern und Soll-/Ist-Differenzen nach den festgelegten Formaten ausgeben.
-- [ ] Die gemeinsame Rundungsmethode für nichtnegative berechnete Minuten umsetzen.
-- [ ] Zeitdauer und Uhrzeit technisch als unterschiedliche Konzepte behandeln.
+- [x] Zeitdauern zwischen Eingabeformat und ganzen Minuten umwandeln.
+- [x] Zeitdauern und Soll-/Ist-Differenzen nach den festgelegten Formaten ausgeben.
+- [x] Die gemeinsame Rundungsmethode für nichtnegative berechnete Minuten umsetzen.
+- [x] Zeitdauer und Uhrzeit technisch als unterschiedliche Konzepte behandeln.
 
 ### Kalenderfunktionen
 
-- [ ] Alle Datumsberechnungen als reine Kalenderdaten ohne Zeitzonenverschiebung umsetzen.
-- [ ] Sämtliche Kalendertage eines ausgewählten Monats erzeugen.
-- [ ] Wochentag, Samstag, Sonntag und Wochenende bestimmen.
-- [ ] Ostersonntag für jedes technisch unterstützte Jahr berechnen.
-- [ ] Die zwölf festgelegten gesetzlichen Feiertage Brandenburgs bestimmen.
-- [ ] Mehrere Feiertagsbezeichnungen an einem Datum erhalten.
-- [ ] Die kalendarischen Arbeitstage eines Monats berechnen.
+- [x] Alle Datumsberechnungen als reine Kalenderdaten ohne Zeitzonenverschiebung umsetzen.
+- [x] Sämtliche Kalendertage eines ausgewählten Monats erzeugen.
+- [x] Wochentag, Samstag, Sonntag und Wochenende bestimmen.
+- [x] Ostersonntag für jedes technisch unterstützte Jahr berechnen.
+- [x] Die zwölf festgelegten gesetzlichen Feiertage Brandenburgs bestimmen.
+- [x] Mehrere Feiertagsbezeichnungen an einem Datum erhalten.
+- [x] Die kalendarischen Arbeitstage eines Monats berechnen.
 
 Abnahmekriterien:
 
-- [ ] Tests decken `0:00`, Dauern über 24 und 99 Stunden sowie positive und negative Differenzen ab.
-- [ ] Rundungsfälle unter, bei und über einer halben Minute sind geprüft.
-- [ ] Schaltjahre, Feiertage am Wochenende und mehrere Feiertage an einem Datum sind geprüft.
-- [ ] Die Kalenderberechnung ist unabhängig von lokaler Zeitzone und Sommerzeit.
+- [x] Tests decken `0:00`, Dauern über 24 und 99 Stunden sowie positive und negative Differenzen ab.
+- [x] Rundungsfälle unter, bei und über einer halben Minute sind geprüft.
+- [x] Schaltjahre, Feiertage am Wochenende und mehrere Feiertage an einem Datum sind geprüft.
+- [x] Die Kalenderberechnung ist unabhängig von lokaler Zeitzone und Sommerzeit.
 
 ## Schritt 4: Monatsplan- und Snapshot-Modelle umsetzen
 
