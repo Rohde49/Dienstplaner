@@ -9,6 +9,7 @@ import {
   type MonthlyPlan,
   type PlanDay,
 } from '../../../src/shared/schemas/monthlyPlan';
+import { monthlyPlanFileSchema } from '../../../src/shared/schemas/monthlyPlanStorage';
 
 const planId = '00000000-0000-4000-8000-000000000001';
 const educatorId = '10000000-0000-4000-8000-000000000001';
@@ -130,6 +131,36 @@ describe('Monatsplan-Grundstruktur', () => {
         ...createValidPlan(),
         entryTypeCategory: 'Dienst',
       }).success,
+    ).toBe(false);
+  });
+
+  it('entfernt äußere Leerzeichen aus Titel, Bemerkung und Uhrzeiten', () => {
+    const plan = createValidPlan();
+    plan.title = ' Septemberplan ';
+    plan.days[0].note = ' Hinweis ';
+    plan.days[0].entries.push(
+      createPlanEntry({ startTime: ' 14:00 ', endTime: ' 08:00 ' }),
+    );
+
+    const result = monthlyPlanSchema.parse(plan);
+
+    expect(result.title).toBe('Septemberplan');
+    expect(result.days[0].note).toBe('Hinweis');
+    expect(result.days[0].entries[0]).toMatchObject({
+      startTime: '14:00',
+      endTime: '08:00',
+    });
+  });
+
+  it('prüft die versionierte Dateihülle des Monatsplans', () => {
+    const plan = createValidPlan();
+
+    expect(monthlyPlanFileSchema.parse({ schemaVersion: 1, plan })).toEqual({
+      schemaVersion: 1,
+      plan,
+    });
+    expect(
+      monthlyPlanFileSchema.safeParse({ schemaVersion: 2, plan }).success,
     ).toBe(false);
   });
 });
@@ -259,6 +290,12 @@ describe('Planungseintrag-Snapshots', () => {
         }),
       ).success,
     ).toBe(false);
+  });
+
+  it('entfernt äußere Leerzeichen aus dem gespeicherten Snapshot-Kürzel', () => {
+    expect(planEntrySchema.parse(createPlanEntry({ code: 'SN/F ' })).code).toBe(
+      'SN/F',
+    );
   });
 
   it('enthält weder eine Eintragskategorie noch eine Berechnungsart', () => {

@@ -19,16 +19,16 @@ const employeeStore = new JsonFileStore<EmployeesFile>({
   }),
 });
 
-let mutationQueue: Promise<void> = Promise.resolve();
+let accessQueue: Promise<void> = Promise.resolve();
 
 /**
  * Führt Schreibvorgänge nacheinander aus.
  * Dadurch überschreiben sich gleichzeitige Änderungen nicht gegenseitig.
  */
-function runMutation<T>(operation: () => Promise<T>): Promise<T> {
-  const result = mutationQueue.then(operation);
+function runAccess<T>(operation: () => Promise<T>): Promise<T> {
+  const result = accessQueue.then(operation);
 
-  mutationQueue = result.then(
+  accessQueue = result.then(
     (): void => undefined,
     (): void => undefined,
   );
@@ -38,13 +38,15 @@ function runMutation<T>(operation: () => Promise<T>): Promise<T> {
 
 /** Lädt alle gespeicherten Mitarbeiter. */
 export async function listEmployees(): Promise<Employee[]> {
-  const file = await employeeStore.read();
-  return file.employees;
+  return runAccess(async () => {
+    const file = await employeeStore.read();
+    return file.employees;
+  });
 }
 
 /** Prüft die Eingaben und speichert einen neuen Mitarbeiter. */
 export function createEmployee(input: unknown): Promise<Employee> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedInput = employeeInputSchema.parse(input);
     const file = await employeeStore.read();
     const timestamp = new Date().toISOString();
@@ -68,7 +70,7 @@ export function createEmployee(input: unknown): Promise<Employee> {
 
 /** Prüft und aktualisiert einen vorhandenen Mitarbeiter. */
 export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedId = employeeIdSchema.parse(id);
     const validatedInput = employeeInputSchema.parse(input);
     const file = await employeeStore.read();
@@ -106,7 +108,7 @@ export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
 
 /** Entfernt einen Mitarbeiter dauerhaft aus der Datendatei. */
 export function deleteEmployee(id: unknown): Promise<void> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedId = employeeIdSchema.parse(id);
     const file = await employeeStore.read();
 

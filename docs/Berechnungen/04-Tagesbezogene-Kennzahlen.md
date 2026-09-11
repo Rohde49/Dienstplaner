@@ -21,7 +21,7 @@ Die Kennzahl behält die Bezeichnung **SN/F-Dienste** und wird für jeden Mitarb
 - Ein Planungseintrag mit dem alleinigen Kürzel `F` erhöht den Zähler nicht.
 - Jeder passende Planungseintrag wird einzeln für seinen Kalendertag gezählt.
 - Mehrere aufeinanderfolgende Planungseinträge werden nicht zu einer kalendertagübergreifenden Dienstfolge zusammengesetzt. Insbesondere wird eine Folge aus einem `SN`-Eintrag und einem späteren `F`-Eintrag nicht zusätzlich oder nachträglich als gemeinsame Kombination erkannt.
-- Die Erkennung beruht im Prototyp bewusst auf den exakten Kürzeltexten. Abweichende Schreibweisen, zusätzliche Leerzeichen oder andere frei angelegte Kürzel werden nicht als SN/F-Dienst erkannt.
+- Äußere Leerzeichen werden bei Texteingaben an der gemeinsamen Validierungsgrenze automatisch entfernt. Danach beruht die Erkennung im Prototyp bewusst auf den exakten Kürzeltexten. Abweichende Schreibweisen oder andere frei angelegte Kürzel werden nicht als SN/F-Dienst erkannt.
 
 Diese Regel ist eine bewusste Vereinfachung für den Prototyp. Fachlich soll die Kennzahl Spät-Nacht-Früh-Dienste erfassen; die frei anlegbaren Kürzel und die Beschränkung eines Planungseintrags auf genau einen Kalendertag erlauben jedoch noch keine zuverlässige semantische Erkennung vollständiger Dienstfolgen. Eine spätere Weiterentwicklung kann dafür ausdrückliche Eintragskategorien und eine kalendertagübergreifende Auswertung einführen.
 
@@ -31,7 +31,7 @@ Ein Kalendertag wird für einen Mitarbeiter nur dann als freier Tag gezählt, we
 
 - Jeder passende Planungseintrag erhöht die Anzahl der freien Tage dieses Mitarbeiters um `1`.
 - Eine leere Planungszelle bedeutet „noch ungeplant“ und wird nicht als freier Tag gezählt.
-- Abweichende Kürzel oder Kürzel mit zusätzlichen Zeichen beziehungsweise Leerzeichen gelten nicht als Frei-Eintrag.
+- Äußere Leerzeichen werden vor dem Speichern entfernt. Davon abgesehen gelten abweichende Kürzel oder Kürzel mit zusätzlichen Zeichen nicht als Frei-Eintrag.
 - Maßgeblich ist der Snapshot des konkreten Planungseintrags. Eine spätere Änderung der zugrunde liegenden Eintragsdefinition verändert die Zählung eines bereits gesetzten Eintrags nicht.
 
 ## Freie Samstage und freie Sonntage

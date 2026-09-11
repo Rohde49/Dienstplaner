@@ -6,9 +6,10 @@ import {
   createMonthCalendar,
 } from '../calculations/calendar';
 import { employeeColorKeySchema, employeeRoleSchema } from './employee';
-import { timeValuesSchema } from './entryType';
+import { entryCodeSchema, timeValuesSchema } from './entryType';
 
 const uuidSchema = z.string().uuid();
+export const monthlyPlanIdSchema = uuidSchema;
 
 const requiredNameSchema = (label: string) =>
   z
@@ -29,6 +30,7 @@ const weeklyWorkingMinutesSchema = z
 
 const clockTimeSchema = z
   .string()
+  .trim()
   .regex(
     /^(?:[01]\d|2[0-3]):[0-5]\d$/,
     'Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.',
@@ -89,11 +91,7 @@ const planEntryObjectSchema = z
     id: uuidSchema,
     planEmployeeId: uuidSchema,
     sourceEntryTypeId: uuidSchema,
-    code: z
-      .string()
-      .trim()
-      .min(1, 'Das Kürzel ist erforderlich.')
-      .max(20, 'Das Kürzel darf höchstens 20 Zeichen enthalten.'),
+    code: entryCodeSchema,
     name: requiredNameSchema('Die Bezeichnung'),
     startTime: clockTimeSchema,
     endTime: clockTimeSchema,
@@ -147,6 +145,13 @@ const monthlyPlanObjectSchema = z
     days: z.array(planDaySchema),
   })
   .strict();
+
+/** Prüft die Angaben zum Erstellen eines neuen Monatsplans. */
+export const monthlyPlanInputSchema = monthlyPlanObjectSchema.pick({
+  year: true,
+  month: true,
+  title: true,
+});
 
 const timeValueKeys = [
   'attendanceMinutes',
@@ -348,3 +353,4 @@ export type PlanEmployee = z.infer<typeof planEmployeeSchema>;
 export type PlanEntry = z.infer<typeof planEntrySchema>;
 export type PlanDay = z.infer<typeof planDaySchema>;
 export type MonthlyPlan = z.infer<typeof monthlyPlanSchema>;
+export type MonthlyPlanInput = z.infer<typeof monthlyPlanInputSchema>;

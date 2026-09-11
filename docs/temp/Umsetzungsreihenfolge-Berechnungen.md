@@ -180,18 +180,19 @@ Abnahmekriterien:
 
 ## Schritt 7: Monatsplan speichern und über die Anwendungsschnittstelle bereitstellen
 
-- [ ] Einen Repository-Bereich für Monatspläne anlegen.
-- [ ] Monatspläne eindeutig nach Jahr und Monat speichern und laden.
-- [ ] Schreibvorgänge gegen Überschneidungen absichern.
-- [ ] Vor dem Speichern und nach dem Laden vollständig validieren.
-- [ ] Fehler- und Sicherungsverhalten entsprechend der vorhandenen Datenhaltung umsetzen.
-- [ ] IPC- und Preload-Schnittstellen für Erstellen, Laden und Speichern bereitstellen.
+- [x] Einen Repository-Bereich für Monatspläne anlegen.
+- [x] Monatspläne jeweils eindeutig nach ihrer Plan-UUID speichern und laden.
+- [x] Mehrere eigenständige Monatspläne für dasselbe Jahr und denselben Monat zulassen.
+- [x] Lese- und Schreibvorgänge gegen Überschneidungen absichern.
+- [x] Vor dem Speichern und nach dem Laden vollständig validieren.
+- [x] Fehler- und Sicherungsverhalten entsprechend der vorhandenen Datenhaltung umsetzen.
+- [x] IPC- und Preload-Schnittstellen für Auflisten, Erstellen, Laden und Speichern bereitstellen.
 
 Abnahmekriterien:
 
-- [ ] Ein Monatsplan bleibt nach Speichern, Anwendungsneustart und erneutem Laden unverändert.
-- [ ] Snapshots bleiben auch ohne ihre ursprünglichen Stammdatensätze auswertbar.
-- [ ] Fehlerhafte Dateien werden nach der in Schritt 0 festgelegten technischen Strategie behandelt.
+- [x] Ein Monatsplan bleibt nach Speichern, Anwendungsneustart und erneutem Laden unverändert.
+- [x] Snapshots bleiben auch ohne ihre ursprünglichen Stammdatensätze auswertbar.
+- [x] Fehlerhafte Dateien werden nach der in Schritt 0 festgelegten technischen Strategie behandelt.
 
 ## Schritt 8: Planungsseite und Live-Vorschau anbinden
 

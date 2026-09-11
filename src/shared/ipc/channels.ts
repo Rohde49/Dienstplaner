@@ -13,3 +13,11 @@ export const ENTRY_TYPE_IPC_CHANNELS = {
   update: 'entry-types:update',
   remove: 'entry-types:remove',
 } as const;
+
+/** Enthält die eindeutigen Kanäle für gespeicherte Monatspläne. */
+export const MONTHLY_PLAN_IPC_CHANNELS = {
+  list: 'monthly-plans:list',
+  get: 'monthly-plans:get',
+  create: 'monthly-plans:create',
+  save: 'monthly-plans:save',
+} as const;

@@ -5,6 +5,13 @@ export const CALCULATION_TYPES = ['fixed', 'weeklyWorkingTime'] as const;
 export const calculationTypeSchema = z.enum(CALCULATION_TYPES);
 export const entryTypeIdSchema = z.string().uuid();
 
+/** Entfernt äußere Leerzeichen und prüft ein frei vergebenes Kürzel. */
+export const entryCodeSchema = z
+  .string()
+  .trim()
+  .min(1, 'Das Kürzel ist erforderlich.')
+  .max(20, 'Das Kürzel darf höchstens 20 Zeichen enthalten.');
+
 const minuteValueSchema = z
   .number()
   .int('Der Zeitwert muss minutengenau angegeben werden.')
@@ -63,6 +70,7 @@ export const timeValuesSchema = timeValuesObjectSchema.superRefine(
 
 const clockTimeSchema = z
   .string()
+  .trim()
   .regex(
     /^(?:[01]\d|2[0-3]):[0-5]\d$/,
     'Bitte geben Sie eine gültige Uhrzeit im Format HH:MM ein.',
@@ -72,11 +80,7 @@ const clockTimeSchema = z
 const entryTypeObjectSchema = z
   .object({
     id: entryTypeIdSchema,
-    code: z
-      .string()
-      .trim()
-      .min(1, 'Das Kürzel ist erforderlich.')
-      .max(20, 'Das Kürzel darf höchstens 20 Zeichen enthalten.'),
+    code: entryCodeSchema,
     name: z
       .string()
       .trim()

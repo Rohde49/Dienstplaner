@@ -3,6 +3,10 @@ import type {
   EmployeeInput,
   EntryType,
   EntryTypeInput,
+  MonthlyPlan,
+  MonthlyPlanInput,
+  MonthlyPlanLoadResult,
+  MonthlyPlanSummary,
 } from '../schemas';
 
 /** Beschreibt die verfügbaren Funktionen der Mitarbeiterverwaltung. */
@@ -21,8 +25,17 @@ export type EntryTypesApi = {
   remove: (id: string) => Promise<void>;
 };
 
+/** Beschreibt die verfügbaren Funktionen für gespeicherte Monatspläne. */
+export type MonthlyPlansApi = {
+  list: () => Promise<MonthlyPlanSummary[]>;
+  get: (id: string) => Promise<MonthlyPlanLoadResult>;
+  create: (input: MonthlyPlanInput) => Promise<MonthlyPlan>;
+  save: (plan: MonthlyPlan) => Promise<MonthlyPlan>;
+};
+
 /** Beschreibt alle Funktionen, die der Oberfläche bereitgestellt werden. */
 export type DienstplanerApi = {
   employees: EmployeesApi;
   entryTypes: EntryTypesApi;
+  monthlyPlans: MonthlyPlansApi;
 };

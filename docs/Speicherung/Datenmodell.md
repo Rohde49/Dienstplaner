@@ -15,7 +15,7 @@ fachlichen Formeln Vorrang.
 | ------------------------ | -------------------------------------------------------------------------------------- |
 | Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
 | Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
-| Monatsplan und Snapshots | Schemas, Konsistenzprüfung, Erzeugung der Snapshots und Zelloperationen sind umgesetzt |
+| Monatsplan und Snapshots | Modell, Snapshots, Zelloperationen und Speicherung sind umgesetzt                      |
 | Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                          |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
@@ -35,6 +35,10 @@ betreffende Teil bereits implementiert ist.
   Process mit `crypto.randomUUID()` erzeugt.
 - Datumswerte verwenden `YYYY-MM-DD`, Uhrzeiten `HH:mm` und Zeitpunkte das
   ISO-Format.
+- Äußere Leerzeichen werden bei Benutzereingaben an den gemeinsamen
+  Validierungsgrenzen automatisch entfernt. Das gilt in der gesamten
+  Anwendung insbesondere für Namen, Kürzel, Titel, Bemerkungen und
+  Uhrzeiteingaben.
 - Zeitdauern werden als nichtnegative sichere ganze Minuten gespeichert.
 - Stammdaten besitzen einen Aktivierungsstatus. Inaktive Stammdaten bleiben
   erhalten, werden für neue Planbestandteile aber nicht angeboten.
@@ -218,7 +222,8 @@ interface EntryType {
 
 Regeln:
 
-- `code` ist erforderlich und höchstens 20 Zeichen lang.
+- `code` ist nach dem Entfernen äußerer Leerzeichen erforderlich und höchstens
+  20 Zeichen lang.
 - `name` ist erforderlich und höchstens 100 Zeichen lang.
 - Mehrere Eintragsarten dürfen dasselbe Kürzel verwenden. Die UUID bleibt die
   technische Identität.
@@ -239,8 +244,8 @@ Die Eintragsarten-IDs innerhalb der Datei müssen eindeutig sein.
 
 ## 7. Monatsplan (`MonthlyPlan`)
 
-Status: **Grundmodell, Konsistenzprüfung und reguläre Erzeugung sind
-umgesetzt; Speicherung und Oberfläche folgen in späteren Schritten**.
+Status: **Grundmodell, Konsistenzprüfung, reguläre Erzeugung und Speicherung
+sind umgesetzt; die Oberfläche folgt in einem späteren Schritt**.
 
 ```ts
 interface MonthlyPlan {
@@ -341,8 +346,8 @@ können, beispielsweise als `string[]`.
 
 ## 10. Planeintrag (`PlanEntry`)
 
-Status: **Snapshot-Erzeugung sowie Setzen, Ersetzen und Entfernen sind
-umgesetzt; Speicherung und Oberfläche folgen in späteren Schritten**.
+Status: **Snapshot-Erzeugung sowie Setzen, Ersetzen, Entfernen und Speichern
+sind umgesetzt; die Oberfläche folgt in einem späteren Schritt**.
 
 ```ts
 interface PlanEntry {
@@ -364,6 +369,7 @@ Regeln:
   zur Eintragsart herzustellen.
 - Kürzel, Bezeichnung, Uhrzeiten und alle konkreten Zeitwerte werden beim
   Setzen in den Planeintrag kopiert.
+- Das zuvor normalisierte Kürzel wird exakt in den Snapshot übernommen.
 - Die Berechnungsart muss nicht gespeichert werden, weil der Snapshot beim
   Setzen vollständig bestimmt wird und danach nicht neu aus Stammdaten
   berechnet werden darf.
@@ -463,9 +469,9 @@ Geplante gemeinsame Schemaaufteilung:
 ```text
 src/shared/schemas/
 ├── employee.ts
-├── timeValues.ts
 ├── entryType.ts
 ├── monthlyPlan.ts
+├── monthlyPlanStorage.ts
 └── index.ts
 ```
 

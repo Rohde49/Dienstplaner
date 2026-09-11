@@ -31,15 +31,20 @@ nicht erforderlich.
   Zelloperationen im Main Process,
 - gemeinsame reine Monatsauswertung ausschließlich aus den gespeicherten
   Snapshots und Kalenderdaten,
+- ein eigener Plan-Unterordner mit jeweils einer Datei pro Plan-UUID,
+- ein Plan-Repository für Auflisten, Laden, Erstellen und Speichern,
+- vollständige Planvalidierung vor dem Schreiben und nach dem Laden,
+- Weitergabe einer verständlichen Wiederherstellungswarnung an die
+  Anwendungsschnittstelle,
+- serialisierte Lese- und Schreibzugriffe innerhalb der Repositories,
+- begrenzte IPC-/Preload-Schnittstellen für Monatspläne,
 - der bestätigte Reset der bisherigen Prototypdaten auf die neuen
   Schema-Versionen.
 
 ### Noch umzusetzen
 
-- Plan-Unterordner und Plan-Repository,
-- Plan-IPC- und Preload-Schnittstellen,
 - sichtbare Warnung nach Wiederherstellung aus einer Sicherung,
-- Serialisierung von Lesen und Schreiben derselben Ressource.
+- Anbindung der Plan-Schnittstellen an die Planungsoberfläche.
 
 ## 2. Speicherort und Dateistruktur
 
@@ -170,14 +175,16 @@ Für Monatspläne wird ein eigenes Repository ergänzt.
 Minimal benötigte Operationen:
 
 ```text
-list()                     → MonthlyPlanSummary[]
-get(id)                    → MonthlyPlan | null
-create(year, month, title) → MonthlyPlan
-save(monthlyPlan)          → MonthlyPlan
+list()               → MonthlyPlanSummary[]
+get(id)              → MonthlyPlanLoadResult
+create(input)        → MonthlyPlan
+save(monthlyPlan)    → MonthlyPlan
 ```
 
 `MonthlyPlanSummary` ist eine berechnete Transportansicht aus ID, Jahr, Monat,
 Titel und Änderungszeitpunkt. Sie wird nicht zusätzlich gespeichert.
+`MonthlyPlanLoadResult` enthält den gefundenen Plan oder `null` sowie eine
+mögliche verständliche Warnung, wenn die Sicherungsdatei verwendet wurde.
 
 Beim Erstellen:
 

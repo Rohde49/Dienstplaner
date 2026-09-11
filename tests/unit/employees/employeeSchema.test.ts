@@ -35,6 +35,16 @@ describe('Mitarbeiterschema', () => {
     ).toBe(false);
   });
 
+  it('entfernt äußere Leerzeichen aus Namen', () => {
+    expect(
+      employeeInputSchema.parse({
+        ...validInput,
+        firstName: '  Max ',
+        lastName: ' Mustermann  ',
+      }),
+    ).toMatchObject({ firstName: 'Max', lastName: 'Mustermann' });
+  });
+
   it('akzeptiert eine Wochenarbeitszeit von 0 Minuten', () => {
     expect(
       employeeInputSchema.safeParse({

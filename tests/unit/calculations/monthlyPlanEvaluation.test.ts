@@ -133,12 +133,10 @@ describe('Monatsauswertung', () => {
       addEntry(plan, '2026-03-06', employeeId, 5),
     ];
 
-    // Die Werte werden nach der gültigen Planerzeugung absichtlich verändert.
-    // Ein erneutes Schema-Parsing würde Leerzeichen entfernen und den Test verfälschen.
-    entries[0].code = 'SN/F ';
-    entries[1].code = ' SN';
+    entries[0].code = 'sn/f';
+    entries[1].code = 'SN/F+';
     entries[2].code = 'sn';
-    entries[3].code = ' /';
+    entries[3].code = 'Frei';
     entries[4].code = '//';
 
     const result = getEmployeeEvaluation(
@@ -148,6 +146,24 @@ describe('Monatsauswertung', () => {
 
     expect(result.snfServiceCount).toBe(0);
     expect(result.freeDayCount).toBe(0);
+  });
+
+  it('entfernt äußere Leerzeichen vor dem exakten Kürzelvergleich', () => {
+    const plan = createPlan(2026, 3);
+    const employeeId = plan.employees[0].id;
+
+    addEntry(plan, '2026-03-02', employeeId, 1, { code: ' SN/F ' });
+    addEntry(plan, '2026-03-03', employeeId, 2, { code: ' SN ' });
+    addEntry(plan, '2026-03-07', employeeId, 3, { code: ' / ' });
+
+    const result = getEmployeeEvaluation(
+      calculateMonthlyPlanEvaluation(plan),
+      employeeId,
+    );
+
+    expect(result.snfServiceCount).toBe(2);
+    expect(result.freeDayCount).toBe(1);
+    expect(result.freeSaturdayCount).toBe(1);
   });
 
   it('zählt leere Zellen auch am Wochenende nicht als freie Tage', () => {

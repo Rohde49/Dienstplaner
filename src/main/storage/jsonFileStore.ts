@@ -17,8 +17,13 @@ const DATA_DIRECTORY_NAME = 'dienstplaner-data';
 type JsonFileStoreOptions<T> = {
   fileName: string;
   schema: ZodType<T>;
-  createDefault: () => T;
+  createDefault?: () => T;
+  dataDirectoryPath?: string;
 };
+
+export type JsonFileReadResult<T> =
+  | { status: 'found'; data: T; source: 'primary' | 'backup' }
+  | { status: 'missing' };
 
 type ReadResult<T> =
   | { status: 'valid'; data: T }
@@ -37,16 +42,26 @@ function isFileNotFound(error: unknown): boolean {
 export class JsonFileStore<T> {
   private readonly fileName: string;
   private readonly schema: ZodType<T>;
-  private readonly createDefault: () => T;
+  private readonly createDefault?: () => T;
+  private readonly configuredDataDirectoryPath?: string;
 
-  constructor({ fileName, schema, createDefault }: JsonFileStoreOptions<T>) {
+  constructor({
+    fileName,
+    schema,
+    createDefault,
+    dataDirectoryPath,
+  }: JsonFileStoreOptions<T>) {
     this.fileName = fileName;
     this.schema = schema;
     this.createDefault = createDefault;
+    this.configuredDataDirectoryPath = dataDirectoryPath;
   }
 
   private get directoryPath(): string {
-    return path.join(app.getPath('userData'), DATA_DIRECTORY_NAME);
+    return (
+      this.configuredDataDirectoryPath ??
+      path.join(app.getPath('userData'), DATA_DIRECTORY_NAME)
+    );
   }
 
   private get filePath(): string {
@@ -94,26 +109,34 @@ export class JsonFileStore<T> {
    * Liest die gespeicherten Daten.
    * Falls die Hauptdatei beschädigt ist, wird die Sicherung verwendet.
    */
-  async read(): Promise<T> {
-    await mkdir(this.directoryPath, { recursive: true });
+  async readWithSource(): Promise<JsonFileReadResult<T>> {
+    await mkdir(path.dirname(this.filePath), { recursive: true });
 
     const primaryResult = await this.readCandidate(this.filePath);
 
     if (primaryResult.status === 'valid') {
-      return primaryResult.data;
+      return {
+        status: 'found',
+        data: primaryResult.data,
+        source: 'primary',
+      };
     }
 
     const backupResult = await this.readCandidate(this.backupPath);
 
     if (backupResult.status === 'valid') {
-      return backupResult.data;
+      return {
+        status: 'found',
+        data: backupResult.data,
+        source: 'backup',
+      };
     }
 
     if (
       primaryResult.status === 'missing' &&
       backupResult.status === 'missing'
     ) {
-      return this.createDefault();
+      return { status: 'missing' };
     }
 
     const cause =
@@ -129,6 +152,21 @@ export class JsonFileStore<T> {
     );
   }
 
+  /** Liest Daten mit dem bereichsspezifischen Standardwert als Fallback. */
+  async read(): Promise<T> {
+    const result = await this.readWithSource();
+
+    if (result.status === 'found') {
+      return result.data;
+    }
+
+    if (this.createDefault) {
+      return this.createDefault();
+    }
+
+    throw new Error(`Die Datendatei "${this.fileName}" ist nicht vorhanden.`);
+  }
+
   /**
    * Prüft und speichert die Daten über eine temporäre Datei.
    * Die bisherige gültige Datei wird vorher gesichert.
@@ -136,7 +174,7 @@ export class JsonFileStore<T> {
   async write(value: T): Promise<void> {
     const validatedValue = this.schema.parse(value);
 
-    await mkdir(this.directoryPath, { recursive: true });
+    await mkdir(path.dirname(this.filePath), { recursive: true });
 
     const temporaryPath = `${this.filePath}.${randomUUID()}.tmp`;
     const serializedValue = `${JSON.stringify(validatedValue, null, 2)}\n`;
@@ -145,12 +183,22 @@ export class JsonFileStore<T> {
       await writeFile(temporaryPath, serializedValue, 'utf8');
 
       const currentFile = await this.readCandidate(this.filePath);
+      const currentBackup = await this.readCandidate(this.backupPath);
 
       if (currentFile.status === 'valid') {
         await copyFile(this.filePath, this.backupPath);
+      } else if (
+        currentBackup.status !== 'valid' &&
+        (currentFile.status === 'invalid' || currentBackup.status === 'invalid')
+      ) {
+        throw new Error(
+          `Die Datendatei "${this.fileName}" ist beschädigt und kann nicht sicher überschrieben werden.`,
+        );
       }
 
-      await rm(this.filePath, { force: true });
+      if (currentFile.status !== 'missing') {
+        await rm(this.filePath, { force: true });
+      }
       await rename(temporaryPath, this.filePath);
     } finally {
       await rm(temporaryPath, { force: true });

@@ -105,6 +105,32 @@ describe('Zeitwerte einer Eintragsart', () => {
 });
 
 describe('Berechnungsarten', () => {
+  it('entfernt äußere Leerzeichen aus Texten und Uhrzeiten', () => {
+    const input = {
+      ...createFixedEntryTypeInput(),
+      code: ' SN/F ',
+      name: ' Spät-Nacht-Dienst ',
+      startTime: ' 14:00 ',
+      endTime: ' 08:00 ',
+    };
+
+    expect(entryTypeInputSchema.parse(input)).toMatchObject({
+      code: 'SN/F',
+      name: 'Spät-Nacht-Dienst',
+      startTime: '14:00',
+      endTime: '08:00',
+    });
+  });
+
+  it('lehnt ein ausschließlich aus Leerzeichen bestehendes Kürzel ab', () => {
+    expect(
+      entryTypeInputSchema.safeParse({
+        ...createFixedEntryTypeInput(),
+        code: '   ',
+      }).success,
+    ).toBe(false);
+  });
+
   it('akzeptiert bei Wochenarbeitszeit null-Uhrzeiten und ausschließlich Nullwerte', () => {
     expect(
       entryTypeInputSchema.parse({

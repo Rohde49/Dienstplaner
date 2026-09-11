@@ -19,13 +19,13 @@ const entryTypeStore = new JsonFileStore<EntryTypesFile>({
   }),
 });
 
-let mutationQueue: Promise<void> = Promise.resolve();
+let accessQueue: Promise<void> = Promise.resolve();
 
 /** Führt Änderungen nacheinander aus, damit sie sich nicht überschreiben. */
-function runMutation<T>(operation: () => Promise<T>): Promise<T> {
-  const result = mutationQueue.then(operation);
+function runAccess<T>(operation: () => Promise<T>): Promise<T> {
+  const result = accessQueue.then(operation);
 
-  mutationQueue = result.then(
+  accessQueue = result.then(
     (): void => undefined,
     (): void => undefined,
   );
@@ -35,13 +35,15 @@ function runMutation<T>(operation: () => Promise<T>): Promise<T> {
 
 /** Lädt alle gespeicherten Eintragsarten. */
 export async function listEntryTypes(): Promise<EntryType[]> {
-  const file = await entryTypeStore.read();
-  return file.entryTypes;
+  return runAccess(async () => {
+    const file = await entryTypeStore.read();
+    return file.entryTypes;
+  });
 }
 
 /** Prüft die Eingaben und speichert eine neue Eintragsart. */
 export function createEntryType(input: unknown): Promise<EntryType> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedInput = entryTypeInputSchema.parse(input);
     const file = await entryTypeStore.read();
     const timestamp = new Date().toISOString();
@@ -68,7 +70,7 @@ export function updateEntryType(
   id: unknown,
   input: unknown,
 ): Promise<EntryType> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedId = entryTypeIdSchema.parse(id);
     const validatedInput = entryTypeInputSchema.parse(input);
     const file = await entryTypeStore.read();
@@ -103,7 +105,7 @@ export function updateEntryType(
 
 /** Entfernt eine Eintragsart dauerhaft aus der Datendatei. */
 export function deleteEntryType(id: unknown): Promise<void> {
-  return runMutation(async () => {
+  return runAccess(async () => {
     const validatedId = entryTypeIdSchema.parse(id);
     const file = await entryTypeStore.read();
     const entryTypes = file.entryTypes.filter(

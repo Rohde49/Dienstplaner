@@ -70,17 +70,21 @@ function calculateRoundedFraction(
 export function calculateMonthlyPlanEvaluation(
   plan: MonthlyPlan,
 ): MonthlyPlanEvaluation {
-  // Die Prüfung verwendet bewusst nicht das normalisierte Parse-Ergebnis:
-  // Kennzahlen wie SN/F und Frei vergleichen den gespeicherten Text exakt.
-  monthlyPlanSchema.parse(plan);
+  const validatedPlan = monthlyPlanSchema.parse(plan);
 
-  const calendarDays = createMonthCalendar(plan.year, plan.month);
+  const calendarDays = createMonthCalendar(
+    validatedPlan.year,
+    validatedPlan.month,
+  );
   const calendarDaysByDate = new Map(
     calendarDays.map((calendarDay) => [calendarDay.date, calendarDay]),
   );
-  const workingDayCount = countWorkingDays(plan.year, plan.month);
+  const workingDayCount = countWorkingDays(
+    validatedPlan.year,
+    validatedPlan.month,
+  );
 
-  const employees = plan.employees.map(
+  const employees = validatedPlan.employees.map(
     (planEmployee): EmployeeMonthlyEvaluation => {
       let snfServiceCount = 0;
       let freeDayCount = 0;
@@ -93,7 +97,7 @@ export function calculateMonthlyPlanEvaluation(
       let nightWorkMinutes = 0;
       let sundayOrHolidayWorkingWithoutNightReadinessMinutes = 0;
 
-      plan.days.forEach((day) => {
+      validatedPlan.days.forEach((day) => {
         if (day.onCallEmployeeId === planEmployee.id) {
           onCallCount += 1;
         }

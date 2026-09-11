@@ -3,6 +3,7 @@ import started from 'electron-squirrel-startup';
 import path from 'node:path';
 import { registerEntryTypeIpcHandlers } from './main/ipc/registerEntryTypeIpcHandlers';
 import { registerEmployeeIpcHandlers } from './main/ipc/registerEmployeeIpcHandlers';
+import { registerMonthlyPlanIpcHandlers } from './main/ipc/registerMonthlyPlanIpcHandlers';
 
 if (started) {
   app.quit();
@@ -44,6 +45,7 @@ const createWindow = (): void => {
 app.whenReady().then(() => {
   registerEmployeeIpcHandlers();
   registerEntryTypeIpcHandlers();
+  registerMonthlyPlanIpcHandlers();
   createWindow();
 });
 
