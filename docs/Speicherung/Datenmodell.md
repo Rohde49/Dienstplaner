@@ -1,45 +1,69 @@
 # Datenmodell des Dienstplaners
 
-Dieses Dokument beschreibt das fachliche Zielmodell des aktuellen Projekts. Die
-technischen Feldnamen sind englisch, während die Bezeichnungen in der
-Benutzeroberfläche deutsch bleiben.
+Dieses Dokument beschreibt den fachlich und technisch umsetzbaren Zielstand der
+gespeicherten Daten. Technische Feldnamen sind englisch, die Bezeichnungen in
+der Benutzeroberfläche bleiben deutsch.
 
-Die Mitarbeiterverwaltung ist bereits umgesetzt. Die Modelle für
-Eintragsarten und Monatspläne legen den vorgesehenen Zielzustand fest und werden
-erst mit den zugehörigen Funktionsbereichen umgesetzt. Eine Beschreibung in
-diesem Dokument bedeutet daher nicht automatisch, dass die Funktion schon im
-Programm vorhanden ist.
+Die konkreten Speicherorte, Sicherungen und Repository-Abläufe stehen getrennt
+in [Datenhaltung.md](./Datenhaltung.md). Die verbindlichen Berechnungsregeln
+stehen unter [docs/Berechnungen](../Berechnungen/README.md) und haben bei
+fachlichen Formeln Vorrang.
 
-## 1. Grundentscheidungen
+## 1. Umsetzungsstand
 
-- Die Anwendung verwaltet genau ein Team. Eine eigene Entität `Team` wird nicht
-  benötigt.
-- Alle Daten werden lokal als JSON gespeichert. Eine relationale Datenbank und
-  relationale Fremdschlüssel sind nicht vorgesehen.
-- Zod-Schemas sind die zentrale, zur Laufzeit geprüfte Datenbeschreibung. Die
-  TypeScript-Typen werden aus ihnen abgeleitet.
-- Jede eigenständig identifizierbare Entität erhält eine UUID als
-  Zeichenkette. Neue IDs werden mit `crypto.randomUUID()` erzeugt.
+| Bereich                  | Stand                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell und vollständiger Datenfluss sind umgesetzt; Rollen-Enum und Fünf-Minuten-Regel fehlen noch             |
+| Eintragsarten            | Grundmodell und vollständiger Datenfluss sind umgesetzt; die verbindliche Ableitung von `workingMinutes` fehlt noch |
+| Monatsplan und Snapshots | Zielmodell festgelegt, noch nicht im Anwendungscode umgesetzt                                                       |
+
+Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
+betreffende Teil bereits implementiert ist.
+
+## 2. Grundentscheidungen
+
+- Die Anwendung verwaltet genau ein Team. Eine eigene Entität `Team` ist nicht
+  erforderlich.
+- `Employee` und `EntryType` sind veränderbare Stammdaten-Entitäten.
+- Ein `MonthlyPlan` ist ein eigenständig gespeichertes Aggregat. Eingebettete
+  `PlanEmployee`, `PlanDay` und `PlanEntry` werden nicht getrennt gespeichert.
+- Gemeinsame Zod-Schemas sind die zur Laufzeit geprüfte Datenbeschreibung. Die
+  TypeScript-Typen werden daraus abgeleitet.
+- `Employee`, `EntryType`, `MonthlyPlan`, `PlanEmployee`, `PlanDay` und
+  `PlanEntry` besitzen jeweils eine eigene UUID. Neue IDs werden im Main
+  Process mit `crypto.randomUUID()` erzeugt.
 - Datumswerte verwenden `YYYY-MM-DD`, Uhrzeiten `HH:mm` und Zeitpunkte das
   ISO-Format.
-- Zeitdauern werden als nichtnegative ganze Minuten gespeichert. Dadurch
-  entstehen bei Berechnungen keine Rundungsfehler durch Dezimalstunden.
+- Zeitdauern werden als nichtnegative sichere ganze Minuten gespeichert.
 - Stammdaten besitzen einen Aktivierungsstatus. Inaktive Stammdaten bleiben
-  erhalten, werden aber für neue Planungen nicht mehr angeboten.
-- Bereits angelegte Monatspläne verwenden Snapshots. Spätere Änderungen an
-  Mitarbeitern oder Eintragsarten verändern einen vorhandenen Plan daher nicht
-  rückwirkend.
-- Berechnete Anzeige- und Auswertungswerte werden nicht gespeichert.
+  erhalten, werden für neue Planbestandteile aber nicht angeboten.
+- Monatspläne verwenden vollständige Snapshots. Spätere Änderungen,
+  Deaktivierungen oder Löschungen von Stammdaten verändern bestehende Pläne
+  nicht rückwirkend.
+- Monatliche Kennzahlen und reine Anzeigewerte werden berechnet und nicht als
+  zusätzlicher Auswertungsstand gespeichert.
+- Es wird keine Eintragskategorie eingeführt. `EntryTypeCategory` oder ein
+  vergleichbares Feld ist nicht Bestandteil des Zielmodells.
 
-## 2. Überblick und Beziehungen
+### Modellarten
 
-Das Modell besteht aus zwei Stammdatenbereichen und dem Monatsplan als
-zusammenhängendem Aggregat:
+- `Employee` und `EntryType` sind eigenständige Stammdaten-Entitäten.
+- `MonthlyPlan` ist die Wurzel eines gemeinsam gespeicherten Aggregats und eine
+  eigenständig identifizierbare Entität.
+- `PlanEmployee`, `PlanDay` und `PlanEntry` sind Entitäten innerhalb dieses
+  Aggregats. Ihre UUIDs bleiben bei späteren Änderungen stabil, sie besitzen
+  aber keine eigenen Dateien oder Repositories.
+- `TimeValues` ist ein Wertobjekt. Es wird durch seine fünf benannten Werte
+  beschrieben und benötigt keine eigene ID.
+- Dateihüllen und `schemaVersion` sind technische Bestandteile der
+  Datenhaltung und keine fachlichen Entitäten.
+
+## 3. Überblick und Beziehungen
 
 ```text
 Employee ── Snapshot beim Erstellen ──> PlanEmployee
                                            │
-                                           │ wird innerhalb des Plans verwendet
+                                           │ planlokale Referenz
                                            ▼
 MonthlyPlan ── enthält ──> PlanDay ── enthält ──> PlanEntry
      │                       │                    ▲
@@ -50,22 +74,30 @@ MonthlyPlan ── enthält ──> PlanDay ── enthält ──> PlanEntry
 EntryType ── Snapshot beim Setzen ────────────────┘
 ```
 
-- `Employee` enthält die aktuell verwalteten Mitarbeiterstammdaten.
-- `EntryType` beschreibt auswählbare Dienste, Abwesenheiten und freie Tage.
-- `MonthlyPlan` enthält genau einen Dienstplan für einen Monat und ein Jahr.
-- `PlanEmployee` ist die unveränderliche Mitarbeiterkopie innerhalb eines
-  Monatsplans.
-- `PlanDay` bildet einen Kalendertag mit Bemerkung, Rufbereitschaft und
-  Planeinträgen ab.
-- `PlanEntry` ist der an einem Tag gesetzte Snapshot einer Eintragsart für einen
-  Planmitarbeiter.
+`sourceEmployeeId` und `sourceEntryTypeId` dokumentieren ausschließlich die
+Herkunft eines Snapshots. Sie sind keine lebenden Fremdschlüssel. Ein Plan muss
+deshalb auch dann vollständig verwendbar bleiben, wenn die ursprünglichen
+Stammdaten später fehlen.
 
-`PlanEmployee`, `PlanDay` und `PlanEntry` werden nicht in eigenen Dateien
-gespeichert. Sie gehören vollständig zu ihrem `MonthlyPlan`.
+## 4. Gemeinsame Werttypen
 
-## 3. Gemeinsame Werttypen
+### 4.1 Mitarbeiterrollen
 
-### Mitarbeiterfarben
+```ts
+const EMPLOYEE_ROLES = ['Erzieher', 'Wirtschaftskraft', 'Praktikant'] as const;
+
+type EmployeeRole = (typeof EMPLOYEE_ROLES)[number];
+```
+
+`Employee.role` und `PlanEmployee.role` verwenden dasselbe gemeinsame
+`employeeRoleSchema`. Andere Werte und freie Texteingaben sind nicht zulässig.
+
+Die allgemeinen Zeitberechnungen sind rollenunabhängig. Eine Rollenprüfung
+findet nur dort statt, wo eine verbindliche Fachregel sie verlangt. Die
+Rufbereitschaft darf beispielsweise nur einem `PlanEmployee` mit der im
+Snapshot gespeicherten Rolle `Erzieher` zugeordnet werden.
+
+### 4.2 Mitarbeiterfarben
 
 ```ts
 const EMPLOYEE_COLOR_KEYS = [
@@ -80,21 +112,20 @@ const EMPLOYEE_COLOR_KEYS = [
 type EmployeeColorKey = (typeof EMPLOYEE_COLOR_KEYS)[number];
 ```
 
-Gespeichert wird nur der kontrollierte Farbschlüssel. Die tatsächlichen
-Darstellungsfarben werden zentral in der Oberfläche zugeordnet. Dadurch bleiben
-die gespeicherten Daten unabhängig von konkreten CSS-Farbwerten.
+Gespeichert wird nur der kontrollierte Farbschlüssel. Die tatsächlichen Farben
+werden zentral in der Oberfläche zugeordnet.
 
-### Berechnungsarten
+### 4.3 Berechnungsarten
 
 ```ts
 type CalculationType = 'fixed' | 'weeklyWorkingTime';
 ```
 
-- `fixed` verwendet die in der Eintragsart hinterlegten festen Zeitwerte.
-- `weeklyWorkingTime` ermittelt die anrechenbare Arbeitszeit beim Setzen des
-  Planeintrags aus der im Plan gespeicherten Wochenarbeitszeit des Mitarbeiters.
+- `fixed` verwendet die gültigen festen Zeitwerte der Eintragsart.
+- `weeklyWorkingTime` bildet beim Setzen eines Planeintrags den Tageswert aus
+  der im `PlanEmployee` gespeicherten Wochenarbeitszeit.
 
-### Zeitwerte
+### 4.4 Zeitwerte
 
 ```ts
 interface TimeValues {
@@ -106,36 +137,44 @@ interface TimeValues {
 }
 ```
 
-Die fünf Werte haben folgende Bedeutung:
+- `attendanceMinutes`: Anwesenheitsdauer einschließlich Pausen,
+- `workingMinutes`: Arbeitszeit einschließlich Nachtbereitschaft,
+- `workingWithoutNightReadinessMinutes`: reine Arbeitszeit,
+- `nightReadinessMinutes`: Nachtbereitschaft,
+- `nightWorkMinutes`: Nachtarbeit.
 
-- `attendanceMinutes`: gesamte Anwesenheitsdauer einschließlich Pausen,
-- `workingMinutes`: insgesamt angerechnete Arbeitszeit einschließlich
-  Nachtbereitschaft; in der Oberfläche „Arbeitszeit (mit NB)“,
-- `workingWithoutNightReadinessMinutes`: reine Arbeitszeit ohne
-  Nachtbereitschaft; in der Oberfläche „Reine Arbeitszeit“,
-- `nightReadinessMinutes`: enthaltene Nachtbereitschaft,
-- `nightWorkMinutes`: enthaltene Nachtarbeit.
+Alle fünf Felder bleiben gespeichert, damit Eintragsart und Planeintrag dieselbe
+schlanke Struktur verwenden können. `workingMinutes` ist jedoch kein frei
+bestimmbarer Wert. Es gilt verbindlich:
 
-Alle Werte sind eigenständig gespeicherte, nichtnegative ganze Minuten. Beginn
-und Ende dienen der zeitlichen Darstellung; die Anwendung leitet aus ihnen
-keine Zeitdauer ab. Dadurch kann beispielsweise auch ein über Mitternacht
-laufender Dienst eindeutig durch seine gespeicherten Zeitwerte beschrieben
-werden.
+Jeder Zeitwert bleibt eine eigene, ausdrücklich benannte Eigenschaft. Die Werte
+werden weder zu einer allgemeinen Zahl zusammengefasst noch als frei benannte
+Liste von Zeitwerten gespeichert.
 
-Die erwarteten fachlichen Zusammenhänge zwischen den Zeitwerten können später
-als Plausibilitätsprüfung ergänzt werden. Das Datenmodell allein führt keine
-arbeitsrechtliche oder fachliche Bewertung der eingegebenen Werte durch.
+```text
+workingMinutes =
+  workingWithoutNightReadinessMinutes + nightReadinessMinutes
+```
 
-## 4. Mitarbeiter (`Employee`)
+Die Oberfläche zeigt diesen Wert schreibgeschützt an. Das gemeinsame Schema
+prüft die Gleichung bei Eingaben, nach dem Laden und vor dem Speichern.
+Widersprüchliche Werte werden abgelehnt und nicht still korrigiert.
 
-Status: **bereits umgesetzt** in `src/shared/schemas/employee.ts`.
+Beginn und Ende dienen der zeitlichen Darstellung. Zeitdauern werden nicht aus
+ihnen abgeleitet. Dadurch kann auch ein über Mitternacht laufender Dienst durch
+seine ausdrücklich gespeicherten Minutenwerte beschrieben werden.
+
+## 5. Mitarbeiter (`Employee`)
+
+Status: **teilweise umgesetzt**. Die Struktur existiert; Rollen-Enum und
+Fünf-Minuten-Regel sind noch umzusetzen.
 
 ```ts
 interface Employee {
   id: string;
   firstName: string;
   lastName: string;
-  role: string;
+  role: EmployeeRole;
   weeklyWorkingMinutes: number;
   colorKey: EmployeeColorKey;
   active: boolean;
@@ -144,36 +183,24 @@ interface Employee {
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `role` ist bewusst frei eingebbarer Text. Das Modell schreibt keine feste
-  Rollenliste vor.
-- `weeklyWorkingMinutes` speichert die vertragliche Wochenarbeitszeit in
-  Minuten. Die Umrechnung in Stunden erfolgt nur für Eingabe und Anzeige.
-- `colorKey` verweist auf die festgelegte Farbpalette und enthält keinen frei
-  eingegebenen Hex-Wert.
-- `active` ermöglicht das Deaktivieren, ohne den Datensatz zu verlieren.
-- `createdAt` und `updatedAt` machen Anlage und letzte Änderung
-  nachvollziehbar.
+- Vorname und Nachname sind erforderlich und auf jeweils 100 Zeichen begrenzt.
+- `role` ist genau eine der drei festgelegten Rollen.
+- `weeklyWorkingMinutes` ist eine nichtnegative sichere ganze Zahl, höchstens
+  10.080 und ohne Rest durch fünf teilbar.
+- `0` Minuten bleiben zulässig.
+- Die Oberfläche darf Eingaben nicht still auf einen anderen Minutenwert
+  runden.
+- `active` steuert die Verwendung bei der Erstellung neuer Monatspläne.
+- `createdAt` und `updatedAt` dokumentieren Anlage und letzte Änderung.
 
-Die aktuell umgesetzte Validierung begrenzt Vorname, Nachname und Rolle auf
-jeweils 1 bis 100 Zeichen. Die Wochenarbeitszeit muss eine ganze Minutenzahl
-zwischen 0 und 10.080 Minuten sein.
+Die Mitarbeiter-IDs innerhalb der Datei müssen eindeutig sein.
 
-### Mitarbeiterdatei
+## 6. Eintragsart (`EntryType`)
 
-```ts
-interface EmployeesFile {
-  schemaVersion: 1;
-  updatedAt: string;
-  employees: Employee[];
-}
-```
-
-## 5. Eintragsart (`EntryType`)
-
-Eine Eintragsart ist eine wiederverwendbare Vorlage für einen Dienst, eine
-Abwesenheit oder einen freien Tag.
+Status: **teilweise umgesetzt**. Die Struktur und beide Berechnungsarten
+existieren; die Summenbeziehung von `workingMinutes` ist noch umzusetzen.
 
 ```ts
 interface EntryType {
@@ -190,42 +217,33 @@ interface EntryType {
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `code` ist das kurze Kürzel für Dienstplan und Legende, beispielsweise
-  `SN/F`, `D1` oder `U`.
-- `name` ist die ausgeschriebene Bezeichnung.
-- `code` muss nicht eindeutig sein. Dadurch sind mehrere Zeitvarianten mit
-  demselben fachlichen Kürzel möglich. Die UUID bleibt die technische
-  Identität.
-- `startTime` und `endTime` sind optionale Uhrzeiten im Format `HH:mm`.
-  `null` bedeutet, dass keine Uhrzeit vorgesehen ist.
-- Bei `fixed` werden alle Zeitwerte beim Setzen unverändert in den Planeintrag
-  kopiert.
-- Bei `weeklyWorkingTime` wird `workingMinutes` beim Setzen aus
-  `PlanEmployee.weeklyWorkingMinutes / 5` berechnet und auf die nächste volle
-  Minute gerundet. Die übrigen Zeitwerte sind für diese Berechnungsart `0`, die
-  Uhrzeiten `null`.
-- `active` steuert, ob die Eintragsart für neue Planeinträge auswählbar ist.
-  Bereits gesetzte Einträge bleiben durch ihren Snapshot unverändert.
+- `code` ist erforderlich und höchstens 20 Zeichen lang.
+- `name` ist erforderlich und höchstens 100 Zeichen lang.
+- Mehrere Eintragsarten dürfen dasselbe Kürzel verwenden. Die UUID bleibt die
+  technische Identität.
+- `startTime` und `endTime` sind entweder beide gesetzt oder beide `null`.
+- Bei `fixed` werden die geprüften Uhrzeiten und Zeitwerte später vollständig
+  in den `PlanEntry` kopiert.
+- Bei `weeklyWorkingTime` sind Uhrzeiten `null` und alle festen Zeitwerte der
+  Definition `0`.
+- Bei `weeklyWorkingTime` entstehen die konkreten Werte erst beim Setzen des
+  Planeintrags. `workingWithoutNightReadinessMinutes` und `workingMinutes`
+  entsprechen dann jeweils `PlanEmployee.weeklyWorkingMinutes / 5`; die
+  übrigen Zeitwerte sind `0`. Wegen der Fünf-Minuten-Regel ist keine Rundung
+  erforderlich.
+- `active` steuert nur die Auswahl für neue Planeinträge. Bereits gespeicherte
+  Snapshots bleiben unverändert.
 
-### Eintragsartendatei
+Die Eintragsarten-IDs innerhalb der Datei müssen eindeutig sein.
 
-```ts
-interface EntryTypesFile {
-  schemaVersion: 1;
-  updatedAt: string;
-  entryTypes: EntryType[];
-}
-```
+## 7. Monatsplan (`MonthlyPlan`)
 
-## 6. Monatsplan (`MonthlyPlan`)
-
-Jeder Monatsplan ist ein eigenständig gespeichertes JSON-Aggregat:
+Status: **noch nicht implementiert**.
 
 ```ts
 interface MonthlyPlan {
-  schemaVersion: 1;
   id: string;
   year: number;
   month: number;
@@ -237,21 +255,28 @@ interface MonthlyPlan {
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `year` und `month` beschreiben den Planzeitraum. `month` liegt zwischen 1 und 12.
-- Für jede Kombination aus Jahr und Monat darf höchstens ein Monatsplan
-  existieren.
-- `title` enthält die darstellbare Bezeichnung, beispielsweise
-  `Dienstplan August 2026`.
-- `employees` und `days` gehören vollständig zum Plan und werden gemeinsam mit
-  ihm gespeichert.
-- Beim Erstellen werden die zu diesem Zeitpunkt aktiven Mitarbeiter und alle
-  Kalendertage des gewählten Monats aufgenommen.
-- Spätere Änderungen an den Stammdaten ergänzen oder verändern einen
-  bestehenden Plan nicht automatisch.
+- `year` ist eine sichere ganze Zahl von `2000` bis einschließlich `2100`.
+- `month` ist eine ganze Zahl von `1` bis `12`.
+- Mehrere Monatspläne dürfen dasselbe Jahr und denselben Monat besitzen. Die
+  UUID identifiziert jeden Plan unabhängig von seinem Zeitraum und Titel.
+- Die Oberfläche bietet bei einer Neuanlage standardmäßig das aktuelle Jahr
+  sowie die jeweils zwei vorherigen und folgenden Jahre an, soweit diese
+  innerhalb des technischen Bereichs liegen. Dieses rollierende Auswahlfenster
+  ist eine Bedienregel; die stabile Dateivalidierung bleibt davon unabhängig.
+- `title` wird vom Benutzer angelegt, ist erforderlich, höchstens 200 Zeichen
+  lang und später editierbar.
+- Nach dem Erstellen sind Jahr und Monat unveränderlich.
+- Beim Erstellen werden die zu diesem Zeitpunkt aktiven Mitarbeiter in ihrer
+  aktuellen Listenreihenfolge und sämtliche Kalendertage des Monats
+  aufgenommen.
+- Mitarbeiter dürfen in diesem ersten Zielstand nach der Erstellung nicht
+  ergänzt, entfernt oder umsortiert werden.
+- `employees` und `days` gehören vollständig zum Plan und werden gemeinsam
+  validiert und gespeichert.
 
-## 7. Mitarbeiter-Snapshot (`PlanEmployee`)
+## 8. Mitarbeiter-Snapshot (`PlanEmployee`)
 
 ```ts
 interface PlanEmployee {
@@ -259,30 +284,31 @@ interface PlanEmployee {
   sourceEmployeeId: string;
   firstName: string;
   lastName: string;
-  role: string;
+  role: EmployeeRole;
   weeklyWorkingMinutes: number;
   colorKey: EmployeeColorKey;
   position: number;
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `id` identifiziert den Mitarbeiter innerhalb dieses Monatsplans.
-- `sourceEmployeeId` dokumentiert, aus welchem `Employee` der Snapshot erzeugt
-  wurde. Der Plan bleibt auch gültig, wenn dieser Stammdatensatz später
-  deaktiviert oder gelöscht wird.
-- Namen, Rolle, Wochenarbeitszeit und Farbe werden kopiert. Änderungen in der
-  Teamverwaltung wirken sich deshalb nicht rückwirkend aus.
-- `position` ist eine positive ganze Zahl und legt die Reihenfolge der
-  Mitarbeiterspalten fest. Positionen sind innerhalb eines Plans eindeutig.
-- Ein Aktivierungsstatus wird im Snapshot nicht benötigt. In den Plan werden
-  bei seiner Erstellung nur aktive Mitarbeiter übernommen.
+- `id` identifiziert den Mitarbeiter innerhalb des Plans.
+- `sourceEmployeeId` dokumentiert die Herkunft, ohne eine lebende Abhängigkeit
+  zum Mitarbeiterstamm herzustellen.
+- Namen, Rolle, Wochenarbeitszeit und Farbe werden beim Erstellen kopiert.
+- `position` übernimmt die aktuelle Reihenfolge der aktiven Mitarbeiter als
+  lückenlose Folge `1..n`.
+- Ein Aktivstatus ist im Snapshot nicht erforderlich.
+- Laden, Bearbeiten und Auswerten eines Plans verwenden ausschließlich den
+  Snapshot. Der Mitarbeiterstamm darf dafür nicht erneut eingelesen oder in
+  den Plan zurückkopiert werden.
 
-## 8. Kalendertag (`PlanDay`)
+## 9. Kalendertag (`PlanDay`)
 
 ```ts
 interface PlanDay {
+  id: string;
   date: string;
   note: string | null;
   onCallEmployeeId: string | null;
@@ -290,24 +316,30 @@ interface PlanDay {
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `date` ist innerhalb des Monatsplans eindeutig und muss in dessen Monat
-  liegen.
-- `note` enthält höchstens eine optionale Bemerkung zum Tag.
-- `onCallEmployeeId` verweist auf die `id` eines `PlanEmployee` desselben
-  Plans. `null` bedeutet, dass keine Rufbereitschaft eingeteilt ist.
-- Durch das einzelne Feld kann es pro Tag höchstens eine Rufbereitschaft geben.
-  Eine zusätzliche eigene Entität ist dafür nicht erforderlich.
-- Rufbereitschaft darf parallel zu einem regulären Planeintrag derselben Person
-  bestehen und verändert die gespeicherten Arbeitszeitwerte nicht.
-- Das aktuelle Modell kennt wegen der frei eingebbaren Rolle keine automatisch
-  prüfbare Einschränkung der Rufbereitschaft auf eine bestimmte Rolle.
+- Beim regulären Erstellen enthält der Plan für jeden Tag seines Monats genau
+  einen chronologisch einsortierten `PlanDay`.
+- `id` identifiziert den Plantag innerhalb des Monatsplan-Aggregats und bleibt
+  bei späteren Änderungen an Bemerkung, Rufbereitschaft oder Einträgen stabil.
+- `date` muss im Zeitraum des zugehörigen Plans liegen und innerhalb des Plans
+  eindeutig sein.
+- `note` enthält eine optionale Bemerkung. Eine leere Bemerkung wird als `null`
+  gespeichert.
+- `onCallEmployeeId` ist `null` oder verweist auf die `id` eines
+  `PlanEmployee` desselben Plans.
+- Pro Tag gibt es höchstens eine Rufbereitschaft.
+- Rufbereitschaft darf nur einem Planmitarbeiter mit Snapshot-Rolle `Erzieher`
+  zugeordnet werden.
+- Rufbereitschaft und regulärer Planeintrag derselben Person dürfen parallel
+  bestehen.
 
-Wochentag, Wochenende und Feiertag werden aus `date` berechnet und nicht
-gespeichert.
+Wochentag, Wochenende, Feiertagsstatus und alle auf ein Datum zutreffenden
+Feiertagsbezeichnungen werden aus `date` berechnet und nicht gespeichert. Die
+abgeleitete Kalenderdarstellung muss mehrere Feiertagsnamen je Datum erhalten
+können, beispielsweise als `string[]`.
 
-## 9. Planeintrag (`PlanEntry`)
+## 10. Planeintrag (`PlanEntry`)
 
 ```ts
 interface PlanEntry {
@@ -322,102 +354,112 @@ interface PlanEntry {
 }
 ```
 
-### Entscheidungen
+Regeln:
 
-- `planEmployeeId` verweist auf einen `PlanEmployee` desselben Monatsplans,
-  nicht unmittelbar auf die aktuellen Mitarbeiterstammdaten.
-- `sourceEntryTypeId` dokumentiert die ursprüngliche Eintragsart, stellt aber
-  keine lebende Abhängigkeit dar.
-- Kürzel, Name, Uhrzeiten und Zeitwerte werden beim Setzen in den
-  Planeintrag kopiert. Nachträgliche Änderungen oder eine Deaktivierung der
-  Eintragsart ändern den Monatsplan daher nicht.
+- `planEmployeeId` verweist auf einen `PlanEmployee` desselben Plans.
+- `sourceEntryTypeId` dokumentiert die Herkunft, ohne eine lebende Abhängigkeit
+  zur Eintragsart herzustellen.
+- Kürzel, Bezeichnung, Uhrzeiten und alle konkreten Zeitwerte werden beim
+  Setzen in den Planeintrag kopiert.
+- Die Berechnungsart muss nicht gespeichert werden, weil der Snapshot beim
+  Setzen vollständig bestimmt wird und danach nicht neu aus Stammdaten
+  berechnet werden darf.
 - Pro `PlanDay` darf es höchstens einen `PlanEntry` je `planEmployeeId` geben.
-  Das Wechseln einer Eintragsart ersetzt somit den vorhandenen Eintrag in der
-  Zelle.
-- Beginn und Ende dienen nur der Darstellung. Maßgeblich für Auswertungen sind
-  die gespeicherten Minutenwerte.
-- Ein über Mitternacht reichender Dienst muss nicht technisch in zwei Einträge
-  aufgeteilt werden. Die Zuordnung erfolgt zu dem Kalendertag, an dem der Dienst
-  im Plan geführt werden soll; seine Dauer wird ausdrücklich in `timeValues`
-  gespeichert.
+- Das Wechseln einer Eintragsart ersetzt den bisherigen Snapshot vollständig.
+- Das Entfernen eines Eintrags entfernt dessen Snapshot.
+- Ein über Mitternacht reichender Dienst bleibt dem Kalendertag seiner
+  Planungszelle zugeordnet. Eine Aufteilung auf den Folgetag erfolgt nicht.
 
-## 10. Fachliche Regeln über mehrere Modelle
+## 11. Planweite Konsistenzregeln
 
-- Ein Monatsplan ist über die Kombination `year` und `month` eindeutig.
-- Ein Monatsplan enthält genau einen `PlanDay` für jeden Kalendertag seines
-  Monats und keine Tage außerhalb dieses Monats.
-- Alle `PlanEmployee.id`-Werte sind innerhalb eines Monatsplans eindeutig.
-- Alle `PlanEmployee.position`-Werte sind innerhalb eines Monatsplans
-  eindeutig.
-- Alle `PlanEntry.id`-Werte sind innerhalb eines Monatsplans eindeutig.
-- `PlanDay.onCallEmployeeId` und `PlanEntry.planEmployeeId` müssen auf einen im
-  selben Monatsplan enthaltenen `PlanEmployee` verweisen.
-- Je Tag und Planmitarbeiter ist höchstens ein Planeintrag zulässig.
-- Für neue Monatspläne werden nur aktive Mitarbeiter verwendet.
-- Für neue Planeinträge werden nur aktive Eintragsarten angeboten.
-- Deaktivierung oder Löschung von Stammdaten macht bestehende Snapshots nicht
-  ungültig.
-- Feiertage werden aus dem Datum berechnet. Sie sind keine gespeicherten
-  Entitäten des Datenmodells.
+Beim Erzeugen, Laden und Speichern eines Plans müssen das gemeinsame Schema und
+die aufrufende Fachlogik mindestens sicherstellen:
 
-Diese Regeln werden nicht durch relationale Datenbank-Constraints abgesichert.
-Sie müssen beim Erzeugen und Ändern der Daten sowie durch verfeinerte
-Zod-Prüfungen im Main Process durchgesetzt werden.
+- genau die chronologisch geordneten Kalendertage des Planmonats, ohne
+  Duplikate und ohne fremde Daten;
+- eindeutige `PlanEmployee.id`- und `sourceEmployeeId`-Werte;
+- eindeutige und lückenlose Mitarbeiterpositionen `1..n`;
+- eindeutige `PlanDay.id`-Werte;
+- im gesamten Plan eindeutige `PlanEntry.id`-Werte;
+- gültige planinterne Verweise von Planeinträgen und Rufbereitschaften;
+- höchstens einen Eintrag je Mitarbeiter und Tag;
+- Rufbereitschaft ausschließlich für Snapshot-Rolle `Erzieher`;
+- die verbindliche Summenformel jedes gespeicherten `TimeValues`-Objekts;
+- syntaktisch gültige Herkunfts-IDs, ohne die Existenz aktueller Stammdaten zu
+  verlangen;
+- sichere Ganzzahligkeit sämtlicher Minutenwerte und berechneter Summen.
 
-## 11. Nicht gespeicherte Werte
+Eine beschädigte oder manuell veränderte Datei begründet kein gewünschtes
+fachliches Sonderverhalten. Sie wird technisch abgelehnt oder aus einer
+gültigen Sicherung wiederhergestellt und niemals nur teilweise ausgewertet.
 
-Folgende Werte werden aus den gespeicherten Daten abgeleitet:
+## 12. Snapshot-Lebenszyklus
 
-- Wochentag, Wochenende und Feiertag,
-- Sollarbeitszeit,
-- Istarbeitszeit und Differenz,
-- Anzahl freier Tage,
-- Dienst- und Abwesenheitsverteilung,
-- Nachtarbeit und Nachtbereitschaft,
+1. Beim Erstellen eines Plans werden nur aktive Mitarbeiter kopiert.
+2. Der Mitarbeiterbestand und seine Reihenfolge bleiben danach eingefroren.
+3. Beim Setzen wird nur eine aktuell aktive Eintragsart verwendet.
+4. Eine gemeinsame Fachfunktion erzeugt den vollständigen konkreten
+   `PlanEntry` aus Eintragsart und `PlanEmployee`.
+5. Bei `weeklyWorkingTime` wird ausschließlich die Wochenarbeitszeit des
+   Snapshots verwendet.
+6. Spätere Änderungen, Deaktivierungen, Löschungen oder Neuanlagen in den
+   Stammdaten verändern vorhandene Snapshots nicht.
+7. Laden und Auswerten verwenden ausschließlich die gespeicherten Snapshots.
+
+## 13. Gespeicherte und berechnete Werte
+
+### Gespeichert
+
+- Mitarbeiter- und Eintragsartenstammdaten,
+- frei editierbarer Plantitel,
+- Jahr und Monat,
+- Mitarbeiter-Snapshots einschließlich Rolle und Reihenfolge,
+- Kalendertage mit Bemerkung und optionaler Rufbereitschaft,
+- Planungseintrag-Snapshots einschließlich aller konkreten Zeitwerte,
+- `workingMinutes` als abgeleiteter, geprüfter und im Snapshot eingefrorener
+  Einzelwert.
+
+### Berechnet und nicht als Monatsauswertung gespeichert
+
+- Wochentag, Samstag, Sonntag und Wochenende,
+- Feiertagsstatus und sämtliche Feiertagsbezeichnungen,
+- kalendarische Arbeitstagszahl,
+- SN/F-Dienste und die festgelegten Frei-Kennzahlen,
 - Anzahl der Rufbereitschaften,
-- Summen und weitere Werte der Auswertung,
-- Druckdarstellung und PDF-Inhalt.
+- monatliche Summen der gespeicherten Zeitwerte,
+- Sonntags- und Feiertagszeit,
+- Nachtzuschlag und Nachtbereitschaftszuschlag,
+- Soll-Arbeitszeit, Ist-Arbeitszeit und Differenz,
+- Anzeige-, Tabellen-, Druck- und Exportdarstellung.
 
-Diese Werte werden bei Änderungen neu berechnet. Dadurch kann kein veralteter
-gespeicherter Auswertungswert von den eigentlichen Planeinträgen abweichen. Die
-genauen Berechnungsregeln gehören in die spätere Planungs- und
-Auswertungslogik, nicht in zusätzliche Entitäten.
+Nachtarbeit und Nachtbereitschaft sind damit nicht generell ungespeichert: Ihre
+Einzelwerte stehen im `PlanEntry`; nur die Monatsaggregate werden neu
+berechnet.
 
-## 12. Laufzeitvalidierung
+## 14. Laufzeitvalidierung
 
-Für jedes Modell wird ein Zod-Schema angelegt. Validiert wird:
+Validiert wird:
 
-- bei Daten aus der React-Oberfläche,
-- im Main Process vor fachlichen Änderungen,
+- im Renderer für verständliche Eingaberückmeldungen,
+- erneut im Main Process vor jeder fachlichen Änderung,
 - unmittelbar vor dem Speichern,
-- nach dem Laden einer JSON-Datei und
-- bei Antworten über die Preload-API.
+- vollständig nach dem Laden einer JSON-Datei.
 
-Neben Feldformaten müssen die Schemas beziehungsweise die aufrufende
-Fachlogik auch die Beziehungen innerhalb eines Monatsplans prüfen. Dazu gehören
-insbesondere eindeutige Tage, Positionen und Einträge sowie gültige Verweise auf
-`PlanEmployee`.
+Die Main-Process-Prüfung ist die maßgebliche Sicherheitsgrenze. Eine Antwort
+über die Preload-API benötigt keine zusätzliche, davon unabhängige
+Schema-Schicht, wenn sie ausschließlich aus bereits erfolgreich validierten
+Repository-Daten gebildet wurde.
 
-Die geplante Aufteilung der gemeinsamen Schemas lautet:
+Geplante gemeinsame Schemaaufteilung:
 
 ```text
 src/shared/schemas/
-├── employee.ts       # bereits umgesetzt
+├── employee.ts
 ├── timeValues.ts
 ├── entryType.ts
 ├── monthlyPlan.ts
 └── index.ts
 ```
 
-## 13. Zuordnung zu den JSON-Dateien
-
-```text
-dienstplaner-data/
-├── employees.json                  # EmployeesFile
-├── entry-types.json                # EntryTypesFile
-└── plans/
-    └── YYYY-MM.json                # jeweils ein MonthlyPlan
-```
-
-Sicherungs- und temporäre Dateien sind Teil der technischen Datenhaltung, aber
-keine eigenen fachlichen Entitäten.
+Die technische Zuordnung dieser Modelle zu JSON-Dateien und die Behandlung von
+Schema-Versionen beschreibt [Datenhaltung.md](./Datenhaltung.md).
