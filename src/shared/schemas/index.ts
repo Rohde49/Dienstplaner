@@ -35,3 +35,17 @@ export type {
   EntryTypesFile,
   TimeValues,
 } from './entryType';
+
+export {
+  monthlyPlanSchema,
+  planDaySchema,
+  planEmployeeSchema,
+  planEntrySchema,
+} from './monthlyPlan';
+
+export type {
+  MonthlyPlan,
+  PlanDay,
+  PlanEmployee,
+  PlanEntry,
+} from './monthlyPlan';

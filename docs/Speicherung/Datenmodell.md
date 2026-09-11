@@ -11,11 +11,11 @@ fachlichen Formeln Vorrang.
 
 ## 1. Umsetzungsstand
 
-| Bereich                  | Stand                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------- |
-| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
-| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
-| Monatsplan und Snapshots | Zielmodell festgelegt, noch nicht im Anwendungscode umgesetzt                          |
+| Bereich                  | Stand                                                                                              |
+| ------------------------ | -------------------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt                         |
+| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt             |
+| Monatsplan und Snapshots | Gemeinsame Schemas, planweite Konsistenzprüfung und Erzeugung des Mitarbeiterstands sind umgesetzt |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -238,7 +238,8 @@ Die Eintragsarten-IDs innerhalb der Datei müssen eindeutig sein.
 
 ## 7. Monatsplan (`MonthlyPlan`)
 
-Status: **noch nicht implementiert**.
+Status: **Grundmodell, Konsistenzprüfung und reguläre Erzeugung sind
+umgesetzt; Speicherung und Oberfläche folgen in späteren Schritten**.
 
 ```ts
 interface MonthlyPlan {

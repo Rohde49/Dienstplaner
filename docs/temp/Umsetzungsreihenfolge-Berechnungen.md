@@ -100,19 +100,19 @@ Abnahmekriterien:
 
 ## Schritt 4: Monatsplan- und Snapshot-Modelle umsetzen
 
-- [ ] Gemeinsame Schemas für `MonthlyPlan`, `PlanEmployee`, `PlanDay` und `PlanEntry` anlegen.
-- [ ] Beim Erstellen eines Monatsplans ausschließlich die zu diesem Zeitpunkt aktiven Mitarbeiter übernehmen.
-- [ ] Rolle, Wochenarbeitszeit, Namen, Farbe und Reihenfolge in `PlanEmployee` speichern.
-- [ ] Für jeden Kalendertag des Monats genau einen regulär erzeugten `PlanDay` anlegen.
-- [ ] Verweise innerhalb des Monatsplans validieren.
-- [ ] Pro Mitarbeiter und Kalendertag höchstens einen Planungseintrag zulassen.
-- [ ] Pro Kalendertag höchstens eine Rufbereitschaft zulassen.
+- [x] Gemeinsame Schemas für `MonthlyPlan`, `PlanEmployee`, `PlanDay` und `PlanEntry` anlegen.
+- [x] Beim Erstellen eines Monatsplans ausschließlich die zu diesem Zeitpunkt aktiven Mitarbeiter übernehmen.
+- [x] Rolle, Wochenarbeitszeit, Namen, Farbe und Reihenfolge in `PlanEmployee` speichern.
+- [x] Für jeden Kalendertag des Monats genau einen regulär erzeugten `PlanDay` anlegen.
+- [x] Verweise innerhalb des Monatsplans validieren.
+- [x] Pro Mitarbeiter und Kalendertag höchstens einen Planungseintrag zulassen.
+- [x] Pro Kalendertag höchstens eine Rufbereitschaft zulassen.
 
 Abnahmekriterien:
 
-- [ ] Ein vollständiger Monatsplan kann aus Stammdaten erzeugt und validiert werden.
-- [ ] Spätere Stammdatenänderungen verändern den erzeugten Mitarbeiter-Snapshot nicht.
-- [ ] Ungültige interne Verweise und doppelte Einträge einer Planungszelle werden technisch erkannt.
+- [x] Ein vollständiger Monatsplan kann aus Stammdaten erzeugt und validiert werden.
+- [x] Spätere Stammdatenänderungen verändern den erzeugten Mitarbeiter-Snapshot nicht.
+- [x] Ungültige interne Verweise und doppelte Einträge einer Planungszelle werden technisch erkannt.
 
 ## Schritt 5: Planungseintrag-Snapshots erzeugen und verändern
 

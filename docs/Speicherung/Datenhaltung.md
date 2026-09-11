@@ -21,18 +21,21 @@ nicht erforderlich.
 - automatische Verwendung einer gültigen Sicherung,
 - serialisierte Mutationen innerhalb der vorhandenen Repositories,
 - ausschließlicher Dateizugriff durch den Main Process,
-- begrenzte IPC-/Preload-Schnittstellen für Mitarbeiter und Eintragsarten.
+- begrenzte IPC-/Preload-Schnittstellen für Mitarbeiter und Eintragsarten,
+- gemeinsame Kalenderfunktionen,
+- gemeinsame Schemas für Monatsplan und Snapshots einschließlich planweiter
+  Konsistenzprüfung,
+- Erzeugung eines vollständigen Monatsplans aus aktiven
+  Mitarbeiter-Snapshots und allen Kalendertagen,
+- der bestätigte Reset der bisherigen Prototypdaten auf die neuen
+  Schema-Versionen.
 
 ### Noch umzusetzen
 
-- gemeinsamer Kalender- und Monatsplanbereich,
 - Plan-Unterordner und Plan-Repository,
 - Plan-IPC- und Preload-Schnittstellen,
 - sichtbare Warnung nach Wiederherstellung aus einer Sicherung,
-- Serialisierung von Lesen und Schreiben derselben Ressource,
-- planweite Konsistenzprüfung,
-- der bestätigte Reset der vorhandenen Prototypdaten auf die neuen
-  Schema-Versionen.
+- Serialisierung von Lesen und Schreiben derselben Ressource.
 
 ## 2. Speicherort und Dateistruktur
 
