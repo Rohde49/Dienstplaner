@@ -11,11 +11,11 @@ fachlichen Formeln Vorrang.
 
 ## 1. Umsetzungsstand
 
-| Bereich                  | Stand                                                                                              |
-| ------------------------ | -------------------------------------------------------------------------------------------------- |
-| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt                         |
-| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt             |
-| Monatsplan und Snapshots | Gemeinsame Schemas, planweite Konsistenzprüfung und Erzeugung des Mitarbeiterstands sind umgesetzt |
+| Bereich                  | Stand                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
+| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
+| Monatsplan und Snapshots | Schemas, Konsistenzprüfung, Erzeugung der Snapshots und Zelloperationen sind umgesetzt |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -340,6 +340,9 @@ können, beispielsweise als `string[]`.
 
 ## 10. Planeintrag (`PlanEntry`)
 
+Status: **Snapshot-Erzeugung sowie Setzen, Ersetzen und Entfernen sind
+umgesetzt; Speicherung und Oberfläche folgen in späteren Schritten**.
+
 ```ts
 interface PlanEntry {
   id: string;
@@ -365,6 +368,8 @@ Regeln:
   berechnet werden darf.
 - Pro `PlanDay` darf es höchstens einen `PlanEntry` je `planEmployeeId` geben.
 - Das Wechseln einer Eintragsart ersetzt den bisherigen Snapshot vollständig.
+- Beim Ersetzen bleibt die `PlanEntry.id` stabil. Alle aus der Eintragsart
+  übernommenen beziehungsweise berechneten Snapshot-Inhalte werden erneuert.
 - Das Entfernen eines Eintrags entfernt dessen Snapshot.
 - Ein über Mitternacht reichender Dienst bleibt dem Kalendertag seiner
   Planungszelle zugeordnet. Eine Aufteilung auf den Folgetag erfolgt nicht.

@@ -27,6 +27,8 @@ nicht erforderlich.
   Konsistenzprüfung,
 - Erzeugung eines vollständigen Monatsplans aus aktiven
   Mitarbeiter-Snapshots und allen Kalendertagen,
+- gemeinsame reine Erzeugung von Planungseintrag-Snapshots sowie validierte
+  Zelloperationen im Main Process,
 - der bestätigte Reset der bisherigen Prototypdaten auf die neuen
   Schema-Versionen.
 

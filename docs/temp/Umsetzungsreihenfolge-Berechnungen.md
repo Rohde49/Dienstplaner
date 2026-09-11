@@ -118,30 +118,30 @@ Abnahmekriterien:
 
 ### Feste Zeitwerte
 
-- [ ] Herkunfts-ID, Kürzel, Bezeichnung, Uhrzeiten und die festgelegten Zeitwerte übernehmen.
-- [ ] Arbeitszeit (mit NB) berechnen und im Planungseintrag-Snapshot speichern.
-- [ ] Die Summenbeziehung des gespeicherten Snapshot-Werts validieren.
+- [x] Herkunfts-ID, Kürzel, Bezeichnung, Uhrzeiten und die festgelegten Zeitwerte übernehmen.
+- [x] Arbeitszeit (mit NB) berechnen und im Planungseintrag-Snapshot speichern.
+- [x] Die Summenbeziehung des gespeicherten Snapshot-Werts validieren.
 
 ### Wochenarbeitszeit
 
-- [ ] Den Tageswert als `Wochenarbeitszeit aus dem Mitarbeiter-Snapshot / 5` berechnen.
-- [ ] Reine Arbeitszeit und Arbeitszeit (mit NB) auf den Tageswert setzen.
-- [ ] Anwesenheitszeit, Nachtbereitschaft und Nachtarbeit auf `0` setzen.
-- [ ] Beginn und Ende leer lassen.
+- [x] Den Tageswert als `Wochenarbeitszeit aus dem Mitarbeiter-Snapshot / 5` berechnen.
+- [x] Reine Arbeitszeit und Arbeitszeit (mit NB) auf den Tageswert setzen.
+- [x] Anwesenheitszeit, Nachtbereitschaft und Nachtarbeit auf `0` setzen.
+- [x] Beginn und Ende leer lassen.
 
 ### Änderungen einer Planungszelle
 
-- [ ] Einen Planungseintrag setzen.
-- [ ] Einen vorhandenen Planungseintrag vollständig ersetzen.
-- [ ] Einen Planungseintrag entfernen.
-- [ ] Beim erneuten Setzen einen neuen Snapshot aus den dann geltenden Ausgangsdaten bilden.
-- [ ] Vorhandene Snapshots beim Laden und Auswerten nicht aus aktuellen Stammdaten neu berechnen.
+- [x] Einen Planungseintrag setzen.
+- [x] Einen vorhandenen Planungseintrag vollständig ersetzen.
+- [x] Einen Planungseintrag entfernen.
+- [x] Beim erneuten Setzen einen neuen Snapshot aus den dann geltenden Ausgangsdaten bilden.
+- [x] Vorhandene Snapshots bei Zelländerungen nicht aus aktuellen Stammdaten neu berechnen.
 
 Abnahmekriterien:
 
-- [ ] Änderungen oder Löschungen einer Eintragsdefinition verändern bestehende Snapshots nicht.
-- [ ] Änderungen eines Mitarbeiters verändern bestehende Mitarbeiter- und Planungseintrag-Snapshots nicht.
-- [ ] Beide Berechnungsarten erzeugen exakt die fachlich festgelegten Snapshot-Werte.
+- [x] Änderungen oder Löschungen einer Eintragsdefinition verändern bestehende Snapshots nicht.
+- [x] Änderungen eines Mitarbeiters verändern bestehende Mitarbeiter- und Planungseintrag-Snapshots nicht.
+- [x] Beide Berechnungsarten erzeugen exakt die fachlich festgelegten Snapshot-Werte.
 
 ## Schritt 6: Reine Auswertungsfunktionen umsetzen
 
