@@ -11,12 +11,12 @@ fachlichen Formeln Vorrang.
 
 ## 1. Umsetzungsstand
 
-| Bereich                  | Stand                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------- |
-| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt             |
-| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt |
-| Monatsplan und Snapshots | Modell, Snapshots, Zelloperationen und Speicherung sind umgesetzt                      |
-| Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                          |
+| Bereich                  | Stand                                                                                                                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt                                                                                             |
+| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt                                                                                 |
+| Monatsplan und Snapshots | Grundmodell, Snapshots, Zelloperationen und Speicherung sind umgesetzt; die Mindestbesetzung bei der Anlage und die neue Bemerkungsgrenze folgen vor der Planungsseite |
+| Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                                                                                                          |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -276,6 +276,9 @@ Regeln:
 - Beim Erstellen werden die zu diesem Zeitpunkt aktiven Mitarbeiter in ihrer
   aktuellen Listenreihenfolge und sämtliche Kalendertage des Monats
   aufgenommen.
+- Ein Monatsplan darf nur regulär erstellt werden, wenn dabei mindestens ein
+  aktiver Mitarbeiter als Snapshot übernommen werden kann. Andernfalls wird die
+  Anlage an der maßgeblichen Fachgrenze abgelehnt.
 - Mitarbeiter dürfen in diesem ersten Zielstand nach der Erstellung nicht
   ergänzt, entfernt oder umsortiert werden.
 - `employees` und `days` gehören vollständig zum Plan und werden gemeinsam
@@ -329,8 +332,9 @@ Regeln:
   bei späteren Änderungen an Bemerkung, Rufbereitschaft oder Einträgen stabil.
 - `date` muss im Zeitraum des zugehörigen Plans liegen und innerhalb des Plans
   eindeutig sein.
-- `note` enthält eine optionale Bemerkung. Eine leere Bemerkung wird als `null`
-  gespeichert.
+- `note` enthält eine optionale Bemerkung mit höchstens 60 Zeichen. Äußere
+  Leerzeichen werden entfernt; eine anschließend leere Bemerkung wird als
+  `null` gespeichert.
 - `onCallEmployeeId` ist `null` oder verweist auf die `id` eines
   `PlanEmployee` desselben Plans.
 - Pro Tag gibt es höchstens eine Rufbereitschaft.

@@ -16,7 +16,8 @@ Die erwarteten Ergebnisse stammen aus den jeweils aktuellen Festlegungen:
 
 - [Berechnungen](../Berechnungen/README.md),
 - [Datenmodell](../Speicherung/Datenmodell.md) und
-- [Datenhaltung](../Speicherung/Datenhaltung.md).
+- [Datenhaltung](../Speicherung/Datenhaltung.md) sowie
+- die [Planungsseite](../Features/03-PlanPage.md).
 
 Die Teststrategie ergänzt diese Festlegungen nicht um neue Fachregeln. Ist ein
 erwartetes Verhalten dort nicht eindeutig beschrieben, wird die offene Frage
@@ -34,6 +35,8 @@ Geprüft werden insbesondere:
 - das vollständige Speichern und Wiederherstellen von Stammdaten und
   Monatsplänen;
 - verständliche Reaktionen auf ungültige Eingaben oder beschädigte Daten;
+- manuelles Laden, Entwurfskennzeichnung, Verlustschutz und bestätigtes Löschen
+  von Monatsplänen;
 - der vollständige Kernablauf vom Anlegen eines Monatsplans bis zu seiner
   Auswertung.
 
@@ -86,6 +89,17 @@ Anwendung ausführt. Dabei wird nicht nur das Endergebnis betrachtet, sondern
 auch, ob unzulässige Aktionen verhindert und Zustände verständlich angezeigt
 werden.
 
+Dazu gehören auf der Planungsseite insbesondere:
+
+- der eindeutig nicht angelegte Vorschauplan ohne automatisches Öffnen eines
+  gespeicherten Plans,
+- das bewusste Laden aus der vollständigen Planliste,
+- sichtbare Kennzahlen nach einer noch ungespeicherten Änderung,
+- Speichern, Verwerfen und Abbrechen vor einem zustandsverwerfenden Wechsel,
+- der Schutz beim Schließen der Anwendung sowie
+- das bestätigte Löschen einschließlich des gesperrten ungespeicherten
+  aktuellen Plans.
+
 Die sichtbare und fachliche Abnahme der Oberfläche erfolgt durch den Benutzer.
 Automatische Prüfungen ersetzen diese Abnahme nicht.
 
@@ -111,7 +125,8 @@ Fachregeln oder Kernabläufe unbeabsichtigt verändert.
 - tagesbezogene Zähler und Rufbereitschaft;
 - fachliche Fehlermeldungen und Wiederherstellung aus einer Sicherung;
 - Live-Aktualisierung während der Planbearbeitung;
-- Rollenfilter der Auswertungsdarstellung;
+- rollenbezogene Auswahl der im Mitarbeiterkopf sichtbaren Kennzahlen;
+- manuelles Laden, Entwurfs- und Verlustschutz sowie Planlöschung;
 - vollständiger Kernablauf aus Benutzersicht.
 
 ### Priorität 3: nachgelagert
@@ -174,7 +189,10 @@ Neben dem gewünschten Normalfall werden gezielt Fehlerfälle geprüft:
   Arbeitszeit (mit NB);
 - doppelte, fehlende oder fremde Bestandteile eines Monatsplans;
 - ungültige Verweise innerhalb eines Monatsplans;
+- eine Plananlage ohne aktiven Mitarbeiter;
+- eine Tagesbemerkung mit mehr als 60 Zeichen;
 - mehrere Planungseinträge für dieselbe Person und denselben Tag;
+- neue oder ersetzte Planungseinträge mit manipulierten Snapshotwerten;
 - Rufbereitschaften für unzulässige Rollen oder mehrere Rufbereitschaften an
   einem Tag;
 - unbekannte Datenstände sowie beschädigte Haupt- und Sicherungsdaten.
@@ -217,7 +235,9 @@ zusammengeführt:
 6. Beschädigte Daten werden entsprechend der festgelegten Datenhaltung
    behandelt.
 7. Der vollständige Kernablauf wurde aus Benutzersicht nachvollzogen.
-8. Verbleibende Abweichungen zwischen Dokumentation, Verhalten und sichtbarer
+8. Manuelles Laden, ungespeicherter Entwurf, Verlustschutz und bestätigtes
+   Löschen entsprechen den Regeln der Planungsseite.
+9. Verbleibende Abweichungen zwischen Dokumentation, Verhalten und sichtbarer
    Oberfläche sind ausdrücklich festgehalten.
 
 Die Gesamtfreigabe setzt sowohl erfolgreiche fachliche Prüfungen als auch die

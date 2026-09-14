@@ -97,8 +97,14 @@ Dies gilt für:
 
 ### Darstellungsregel
 
-- In der vorgesehenen zeitbezogenen Auswertung werden ausschließlich Mitarbeiter aufgelistet, deren Rolle im Mitarbeiter-Snapshot des Monatsplans `Erzieher` ist.
-- Maßgeblich für diesen Darstellungsfilter ist die im Monatsplan gespeicherte Rolle und nicht der aktuelle Mitarbeiter-Stammdatensatz.
-- Mitarbeiter mit einer anderen Rolle bleiben mit ihren Planungseinträgen Bestandteil des Monatsplans. Ihre Zeitwerte sind nach denselben Formeln berechenbar, werden in dieser Auswertung jedoch nicht aufgelistet.
-- Ein Rollenfilter einer Oberfläche ist eine Darstellungsregel und kein Bestandteil der jeweiligen Berechnungsformel.
-- Welche Kennzahlen eine andere konkrete Seite, Tabelle oder sonstige Oberfläche anzeigt, wird bei der betreffenden Funktion festgelegt. Daraus entsteht keine allgemeine Rollenabhängigkeit der Berechnungen.
+- Die vorgesehene zeitbezogene Auswertung führt Mitarbeiter aller im Monatsplan
+  gespeicherten Rollen auf.
+- Soll-Arbeitszeit, Ist-Arbeitszeit und Soll-/Ist-Differenz werden insbesondere
+  für Erzieher, Wirtschaftskräfte und Praktikanten nach denselben Formeln
+  berechnet und angezeigt.
+- Welche dieser und weiterer Kennzahlen eine konkrete Seite an welcher Stelle
+  hervorhebt, wird bei der betreffenden Oberfläche festgelegt. Die
+  Planungsseite zeigt beispielsweise im Mitarbeiterkopf eine bewusst kleinere,
+  rollenabhängig ausgewählte Kennzahlenmenge.
+- Die Auswahl sichtbarer Kennzahlen einer Oberfläche ist eine Darstellungsregel
+  und erzeugt keine Rollenabhängigkeit der Berechnungsformeln.

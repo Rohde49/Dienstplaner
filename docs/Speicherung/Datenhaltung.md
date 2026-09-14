@@ -44,6 +44,14 @@ nicht erforderlich.
 ### Noch umzusetzen
 
 - sichtbare Warnung nach Wiederherstellung aus einer Sicherung,
+- Ablehnung einer Plananlage ohne mindestens einen aktiven Mitarbeiter,
+- Durchsetzung der 60-Zeichen-Grenze für Tagesbemerkungen,
+- erneute Herleitung beziehungsweise Prüfung neuer und ersetzter
+  Planungseintrag-Snapshots an der Main-Process-Grenze,
+- Auflisten mit Erstellungszeitpunkt und Sortierung nach letzter Änderung,
+- sicheres Löschen eines vollständigen Monatsplans einschließlich seiner
+  Sicherungsdatei,
+- IPC- und Preload-Schnittstelle für das Löschen sowie
 - Anbindung der Plan-Schnittstellen an die Planungsoberfläche.
 
 ## 2. Speicherort und Dateistruktur
@@ -179,10 +187,12 @@ list()               → MonthlyPlanSummary[]
 get(id)              → MonthlyPlanLoadResult
 create(input)        → MonthlyPlan
 save(monthlyPlan)    → MonthlyPlan
+remove(id)           → void
 ```
 
 `MonthlyPlanSummary` ist eine berechnete Transportansicht aus ID, Jahr, Monat,
-Titel und Änderungszeitpunkt. Sie wird nicht zusätzlich gespeichert.
+Titel, Erstellungszeitpunkt und Änderungszeitpunkt. Sie wird nicht zusätzlich
+gespeichert.
 `MonthlyPlanLoadResult` enthält den gefundenen Plan oder `null` sowie eine
 mögliche verständliche Warnung, wenn die Sicherungsdatei verwendet wurde.
 
@@ -191,17 +201,25 @@ Beim Erstellen:
 1. Jahr, Monat und Titel validieren.
 2. Eine neue, noch nicht verwendete Plan-UUID erzeugen.
 3. Aktive Mitarbeiter laden und in ihrer aktuellen Reihenfolge snapshotten.
-4. Sämtliche Kalendertage des Monats mit eigenen UUIDs erzeugen.
-5. Das vollständige Aggregat planweit validieren.
-6. Es unter seiner Plan-UUID als eigene Monatsplandatei speichern.
+4. Die Anlage ablehnen, wenn kein aktiver Mitarbeiter übernommen werden kann.
+5. Sämtliche Kalendertage des Monats mit eigenen UUIDs erzeugen.
+6. Das vollständige Aggregat planweit validieren.
+7. Es unter seiner Plan-UUID als eigene Monatsplandatei speichern.
 
-`list()` liefert alle vorhandenen Pläne als Zusammenfassungen. Mehrere
-Zusammenfassungen dürfen denselben Monat und dasselbe Jahr besitzen und bleiben
-über ihre jeweilige Plan-ID eindeutig auswählbar.
+`list()` liefert alle vorhandenen Pläne als Zusammenfassungen und sortiert sie
+nach `updatedAt` absteigend. Mehrere Zusammenfassungen dürfen denselben Monat
+und dasselbe Jahr besitzen und bleiben über ihre jeweilige Plan-ID eindeutig
+auswählbar.
 
 Beim Speichern eines Entwurfs wird erneut das vollständige Aggregat geprüft.
-Der Main Process vertraut weder berechneten Zeitwerten noch internen Verweisen
-aus dem Renderer.
+Für den Zielstand darf der Main Process weder berechneten Zeitwerten noch
+internen Verweisen aus dem Renderer vertrauen. Neue oder ersetzte
+Planungseinträge werden deshalb anhand ihrer Herkunfts-ID und des
+Mitarbeiter-Snapshots erneut aus einer aktuell aktiven Eintragsart hergeleitet
+beziehungsweise vollständig dagegen geprüft. Unveränderte ältere Snapshots
+bleiben dagegen unabhängig vom aktuellen Stammdatenbestand gültig. Diese
+Prüfung ist im aktuellen Repository noch nicht vollständig umgesetzt und muss
+vor der UI-Anbindung geschlossen werden.
 
 Bei einem vorhandenen Plan dürfen `id`, `year`, `month`, `createdAt`, die
 Mitarbeiter-Snapshots und die Datumsfolge nicht über einen allgemeinen
@@ -209,8 +227,12 @@ Speicheraufruf verändert werden. Das Repository vergleicht diese Bestandteile
 mit dem geladenen Stand. Änderbar sind der Titel sowie die dafür vorgesehenen
 Inhalte der Plantage. `updatedAt` wird ausschließlich im Main Process gesetzt.
 
-Eine Löschoperation für Monatspläne wird erst ergänzt, wenn Löschverhalten und
-Oberfläche ausdrücklich festgelegt sind.
+`remove(id)` validiert die Plan-ID und entfernt innerhalb derselben
+serialisierten Repository-Operation sowohl die Hauptdatei als auch die
+zugehörige Sicherungsdatei. Eine fehlende Plan-ID darf nicht als erfolgreiche
+Löschung ausgegeben werden. Bestätigung, Schutz eines ungespeicherten aktuell
+geladenen Plans und anschließende Aktualisierung der Auswahlliste gehören zur
+Planungsoberfläche.
 
 ## 7. Sicheres Schreiben
 
@@ -224,11 +246,11 @@ Ein Speichervorgang folgt diesem Ablauf:
 6. nicht mehr benötigte temporäre Dateien entfernen,
 7. erst danach Erfolg an die Oberfläche melden.
 
-Der Austausch muss so umgesetzt werden, dass ein Fehler zwischen Sicherung und
-Einsetzen der neuen Hauptdatei weiterhin eine gültige Haupt- oder
-Sicherungsdatei hinterlässt. Die aktuelle Store-Implementierung löscht die
-Hauptdatei vor dem Umbenennen und muss vor der Monatsplanpersistenz für dieses
-Zielverhalten geprüft und gehärtet werden.
+Der Austausch ist so umgesetzt, dass vor dem Ersetzen einer gültigen
+Hauptdatei deren bisheriger Stand als Sicherungsdatei kopiert wird. Muss die
+Hauptdatei für das anschließende Umbenennen entfernt werden und scheitert dieser
+letzte Schritt, bleibt dadurch weiterhin die gültige Sicherungsdatei erhalten.
+Die Monatsplanpersistenz verwendet denselben geprüften Ablauf.
 
 Das ist keine vollständige Backup-Funktion. Es schützt gegen eine beschädigte
 oder unvollständig geschriebene letzte Fassung.
@@ -298,9 +320,16 @@ werden. Dadurch kann die Oberfläche ungespeicherte Änderungen sichtbar machen,
 ohne jede Zelländerung sofort auf die Festplatte zu schreiben.
 
 Eine gemeinsame reine Fachfunktion erzeugt beim Setzen eines Planeintrags den
-vollständigen Snapshot. Der Main Process berechnet beziehungsweise prüft die
-verbindlichen Werte beim Speichern erneut. So liegt die maßgebliche Fachlogik
+vollständigen Snapshot für die unmittelbare Entwurfsdarstellung. Der Main
+Process erzeugt beziehungsweise prüft die verbindlichen Werte beim Speichern
+erneut anhand der tatsächlichen Eintragsart. So liegt die maßgebliche Fachlogik
 nicht ausschließlich im Renderer.
+
+Entwurfsänderungen dürfen `updatedAt` nicht als bereits gespeicherten
+Änderungszeitpunkt fortschreiben. Dieser Wert wird erst bei einem erfolgreichen
+Speichervorgang durch den Main Process gesetzt. Für den Dirty-State vergleicht
+die Oberfläche ausschließlich die fachlich änderbaren Inhalte mit dem zuletzt
+geladenen oder gespeicherten Ausgangsstand.
 
 Snapshots werden immer als Teil des vollständigen Monatsplans gespeichert. Das
 Repository darf sie beim Laden weder aus aktuellen Mitarbeiter- noch aus

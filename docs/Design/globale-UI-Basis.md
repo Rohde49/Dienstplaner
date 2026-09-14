@@ -18,9 +18,9 @@ Wir verwenden die Windows-nahe Systemschrift **Segoe UI**. Sie ist lokal verfüg
 
 Es werden hauptsächlich drei Schriftstärken verwendet:
 
-* `font-normal`
-* `font-medium`
-* `font-semibold`
+- `font-normal`
+- `font-medium`
+- `font-semibold`
 
 ## 2. Abstände
 
@@ -79,37 +79,42 @@ Schatten werden sparsam eingesetzt:
 
 ## 6. Übergänge
 
-* Hover- und Farbwechsel: `transition-colors duration-150`
-* Öffnen von Menüs und Dialogen: höchstens 200 Millisekunden
-* keine federnden oder verspielten Animationen
-* keine dauerhaften dekorativen Animationen
-* Ladeanimationen nur während eines tatsächlichen Vorgangs
+- Hover- und Farbwechsel: `transition-colors duration-150`
+- Öffnen von Menüs und Dialogen: höchstens 200 Millisekunden
+- keine federnden oder verspielten Animationen
+- keine dauerhaften dekorativen Animationen
+- Ladeanimationen nur während eines tatsächlichen Vorgangs
 
 ## 7. Responsives Desktop-Verhalten
 
 Die kleinste unterstützte Fenstergröße wird auf ungefähr **1024 × 700 Pixel** festgelegt.
 
+Das Hauptfenster startet maximiert und nutzt damit die verfügbare
+Bildschirmfläche. Es bleibt ein normales Windows-Fenster mit Titelleiste und
+Wiederherstellungsmöglichkeit; ein Vollbildmodus wird nicht verwendet.
+
 ### Ab 1280 Pixel Breite
 
-* vollständige Navigation
-* 24 Pixel Seitenabstand
-* Aktionen möglichst nebeneinander
-* Verwaltungsformulare können mehrspaltig dargestellt werden
+- vollständige Navigation
+- 24 Pixel Seitenabstand
+- Aktionen möglichst nebeneinander
+- Verwaltungsformulare können mehrspaltig dargestellt werden
 
 ### Zwischen 1024 und 1279 Pixel Breite
 
-* kompaktere Navigation
-* 16 Pixel Seitenabstand
-* Aktionsleisten dürfen umbrechen
-* Formulare wechseln bei Bedarf auf eine Spalte
+- auf eine schmale Symbolleiste reduzierte Navigation; Beschriftungen bleiben
+  zugänglich
+- 16 Pixel Seitenabstand
+- Aktionsleisten dürfen umbrechen
+- Formulare wechseln bei Bedarf auf eine Spalte
 
 ### Dienstplan
 
-* nutzt die verfügbare Fensterbreite
-* bleibt in seinen Spalten kompakt
-* wird nicht bis zur Unleserlichkeit zusammengedrückt
-* erhält bei Platzmangel einen horizontalen Scrollbereich
-* wichtige Spalten können später fixiert werden
+- nutzt die verfügbare Fensterbreite
+- bleibt in seinen Spalten kompakt
+- wird nicht bis zur Unleserlichkeit zusammengedrückt
+- erhält bei Platzmangel einen horizontalen Scrollbereich
+- wichtige Spalten können später fixiert werden
 
 ## 8. Grundlegendes Seitenlayout
 

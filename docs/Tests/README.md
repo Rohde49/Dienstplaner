@@ -20,7 +20,9 @@ Sie ergeben sich aus:
 
 - den [fachlichen Berechnungsregeln](../Berechnungen/README.md),
 - dem [Datenmodell](../Speicherung/Datenmodell.md) und
-- der [Datenhaltung](../Speicherung/Datenhaltung.md).
+- der [Datenhaltung](../Speicherung/Datenhaltung.md) sowie
+- den jeweils betroffenen Feature-Dokumenten, insbesondere der
+  [Planungsseite](../Features/03-PlanPage.md).
 
 Bei einem Widerspruch muss zuerst die fachliche Grundlage geklärt werden. Ein
 Test darf keine davon abweichende Regel zum gewünschten Verhalten erklären.

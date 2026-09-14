@@ -196,13 +196,29 @@ Abnahmekriterien:
 
 ## Schritt 8: Planungsseite und Live-Vorschau anbinden
 
-- [ ] Monat und Jahr auswählen sowie einen Monatsplan laden oder neu anlegen.
-- [ ] Mitarbeiter-Snapshots und alle Kalendertage darstellen.
+- [ ] Vor der UI-Anbindung die Main-Process-Prüfung neuer und ersetzter
+      Planungseintrag-Snapshots schließen.
+- [ ] Tagesbemerkungen auf maximal 60 Zeichen begrenzen und eine Plananlage ohne
+      aktiven Mitarbeiter an der Fachgrenze ablehnen.
+- [ ] Monat und Jahr auswählen sowie zunächst die nicht bearbeitbare leere
+      Monatsvorschau anzeigen.
+- [ ] Einen Monatsplan bewusst laden oder mit verpflichtendem Titel neu anlegen.
+- [ ] Im globalen Ladedialog alle Pläne mit ID, Titel, Zeitraum sowie
+      Erstellungszeitpunkt und Änderungszeitpunkt darstellen.
+- [ ] Monatspläne im Ladedialog bestätigt und unter Schutz des aktuellen
+      Entwurfs löschen.
+- [ ] Mitarbeiter-Snapshots und alle Kalendertage in einem Raster mit zwei
+      Teilspalten je Mitarbeiter darstellen.
 - [ ] Planungseinträge setzen, ersetzen und entfernen.
 - [ ] Rufbereitschaften ausschließlich zulässigen Mitarbeitern zuordnen.
+- [ ] Optionale Tagesbemerkungen kompakt anzeigen und bearbeiten.
 - [ ] Ungespeicherte Änderungen eindeutig kennzeichnen.
 - [ ] Alle Kennzahlen unmittelbar aus dem aktuellen Entwurf neu berechnen.
+- [ ] Die festgelegten Kopfkennzahlen sowie Ist und Soll unterhalb des Plans
+      dauerhaft sichtbar anzeigen.
 - [ ] Speichern als bewusste Aktion anbieten.
+- [ ] Seiten-, Zeitraum-, Plan- und Fensterschließwechsel bei ungespeicherten
+      Änderungen absichern.
 - [ ] Verbindliche Ausgaben bei ungespeicherten Änderungen verhindern beziehungsweise vorheriges Speichern verlangen.
 
 Abnahmekriterien:
@@ -210,11 +226,14 @@ Abnahmekriterien:
 - [ ] Jede Änderung einer Planungszelle aktualisiert die betroffenen Kennzahlen sofort.
 - [ ] Die Soll-Arbeitszeit bleibt bei reinen Planungseintragsänderungen unverändert.
 - [ ] Entwurfsstand und gespeicherter Stand sind für den Benutzer unterscheidbar.
+- [ ] Kein vorhandener Plan wird automatisch geöffnet.
+- [ ] Die Anwendung startet maximiert und die Navigation wird im kleineren
+      Desktopbereich zur Symbolleiste reduziert.
 
 ## Schritt 9: Auswertungsdarstellung anbinden
 
 - [ ] Tagesbezogene Kennzahlen für alle Mitarbeiter des Monatsplan-Snapshots darstellen.
-- [ ] Zeitbezogene Auswertung ausschließlich für Mitarbeiter mit der Snapshot-Rolle `Erzieher` darstellen.
+- [ ] Zeitbezogene Auswertung für Mitarbeiter aller Snapshot-Rollen darstellen.
 - [ ] Arbeitszeit (mit NB), reine Arbeitszeit, Nachtbereitschaft und Nachtarbeit getrennt anzeigen.
 - [ ] Sonntags-/Feiertagskennzahl und beide Zuschläge getrennt anzeigen.
 - [ ] Soll, Ist und Differenz mit korrektem Vorzeichenformat anzeigen.
@@ -222,7 +241,9 @@ Abnahmekriterien:
 
 Abnahmekriterien:
 
-- [ ] Rollenfilter beeinflussen ausschließlich die Darstellung und nicht die globalen Berechnungsfunktionen.
+- [ ] Eine Auswahl besonders hervorgehobener Kennzahlen beeinflusst
+      ausschließlich die Darstellung und nicht die globalen
+      Berechnungsfunktionen.
 - [ ] `00:00`, positive und negative Differenzen werden fachlich korrekt dargestellt.
 - [ ] Angezeigte Werte stimmen mit den geprüften Berechnungsfunktionen überein.
 
@@ -247,6 +268,7 @@ Abnahmekriterien:
 Diese Themen sollten erst nach einer stabilen Planung und Auswertung umgesetzt werden:
 
 - [ ] Druck- und PDF-Ausgabe
+- [ ] eigenständige Kompaktansicht
 - [ ] weitergehende Plausibilitätsprüfungen zwischen unabhängigen Zeitfeldern
 - [ ] semantische Eintragskategorien für eine robustere SN/F- und Sonntags-/Feiertagsauswertung
 - [ ] kalendertagübergreifende Erkennung zusammenhängender Dienstfolgen
