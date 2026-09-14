@@ -48,15 +48,13 @@ Die Darstellung muss:
 
 Vor der Umsetzung sind insbesondere zu entscheiden:
 
-- welchen eigenständigen Nutzen die Kompaktansicht im Arbeitsablauf erfüllt,
 - welche Spalten und Planinformationen sie tatsächlich zeigt,
 - ob sie den aktuellen Entwurf oder ausschließlich einen gespeicherten Stand
   darstellen darf,
-- wie sie von der Planungsseite aus geöffnet und wieder verlassen wird und
-- ob das Feature nach Klärung des Nutzens weiterhin benötigt wird.
+- wie sie von der Planungsseite aus geöffnet und wieder verlassen wird.
 
-Bis diese Fragen beantwortet sind, werden keine konkreten Tabelleninhalte oder
-Bedienaktionen erfunden.
+Bis diese Fragen beantwortet sind, werden keine darüber hinausgehenden
+Tabelleninhalte oder Bedienaktionen festgelegt.
 
 ## Abgrenzung
 

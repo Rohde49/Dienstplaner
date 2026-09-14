@@ -79,13 +79,13 @@ Kein Ergebnisdokument wurde gleichzeitig von mehreren Agenten bearbeitet. Der Ha
 
 ## Fortschritt
 
-| Analysebereich | Status | Hinweis |
-| --- | --- | --- |
-| Commit-Verifikation | erledigt | HEAD stimmt exakt mit dem festgelegten Commit überein. |
-| Gemeinsame Bestandsaufnahme | erledigt | Struktur, Anwendungsbereiche, Feature-Zuordnung, Querschnittsschichten, Tests und `docs`-Gliederung sind erfasst. |
-| Team-Verwaltung | erledigt | Quellcode- und Dokumentationsanalyse vollständig; statische Grenzen und nicht angebundener Farbhelfer sind gekennzeichnet. |
-| Eintrags-Verwaltung | erledigt | Quellcode- und Dokumentationsanalyse vollständig; Laufzeitgrenzen, fehlende direkte UI-/E2E-Abdeckung und die Verwendung der Zeitfelder sind gekennzeichnet. |
-| Planungsseite | erledigt | Quellcode- und Dokumentationsanalyse vollständig; deaktivierter Druckpfad, nicht angebundene Validierungsfunktion und Laufzeitgrenzen sind gekennzeichnet. |
-| Auswertung | erledigt | Dialoganbindung, Entwurfsdaten, 15 Kennzahlen, Tests und statische Grenzen sowie die eigenständige Dokumentationssicht sind erfasst. |
-| Übergreifende Ergebnisse | erledigt | Architektur, Navigation, Datenmodell, Datenhaltung, Berechnungen, Fehlerbehandlung, Komponenten, Tests und Dokumentationsstruktur sind zentral dokumentiert. |
+| Analysebereich                 | Status   | Hinweis                                                                                                                                                                             |
+| ------------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Commit-Verifikation            | erledigt | HEAD stimmt exakt mit dem festgelegten Commit überein.                                                                                                                              |
+| Gemeinsame Bestandsaufnahme    | erledigt | Struktur, Anwendungsbereiche, Feature-Zuordnung, Querschnittsschichten, Tests und `docs`-Gliederung sind erfasst.                                                                   |
+| Team-Verwaltung                | erledigt | Quellcode- und Dokumentationsanalyse vollständig; statische Grenzen und nicht angebundener Farbhelfer sind gekennzeichnet.                                                          |
+| Eintrags-Verwaltung            | erledigt | Quellcode- und Dokumentationsanalyse vollständig; Laufzeitgrenzen, fehlende direkte UI-/E2E-Abdeckung und die Verwendung der Zeitfelder sind gekennzeichnet.                        |
+| Planungsseite                  | erledigt | Quellcode- und Dokumentationsanalyse vollständig; deaktivierter Druckpfad, nicht angebundene Validierungsfunktion und Laufzeitgrenzen sind gekennzeichnet.                          |
+| Auswertung                     | erledigt | Dialoganbindung, Entwurfsdaten, 15 Kennzahlen, Tests und statische Grenzen sowie die eigenständige Dokumentationssicht sind erfasst.                                                |
+| Übergreifende Ergebnisse       | erledigt | Architektur, Navigation, Datenmodell, Datenhaltung, Berechnungen, Fehlerbehandlung, Komponenten, Tests und Dokumentationsstruktur sind zentral dokumentiert.                        |
 | Abschlussprüfung und Wegweiser | erledigt | README vollständig; Commit und unveränderter Altsystem-Checkout bestätigt, 16 Ergebnisdateien vorhanden, interne Links geprüft und Worktree-Änderungen auf den Zielordner begrenzt. |

@@ -77,8 +77,10 @@ Mitarbeiter mit der im Plan gespeicherten Rolle `Erzieher` zugeordnet sein; die
 - Soll-/Ist-Differenz.
 
 Die Auswertung zeigt ausschließlich Ergebnisse. Die dafür geltenden Formeln,
-Rundungszeitpunkte und Zählregeln werden zentral unter
-[Berechnungen](../fachlichkeit/berechnungen/tageskennzahlen.md) gepflegt.
+Rundungszeitpunkte und Zählregeln stehen unter
+[Tagesbezogene Kennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),
+[Zeitbezogene Monatskennzahlen](../fachlichkeit/berechnungen/monatskennzahlen.md)
+und [Soll-Ist-Auswertung](../fachlichkeit/berechnungen/soll-ist-auswertung.md).
 
 ## Verhalten bei Entwurfsänderungen
 

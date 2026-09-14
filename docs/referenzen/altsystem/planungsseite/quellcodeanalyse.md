@@ -140,15 +140,15 @@ Der Löschaufruf läuft über Preload und IPC in `deleteDienstplan()`. Dort werd
 
 ## Beteiligte Module und Schichten
 
-| Bereich | Wesentliche Bestandteile | Aufgabe |
-| --- | --- | --- |
-| Renderer-Seite | `PlanPage.tsx` | Orchestriert Laden, Entwurf, Dirty-Tracking, Speichern, Dialoge und Ansichtswechsel |
-| Renderer-Ansichten | `PlanungsGrid.tsx`, `VerkuerzteAnsicht.tsx` | Bearbeitbare beziehungsweise kompakte Tabellendarstellung und live berechnete Kennzahlen |
-| Renderer-Auswahl | `EintragsdefinitionAuswahl.tsx`, `RufbereitschaftAuswahl.tsx` | Lädt Stammdaten für die Popover und liefert die Auswahl zurück |
-| Renderer-Hilfen | `planeintragSnapshot.ts`, `rufbereitschaftEntwurf.ts`, `planAnsicht.ts`, `mitarbeiterabhaengigeArbeitszeit.ts`, `sollIstFarbe.ts` | Snapshot-/Entwurfsbildung, gemeinsame Darstellung und Berechnungshilfen |
-| Gemeinsamer Code | `types.ts`, `kalendertage.ts`, `auswertung.ts`, `planeintragSchluessel.ts`, `time.ts`, `rundeAufVolleMinute.ts` | Typen, Kalender, Schlüssel, Zeitformatierung und fachliche Berechnungen |
-| Prozessgrenze | `ipcKanaele.ts`, `preload/index.ts`, `preload/index.d.ts`, `main/ipc/*Handlers.ts` | Typisierte `window.api`-Brücke und Registrierung der IPC-Aufrufe |
-| Datenhaltung | `dienstplanRepository.ts`, `planeintragRepository.ts`, `rufbereitschaftRepository.ts`, `schema.ts` | SQLite-Schema, Transaktionen und planbezogene Abfragen |
+| Bereich            | Wesentliche Bestandteile                                                                                                          | Aufgabe                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Renderer-Seite     | `PlanPage.tsx`                                                                                                                    | Orchestriert Laden, Entwurf, Dirty-Tracking, Speichern, Dialoge und Ansichtswechsel      |
+| Renderer-Ansichten | `PlanungsGrid.tsx`, `VerkuerzteAnsicht.tsx`                                                                                       | Bearbeitbare beziehungsweise kompakte Tabellendarstellung und live berechnete Kennzahlen |
+| Renderer-Auswahl   | `EintragsdefinitionAuswahl.tsx`, `RufbereitschaftAuswahl.tsx`                                                                     | Lädt Stammdaten für die Popover und liefert die Auswahl zurück                           |
+| Renderer-Hilfen    | `planeintragSnapshot.ts`, `rufbereitschaftEntwurf.ts`, `planAnsicht.ts`, `mitarbeiterabhaengigeArbeitszeit.ts`, `sollIstFarbe.ts` | Snapshot-/Entwurfsbildung, gemeinsame Darstellung und Berechnungshilfen                  |
+| Gemeinsamer Code   | `types.ts`, `kalendertage.ts`, `auswertung.ts`, `planeintragSchluessel.ts`, `time.ts`, `rundeAufVolleMinute.ts`                   | Typen, Kalender, Schlüssel, Zeitformatierung und fachliche Berechnungen                  |
+| Prozessgrenze      | `ipcKanaele.ts`, `preload/index.ts`, `preload/index.d.ts`, `main/ipc/*Handlers.ts`                                                | Typisierte `window.api`-Brücke und Registrierung der IPC-Aufrufe                         |
+| Datenhaltung       | `dienstplanRepository.ts`, `planeintragRepository.ts`, `rufbereitschaftRepository.ts`, `schema.ts`                                | SQLite-Schema, Transaktionen und planbezogene Abfragen                                   |
 
 Der Renderer greift nicht direkt auf SQLite zu. Der Main-Prozess öffnet die lokale Datei `dienstplan.db` im Electron-`userData`-Verzeichnis, bereitet Schema und Pragmas vor und reicht die Verbindung an die Handler und Repositories weiter.
 

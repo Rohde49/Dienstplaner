@@ -96,12 +96,12 @@ Unumkehrbarkeit und verlangt eine zweite Löschbestätigung. Erst deren Aktion r
 
 `TeamPage` hält vier fachlich relevante React-Zustände:
 
-| Zustand | Bedeutung |
-| --- | --- |
-| `teamMembers` | aktuell geladene Liste; initial leer |
-| `selectedId` | `null` für Anlegen, numerische ID für Bearbeiten |
-| `formValues` | die fünf sichtbaren Formularwerte als Strings |
-| `errors` | lokale Liste von Format-, Validierungs- oder Löschfehlern |
+| Zustand       | Bedeutung                                                 |
+| ------------- | --------------------------------------------------------- |
+| `teamMembers` | aktuell geladene Liste; initial leer                      |
+| `selectedId`  | `null` für Anlegen, numerische ID für Bearbeiten          |
+| `formValues`  | die fünf sichtbaren Formularwerte als Strings             |
+| `errors`      | lokale Liste von Format-, Validierungs- oder Löschfehlern |
 
 `TeamMemberForm` hält zusätzlich lokal, ob der Löschdialog geöffnet ist. Einen eigenen
 Lade-, Speicher- oder Löschstatus gibt es nicht. Buttons werden während laufender
@@ -160,14 +160,14 @@ Planungshistorie liegt für diese Beziehung daher sichtbar in der expliziten Lö
 
 Der gemeinsame Typ `TeamMember` besteht aus:
 
-| Feld | Statische Bedeutung |
-| --- | --- |
-| `id` | numerischer SQLite-Primärschlüssel mit Autoincrement |
-| `vorname` | Vorname als Text |
-| `name` | Nachname als Text |
-| `rolle` | `Erzieher`, `Praktikant` oder `Wirtschaftskraft` |
-| `wochenarbeitszeitMinuten` | Zeitdauer als Minutenzahl |
-| `farbe` | Hex-Wert aus der gemeinsamen Zehnerpalette |
+| Feld                       | Statische Bedeutung                                  |
+| -------------------------- | ---------------------------------------------------- |
+| `id`                       | numerischer SQLite-Primärschlüssel mit Autoincrement |
+| `vorname`                  | Vorname als Text                                     |
+| `name`                     | Nachname als Text                                    |
+| `rolle`                    | `Erzieher`, `Praktikant` oder `Wirtschaftskraft`     |
+| `wochenarbeitszeitMinuten` | Zeitdauer als Minutenzahl                            |
+| `farbe`                    | Hex-Wert aus der gemeinsamen Zehnerpalette           |
 
 Die Wochenarbeitszeit wird nur an der UI-Grenze als `HH:MM` behandelt. Der Parser
 akzeptiert nach optionalen äußeren Leerzeichen eine bis drei Stundenziffern sowie Minuten
@@ -236,19 +236,19 @@ geladene Liste sichtbar gemacht.
 
 ## Module und Verantwortlichkeiten
 
-| Modul | Verantwortung |
-| --- | --- |
-| `renderer/src/pages/TeamPage.tsx` | Seitenzustand, Abläufe, API-Aufrufe |
-| `renderer/src/components/TeamMemberTable.tsx` | Liste und Leerzustand |
-| `renderer/src/components/TeamMemberForm.tsx` | kontrolliertes Formular, Farbtastatur, Löschdialog |
-| `renderer/src/lib/validateTeamMember.ts` | reine Team-Eingabeprüfung |
-| `shared/time.ts` | Konvertierung zwischen Dauerstring und Minuten |
-| `shared/types.ts` | Teamtyp, Farbpalette und Farbhelfer |
-| `shared/ipcKanaele.ts` | zentrale IPC-Kanalnamen |
-| `preload/index.ts` und `index.d.ts` | freigegebene, typisierte Team-API |
-| `main/ipc/teamHandlers.ts` | IPC-zu-Repository-Weiterleitung |
-| `main/db/teamRepository.ts` | Schema sowie SQL für Liste, Anlage, Änderung und Löschung |
-| `main/db/schema.ts` | Einbindung der Teamtabelle in die gemeinsame DB-Vorbereitung |
+| Modul                                         | Verantwortung                                                |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| `renderer/src/pages/TeamPage.tsx`             | Seitenzustand, Abläufe, API-Aufrufe                          |
+| `renderer/src/components/TeamMemberTable.tsx` | Liste und Leerzustand                                        |
+| `renderer/src/components/TeamMemberForm.tsx`  | kontrolliertes Formular, Farbtastatur, Löschdialog           |
+| `renderer/src/lib/validateTeamMember.ts`      | reine Team-Eingabeprüfung                                    |
+| `shared/time.ts`                              | Konvertierung zwischen Dauerstring und Minuten               |
+| `shared/types.ts`                             | Teamtyp, Farbpalette und Farbhelfer                          |
+| `shared/ipcKanaele.ts`                        | zentrale IPC-Kanalnamen                                      |
+| `preload/index.ts` und `index.d.ts`           | freigegebene, typisierte Team-API                            |
+| `main/ipc/teamHandlers.ts`                    | IPC-zu-Repository-Weiterleitung                              |
+| `main/db/teamRepository.ts`                   | Schema sowie SQL für Liste, Anlage, Änderung und Löschung    |
+| `main/db/schema.ts`                           | Einbindung der Teamtabelle in die gemeinsame DB-Vorbereitung |
 
 ## Gemeinsame Komponenten
 
@@ -314,4 +314,3 @@ Speicherfehler, Doppelklick/Mehrfachabsenden und Lade-/Speicherzustände.
 - Ob das zweispaltige Layout, Radix-Select, Radiogruppenfokus, Dialogfokus und globale
   Fehlermeldungen in der gebauten Electron-Anwendung tatsächlich wie beabsichtigt
   funktionieren, lässt sich durch diese rein statische Analyse nicht bestätigen.
-

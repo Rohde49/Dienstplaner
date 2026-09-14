@@ -8,7 +8,7 @@ Bildschirmansicht oder die Kompaktansicht ersetzt.
 
 Der Export soll:
 
-- einen gespeicherten Monatsplan in ein festgelegtes PDF-Layout übertragen,
+- einen Monatsplan in ein festgelegtes PDF-Layout übertragen,
 - die für die Weitergabe benötigten Planinformationen vollständig und lesbar
   darstellen,
 - ausschließlich lokal und ohne Server- oder Cloud-Dienst funktionieren,

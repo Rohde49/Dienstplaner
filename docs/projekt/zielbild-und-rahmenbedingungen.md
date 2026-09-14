@@ -41,6 +41,7 @@ Der Prototyp soll:
 - Mitarbeiter und die für sie benötigten Stammdaten verwalten,
 - wiederverwendbare Planungseinträge verwalten,
 - Monatspläne erstellen, bearbeiten, speichern und erneut laden,
+- eine kompakte Darstellung des Dienstplans bereitstellen,
 - planungsrelevante Zeitwerte und Kennzahlen berechnen,
 - eine Auswertung für die Mitarbeiter bereitstellen,
 - relevante Fehler und Auffälligkeiten verständlich darstellen,

@@ -10,6 +10,11 @@ Der Quellcode bleibt maßgeblich für den tatsächlichen Implementierungsstand.
 Die Roadmap wird angepasst, wenn sich Prioritäten ändern oder ein Arbeitspaket
 abgeschlossen wurde.
 
+## Abgeschlossen
+
+- [Teamverwaltung](../features/teamverwaltung.md)
+- [Planungseinträge](../features/planungseintraege.md)
+
 ## Aktueller Schwerpunkt
 
 ### Planungsseite
@@ -40,7 +45,7 @@ auf Grundlage der verbindlichen Berechnungsregeln dargestellt.
 ### 2. Kompaktansicht
 
 Eine eigenständige [Kompaktansicht](../features/kompaktansicht.md) des
-Monatsplans wird fachlich abschließend geklärt und bei bestätigtem Nutzen
+Monatsplans wird fachlich abschließend konkretisiert und anschließend
 umgesetzt. Sie ist keine Druckvorschau.
 
 ### 3. PDF-Export und Ausgabe

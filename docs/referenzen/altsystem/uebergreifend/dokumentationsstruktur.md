@@ -61,11 +61,11 @@ Drei Texte beschreiben den damaligen Umgang mit Claude Code, Regeln zur Dokument
 
 ## Zuordnung zu den vier untersuchten Features
 
-| Feature | Besonders einschlägige Dokumentgruppen |
-| --- | --- |
-| Team-Verwaltung | `funktionsbereiche/team-verwaltung.md`, Ablaufpläne Schritte 4 und 12, Datenmodell, Erledigt, Tests und Style |
-| Eintrags-Verwaltung | `funktionsbereiche/eintrag-verwaltung.md`, Ablaufpläne Schritte 5 und 13, Datenmodell, Erledigt, Tests und Style |
-| Planungsseite | `funktionsbereiche/dienstplan-geruest.md`, `eintraege-setzen.md`, Ablaufpläne Schritte 6 bis 10, 14 und 16, Datenmodell, Erledigt, Tests und Style |
-| Auswertung | `funktionsbereiche/auswertungstabelle.md`, `architektur/auswertung.md`, Ablaufpläne Schritte 11 und 15 sowie Teile von Schritt 16, Erledigt und Tests |
+| Feature             | Besonders einschlägige Dokumentgruppen                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Team-Verwaltung     | `funktionsbereiche/team-verwaltung.md`, Ablaufpläne Schritte 4 und 12, Datenmodell, Erledigt, Tests und Style                                         |
+| Eintrags-Verwaltung | `funktionsbereiche/eintrag-verwaltung.md`, Ablaufpläne Schritte 5 und 13, Datenmodell, Erledigt, Tests und Style                                      |
+| Planungsseite       | `funktionsbereiche/dienstplan-geruest.md`, `eintraege-setzen.md`, Ablaufpläne Schritte 6 bis 10, 14 und 16, Datenmodell, Erledigt, Tests und Style    |
+| Auswertung          | `funktionsbereiche/auswertungstabelle.md`, `architektur/auswertung.md`, Ablaufpläne Schritte 11 und 15 sowie Teile von Schritt 16, Erledigt und Tests |
 
 Die eigenständigen Zusammenfassungen stehen in den jeweiligen `dokumentationsanalyse.md`-Dateien. Diese Strukturübersicht löst unterschiedliche historische und aktuelle Aussagen nicht auf.

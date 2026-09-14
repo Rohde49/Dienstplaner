@@ -7,10 +7,12 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 ## Verhältnis zwischen Quellcode und Dokumentation
 
-- Der Quellcode ist die maßgebliche Quelle für den tatsächlichen
-  Implementierungsstand.
-- Die Dokumentation beschreibt fachliche Regeln, projektspezifischen Kontext,
-  geplantes Verhalten und wichtige übergreifende Entscheidungen.
+- Der Quellcode beantwortet, was die Anwendung aktuell tatsächlich umsetzt.
+- Die Dokumentation beantwortet, was die Anwendung fachlich tun soll und warum.
+  Sie beschreibt dazu fachliche Regeln, projektspezifischen Kontext, geplantes
+  Verhalten und wichtige übergreifende Entscheidungen.
+- Ein dokumentiertes Zielverhalten ist allein kein Nachweis dafür, dass es
+  bereits umgesetzt wurde.
 - Technische Einzelheiten, die unmittelbar und verständlich aus dem Quellcode
   hervorgehen, werden nicht zusätzlich in der Dokumentation gepflegt.
 - Widersprüche zwischen Quellcode und Dokumentation werden ausdrücklich
@@ -27,6 +29,7 @@ den jeweils zuständigen Dokumenten festgehalten.
 | `oberflaeche/`  | Übergreifende Gestaltungs- und Bediengrundsätze                 | Wiederholungen einzelner Feature-Abläufe                  |
 | `qualitaet/`    | Teststrategie und projektweite Qualitätsgrundsätze              | Momentane Testergebnisse und Testzahlen                   |
 | `planung/`      | Aktueller Stand, Prioritäten und Reihenfolge der Arbeitspakete  | Fachliche Regeln und ausformulierte Feature-Inhalte       |
+| `referenzen/`   | Nicht verbindliche Untersuchungen fremder oder älterer Systeme  | Anforderungen und Entscheidungen des aktuellen Projekts   |
 | `README.md`     | Wegweiser und Zuständigkeiten der Dokumentation                 | Fachliche oder technische Projektinformationen            |
 
 ## Einstiegspunkte
@@ -62,8 +65,12 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 ## Pflegegrundsätze
 
-- Jede Information erhält genau einen zuständigen Ablageort.
-- Andere Dokumente verweisen auf diesen Ort, statt den Inhalt zu wiederholen.
+- Jede Information besitzt einen maßgeblichen Hauptablageort.
+- Andere Dokumente dürfen sie zum Verständnis knapp einordnen und verweisen
+  für die vollständige Regel auf diesen Hauptablageort.
+- Nicht als offen gekennzeichnete Aussagen in Fach- und Feature-Dokumenten
+  beschreiben das abgestimmte Zielverhalten. Ob dieses Verhalten bereits
+  umgesetzt ist, ergibt sich aus Quellcode und Roadmap.
 - Implementierungsstand, Prioritäten und Reihenfolge werden ausschließlich in
   der Roadmap gepflegt.
 - Feature-Dokumente beschreiben Zweck, gewünschtes Verhalten, Grenzen und noch
@@ -75,3 +82,11 @@ den jeweils zuständigen Dokumenten festgehalten.
   dauerhafte Projektdokumentation.
 - Vergangene Entscheidungen werden nur dokumentiert, wenn ihre Begründung für
   das heutige Verhalten weiterhin notwendig ist.
+
+## Migrationsarchiv
+
+Der Ordner `docs-alt/` außerhalb dieser Dokumentation enthält den Stand vor der
+laufenden Dokumentationsmigration. Er ist kein Bestandteil der aktuellen
+Projektdokumentation und keine verbindliche Quelle für Implementierungen. Er
+wird nur für den Abschluss der Migration herangezogen und ansonsten nicht
+gelesen.

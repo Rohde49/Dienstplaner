@@ -24,7 +24,9 @@ Anwendung ab. Innerhalb dieses Verzeichnisses verwendet sie den Ordner
 ```text
 dienstplaner-data/
 ├── employees.json
+├── employees.json.backup
 ├── entry-types.json
+├── entry-types.json.backup
 └── plans/
     ├── <plan-id>.json
     └── <plan-id>.json.backup
@@ -114,10 +116,12 @@ Beim Laden gilt folgende Reihenfolge:
 4. Existiert eine beschädigte Datei und steht keine gültige Alternative zur
    Verfügung, wird das Laden mit einem Fehler abgebrochen.
 
-Eine Wiederherstellung aus der Sicherung muss für den aufrufenden Teil der
-Anwendung erkennbar bleiben, damit die Oberfläche einen Hinweis anzeigen kann.
-Beschädigte Daten dürfen niemals stillschweigend durch einen leeren Zustand
-ersetzt und anschließend überschrieben werden.
+Beim Laden eines Monatsplans bleibt eine Wiederherstellung aus der Sicherung
+für den aufrufenden Teil der Anwendung erkennbar, damit die Planungsseite einen
+Hinweis anzeigen kann. Bei Mitarbeiter- und Eintragsartendaten verwendet die
+bestehende Schnittstelle eine gültige Sicherung automatisch. Beschädigte Daten
+dürfen niemals stillschweigend durch einen leeren Zustand ersetzt und
+anschließend überschrieben werden.
 
 ## Nebenläufigkeit
 

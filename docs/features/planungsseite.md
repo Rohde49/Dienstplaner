@@ -43,6 +43,11 @@ Beschriftung gemeinsam angezeigt.
 
 ## Anfangszustand und Vorschau
 
+Beim ersten Öffnen zeigt die Zeitraumsauswahl den aktuellen Monat und das
+aktuelle Jahr. Die Jahresauswahl bietet standardmäßig das aktuelle Jahr sowie
+jeweils zwei vorherige und zwei folgende Jahre an, soweit diese innerhalb des
+technisch unterstützten Bereichs liegen.
+
 Beim Öffnen der Planungsseite wird kein gespeicherter Plan automatisch geladen.
 Das gilt auch dann, wenn für den gewählten Zeitraum genau ein Plan vorhanden
 ist.
@@ -251,8 +256,10 @@ Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
 Soll-Arbeitszeit. Diese Werte unterstützen die laufende Planung, ersetzen aber
 nicht die spätere ausführliche Auswertung.
 
-Die verbindlichen Formeln und Zählregeln werden ausschließlich unter
-[Berechnungen](../fachlichkeit/berechnungen/monatskennzahlen.md) gepflegt.
+Die verbindlichen Regeln stehen unter
+[Tagesbezogene Kennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),
+[Zeitbezogene Monatskennzahlen](../fachlichkeit/berechnungen/monatskennzahlen.md)
+und [Soll-Ist-Auswertung](../fachlichkeit/berechnungen/soll-ist-auswertung.md).
 
 ## Entwurf, Speichern und Verlustschutz
 

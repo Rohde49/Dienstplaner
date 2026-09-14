@@ -40,12 +40,12 @@ Die API ist befehlsspezifisch: Listen, Anlegen, Aktualisieren und Löschen bei S
 
 Der Renderer verwendet `HashRouter`. `App.tsx` bindet vier Routen ein:
 
-| Route | Ansicht | Zweck |
-| --- | --- | --- |
-| `/` | `StartPage` | Einstieg mit drei Navigationskarten |
-| `/team` | `TeamPage` | Team-Verwaltung |
-| `/eintraege` | `EintraegePage` | Eintrags-Verwaltung |
-| `/dienstplan` | `PlanPage` | Monatsplan, Planung, Druckvorschau und Auswertungsdialog |
+| Route         | Ansicht         | Zweck                                                    |
+| ------------- | --------------- | -------------------------------------------------------- |
+| `/`           | `StartPage`     | Einstieg mit drei Navigationskarten                      |
+| `/team`       | `TeamPage`      | Team-Verwaltung                                          |
+| `/eintraege`  | `EintraegePage` | Eintrags-Verwaltung                                      |
+| `/dienstplan` | `PlanPage`      | Monatsplan, Planung, Druckvorschau und Auswertungsdialog |
 
 Die „AuswertungsPage“ ist im untersuchten Code keine Route. `AuswertungDialog` wird in `PlanPage` als modales Overlay eingebunden. Team- und Eintragsseite navigieren über ihre Management-Kopfbereiche zurück; die Planungsseite besitzt eine eigene Startseiten-Schaltfläche.
 

@@ -59,24 +59,24 @@ Die beteiligten Typen und ihre Speicherung sind zentral in [Datenmodell und Date
 
 Die UI zeigt 15 Zeilen. Der untersuchte Code berechnet sie beziehungsweise die zusätzliche Rasterkennzahl wie folgt:
 
-| Wert im Code | Statisch erkennbare Regel |
-| --- | --- |
-| SN/F-Dienste | Einträge mit Kürzel `SN/F` **oder** `SN` werden gezählt. |
-| Freie Tage | Jeder Eintrag mit Kürzel `/` wird gezählt; dieser Wert erscheint nur im Planungsraster. |
-| Freie Samstage | Eintrag `/` an einem Samstag. |
-| Freie Sonntage | Eintrag `/` an einem Sonntag; ein Feiertag an einem anderen Wochentag wird von dieser Zählung nicht erfasst. |
-| Gearbeitete Stunden an Sonntagen/Feiertagen | Summe `arbeitszeitOhneNachtbereitschaftMinuten` an Sonntagen oder gesetzlichen Feiertagen. |
-| Arbeitszeit gesamt | Je Eintrag `arbeitszeitOhneNachtbereitschaftMinuten + nachtbereitschaftMinuten`. Das Feld `arbeitszeitMinuten` wird von dieser Funktion nicht gelesen. |
-| Nachtbereitschaft gesamt | Summe `nachtbereitschaftMinuten`. |
-| Stunden ohne Nachtbereitschaft gesamt | Summe `arbeitszeitOhneNachtbereitschaftMinuten`. |
-| Nachtarbeit gesamt | Summe `nachtarbeitMinuten`. |
-| Nachtzuschlag | 20 Prozent der monatlichen Nachtarbeit, danach auf volle Minuten gerundet. |
-| Nachtbereitschaftszuschlag | 25 Prozent der monatlichen Nachtbereitschaft, danach auf volle Minuten gerundet. |
-| Rufbereitschaften | Anzahl der Tage, deren Entwurfszuordnung der Mitarbeiter-ID entspricht. |
-| Arbeitstage | Montag bis Freitag, sofern der Tag kein gesetzlicher Feiertag ist. |
-| Ist-Arbeitszeit | Arbeitszeit ohne Nachtbereitschaft plus gerundeter Nachtbereitschaftszuschlag. |
-| Soll-Arbeitszeit | Arbeitstage mal individuelle Wochenarbeitszeit, geteilt durch fünf und anschließend gerundet. |
-| Differenz Soll/Ist | Ist minus Soll. |
+| Wert im Code                                | Statisch erkennbare Regel                                                                                                                              |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SN/F-Dienste                                | Einträge mit Kürzel `SN/F` **oder** `SN` werden gezählt.                                                                                               |
+| Freie Tage                                  | Jeder Eintrag mit Kürzel `/` wird gezählt; dieser Wert erscheint nur im Planungsraster.                                                                |
+| Freie Samstage                              | Eintrag `/` an einem Samstag.                                                                                                                          |
+| Freie Sonntage                              | Eintrag `/` an einem Sonntag; ein Feiertag an einem anderen Wochentag wird von dieser Zählung nicht erfasst.                                           |
+| Gearbeitete Stunden an Sonntagen/Feiertagen | Summe `arbeitszeitOhneNachtbereitschaftMinuten` an Sonntagen oder gesetzlichen Feiertagen.                                                             |
+| Arbeitszeit gesamt                          | Je Eintrag `arbeitszeitOhneNachtbereitschaftMinuten + nachtbereitschaftMinuten`. Das Feld `arbeitszeitMinuten` wird von dieser Funktion nicht gelesen. |
+| Nachtbereitschaft gesamt                    | Summe `nachtbereitschaftMinuten`.                                                                                                                      |
+| Stunden ohne Nachtbereitschaft gesamt       | Summe `arbeitszeitOhneNachtbereitschaftMinuten`.                                                                                                       |
+| Nachtarbeit gesamt                          | Summe `nachtarbeitMinuten`.                                                                                                                            |
+| Nachtzuschlag                               | 20 Prozent der monatlichen Nachtarbeit, danach auf volle Minuten gerundet.                                                                             |
+| Nachtbereitschaftszuschlag                  | 25 Prozent der monatlichen Nachtbereitschaft, danach auf volle Minuten gerundet.                                                                       |
+| Rufbereitschaften                           | Anzahl der Tage, deren Entwurfszuordnung der Mitarbeiter-ID entspricht.                                                                                |
+| Arbeitstage                                 | Montag bis Freitag, sofern der Tag kein gesetzlicher Feiertag ist.                                                                                     |
+| Ist-Arbeitszeit                             | Arbeitszeit ohne Nachtbereitschaft plus gerundeter Nachtbereitschaftszuschlag.                                                                         |
+| Soll-Arbeitszeit                            | Arbeitstage mal individuelle Wochenarbeitszeit, geteilt durch fünf und anschließend gerundet.                                                          |
+| Differenz Soll/Ist                          | Ist minus Soll.                                                                                                                                        |
 
 Positive Differenzen werden mit `+`, negative mit dem typografischen Minus `−` und der exakte Ausgleich als `0:00` formatiert. Zeitwerte erscheinen über `formatMinutesToHHMM()` als Stunden und Minuten. Die Farbfunktion liefert bei exakt null `text-primary`, sonst `text-warning`.
 
