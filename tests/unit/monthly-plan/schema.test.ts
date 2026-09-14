@@ -76,7 +76,7 @@ function createValidPlan(): MonthlyPlan {
         lastName: 'Wirtschaftskraft',
         role: 'Wirtschaftskraft',
         weeklyWorkingMinutes: 1_800,
-        colorKey: 'amber',
+        colorKey: 'orange',
         position: 2,
       },
     ],
@@ -155,12 +155,12 @@ describe('Monatsplan-Grundstruktur', () => {
   it('prüft die versionierte Dateihülle des Monatsplans', () => {
     const plan = createValidPlan();
 
-    expect(monthlyPlanFileSchema.parse({ schemaVersion: 1, plan })).toEqual({
-      schemaVersion: 1,
+    expect(monthlyPlanFileSchema.parse({ schemaVersion: 2, plan })).toEqual({
+      schemaVersion: 2,
       plan,
     });
     expect(
-      monthlyPlanFileSchema.safeParse({ schemaVersion: 2, plan }).success,
+      monthlyPlanFileSchema.safeParse({ schemaVersion: 1, plan }).success,
     ).toBe(false);
   });
 });
@@ -173,7 +173,7 @@ describe('Mitarbeiter-Snapshots', () => {
       planEmployeeSchema.safeParse({ ...employee, role: 'Leitung' }).success,
     ).toBe(false);
     expect(
-      planEmployeeSchema.safeParse({ ...employee, colorKey: 'orange' }).success,
+      planEmployeeSchema.safeParse({ ...employee, colorKey: 'cyan' }).success,
     ).toBe(false);
     expect(
       planEmployeeSchema.safeParse({
@@ -215,6 +215,14 @@ describe('Kalendertage', () => {
     const day = createValidPlan().days[0];
 
     expect(planDaySchema.parse({ ...day, note: '   ' }).note).toBeNull();
+  });
+
+  it('lehnt eine Tagesbemerkung mit mehr als 60 Zeichen ab', () => {
+    const day = createValidPlan().days[0];
+
+    expect(
+      planDaySchema.safeParse({ ...day, note: 'x'.repeat(61) }).success,
+    ).toBe(false);
   });
 
   it.each([

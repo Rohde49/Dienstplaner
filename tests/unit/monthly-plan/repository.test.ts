@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { access, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -34,7 +34,34 @@ function createEmployee(
   };
 }
 
-async function createTestRepository(employees: Employee[] = []): Promise<{
+function createEntryType(overrides: Partial<EntryType> = {}): EntryType {
+  return {
+    id: '20000000-0000-4000-8000-000000000001',
+    code: 'SN/F',
+    name: 'Spät-Nacht-Früh-Dienst',
+    calculationType: 'fixed',
+    startTime: '14:00',
+    endTime: '08:00',
+    timeValues: {
+      attendanceMinutes: 1_080,
+      workingMinutes: 600,
+      workingWithoutNightReadinessMinutes: 480,
+      nightReadinessMinutes: 120,
+      nightWorkMinutes: 60,
+    },
+    active: true,
+    createdAt: '2026-09-01T08:00:00.000Z',
+    updatedAt: '2026-09-01T08:00:00.000Z',
+    ...overrides,
+  };
+}
+
+async function createTestRepository(
+  employees: Employee[] = [
+    createEmployee('10000000-0000-4000-8000-000000000001'),
+  ],
+  entryTypes: EntryType[] = [],
+): Promise<{
   directory: string;
   repository: MonthlyPlansRepository;
 }> {
@@ -46,6 +73,7 @@ async function createTestRepository(employees: Employee[] = []): Promise<{
     repository: new MonthlyPlansRepository({
       dataDirectoryPath: directory,
       loadEmployees: async () => employees,
+      loadEntryTypes: async () => entryTypes,
     }),
   };
 }
@@ -106,6 +134,18 @@ describe('Monatsplan-Repository', () => {
     expect(plan.employees.map((employee) => employee.position)).toEqual([1, 2]);
   });
 
+  it('lehnt die Anlage ohne aktiven Mitarbeiter an der Repository-Grenze ab', async () => {
+    const { repository } = await createTestRepository([
+      createEmployee('10000000-0000-4000-8000-000000000001', {
+        active: false,
+      }),
+    ]);
+
+    await expect(
+      repository.create({ year: 2026, month: 9, title: 'Septemberplan' }),
+    ).rejects.toThrow('mindestens einem aktiven Mitarbeiter');
+  });
+
   it('erlaubt mehrere Pläne desselben Monats und listet beide getrennt', async () => {
     const { repository } = await createTestRepository();
 
@@ -120,6 +160,36 @@ describe('Monatsplan-Repository', () => {
     expect(summaries.map(({ id }) => id)).toEqual(
       expect.arrayContaining([firstPlan.id, secondPlan.id]),
     );
+  });
+
+  it('listet Erstellungszeitpunkte und sortiert nach der letzten Änderung', async () => {
+    const { repository } = await createTestRepository();
+    const firstPlan = await repository.create({
+      year: 2025,
+      month: 1,
+      title: 'Plan A',
+    });
+    const secondPlan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Plan B',
+    });
+    const firstSavedPlan = await repository.save({
+      ...firstPlan,
+      title: 'Plan A geändert',
+    });
+    const updatedFirstPlan = await repository.save(firstSavedPlan);
+
+    const summaries = await repository.list();
+
+    expect(summaries.map(({ id }) => id)).toEqual([
+      updatedFirstPlan.id,
+      secondPlan.id,
+    ]);
+    expect(summaries[0]).toMatchObject({
+      createdAt: firstPlan.createdAt,
+      updatedAt: updatedFirstPlan.updatedAt,
+    });
   });
 
   it('liefert für eine unbekannte gültige Plan-ID einen leeren Ladezustand', async () => {
@@ -200,38 +270,28 @@ describe('Monatsplan-Repository', () => {
     const sourceEmployees = [
       createEmployee('10000000-0000-4000-8000-000000000001'),
     ];
-    const { directory, repository } =
-      await createTestRepository(sourceEmployees);
+    const entryType = createEntryType({
+      code: ' SN/F ',
+      name: 'Abweichendes Kürzel',
+    });
+    const { directory, repository } = await createTestRepository(
+      sourceEmployees,
+      [entryType],
+    );
     const plan = await repository.create({
       year: 2026,
       month: 9,
       title: 'Septemberplan',
     });
-    const entryType: EntryType = {
-      id: '20000000-0000-4000-8000-000000000001',
-      code: ' SN/F ',
-      name: 'Abweichendes Kürzel',
-      calculationType: 'fixed',
-      startTime: '14:00',
-      endTime: '08:00',
-      timeValues: {
-        attendanceMinutes: 1_080,
-        workingMinutes: 600,
-        workingWithoutNightReadinessMinutes: 480,
-        nightReadinessMinutes: 120,
-        nightWorkMinutes: 60,
-      },
-      active: true,
-      createdAt: '2026-09-01T08:00:00.000Z',
-      updatedAt: '2026-09-01T08:00:00.000Z',
-    };
     const planWithEntry = setPlanEntry({
       plan,
       planDayId: plan.days[0].id,
       planEmployeeId: plan.employees[0].id,
       entryType,
     });
-    await repository.save(planWithEntry);
+    const draftEntryId = planWithEntry.days[0].entries[0].id;
+    const savedPlan = await repository.save(planWithEntry);
+    expect(savedPlan.days[0].entries[0].id).not.toBe(draftEntryId);
     sourceEmployees.splice(0);
     const restartedRepository = new MonthlyPlansRepository({
       dataDirectoryPath: directory,
@@ -262,6 +322,164 @@ describe('Monatsplan-Repository', () => {
     });
   });
 
+  it('lehnt manipulierte Werte eines neuen Planungseintrags ab', async () => {
+    const entryType = createEntryType();
+    const { repository } = await createTestRepository(undefined, [entryType]);
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const changedPlan = setPlanEntry({
+      plan,
+      planDayId: plan.days[0].id,
+      planEmployeeId: plan.employees[0].id,
+      entryType,
+    });
+    changedPlan.days[0].entries[0].code = 'Manipuliert';
+
+    await expect(repository.save(changedPlan)).rejects.toThrow(
+      'ungültige Snapshotwerte',
+    );
+    await expect(repository.get(plan.id)).resolves.toEqual({
+      plan,
+      recoveryWarning: null,
+    });
+  });
+
+  it('akzeptiert einen vollständig neu hergeleiteten Ersatz-Snapshot', async () => {
+    const currentEntryTypes = [createEntryType()];
+    const { repository } = await createTestRepository(
+      undefined,
+      currentEntryTypes,
+    );
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const planWithEntry = setPlanEntry({
+      plan,
+      planDayId: plan.days[0].id,
+      planEmployeeId: plan.employees[0].id,
+      entryType: currentEntryTypes[0],
+    });
+    const savedPlan = await repository.save(planWithEntry);
+    const previousEntryId = savedPlan.days[0].entries[0].id;
+    currentEntryTypes[0] = createEntryType({
+      code: 'T',
+      name: 'Tagdienst',
+      startTime: '08:00',
+      endTime: '16:00',
+      timeValues: {
+        attendanceMinutes: 480,
+        workingMinutes: 450,
+        workingWithoutNightReadinessMinutes: 450,
+        nightReadinessMinutes: 0,
+        nightWorkMinutes: 0,
+      },
+    });
+    const replacedPlan = setPlanEntry({
+      plan: savedPlan,
+      planDayId: savedPlan.days[0].id,
+      planEmployeeId: savedPlan.employees[0].id,
+      entryType: currentEntryTypes[0],
+    });
+
+    const savedReplacement = await repository.save(replacedPlan);
+
+    expect(savedReplacement.days[0].entries[0]).toMatchObject({
+      id: previousEntryId,
+      code: 'T',
+      name: 'Tagdienst',
+      timeValues: currentEntryTypes[0].timeValues,
+    });
+  });
+
+  it('lehnt einen neuen Snapshot aus einer inzwischen inaktiven Eintragsart ab', async () => {
+    const activeEntryType = createEntryType();
+    const { repository } = await createTestRepository(undefined, [
+      { ...activeEntryType, active: false },
+    ]);
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const changedPlan = setPlanEntry({
+      plan,
+      planDayId: plan.days[0].id,
+      planEmployeeId: plan.employees[0].id,
+      entryType: activeEntryType,
+    });
+
+    await expect(repository.save(changedPlan)).rejects.toThrow(
+      'aktuell aktive Eintragsart',
+    );
+  });
+
+  it('erhält unveränderte ältere Snapshots ohne aktuelle Eintragsart', async () => {
+    const entryType = createEntryType();
+    const currentEntryTypes = [entryType];
+    const { repository } = await createTestRepository(
+      undefined,
+      currentEntryTypes,
+    );
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const planWithEntry = setPlanEntry({
+      plan,
+      planDayId: plan.days[0].id,
+      planEmployeeId: plan.employees[0].id,
+      entryType,
+    });
+    const savedPlan = await repository.save(planWithEntry);
+    currentEntryTypes.splice(0);
+
+    const savedWithoutSource = await repository.save({
+      ...savedPlan,
+      title: 'Titel ohne Stammdaten geändert',
+    });
+
+    expect(savedWithoutSource.days[0].entries[0]).toEqual(
+      savedPlan.days[0].entries[0],
+    );
+  });
+
+  it('entfernt Haupt- und Sicherungsdatei eines Monatsplans', async () => {
+    const { directory, repository } = await createTestRepository();
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    await repository.save(plan);
+    const filePath = path.join(directory, 'plans', `${plan.id}.json`);
+
+    await repository.remove(plan.id);
+
+    await expect(access(filePath)).rejects.toMatchObject({ code: 'ENOENT' });
+    await expect(access(`${filePath}.backup`)).rejects.toMatchObject({
+      code: 'ENOENT',
+    });
+    await expect(repository.list()).resolves.toEqual([]);
+    await expect(repository.get(plan.id)).resolves.toEqual({
+      plan: null,
+      recoveryWarning: null,
+    });
+  });
+
+  it('meldet eine unbekannte Plan-ID beim Löschen', async () => {
+    const { repository } = await createTestRepository();
+
+    await expect(
+      repository.remove('00000000-0000-4000-8000-000000000001'),
+    ).rejects.toThrow('nicht gefunden');
+  });
+
   it('verwendet bei einer fremden Plan-ID in der Hauptdatei die passende Sicherung', async () => {
     const { directory, repository } = await createTestRepository();
     const plan = await repository.create({
@@ -277,7 +495,7 @@ describe('Monatsplan-Repository', () => {
     };
     await writeFile(
       filePath,
-      `${JSON.stringify({ schemaVersion: 1, plan: foreignPlan }, null, 2)}\n`,
+      `${JSON.stringify({ schemaVersion: 2, plan: foreignPlan }, null, 2)}\n`,
       'utf8',
     );
 
@@ -299,7 +517,7 @@ describe('Monatsplan-Repository', () => {
     });
     const filePath = path.join(directory, 'plans', `${plan.id}.json`);
     const foreignFile = JSON.stringify({
-      schemaVersion: 1,
+      schemaVersion: 2,
       plan: {
         ...plan,
         id: '90000000-0000-4000-8000-000000000001',
@@ -352,7 +570,7 @@ describe('Monatsplan-Repository', () => {
       year: 2026,
       month: 9,
       title: 'Unbekannt',
-      employees: [],
+      employees: [createEmployee('10000000-0000-4000-8000-000000000099')],
     });
 
     await expect(repository.save(unknownPlan)).rejects.toThrow(

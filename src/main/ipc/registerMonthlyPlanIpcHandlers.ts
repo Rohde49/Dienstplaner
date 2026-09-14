@@ -5,6 +5,7 @@ import {
   createMonthlyPlan,
   getMonthlyPlan,
   listMonthlyPlans,
+  removeMonthlyPlan,
   saveMonthlyPlan,
 } from '../storage/monthlyPlansRepository';
 
@@ -22,5 +23,9 @@ export function registerMonthlyPlanIpcHandlers(): void {
 
   ipcMain.handle(MONTHLY_PLAN_IPC_CHANNELS.save, (_event, plan: unknown) =>
     saveMonthlyPlan(plan),
+  );
+
+  ipcMain.handle(MONTHLY_PLAN_IPC_CHANNELS.remove, (_event, id: unknown) =>
+    removeMonthlyPlan(id),
   );
 }

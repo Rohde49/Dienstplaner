@@ -242,7 +242,7 @@ describe('Planungszellen ändern', () => {
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
     expect(updatedPlan.days[0].entries[0].planEmployeeId).toBe(employeeId);
-    expect(updatedPlan.updatedAt).not.toBe(plan.updatedAt);
+    expect(updatedPlan.updatedAt).toBe(plan.updatedAt);
     expect(monthlyPlanSchema.safeParse(updatedPlan).success).toBe(true);
   });
 

@@ -13,7 +13,7 @@ const employeeStore = new JsonFileStore<EmployeesFile>({
   fileName: 'employees.json',
   schema: employeesFileSchema,
   createDefault: () => ({
-    schemaVersion: 2,
+    schemaVersion: 3,
     updatedAt: new Date().toISOString(),
     employees: [],
   }),

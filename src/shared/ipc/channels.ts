@@ -20,4 +20,5 @@ export const MONTHLY_PLAN_IPC_CHANNELS = {
   get: 'monthly-plans:get',
   create: 'monthly-plans:create',
   save: 'monthly-plans:save',
+  remove: 'monthly-plans:remove',
 } as const;

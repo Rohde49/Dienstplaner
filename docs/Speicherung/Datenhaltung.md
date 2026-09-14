@@ -38,20 +38,20 @@ nicht erforderlich.
   Anwendungsschnittstelle,
 - serialisierte Lese- und Schreibzugriffe innerhalb der Repositories,
 - begrenzte IPC-/Preload-Schnittstellen für Monatspläne,
+- Ablehnung einer Plananlage ohne mindestens einen aktiven Mitarbeiter,
+- Durchsetzung der 60-Zeichen-Grenze für Tagesbemerkungen,
+- erneute Herleitung und Prüfung neuer oder ersetzter Planungseintrag-Snapshots
+  an der Main-Process-Grenze,
+- Planübersichten mit Erstellungszeitpunkt und Sortierung nach letzter Änderung,
+- sicheres Löschen eines vollständigen Monatsplans einschließlich seiner
+  Sicherungsdatei und
+- IPC- und Preload-Schnittstelle für das Löschen,
 - der bestätigte Reset der bisherigen Prototypdaten auf die neuen
   Schema-Versionen.
 
 ### Noch umzusetzen
 
 - sichtbare Warnung nach Wiederherstellung aus einer Sicherung,
-- Ablehnung einer Plananlage ohne mindestens einen aktiven Mitarbeiter,
-- Durchsetzung der 60-Zeichen-Grenze für Tagesbemerkungen,
-- erneute Herleitung beziehungsweise Prüfung neuer und ersetzter
-  Planungseintrag-Snapshots an der Main-Process-Grenze,
-- Auflisten mit Erstellungszeitpunkt und Sortierung nach letzter Änderung,
-- sicheres Löschen eines vollständigen Monatsplans einschließlich seiner
-  Sicherungsdatei,
-- IPC- und Preload-Schnittstelle für das Löschen sowie
 - Anbindung der Plan-Schnittstellen an die Planungsoberfläche.
 
 ## 2. Speicherort und Dateistruktur
@@ -93,9 +93,9 @@ Nicht verwendet werden:
 
 | Datei                  | Inhalt                                   | Zielversion |
 | ---------------------- | ---------------------------------------- | ----------- |
-| `employees.json`       | `EmployeesFile`                          | `2`         |
+| `employees.json`       | `EmployeesFile`                          | `3`         |
 | `entry-types.json`     | `EntryTypesFile`                         | `2`         |
-| `plans/<plan-id>.json` | ein vollständiges `MonthlyPlan`-Aggregat | `1`         |
+| `plans/<plan-id>.json` | ein vollständiges `MonthlyPlan`-Aggregat | `2`         |
 
 `EmployeesFile`, `EntryTypesFile` und `MonthlyPlanFile` sind technische
 Dateihüllen und keine fachlichen Entitäten. Sie ergänzen die in
@@ -218,8 +218,7 @@ Planungseinträge werden deshalb anhand ihrer Herkunfts-ID und des
 Mitarbeiter-Snapshots erneut aus einer aktuell aktiven Eintragsart hergeleitet
 beziehungsweise vollständig dagegen geprüft. Unveränderte ältere Snapshots
 bleiben dagegen unabhängig vom aktuellen Stammdatenbestand gültig. Diese
-Prüfung ist im aktuellen Repository noch nicht vollständig umgesetzt und muss
-vor der UI-Anbindung geschlossen werden.
+Prüfung ist im aktuellen Repository umgesetzt.
 
 Bei einem vorhandenen Plan dürfen `id`, `year`, `month`, `createdAt`, die
 Mitarbeiter-Snapshots und die Datumsfolge nicht über einen allgemeinen
@@ -292,26 +291,24 @@ Für den Zielstand gelten zusätzlich:
 Damit kann kein paralleler Zugriff einen temporären Zwischenzustand lesen oder
 dieselbe Plan-ID widersprüchlich speichern.
 
-## 10. Schema-Versionen und bestätigter Reset
+## 10. Schema-Versionen und bestätigter Testdaten-Reset
 
-Die Umstellung auf feste Rollen und die strengere Zeitwertregel sind
-inkompatibel zu möglichen bisherigen Prototypdateien. Es wurde deshalb ein
-Reset statt einer Migration bestätigt.
+Die Umstellungen auf feste Rollen, strengere Zeitwertregeln und die verbindliche
+Mitarbeiterfarbpalette betreffen ausschließlich entbehrliche Prototyp-Testdaten.
+Für diese Änderungen wurde deshalb jeweils ein bewusster Reset statt einer
+Migration bestätigt.
 
-Für die Umsetzung gilt:
+Für den aktuellen Stand gilt:
 
-- vorhandene Prototypdaten werden einmalig und bewusst zurückgesetzt,
-- `EmployeesFile` und `EntryTypesFile` beginnen danach mit Zielversion `2`,
-- `MonthlyPlan` beginnt als neues Modell mit Version `1`,
-- es wird kein Migrationscode für freie Rollen oder widersprüchliche Zeitwerte
-  entwickelt,
-- Daten werden nicht still beim normalen Programmstart gelöscht,
-- eine unbekannte Schema-Version wird mit verständlicher Fehlermeldung
-  abgelehnt.
-
-Spätere Schemaänderungen erhalten entweder eine ausdrückliche Migration oder
-einen erneut bestätigten Reset. Eine vorhandene Version wird nicht still mit
-neuer Bedeutung weiterverwendet.
+- `EmployeesFile` verwendet wegen der neuen Farbpalette Version `3`,
+- `EntryTypesFile` bleibt bei Version `2`,
+- `MonthlyPlanFile` verwendet wegen der neuen Mitarbeiter-Snapshots Version
+  `2`,
+- alte Mitarbeiter- und Monatsplandateien werden nicht migriert,
+- betroffene Testdaten werden vor der weiteren Nutzung bewusst zurückgesetzt,
+- unbekannte oder alte Schema-Versionen werden mit verständlicher Fehlermeldung
+  abgelehnt und
+- beim normalen Programmstart werden Daten nicht automatisch gelöscht.
 
 ## 11. Monatsplanentwurf und Speichern
 

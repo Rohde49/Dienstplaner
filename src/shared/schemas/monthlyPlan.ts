@@ -115,6 +115,7 @@ export const planEntrySchema = planEntryObjectSchema.superRefine(
 const planNoteSchema = z
   .string()
   .trim()
+  .max(60, 'Die Bemerkung darf höchstens 60 Zeichen enthalten.')
   .transform((note) => (note.length === 0 ? null : note))
   .nullable();
 

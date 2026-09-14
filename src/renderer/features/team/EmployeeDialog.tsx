@@ -22,7 +22,7 @@ import {
   Select,
   Spinner,
 } from '../../components/ui';
-import { EMPLOYEE_COLOR_OPTIONS } from './employeeColorStyles';
+import { EMPLOYEE_COLOR_OPTIONS } from '../../styles/employeeColors';
 
 type EmployeeDialogProps = {
   employee?: Employee;
@@ -385,7 +385,7 @@ export function EmployeeDialog({
 
                       <span
                         aria-hidden="true"
-                        className={`size-4 rounded-full ${option.dotClass} peer-focus-visible:ring-app-primary peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2`}
+                        className={`size-4 rounded-full ${option.selectionDotClass} peer-focus-visible:ring-app-primary peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2`}
                       />
 
                       <span>{option.label}</span>

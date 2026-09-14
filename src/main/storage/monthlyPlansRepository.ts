@@ -1,22 +1,26 @@
+import { randomUUID } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { readdir } from 'node:fs/promises';
+import { access, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 import { app } from 'electron';
 
 import { createMonthlyPlan as createMonthlyPlanAggregate } from '../domain/monthlyPlanFactory';
+import { createPlanEntrySnapshot } from '../../shared/domain/planEntrySnapshot';
 import {
   monthlyPlanFileSchema,
   monthlyPlanIdSchema,
   monthlyPlanInputSchema,
   monthlyPlanSchema,
   type Employee,
+  type EntryType,
   type MonthlyPlan,
   type MonthlyPlanFile,
   type MonthlyPlanLoadResult,
   type MonthlyPlanSummary,
 } from '../../shared/schemas';
 import { listEmployees } from './employeesRepository';
+import { listEntryTypes } from './entryTypesRepository';
 import { JsonFileStore } from './jsonFileStore';
 
 const DATA_DIRECTORY_NAME = 'dienstplaner-data';
@@ -26,6 +30,7 @@ const BACKUP_RECOVERY_WARNING =
 type MonthlyPlansRepositoryOptions = {
   dataDirectoryPath?: string;
   loadEmployees?: () => Promise<Employee[]>;
+  loadEntryTypes?: () => Promise<EntryType[]>;
 };
 
 function isFileNotFound(error: unknown): boolean {
@@ -42,18 +47,34 @@ function immutableDayStructure(plan: MonthlyPlan) {
   return plan.days.map((day) => ({ id: day.id, date: day.date }));
 }
 
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await access(filePath);
+    return true;
+  } catch (error) {
+    if (isFileNotFound(error)) {
+      return false;
+    }
+
+    throw error;
+  }
+}
+
 /** Verwaltet Monatspläne in jeweils einer eigenen, validierten JSON-Datei. */
 export class MonthlyPlansRepository {
   private readonly configuredDataDirectoryPath?: string;
   private readonly loadEmployees: () => Promise<Employee[]>;
+  private readonly loadEntryTypes: () => Promise<EntryType[]>;
   private accessQueue: Promise<void> = Promise.resolve();
 
   constructor({
     dataDirectoryPath,
     loadEmployees = listEmployees,
+    loadEntryTypes = listEntryTypes,
   }: MonthlyPlansRepositoryOptions = {}) {
     this.configuredDataDirectoryPath = dataDirectoryPath;
     this.loadEmployees = loadEmployees;
+    this.loadEntryTypes = loadEntryTypes;
   }
 
   private get dataDirectoryPath(): string {
@@ -156,6 +177,7 @@ export class MonthlyPlansRepository {
             year: plan.year,
             month: plan.month,
             title: plan.title,
+            createdAt: plan.createdAt,
             updatedAt: plan.updatedAt,
           });
         }
@@ -163,8 +185,7 @@ export class MonthlyPlansRepository {
 
       return summaries.sort(
         (first, second) =>
-          second.year - first.year ||
-          second.month - first.month ||
+          second.updatedAt.localeCompare(first.updatedAt) ||
           first.title.localeCompare(second.title, 'de') ||
           first.id.localeCompare(second.id),
       );
@@ -192,7 +213,7 @@ export class MonthlyPlansRepository {
         });
       } while ((await this.getWithoutQueue(plan.id)).plan !== null);
 
-      await this.createStore(plan.id).write({ schemaVersion: 1, plan });
+      await this.createStore(plan.id).write({ schemaVersion: 2, plan });
       return plan;
     });
   }
@@ -224,17 +245,114 @@ export class MonthlyPlansRepository {
         );
       }
 
+      const requiresEntryTypeValidation = submittedPlan.days.some(
+        (submittedDay, dayIndex) =>
+          submittedDay.entries.some((submittedEntry) => {
+            const storedEntry = storedPlan.days[dayIndex].entries.find(
+              (entry) => entry.planEmployeeId === submittedEntry.planEmployeeId,
+            );
+
+            return (
+              !storedEntry || !isDeepStrictEqual(submittedEntry, storedEntry)
+            );
+          }),
+      );
+      const entryTypesById = new Map<string, EntryType>(
+        requiresEntryTypeValidation
+          ? (await this.loadEntryTypes()).map((entryType) => [
+              entryType.id,
+              entryType,
+            ])
+          : [],
+      );
+      const validatedDays = submittedPlan.days.map((submittedDay, dayIndex) => {
+        const storedDay = storedPlan.days[dayIndex];
+        const entries = submittedDay.entries.map((submittedEntry) => {
+          const storedEntry = storedDay.entries.find(
+            (entry) => entry.planEmployeeId === submittedEntry.planEmployeeId,
+          );
+
+          if (storedEntry && isDeepStrictEqual(submittedEntry, storedEntry)) {
+            return submittedEntry;
+          }
+
+          const entryType = entryTypesById.get(
+            submittedEntry.sourceEntryTypeId,
+          );
+          if (!entryType?.active) {
+            throw new Error(
+              'Ein neuer oder ersetzter Planungseintrag muss auf eine aktuell aktive Eintragsart verweisen.',
+            );
+          }
+
+          const planEmployee = submittedPlan.employees.find(
+            (employee) => employee.id === submittedEntry.planEmployeeId,
+          );
+          if (!planEmployee) {
+            throw new Error(
+              'Der Mitarbeiter des Planungseintrags gehört nicht zu diesem Monatsplan.',
+            );
+          }
+
+          const expectedEntry = createPlanEntrySnapshot({
+            id: storedEntry?.id ?? randomUUID(),
+            entryType,
+            planEmployee,
+          });
+          const comparableSubmittedEntry = storedEntry
+            ? submittedEntry
+            : { ...submittedEntry, id: expectedEntry.id };
+
+          if (!isDeepStrictEqual(comparableSubmittedEntry, expectedEntry)) {
+            throw new Error(
+              'Ein neuer oder ersetzter Planungseintrag enthält ungültige Snapshotwerte.',
+            );
+          }
+
+          return expectedEntry;
+        });
+
+        return { ...submittedDay, entries };
+      });
+
       const savedPlan = monthlyPlanSchema.parse({
         ...submittedPlan,
+        days: validatedDays,
         updatedAt: nextTimestamp(storedPlan.updatedAt),
       });
 
       await this.createStore(savedPlan.id).write({
-        schemaVersion: 1,
+        schemaVersion: 2,
         plan: savedPlan,
       });
 
       return savedPlan;
+    });
+  }
+
+  /** Entfernt Haupt- und Sicherungsdatei eines vorhandenen Monatsplans. */
+  remove(id: unknown): Promise<void> {
+    return this.runAccess(async () => {
+      const validatedId = monthlyPlanIdSchema.parse(id);
+      const filePath = path.join(
+        this.dataDirectoryPath,
+        'plans',
+        `${validatedId}.json`,
+      );
+      const backupPath = `${filePath}.backup`;
+      const [primaryExists, backupExists] = await Promise.all([
+        fileExists(filePath),
+        fileExists(backupPath),
+      ]);
+
+      if (!primaryExists && !backupExists) {
+        throw new Error('Der Monatsplan wurde nicht gefunden.');
+      }
+
+      await Promise.all([
+        rm(filePath, { force: true }),
+        rm(backupPath, { force: true }),
+      ]);
     });
   }
 }
@@ -252,3 +370,6 @@ export const createMonthlyPlan = (input: unknown): Promise<MonthlyPlan> =>
 
 export const saveMonthlyPlan = (plan: unknown): Promise<MonthlyPlan> =>
   monthlyPlansRepository.save(plan);
+
+export const removeMonthlyPlan = (id: unknown): Promise<void> =>
+  monthlyPlansRepository.remove(id);

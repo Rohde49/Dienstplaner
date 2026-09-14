@@ -30,6 +30,7 @@ const dienstplanerApi: DienstplanerApi = {
     create: (input) =>
       ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.create, input),
     save: (plan) => ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.save, plan),
+    remove: (id) => ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.remove, id),
   },
 };
 

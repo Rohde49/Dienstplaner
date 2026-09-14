@@ -11,12 +11,12 @@ fachlichen Formeln Vorrang.
 
 ## 1. Umsetzungsstand
 
-| Bereich                  | Stand                                                                                                                                                                  |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt                                                                                             |
-| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt                                                                                 |
-| Monatsplan und Snapshots | Grundmodell, Snapshots, Zelloperationen und Speicherung sind umgesetzt; die Mindestbesetzung bei der Anlage und die neue Bemerkungsgrenze folgen vor der Planungsseite |
-| Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                                                                                                          |
+| Bereich                  | Stand                                                                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Mitarbeiter              | Grundmodell, Datenfluss, Rollen-Enum und Fünf-Minuten-Regel sind umgesetzt                                                         |
+| Eintragsarten            | Grundmodell, Datenfluss und verbindliche Ableitung von `workingMinutes` sind umgesetzt                                             |
+| Monatsplan und Snapshots | Grundmodell, Snapshots, Zelloperationen, sichere Speichergrenze, Mindestbesetzung, Bemerkungsgrenze und Speicherung sind umgesetzt |
+| Monatsauswertungen       | Reine, rollenunabhängige Berechnungsfunktionen sind umgesetzt                                                                      |
 
 Eine Beschreibung als Zielmodell bedeutet nicht automatisch, dass der
 betreffende Teil bereits implementiert ist.
@@ -107,18 +107,23 @@ Snapshot gespeicherten Rolle `Erzieher` zugeordnet werden.
 ```ts
 const EMPLOYEE_COLOR_KEYS = [
   'blue',
-  'emerald',
-  'amber',
-  'violet',
-  'rose',
-  'cyan',
+  'green',
+  'red',
+  'orange',
+  'yellow',
+  'purple',
+  'pink',
+  'teal',
 ] as const;
 
 type EmployeeColorKey = (typeof EMPLOYEE_COLOR_KEYS)[number];
 ```
 
-Gespeichert wird nur der kontrollierte Farbschlüssel. Die tatsächlichen Farben
-werden zentral in der Oberfläche zugeordnet.
+Gespeichert wird nur der kontrollierte Farbschlüssel. Die deutschen
+Bezeichnungen und die Darstellungsvarianten für Auswahlpunkt,
+Mitarbeiterkopf und Mitarbeiterzelle werden zentral in der Oberfläche
+zugeordnet. Den bestätigten Reset früherer Testdaten beschreibt
+[Datenhaltung.md](./Datenhaltung.md).
 
 ### 4.3 Berechnungsarten
 

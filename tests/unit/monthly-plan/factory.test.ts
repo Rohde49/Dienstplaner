@@ -27,7 +27,7 @@ describe('Monatsplanerzeugung', () => {
       year: 2024,
       month: 2,
       title: '  Februarplan  ',
-      employees: [],
+      employees: [createEmployee('10000000-0000-4000-8000-000000000001')],
     });
 
     expect(monthlyPlanSchema.safeParse(plan).success).toBe(true);
@@ -49,7 +49,7 @@ describe('Monatsplanerzeugung', () => {
     const employees = [
       createEmployee('10000000-0000-4000-8000-000000000001', {
         firstName: 'Anna',
-        colorKey: 'emerald',
+        colorKey: 'teal',
       }),
       createEmployee('10000000-0000-4000-8000-000000000002', {
         firstName: 'Berta',
@@ -60,7 +60,7 @@ describe('Monatsplanerzeugung', () => {
         lastName: 'Küche',
         role: 'Wirtschaftskraft',
         weeklyWorkingMinutes: 1_800,
-        colorKey: 'amber',
+        colorKey: 'orange',
       }),
     ];
 
@@ -78,7 +78,7 @@ describe('Monatsplanerzeugung', () => {
         lastName: 'Beispiel',
         role: 'Erzieher',
         weeklyWorkingMinutes: 2_340,
-        colorKey: 'emerald',
+        colorKey: 'teal',
         position: 1,
       },
       {
@@ -87,7 +87,7 @@ describe('Monatsplanerzeugung', () => {
         lastName: 'Küche',
         role: 'Wirtschaftskraft',
         weeklyWorkingMinutes: 1_800,
-        colorKey: 'amber',
+        colorKey: 'orange',
         position: 2,
       },
     ]);
@@ -105,11 +105,13 @@ describe('Monatsplanerzeugung', () => {
 
     employee.firstName = 'Geändert';
     employee.weeklyWorkingMinutes = 0;
+    employee.colorKey = 'yellow';
     employee.active = false;
 
     expect(plan.employees[0]).toMatchObject({
       firstName: 'Eva',
       weeklyWorkingMinutes: 2_340,
+      colorKey: 'blue',
     });
   });
 
@@ -133,12 +135,14 @@ describe('Monatsplanerzeugung', () => {
   });
 
   it('lehnt ungültige Plandaten bei der Erzeugung ab', () => {
+    const employees = [createEmployee('10000000-0000-4000-8000-000000000001')];
+
     expect(() =>
       createMonthlyPlan({
         year: 2026,
         month: 9,
         title: '   ',
-        employees: [],
+        employees,
       }),
     ).toThrow();
     expect(() =>
@@ -146,8 +150,23 @@ describe('Monatsplanerzeugung', () => {
         year: 1999,
         month: 9,
         title: 'Ungültiger Plan',
-        employees: [],
+        employees,
       }),
     ).toThrow();
+  });
+
+  it('lehnt die Anlage ohne aktiven Mitarbeiter ab', () => {
+    expect(() =>
+      createMonthlyPlan({
+        year: 2026,
+        month: 9,
+        title: 'Septemberplan',
+        employees: [
+          createEmployee('10000000-0000-4000-8000-000000000001', {
+            active: false,
+          }),
+        ],
+      }),
+    ).toThrow('mindestens einem aktiven Mitarbeiter');
   });
 });

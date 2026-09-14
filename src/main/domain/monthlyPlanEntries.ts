@@ -64,7 +64,6 @@ export function setPlanEntry({
 
   return monthlyPlanSchema.parse({
     ...plan,
-    updatedAt: new Date().toISOString(),
     days,
   });
 }
@@ -100,7 +99,6 @@ export function removePlanEntry({
 
   return monthlyPlanSchema.parse({
     ...plan,
-    updatedAt: new Date().toISOString(),
     days,
   });
 }

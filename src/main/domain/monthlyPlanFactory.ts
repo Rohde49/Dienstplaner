@@ -41,6 +41,12 @@ export function createMonthlyPlan({
       position: index + 1,
     }));
 
+  if (planEmployees.length === 0) {
+    throw new Error(
+      'Ein Monatsplan kann nur mit mindestens einem aktiven Mitarbeiter erstellt werden.',
+    );
+  }
+
   return monthlyPlanSchema.parse({
     id: randomUUID(),
     year,

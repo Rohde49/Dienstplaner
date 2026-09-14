@@ -12,7 +12,7 @@ import {
   Spinner,
   IconButton,
 } from '../../components/ui';
-import { EMPLOYEE_COLOR_STYLES } from './employeeColorStyles';
+import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
 import { formatWeeklyWorkingTime } from './employeeWorkingTime';
 import { EmployeeDialog } from './EmployeeDialog';
 import { DeleteEmployeeDialog } from './DeleteEmployeeDialog';
@@ -142,7 +142,7 @@ export function TeamPage() {
                           <div className="flex items-center gap-3">
                             <span
                               aria-hidden="true"
-                              className={`size-2.5 shrink-0 rounded-full ${colorStyle.dotClass}`}
+                              className={`size-2.5 shrink-0 rounded-full ${colorStyle.selectionDotClass}`}
                             />
                             <span className="text-app-text font-medium">
                               {employee.firstName} {employee.lastName}

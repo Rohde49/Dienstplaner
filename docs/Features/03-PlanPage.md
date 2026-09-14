@@ -15,9 +15,8 @@ werden diese dem Benutzer mitgeteilt und vor einer davon betroffenen
 Abweichung gemeinsam geklärt.
 
 Die Oberfläche selbst ist noch nicht umgesetzt. Monatsplanmodell, Snapshots,
-Speicherung und Berechnungsfunktionen sind bereits vorhanden, müssen vor der
-UI-Anbindung aber um die in diesem Dokument beschriebenen Regeln und sicheren
-Schnittstellen ergänzt werden.
+Speicherung, sichere Speichergrenzen und Berechnungsfunktionen sind bereits
+vorhanden. Sie können nun schrittweise an die Oberfläche angebunden werden.
 
 Die Berechnungsformeln werden hier nicht wiederholt. Dafür gelten die
 [Berechnungsdokumente](../Berechnungen/README.md). Datenfelder und

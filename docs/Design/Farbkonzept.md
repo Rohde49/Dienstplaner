@@ -42,9 +42,9 @@ Eine ausgewählte Tabellenzelle erhält beispielsweise einen hellblauen Hintergr
 
 Die Statusfarbe wird immer durch einen Text oder ein Symbol ergänzt, beispielsweise:
 
-* Häkchen und „Gespeichert“
-* Warndreieck und konkrete Warnmeldung
-* Fehlersymbol und Fehlerbeschreibung
+- Häkchen und „Gespeichert“
+- Warndreieck und konkrete Warnmeldung
+- Fehlersymbol und Fehlerbeschreibung
 
 ## 4. Farben im Dienstplan
 
@@ -64,31 +64,44 @@ Falls ein Feiertag auf ein Wochenende fällt, besitzt die Feiertagsdarstellung V
 
 ## 5. Mitarbeiterfarben
 
-Für Mitarbeiter verwenden wir helle Hintergrundfarben mit dunklem Text:
+Für Mitarbeiter verwenden wir eine verbindliche Palette aus acht gespeicherten
+Farbschlüsseln. Die Auswahlpunkte sind kräftiger, Mitarbeiterköpfe verwenden
+helle Flächen mit dunklem Text und Mitarbeiterzellen eine nochmals dezentere
+Fläche:
 
-| Farbe      | Hintergrund     | Rahmen              | Text              |
-| ---------- | --------------- | ------------------- | ----------------- |
-| Himmelblau | `bg-sky-100`    | `border-sky-300`    | `text-sky-900`    |
-| Violett    | `bg-violet-100` | `border-violet-300` | `text-violet-900` |
-| Türkis     | `bg-teal-100`   | `border-teal-300`   | `text-teal-900`   |
-| Orange     | `bg-orange-100` | `border-orange-300` | `text-orange-900` |
-| Rosa       | `bg-pink-100`   | `border-pink-300`   | `text-pink-900`   |
-| Limette    | `bg-lime-100`   | `border-lime-300`   | `text-lime-900`   |
-| Indigo     | `bg-indigo-100` | `border-indigo-300` | `text-indigo-900` |
-| Cyan       | `bg-cyan-100`   | `border-cyan-300`   | `text-cyan-900`   |
+| Farbe  | Schlüssel | Auswahlpunkt    | Mitarbeiterkopf                                   | Mitarbeiterzelle                                    |
+| ------ | --------- | --------------- | ------------------------------------------------- | --------------------------------------------------- |
+| Blau   | `blue`    | `bg-blue-500`   | `bg-blue-100 border-blue-300 text-blue-900`       | `bg-blue-50/50 border-blue-200 text-blue-950`       |
+| Grün   | `green`   | `bg-green-500`  | `bg-green-100 border-green-300 text-green-900`    | `bg-green-50/50 border-green-200 text-green-950`    |
+| Rot    | `red`     | `bg-red-500`    | `bg-red-100 border-red-300 text-red-900`          | `bg-red-50/50 border-red-200 text-red-950`          |
+| Orange | `orange`  | `bg-orange-500` | `bg-orange-100 border-orange-300 text-orange-900` | `bg-orange-50/50 border-orange-200 text-orange-950` |
+| Gelb   | `yellow`  | `bg-yellow-500` | `bg-yellow-100 border-yellow-300 text-yellow-900` | `bg-yellow-50/50 border-yellow-200 text-yellow-950` |
+| Lila   | `purple`  | `bg-purple-500` | `bg-purple-100 border-purple-300 text-purple-900` | `bg-purple-50/50 border-purple-200 text-purple-950` |
+| Rosa   | `pink`    | `bg-pink-500`   | `bg-pink-100 border-pink-300 text-pink-900`       | `bg-pink-50/50 border-pink-200 text-pink-950`       |
+| Türkis | `teal`    | `bg-teal-500`   | `bg-teal-100 border-teal-300 text-teal-900`       | `bg-teal-50/50 border-teal-200 text-teal-950`       |
 
-Die Mitarbeiterfarbe sollte hauptsächlich im Mitarbeiterkopf, am Namen oder als Farbstreifen erscheinen. Sie füllt nicht unnötig die gesamte Dienstplanzeile aus.
+Die Bezeichnungen und vollständigen Tailwind-Klassen stehen zentral und
+statisch in `src/renderer/styles/employeeColors.ts`. Dadurch kann die spätere
+Planungsseite dieselbe Zuordnung wiederverwenden und Tailwind erkennt alle
+benötigten Klassen beim Erstellen der Anwendung.
+
+Die Mitarbeiterfarbe sollte hauptsächlich im Mitarbeiterkopf, am Namen oder als
+Farbstreifen erscheinen. Die sehr dezente Zellenvariante darf einzelne
+Mitarbeiterzellen unterstützen, füllt aber nicht unnötig die gesamte
+Dienstplanzeile aus.
 
 ## 6. Verbindliche Farbregeln
 
-* Farben werden nach ihrer Bedeutung eingesetzt, nicht nur nach ihrem Aussehen.
-* Blau kennzeichnet zentrale Aktionen und Auswahlen.
-* Rot wird ausschließlich für Fehler und gefährliche Aktionen verwendet.
-* Statusinformationen werden nie nur durch Farbe vermittelt.
-* Mitarbeiterfarben dienen ausschließlich der Zuordnung.
-* Für Texte auf hellen Flächen werden dunkle Farbstufen verwendet.
-* Warnflächen verwenden dunklen Text statt weißem Text auf Gelb.
-* Konkrete Farbkombinationen werden bei der Implementierung auf ausreichenden Kontrast geprüft.
-* Farben werden global definiert und nicht innerhalb einzelner Komponenten wiederholt.
+- Farben werden nach ihrer Bedeutung eingesetzt, nicht nur nach ihrem Aussehen.
+- Blau kennzeichnet zentrale Aktionen und Auswahlen.
+- Außerhalb der Mitarbeiterfarbpalette kennzeichnet Rot Fehler und gefährliche
+  Aktionen. Fehlersymbol und Fehlertext grenzen diese Bedeutung von der roten
+  Mitarbeiterfarbe ab.
+- Statusinformationen werden nie nur durch Farbe vermittelt.
+- Mitarbeiterfarben dienen ausschließlich der Zuordnung.
+- Für Texte auf hellen Flächen werden dunkle Farbstufen verwendet.
+- Warnflächen verwenden dunklen Text statt weißem Text auf Gelb.
+- Konkrete Farbkombinationen werden bei der Implementierung auf ausreichenden Kontrast geprüft.
+- Farben werden global definiert und nicht innerhalb einzelner Komponenten wiederholt.
 
 Als Nächstes können wir daraus die **globale Farb-Basis mit semantischen Variablen** wie `background`, `surface`, `primary`, `warning` und `danger` ableiten.

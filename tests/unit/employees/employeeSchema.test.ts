@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  EMPLOYEE_COLOR_KEYS,
   EMPLOYEE_ROLES,
+  employeeColorKeySchema,
   employeeInputSchema,
   employeesFileSchema,
 } from '../../../src/shared/schemas';
@@ -23,6 +25,24 @@ const validEmployee = {
 } as const;
 
 describe('Mitarbeiterschema', () => {
+  it.each(EMPLOYEE_COLOR_KEYS)(
+    'akzeptiert die Mitarbeiterfarbe %s',
+    (colorKey) => {
+      expect(employeeColorKeySchema.safeParse(colorKey).success).toBe(true);
+      expect(
+        employeeInputSchema.safeParse({ ...validInput, colorKey }).success,
+      ).toBe(true);
+    },
+  );
+
+  it('lehnt unbekannte Farbschlüssel ab', () => {
+    expect(employeeColorKeySchema.safeParse('brown').success).toBe(false);
+    expect(
+      employeeInputSchema.safeParse({ ...validInput, colorKey: 'brown' })
+        .success,
+    ).toBe(false);
+  });
+
   it.each(EMPLOYEE_ROLES)('akzeptiert die Rolle %s', (role) => {
     expect(employeeInputSchema.safeParse({ ...validInput, role }).success).toBe(
       true,
@@ -65,10 +85,10 @@ describe('Mitarbeiterschema', () => {
 });
 
 describe('Mitarbeiterdatei', () => {
-  it('verwendet Schema-Version 2', () => {
+  it('verwendet Schema-Version 3', () => {
     expect(
       employeesFileSchema.safeParse({
-        schemaVersion: 2,
+        schemaVersion: 3,
         updatedAt: validEmployee.updatedAt,
         employees: [validEmployee],
       }).success,
@@ -76,7 +96,7 @@ describe('Mitarbeiterdatei', () => {
 
     expect(
       employeesFileSchema.safeParse({
-        schemaVersion: 1,
+        schemaVersion: 2,
         updatedAt: validEmployee.updatedAt,
         employees: [validEmployee],
       }).success,
@@ -86,7 +106,7 @@ describe('Mitarbeiterdatei', () => {
   it('lehnt doppelte Mitarbeiter-IDs ab', () => {
     expect(
       employeesFileSchema.safeParse({
-        schemaVersion: 2,
+        schemaVersion: 3,
         updatedAt: validEmployee.updatedAt,
         employees: [
           validEmployee,

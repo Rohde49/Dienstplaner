@@ -31,6 +31,7 @@ export type MonthlyPlansApi = {
   get: (id: string) => Promise<MonthlyPlanLoadResult>;
   create: (input: MonthlyPlanInput) => Promise<MonthlyPlan>;
   save: (plan: MonthlyPlan) => Promise<MonthlyPlan>;
+  remove: (id: string) => Promise<void>;
 };
 
 /** Beschreibt alle Funktionen, die der Oberfläche bereitgestellt werden. */
