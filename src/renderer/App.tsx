@@ -1,78 +1,10 @@
 import { useState } from 'react';
-import { toast, Toaster } from 'sonner';
+import { Toaster } from 'sonner';
 
-import {
-  AppShell,
-  PageHeader,
-  Toolbar,
-  type AppPage,
-} from './components/layout';
-import {
-  Alert,
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './components/ui';
+import { AppShell, type AppPage } from './components/layout';
+import { PlannerPage } from './features/planner/PlannerPage';
 import { TeamPage } from './features/team/TeamPage';
 import { EntryTypesPage } from './features/entry-types/EntryTypesPage';
-
-type PageInformation = {
-  title: string;
-  description: string;
-};
-
-const pageInformation: Record<'planner', PageInformation> = {
-  planner: {
-    title: 'Dienstplan',
-    description: 'Monatspläne erstellen, bearbeiten und auswerten.',
-  },
-};
-
-/** Zeigt für einen noch nicht umgesetzten Bereich eine Vorschauseite an. */
-function PlaceholderPage({ title, description }: PageInformation) {
-  return (
-    <>
-      <PageHeader title={title} description={description} />
-
-      <div className="space-y-4 p-6 lg:p-8">
-        <Toolbar
-          actions={
-            <Button
-              onClick={() => toast.success('Visuelles Feedback funktioniert.')}
-            >
-              Feedback testen
-            </Button>
-          }
-        >
-          <span className="text-app-muted text-sm">Aktiver Bereich:</span>
-          <Badge variant="primary">{title}</Badge>
-        </Toolbar>
-
-        <Card>
-          <CardHeader>
-            <Badge variant="success">UI-Grundlage eingerichtet</Badge>
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>
-              Dieser Bereich wird später mit den zugehörigen Komponenten und
-              Funktionen aufgebaut.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <Alert title="Komponentenbasis aktiv">
-              Globale Oberflächen- und Feedback-Komponenten können einheitlich
-              verwendet werden.
-            </Alert>
-          </CardContent>
-        </Card>
-      </div>
-    </>
-  );
-}
 
 /** Steuert die Seitennavigation und zeigt den aktuell gewählten Bereich an. */
 export function App() {
@@ -86,7 +18,7 @@ export function App() {
         ) : activePage === 'entry-types' ? (
           <EntryTypesPage />
         ) : (
-          <PlaceholderPage {...pageInformation[activePage]} />
+          <PlannerPage onNavigate={setActivePage} />
         )}
       </AppShell>
 

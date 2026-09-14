@@ -63,13 +63,13 @@ Abschnitte beschreiben die noch offene Feature-Umsetzung.
 **Ziel:** Beim Start erscheint eine verständliche, noch nicht bearbeitbare
 Vorschau. Gleichzeitig entsteht das Zustandsmodell für die weiteren Schritte.
 
-- [ ] Eigene `PlannerPage` anlegen, einbinden und Vorschau, gespeicherten
+- [x] Eigene `PlannerPage` anlegen, einbinden und Vorschau, gespeicherten
       Ausgangsstand, Entwurf, Sicherungs-, Lade- und Fehlerzustand klar trennen.
-- [ ] Aktuellen Monat und aktuelles Jahr initial auswählen sowie Monatswechsel
+- [x] Aktuellen Monat und aktuelles Jahr initial auswählen sowie Monatswechsel
       und dokumentierte Jahresauswahl umsetzen.
-- [ ] Vorschau aus aktuellem Team und Kalender bilden, als „Vorschau · nicht
+- [x] Vorschau aus aktuellem Team und Kalender bilden, als „Vorschau · nicht
       angelegt“ kennzeichnen und niemals automatisch einen Plan laden.
-- [ ] Ohne aktive Mitarbeiter den vorgesehenen Leerzustand mit „Zur
+- [x] Ohne aktive Mitarbeiter den vorgesehenen Leerzustand mit „Zur
       Teamverwaltung“ anzeigen und die Plananlage sperren.
 
 **Abnahme:** Start und Zeitraumwechsel zeigen den richtigen Monat als
