@@ -1,0 +1,330 @@
+# Planungsseite
+
+Die Planungsseite ist die Startansicht des Dienstplaners. Sie soll die
+Teamleitung dabei unterstützen, Monatspläne bewusst anzulegen oder zu laden,
+Einträge für Mitarbeiter und Kalendertage zu planen, wichtige Kennzahlen direkt
+zu beobachten und Änderungen ausdrücklich zu speichern.
+
+## Zweck und Umfang
+
+Zur Planungsseite gehören:
+
+- eine Monats- und Jahresauswahl mit vorherigem und nächstem Monat,
+- ein nicht gespeicherter Vorschauplan,
+- das bewusste Anlegen neuer Monatspläne,
+- ein globaler Ladedialog für alle gespeicherten Monatspläne,
+- das bestätigte Löschen gespeicherter Monatspläne,
+- eine bearbeitbare Planungstabelle,
+- Planungseinträge, Rufbereitschaften und Tagesbemerkungen,
+- unmittelbar aktualisierte Planungskennzahlen,
+- ein erkennbarer ungespeicherter Entwurf,
+- ausdrückliches Speichern und
+- Schutz vor dem Verlust ungespeicherter Änderungen.
+
+## Seitenaufbau
+
+Die Anwendung startet maximiert, aber nicht im Vollbildmodus. Die normale
+Windows-Titelleiste und die Möglichkeit zum Wiederherstellen des Fensters
+bleiben erhalten. Die kleinste unterstützte Fenstergröße beträgt `1024 × 700`
+Pixel.
+
+Die Planungsseite nutzt die verbleibende Inhaltsbreite und gliedert sich in:
+
+1. Seitenkopf mit Titel, Speicherstatus und Aktion „Speichern“,
+2. Werkzeugleiste mit Zeitraum, „Laden“ und „Dienstplan erstellen“,
+3. dauerhafte Lade-, Fehler-, Sicherungs- oder Änderungshinweise,
+4. Planungstabelle und
+5. Legende.
+
+Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
+schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
+Beschriftungen oder Tooltips verfügbar. Ab `1280` Pixeln werden Symbol und
+Beschriftung gemeinsam angezeigt.
+
+## Anfangszustand und Vorschau
+
+Beim Öffnen der Planungsseite wird kein gespeicherter Plan automatisch geladen.
+Das gilt auch dann, wenn für den gewählten Zeitraum genau ein Plan vorhanden
+ist.
+
+Stattdessen zeigt die Seite einen nicht bearbeitbaren Vorschauplan für den
+gewählten Monat mit:
+
+- allen Kalendertagen des Monats,
+- den aktuell aktiven Mitarbeitern in ihrer aktuellen Reihenfolge und
+- den Kennzahlen des leeren Planungsstands.
+
+Die Vorschau trägt den sichtbaren Status „Vorschau · nicht angelegt“. Sie ist
+kein gespeicherter Monatsplan und besitzt noch keine verbindlichen Snapshots.
+Planungseinträge, Rufbereitschaften und Bemerkungen können erst nach der
+Plananlage bearbeitet werden.
+
+Sind keine aktiven Mitarbeiter vorhanden, bleibt die Zeitraumsauswahl
+verfügbar. Anstelle der Monatstabelle erscheint ein verständlicher Leerzustand
+mit der Aktion „Zur Teamverwaltung“. „Dienstplan erstellen“ ist in diesem
+Zustand deaktiviert.
+
+Ein Wechsel des Monats oder Jahres lädt niemals automatisch einen passenden
+Plan. Er führt zurück zur Vorschau des gewählten Zeitraums. Vorhandene
+ungespeicherte Änderungen werden zuvor geschützt.
+
+## Monatsplan anlegen
+
+„Dienstplan erstellen“ öffnet einen Dialog für den verpflichtenden Plantitel.
+Äußere Leerzeichen werden entfernt; der Titel darf höchstens 200 Zeichen
+enthalten.
+
+Ein Plan darf nur mit mindestens einem aktiven Mitarbeiter angelegt werden.
+Beim Anlegen werden:
+
+1. Jahr, Monat und Titel geprüft,
+2. die aktuell aktiven Mitarbeiter in ihrer Reihenfolge als Snapshots
+   übernommen,
+3. sämtliche Kalendertage des Monats erzeugt,
+4. der neue Plan unmittelbar gespeichert und
+5. der gespeicherte Rückgabestand als Ausgangsstand der Oberfläche übernommen.
+
+Mehrere Pläne dürfen denselben Monat und dasselbe Jahr besitzen. Jeder Plan wird
+durch seine eigene UUID unterschieden. Jahr und Monat bleiben nach der Anlage
+unveränderlich.
+
+Der Plantitel steht oberhalb der Planungstabelle und kann über eine Stift-Aktion
+bearbeitet werden. Eine Titeländerung gehört zunächst zum Entwurf und wird erst
+mit dem gesamten Plan gespeichert. In der Vorschau steht diese Bearbeitung
+nicht zur Verfügung.
+
+## Monatsplan laden
+
+Ein gespeicherter Plan wird ausschließlich über „Laden“ geöffnet. Die Aktion
+öffnet immer einen Auswahldialog, auch wenn kein oder nur ein Plan vorhanden
+ist.
+
+Der Dialog zeigt alle gespeicherten Pläne unabhängig vom aktuell gewählten
+Zeitraum. Jeder Eintrag enthält:
+
+- Titel,
+- Monat und Jahr,
+- Erstellungszeitpunkt und
+- letzten Änderungszeitpunkt.
+
+Die Liste wird nach dem letzten Änderungszeitpunkt absteigend sortiert. Die
+technische Plan-ID bleibt in der normalen Oberfläche verborgen und dient nur
+der eindeutigen Verarbeitung. Gibt es noch keinen Plan, bleibt der Dialog
+geöffnet und zeigt einen verständlichen Leerzustand.
+
+Nach der Auswahl werden Monat und Jahr auf den Zeitraum des Plans gesetzt. Die
+Planungsseite verwendet ausschließlich die gespeicherten Mitarbeiter-,
+Kalender- und Eintragssnapshots dieses Plans. Aktuelle Stammdaten ersetzen diese
+nicht.
+
+## Monatsplan löschen
+
+Jeder Plan im Ladedialog besitzt eine zugänglich beschriftete Löschaktion. Vor
+dem Löschen bestätigt der Benutzer einen Dialog, der Titel und Zeitraum des
+betroffenen Plans nennt.
+
+Dabei gilt:
+
+- Ein nicht geöffneter Plan darf auch gelöscht werden, wenn der aktuell
+  bearbeitete Plan ungespeicherte Änderungen besitzt.
+- Der aktuell geöffnete Plan darf nur ohne ungespeicherte Änderungen gelöscht
+  werden.
+- Nach dem Löschen des geöffneten Plans erscheint die Vorschau desselben
+  Zeitraums.
+- Während eines Löschvorgangs sind weitere Lade- und Löschaktionen gesperrt.
+- Nach erfolgreichem Löschen wird die Liste aktualisiert; der Ladedialog bleibt
+  geöffnet.
+
+Das bestätigte Löschen eines vollständigen Plans ist vom bestätigungsfreien
+Entfernen eines einzelnen Planungseintrags zu unterscheiden.
+
+## Planungstabelle
+
+Die Planungstabelle führt die Kalendertage zeilenweise und die im Plan
+gespeicherten Mitarbeiter spaltenweise. Rechts hinter den Mitarbeiterspalten
+stehen „Rufbereitschaft“ und „Bemerkung“.
+
+Jeder Mitarbeiter besitzt zwei Teilspalten:
+
+1. **Eintrag:** bearbeitbare Zelle zum Setzen eines Planungseintrags und zur
+   Anzeige seines Kürzels,
+2. **Zeit:** nicht bearbeitbare Anzeige von Beginn und Ende, beispielsweise
+   `06:00–14:00`.
+
+Uhrzeiten stammen aus dem gespeicherten Eintragssnapshot und werden nicht in der
+Planungszelle bearbeitet. Ein über Mitternacht reichender Eintrag bleibt dem Tag
+seiner Planungszelle zugeordnet.
+
+Der vollständige Tabellenkopf bleibt beim vertikalen Scrollen sichtbar. Die
+Datumsspalte bleibt beim horizontalen Scrollen links stehen. Abschlusszeilen
+für Ist- und Soll-Arbeitszeit verbleiben am normalen Tabellenende und werden
+nicht fixiert.
+
+### Farben und Kalendertage
+
+- Wochenendzeilen erhalten eine graue beziehungsweise dunklere Kennzeichnung.
+- Feiertagszeilen werden rot gekennzeichnet und nennen den Feiertag auch
+  textlich.
+- Treffen mehrere Feiertagsbezeichnungen auf ein Datum zu, bleiben alle
+  sichtbar.
+- Ein Feiertag hat bei einer Überschneidung Vorrang vor der
+  Wochenendkennzeichnung.
+- Gewöhnliche Planungszellen bleiben neutral.
+- Die Mitarbeiterfarbe wird im jeweiligen Mitarbeiterkopf eingesetzt, trägt
+  die Zuordnung aber nicht allein.
+
+Die fachlichen Kalender- und Feiertagsregeln stehen unter
+[Kalender und Arbeitstage](../fachlichkeit/berechnungen/kalender-und-arbeitstage.md).
+
+## Planungseintrag setzen, ersetzen und entfernen
+
+Ein Klick auf die Teilspalte „Eintrag“ öffnet ein kompaktes Popover. Es bietet
+ausschließlich aktuell aktive Eintragsarten an. Jede Auswahl zeigt gleichwertig:
+
+- Kürzel und
+- Zeitspanne.
+
+Die ausführliche Bezeichnung wird in dieser kompakten Auswahl nicht angezeigt.
+Der aktuell gesetzte Eintrag ist deutlich markiert. Bei einer belegten Zelle
+wird zusätzlich „Eintrag entfernen“ angeboten. Das Entfernen benötigt keine
+Bestätigung, weil es zunächst nur den Entwurf verändert.
+
+Steht keine aktive Eintragsart zur Verfügung, erscheint der Hinweis nur im
+geöffneten Popover. Bei einer bereits belegten Zelle bleibt das Entfernen
+weiterhin möglich.
+
+Setzen oder Ersetzen erzeugt einen vollständigen Snapshot über die gemeinsame
+Fachlogik. Beim Ersetzen bleibt die UUID des vorhandenen Planungseintrags
+erhalten. Die Speichergrenze prüft neue oder ersetzte Einträge nochmals gegen
+die aktuell aktive Eintragsart und akzeptiert keine frei veränderten
+Snapshotwerte.
+
+Die konkreten Snapshot- und Zeitwertregeln stehen unter
+[Berechnungen von Planungseinträgen](../fachlichkeit/berechnungen/planungseintraege.md).
+
+## Rufbereitschaft
+
+Pro Kalendertag kann höchstens eine Rufbereitschaft gesetzt werden. Die Auswahl
+enthält ausschließlich Mitarbeiter mit der im Plan gespeicherten Rolle
+`Erzieher`. Eine spätere Rollenänderung im Mitarbeiterstamm verändert die
+Auswahl eines bestehenden Plans nicht.
+
+„Keine Rufbereitschaft“ entfernt eine bestehende Zuordnung ohne Bestätigung.
+Eine Rufbereitschaft und ein normaler Planungseintrag derselben Person dürfen am
+selben Tag nebeneinander bestehen.
+
+Enthält der Plan keinen Erzieher, bleibt die Zelle bedienbar und erklärt den
+leeren Zustand ausschließlich im geöffneten Popover.
+
+## Tagesbemerkung
+
+Eine Bemerkung gehört zu genau einem Kalendertag, ist optional und auf 60
+Zeichen begrenzt. Äußere Leerzeichen werden entfernt; ein anschließend leerer
+Wert wird als nicht vorhandene Bemerkung gespeichert.
+
+Eine leere Zelle zeigt keinen Platzhalter. Vorhandener Inhalt erscheint als
+gekürzte Vorschau und darf die Zeilenhöhe nicht unkontrolliert vergrößern. Die
+Bearbeitung erfolgt in einem Popover mit:
+
+- einem beschrifteten mehrzeiligen Eingabefeld,
+- einer Anzeige der verwendeten Zeichen und
+- den Aktionen „Übernehmen“ und „Abbrechen“.
+
+Erst „Übernehmen“ überträgt die Eingabe in den Planentwurf. „Abbrechen“, Escape
+oder ein Klick außerhalb verwerfen die noch nicht übernommene Eingabe.
+
+## Sichtbare Kennzahlen
+
+Alle Kennzahlen werden nach jeder Entwurfsänderung aus dem aktuellen
+Monatsplanstand neu berechnet. Die Planungsseite ordnet die gemeinsamen
+Berechnungsergebnisse lediglich ihrer Darstellung zu.
+
+Im Mitarbeiterkopf erscheinen:
+
+| Snapshot-Rolle   | Sichtbare Kennzahlen                         |
+| ---------------- | -------------------------------------------- |
+| Erzieher         | SN/F-Dienste, freie Tage, Soll-Ist-Differenz |
+| Praktikant       | SN/F-Dienste, freie Tage, Soll-Ist-Differenz |
+| Wirtschaftskraft | freie Tage, Soll-Ist-Differenz               |
+
+Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
+Soll-Arbeitszeit. Diese Werte unterstützen die laufende Planung, ersetzen aber
+nicht die spätere ausführliche Auswertung.
+
+Die verbindlichen Formeln und Zählregeln werden ausschließlich unter
+[Berechnungen](../fachlichkeit/berechnungen/monatskennzahlen.md) gepflegt.
+
+## Entwurf, Speichern und Verlustschutz
+
+Die Oberfläche hält den zuletzt geladenen oder gespeicherten Ausgangsstand und
+den aktuell bearbeiteten Entwurf getrennt.
+
+Titel, Planungseinträge, Rufbereitschaften und Bemerkungen werden nicht nach
+jeder Änderung gespeichert. Änderungen erscheinen sofort in Tabelle und
+Kennzahlen. Der sichtbare Gesamtstatus lautet „Ungespeicherte Änderungen“; nach
+einzelnen Planungsschritten erscheint kein Erfolgstoast.
+
+„Speichern“ ist nur bei Änderungen verfügbar. Eine Ausnahme ist ein aus einer
+Sicherungsdatei wiederhergestellter Plan, der auch ohne weitere Inhaltsänderung
+ausdrücklich gespeichert werden kann. Während des Speicherns sind die
+Speicheraktion und kollidierende Bearbeitungen gesperrt.
+
+Nach erfolgreichem Speichern wird der vom Main Process zurückgegebene Plan zum
+neuen Ausgangsstand. Bei einem Fehler bleibt der Entwurf erhalten und eine
+dauerhafte Fehlermeldung bietet einen erneuten Versuch an.
+
+Beim Wechsel von Seite, Zeitraum oder Plan sowie beim Schließen der Anwendung
+werden ungespeicherte Änderungen durch dieselbe Entscheidung geschützt:
+
+- Speichern und fortfahren,
+- Änderungen verwerfen oder
+- Abbrechen.
+
+Erst ein erfolgreiches Speichern setzt die beabsichtigte Aktion fort. Das bloße
+Öffnen des Ladedialogs verwirft noch nichts; der Schutz greift erst bei der
+Auswahl eines anderen Plans.
+
+## Wiederherstellung und Fehlerzustände
+
+Wahrnehmbare Lade-, Speicher- und Löschvorgänge erhalten einen sichtbaren
+Beschäftigtzustand. Fehler erscheinen möglichst nahe an der betroffenen Aktion
+und bleiben sichtbar, solange sie relevant sind. Technische Rohmeldungen dürfen
+nicht die einzige Erklärung sein.
+
+Wurde ein Plan aus seiner Sicherungsdatei geladen, lautet der sichtbare Status
+„Aus Sicherung geladen · Speichern erforderlich“. Dieser Zustand wird wie eine
+ungespeicherte Änderung geschützt und bleibt bestehen, bis ein anderer Plan
+geladen oder der wiederhergestellte Stand ausdrücklich gespeichert wurde.
+
+Die technischen Grenzen der Sicherung und Wiederherstellung werden in der
+[Datenhaltung](../architektur/datenhaltung.md) beschrieben.
+
+## Barrierearme Bedienung
+
+- Jede Planungszelle erhält einen zugänglichen Namen aus Datum, Mitarbeiter und
+  aktuellem Eintrag.
+- Rufbereitschaft und Bemerkung sind eindeutig ihrem Datum zugeordnet.
+- Auswahlzustände und ungespeicherte Änderungen werden nicht ausschließlich
+  durch Farbe vermittelt.
+- Dialoge, Popover und Listen sind per Tastatur bedienbar.
+- Löschsymbole besitzen eine sichtbare oder assistiv verfügbare Beschriftung.
+- Der Fokus bleibt nach dem Schließen eines Popovers oder Dialogs
+  nachvollziehbar.
+
+Das Eintrags-Popover unterstützt Tab, Enter beziehungsweise Leertaste und
+Escape. Eine besondere Pfeiltastennavigation über die gesamte Planungstabelle
+ist nicht vorgesehen.
+
+## Abgrenzung
+
+Nicht zur Planungsseite gehören:
+
+- die ausführliche Auswertungstabelle,
+- die eigenständige Kompaktansicht,
+- eine Druckvorschau,
+- Drucken und PDF-Export sowie
+- das nachträgliche Ergänzen, Entfernen oder Umsortieren der im Plan
+  eingefrorenen Mitarbeiter.
+
+Für Kompaktansicht, Drucken und PDF-Export werden keine funktionslosen Aktionen
+oder Platzhalter auf der Planungsseite angezeigt.
