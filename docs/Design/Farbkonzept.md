@@ -66,10 +66,10 @@ Falls ein Feiertag auf ein Wochenende fällt, besitzt die Feiertagsdarstellung V
 
 Für Mitarbeiter verwenden wir eine verbindliche Palette aus acht gespeicherten
 Farbschlüsseln. Die Auswahlpunkte sind kräftiger, Mitarbeiterköpfe verwenden
-helle Flächen mit dunklem Text und Mitarbeiterzellen eine nochmals dezentere
-Fläche:
+helle Flächen mit dunklem Text. Eine nochmals dezentere Flächenvariante steht
+für andere Zuordnungsdarstellungen außerhalb der Planungsmatrix bereit:
 
-| Farbe  | Schlüssel | Auswahlpunkt    | Mitarbeiterkopf                                   | Mitarbeiterzelle                                    |
+| Farbe  | Schlüssel | Auswahlpunkt    | Mitarbeiterkopf                                   | Dezente Zusatzfläche                                |
 | ------ | --------- | --------------- | ------------------------------------------------- | --------------------------------------------------- |
 | Blau   | `blue`    | `bg-blue-500`   | `bg-blue-100 border-blue-300 text-blue-900`       | `bg-blue-50/50 border-blue-200 text-blue-950`       |
 | Grün   | `green`   | `bg-green-500`  | `bg-green-100 border-green-300 text-green-900`    | `bg-green-50/50 border-green-200 text-green-950`    |
@@ -86,9 +86,9 @@ Planungsseite dieselbe Zuordnung wiederverwenden und Tailwind erkennt alle
 benötigten Klassen beim Erstellen der Anwendung.
 
 Die Mitarbeiterfarbe sollte hauptsächlich im Mitarbeiterkopf, am Namen oder als
-Farbstreifen erscheinen. Die sehr dezente Zellenvariante darf einzelne
-Mitarbeiterzellen unterstützen, füllt aber nicht unnötig die gesamte
-Dienstplanzeile aus.
+Farbstreifen erscheinen. Gewöhnliche Planungszellen bleiben neutral und
+verwenden die dezente Zusatzfläche nicht. So bleiben die Kennzeichnungen von
+Wochenenden und Feiertagen über die gesamte Dienstplanzeile eindeutig.
 
 ## 6. Verbindliche Farbregeln
 
