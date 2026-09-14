@@ -34,6 +34,8 @@ Zum Arbeitspaket gehören insbesondere:
 
 Die verbindliche fachliche Beschreibung steht in der
 [Planungsseite](../features/planungsseite.md).
+Der überprüfte Fortschritt und die nächsten Implementierungsabschnitte stehen
+im [Umsetzungsplan der Planungsseite](umsetzungsplan-planungsseite.md).
 
 ## Anschließende Arbeitspakete
 
