@@ -82,11 +82,3 @@ den jeweils zuständigen Dokumenten festgehalten.
   dauerhafte Projektdokumentation.
 - Vergangene Entscheidungen werden nur dokumentiert, wenn ihre Begründung für
   das heutige Verhalten weiterhin notwendig ist.
-
-## Migrationsarchiv
-
-Der Ordner `docs-alt/` außerhalb dieser Dokumentation enthält den Stand vor der
-laufenden Dokumentationsmigration. Er ist kein Bestandteil der aktuellen
-Projektdokumentation und keine verbindliche Quelle für Implementierungen. Er
-wird nur für den Abschluss der Migration herangezogen und ansonsten nicht
-gelesen.

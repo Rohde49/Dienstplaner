@@ -3,6 +3,5 @@ node_modules/
 out/
 dist/
 coverage/
-docs-alt/
 package-lock.json
 *.log
