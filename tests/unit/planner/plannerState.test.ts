@@ -2,13 +2,19 @@ import { describe, expect, it } from 'vitest';
 
 import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
 import {
+  beginPlannerSave,
   beginPlannerTeamLoad,
+  completePlannerSave,
   completePlannerTeamLoad,
   createInitialPlannerPageState,
+  discardPlannerChanges,
+  failPlannerSave,
   failPlannerTeamLoad,
   getAdjacentPlannerPeriod,
   getPlannerYearOptions,
+  hasUnsavedPlannerChanges,
   openPlannerPlan,
+  replacePlannerDraft,
   returnToPlannerPreview,
   selectPlannerPeriod,
 } from '../../../src/renderer/features/planner/plannerState';
@@ -208,6 +214,104 @@ describe('Planungsseitenzustand', () => {
     }
     expect(state.document.preview.calendarDays).toHaveLength(28);
     expect(state.document.preview.employees).toHaveLength(1);
+  });
+
+  it('erkennt Entwurfsänderungen und Sicherungsstände als ungespeichert', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+      employees: readyState.team,
+    });
+    const cleanState = openPlannerPlan(readyState, plan, false);
+    const changedState = replacePlannerDraft(cleanState, {
+      ...plan,
+      title: 'Entwurf',
+    });
+    const recoveredState = openPlannerPlan(readyState, plan, true);
+
+    expect(hasUnsavedPlannerChanges(cleanState)).toBe(false);
+    expect(hasUnsavedPlannerChanges(changedState)).toBe(true);
+    expect(hasUnsavedPlannerChanges(recoveredState)).toBe(true);
+  });
+
+  it('bewahrt den Entwurf bei Fehlern und übernimmt nur den gespeicherten Rückgabestand', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+      employees: readyState.team,
+    });
+    const changedState = replacePlannerDraft(
+      openPlannerPlan(readyState, plan, false),
+      { ...plan, title: 'Entwurf' },
+    );
+
+    const savingState = beginPlannerSave(changedState);
+    const errorState = failPlannerSave(
+      savingState,
+      'Datenträger nicht verfügbar.',
+    );
+    const savedPlan = {
+      ...plan,
+      title: 'Vom Main Process gespeichert',
+      updatedAt: '2026-09-15T08:00:00.000Z',
+    };
+    const savedState = completePlannerSave(errorState, savedPlan);
+
+    expect(errorState.save).toEqual({
+      status: 'error',
+      errorMessage: 'Datenträger nicht verfügbar.',
+    });
+    expect(errorState.document.kind).toBe('plan');
+    if (errorState.document.kind !== 'plan') {
+      throw new Error('Planansicht erwartet.');
+    }
+    expect(errorState.document.draft.title).toBe('Entwurf');
+    expect(savedState.document.kind).toBe('plan');
+    if (savedState.document.kind !== 'plan') {
+      throw new Error('Planansicht erwartet.');
+    }
+    expect(savedState.document.baseline.title).toBe(
+      'Vom Main Process gespeichert',
+    );
+    expect(savedState.document.draft).toEqual(savedState.document.baseline);
+    expect(savedState.save.status).toBe('idle');
+    expect(hasUnsavedPlannerChanges(savedState)).toBe(false);
+  });
+
+  it('stellt beim Verwerfen den gespeicherten Ausgangsstand wieder her', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+      employees: readyState.team,
+    });
+    const changedState = replacePlannerDraft(
+      openPlannerPlan(readyState, plan, false),
+      { ...plan, title: 'Entwurf' },
+    );
+
+    const state = discardPlannerChanges(changedState);
+
+    expect(state.document.kind).toBe('plan');
+    if (state.document.kind !== 'plan') {
+      throw new Error('Planansicht erwartet.');
+    }
+    expect(state.document.draft.title).toBe('Septemberplan');
+    expect(hasUnsavedPlannerChanges(state)).toBe(false);
   });
 
   it('sperrt die Plananlage ohne aktive Mitarbeiter fachlich durch eine leere Vorschau', () => {

@@ -61,11 +61,17 @@ export type PlannerLoadState =
   | { status: 'ready'; errorMessage: null }
   | { status: 'error'; errorMessage: string };
 
+export type PlannerSaveState =
+  | { status: 'idle'; errorMessage: null }
+  | { status: 'saving'; errorMessage: null }
+  | { status: 'error'; errorMessage: string };
+
 export type PlannerPageState = {
   period: PlannerPeriod;
   team: readonly Employee[];
   document: PlannerDocumentState;
   load: PlannerLoadState;
+  save: PlannerSaveState;
 };
 
 function assertValidPeriod(period: PlannerPeriod): void {
@@ -139,6 +145,7 @@ export function createInitialPlannerPageState(now: Date): PlannerPageState {
     team: [],
     document: createPreviewDocument(period, []),
     load: { status: 'loading', errorMessage: null },
+    save: { status: 'idle', errorMessage: null },
   };
 }
 
@@ -190,6 +197,7 @@ export function selectPlannerPeriod(
     ...state,
     period,
     document: createPreviewDocument(period, state.team),
+    save: { status: 'idle', errorMessage: null },
   };
 }
 
@@ -211,6 +219,7 @@ export function openPlannerPlan(
       draft: structuredClone(baseline),
       recoveredFromBackup,
     },
+    save: { status: 'idle', errorMessage: null },
   };
 }
 
@@ -235,6 +244,89 @@ export function replacePlannerDraft(
       ...state.document,
       draft: validatedDraft,
     },
+    save: { status: 'idle', errorMessage: null },
+  };
+}
+
+/** Erkennt Inhaltsänderungen sowie einen speicherpflichtigen Sicherungsstand. */
+export function hasUnsavedPlannerChanges(state: PlannerPageState): boolean {
+  return (
+    state.document.kind === 'plan' &&
+    (state.document.recoveredFromBackup ||
+      JSON.stringify(state.document.baseline) !==
+        JSON.stringify(state.document.draft))
+  );
+}
+
+/** Markiert den laufenden Speichervorgang, ohne den Entwurf zu verändern. */
+export function beginPlannerSave(state: PlannerPageState): PlannerPageState {
+  if (state.document.kind !== 'plan') {
+    throw new Error('Eine Vorschau kann nicht gespeichert werden.');
+  }
+
+  return {
+    ...state,
+    save: { status: 'saving', errorMessage: null },
+  };
+}
+
+/** Übernimmt ausschließlich den vom Main Process gespeicherten Rückgabestand. */
+export function completePlannerSave(
+  state: PlannerPageState,
+  savedPlan: MonthlyPlan,
+): PlannerPageState {
+  if (state.document.kind !== 'plan') {
+    throw new Error('Es ist kein Monatsplan zum Speichern geöffnet.');
+  }
+
+  const validatedPlan = monthlyPlanSchema.parse(savedPlan);
+
+  if (validatedPlan.id !== state.document.baseline.id) {
+    throw new Error(
+      'Der gespeicherte Rückgabestand gehört zu einem anderen Plan.',
+    );
+  }
+
+  return {
+    ...state,
+    document: {
+      kind: 'plan',
+      preview: null,
+      baseline: validatedPlan,
+      draft: structuredClone(validatedPlan),
+      recoveredFromBackup: false,
+    },
+    save: { status: 'idle', errorMessage: null },
+  };
+}
+
+/** Bewahrt den Entwurf und hält einen Speicherfehler dauerhaft fest. */
+export function failPlannerSave(
+  state: PlannerPageState,
+  errorMessage: string,
+): PlannerPageState {
+  return {
+    ...state,
+    save: { status: 'error', errorMessage },
+  };
+}
+
+/** Verwirft Entwurfsänderungen und einen nicht bestätigten Sicherungszustand. */
+export function discardPlannerChanges(
+  state: PlannerPageState,
+): PlannerPageState {
+  if (state.document.kind !== 'plan') {
+    return state;
+  }
+
+  return {
+    ...state,
+    document: {
+      ...state.document,
+      draft: structuredClone(state.document.baseline),
+      recoveredFromBackup: false,
+    },
+    save: { status: 'idle', errorMessage: null },
   };
 }
 
@@ -245,6 +337,7 @@ export function returnToPlannerPreview(
   return {
     ...state,
     document: createPreviewDocument(state.period, state.team),
+    save: { status: 'idle', errorMessage: null },
   };
 }
 

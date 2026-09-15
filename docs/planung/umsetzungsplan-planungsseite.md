@@ -141,15 +141,15 @@ den dokumentierten Regeln.
 **Ziel:** Änderungen werden bewusst gespeichert und können weder durch Fehler
 noch durch Navigation unbemerkt verloren gehen.
 
-- [ ] Ausgangsstand und Entwurf zuverlässig vergleichen, ungespeicherte
+- [x] Ausgangsstand und Entwurf zuverlässig vergleichen, ungespeicherte
       Änderungen anzeigen und nur dann das Speichern anbieten.
-- [ ] Über `monthlyPlans.save` speichern, Parallelaktionen verhindern und erst
+- [x] Über `monthlyPlans.save` speichern, Parallelaktionen verhindern und erst
       den validierten Rückgabestand zum neuen Ausgangsstand machen.
-- [ ] Bei Speicherfehlern den Entwurf erhalten und eine dauerhafte Meldung mit
+- [x] Bei Speicherfehlern den Entwurf erhalten und eine dauerhafte Meldung mit
       erneutem Versuch anbieten.
-- [ ] Sicherungszustand bis zum ausdrücklichen Speichern oder Planwechsel als
+- [x] Sicherungszustand bis zum ausdrücklichen Speichern oder Planwechsel als
       „Aus Sicherung geladen · Speichern erforderlich“ behandeln.
-- [ ] Einen gemeinsamen Schutzdialog für Zeitraum-, Plan- und Seitenwechsel
+- [x] Einen gemeinsamen Schutzdialog für Zeitraum-, Plan- und Seitenwechsel
       sowie für das Schließen des Electron-Fensters umsetzen.
 
 **Abnahme:** Speichern, Verwerfen und Abbrechen führen bei allen geschützten

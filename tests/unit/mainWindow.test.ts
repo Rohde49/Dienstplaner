@@ -3,10 +3,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const electronMocks = vi.hoisted(() => {
   let readyCallback: (() => void) | undefined;
   let readyToShowCallback: (() => void) | undefined;
+  let closeCallback:
+    ((event: { preventDefault: () => void }) => void) | undefined;
+  let confirmCloseCallback: (() => void) | undefined;
 
   const maximize = vi.fn();
   const show = vi.fn();
   const loadFile = vi.fn();
+  const close = vi.fn();
+  const send = vi.fn();
 
   return {
     app: {
@@ -24,19 +29,46 @@ const electronMocks = vi.hoisted(() => {
           readyToShowCallback = callback;
         }
       }),
+      on: vi.fn(
+        (
+          event: string,
+          callback: (event: { preventDefault: () => void }) => void,
+        ) => {
+          if (event === 'close') {
+            closeCallback = callback;
+          }
+        },
+      ),
+      webContents: { send },
       maximize,
       show,
+      close,
       loadFile,
       loadURL: vi.fn(),
     })),
+    ipcMain: {
+      on: vi.fn((event: string, callback: () => void) => {
+        if (event === 'app:confirm-close') {
+          confirmCloseCallback = callback;
+        }
+      }),
+      removeListener: vi.fn(),
+    },
     maximize,
     show,
+    close,
+    send,
     loadFile,
     runReadyCallback: () => readyCallback?.(),
     runReadyToShowCallback: () => readyToShowCallback?.(),
+    runCloseCallback: (event: { preventDefault: () => void }) =>
+      closeCallback?.(event),
+    runConfirmCloseCallback: () => confirmCloseCallback?.(),
     resetCallbacks: () => {
       readyCallback = undefined;
       readyToShowCallback = undefined;
+      closeCallback = undefined;
+      confirmCloseCallback = undefined;
     },
   };
 });
@@ -44,6 +76,7 @@ const electronMocks = vi.hoisted(() => {
 vi.mock('electron', () => ({
   app: electronMocks.app,
   BrowserWindow: electronMocks.browserWindow,
+  ipcMain: electronMocks.ipcMain,
 }));
 
 vi.mock('electron-squirrel-startup', () => ({ default: false }));
@@ -59,6 +92,7 @@ vi.mock('../../src/main/ipc/registerMonthlyPlanIpcHandlers', () => ({
 
 describe('Electron-Hauptfenster', () => {
   beforeEach(() => {
+    vi.resetModules();
     vi.clearAllMocks();
     electronMocks.resetCallbacks();
   });
@@ -82,5 +116,22 @@ describe('Electron-Hauptfenster', () => {
     expect(electronMocks.maximize.mock.invocationCallOrder[0]).toBeLessThan(
       electronMocks.show.mock.invocationCallOrder[0],
     );
+  });
+
+  it('wartet beim Schließen auf die ausdrückliche Freigabe der Oberfläche', async () => {
+    vi.stubGlobal('MAIN_WINDOW_VITE_DEV_SERVER_URL', undefined);
+    vi.stubGlobal('MAIN_WINDOW_VITE_NAME', 'main_window');
+    await import('../../src/main');
+    electronMocks.runReadyCallback();
+    const closeEvent = { preventDefault: vi.fn() };
+
+    electronMocks.runCloseCallback(closeEvent);
+
+    expect(closeEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(electronMocks.send).toHaveBeenCalledWith('app:close-requested');
+
+    electronMocks.runConfirmCloseCallback();
+
+    expect(electronMocks.close).toHaveBeenCalledOnce();
   });
 });

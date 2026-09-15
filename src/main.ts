@@ -1,9 +1,10 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import started from 'electron-squirrel-startup';
 import path from 'node:path';
 import { registerEntryTypeIpcHandlers } from './main/ipc/registerEntryTypeIpcHandlers';
 import { registerEmployeeIpcHandlers } from './main/ipc/registerEmployeeIpcHandlers';
 import { registerMonthlyPlanIpcHandlers } from './main/ipc/registerMonthlyPlanIpcHandlers';
+import { APP_IPC_CHANNELS } from './shared/ipc';
 
 if (started) {
   app.quit();
@@ -27,6 +28,26 @@ const createWindow = (): void => {
       nodeIntegration: false,
       sandbox: true,
     },
+  });
+  let closeConfirmed = false;
+
+  const confirmClose = (): void => {
+    closeConfirmed = true;
+    mainWindow.close();
+  };
+
+  mainWindow.on('close', (event) => {
+    if (closeConfirmed) {
+      return;
+    }
+
+    event.preventDefault();
+    mainWindow.webContents.send(APP_IPC_CHANNELS.closeRequested);
+  });
+
+  ipcMain.on(APP_IPC_CHANNELS.confirmClose, confirmClose);
+  mainWindow.once('closed', () => {
+    ipcMain.removeListener(APP_IPC_CHANNELS.confirmClose, confirmClose);
   });
 
   mainWindow.once('ready-to-show', () => {

@@ -22,3 +22,9 @@ export const MONTHLY_PLAN_IPC_CHANNELS = {
   save: 'monthly-plans:save',
   remove: 'monthly-plans:remove',
 } as const;
+
+/** Enthält die Kanäle für den geschützten Abschluss des Hauptfensters. */
+export const APP_IPC_CHANNELS = {
+  closeRequested: 'app:close-requested',
+  confirmClose: 'app:confirm-close',
+} as const;

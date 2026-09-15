@@ -34,8 +34,15 @@ export type MonthlyPlansApi = {
   remove: (id: string) => Promise<void>;
 };
 
+/** Beschreibt den begrenzten Lebenszykluszugriff der Oberfläche. */
+export type AppApi = {
+  onCloseRequested: (listener: () => void) => () => void;
+  confirmClose: () => void;
+};
+
 /** Beschreibt alle Funktionen, die der Oberfläche bereitgestellt werden. */
 export type DienstplanerApi = {
+  app: AppApi;
   employees: EmployeesApi;
   entryTypes: EntryTypesApi;
   monthlyPlans: MonthlyPlansApi;

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 import {
+  APP_IPC_CHANNELS,
   EMPLOYEE_IPC_CHANNELS,
   ENTRY_TYPE_IPC_CHANNELS,
   MONTHLY_PLAN_IPC_CHANNELS,
@@ -9,6 +10,19 @@ import {
 
 /** Stellt der Oberfläche nur die freigegebenen Mitarbeiterfunktionen bereit. */
 const dienstplanerApi: DienstplanerApi = {
+  app: {
+    onCloseRequested: (listener) => {
+      const wrappedListener = (): void => listener();
+      ipcRenderer.on(APP_IPC_CHANNELS.closeRequested, wrappedListener);
+
+      return () =>
+        ipcRenderer.removeListener(
+          APP_IPC_CHANNELS.closeRequested,
+          wrappedListener,
+        );
+    },
+    confirmClose: () => ipcRenderer.send(APP_IPC_CHANNELS.confirmClose),
+  },
   employees: {
     list: () => ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.list),
     create: (input) => ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.create, input),
