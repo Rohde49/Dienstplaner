@@ -42,20 +42,20 @@ const navigationItems: NavigationItem[] = [
 /** Zeigt den festen Seitenrahmen mit Navigation und aktuellem Seiteninhalt. */
 export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
   return (
-    <div className="bg-app-background grid min-h-screen grid-cols-[14rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)]">
+    <div className="bg-app-background grid min-h-screen grid-cols-[4.5rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)]">
       <aside className="border-app-border bg-app-surface flex min-h-screen flex-col border-r">
-        <div className="border-app-border flex h-16 items-center gap-3 border-b px-5">
+        <div className="border-app-border flex h-16 items-center justify-center gap-3 border-b px-3 xl:justify-start xl:px-5">
           <div className="bg-app-primary text-app-on-primary flex size-9 items-center justify-center rounded-lg">
             <CalendarDays aria-hidden="true" size={20} strokeWidth={1.8} />
           </div>
 
-          <div>
+          <div className="hidden xl:block">
             <p className="text-app-text font-semibold">Dienstplaner</p>
             <p className="text-app-muted text-xs">Dienstplanung</p>
           </div>
         </div>
 
-        <nav aria-label="Hauptnavigation" className="flex-1 p-3">
+        <nav aria-label="Hauptnavigation" className="flex-1 p-2 xl:p-3">
           <ul className="space-y-1">
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -66,7 +66,8 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
                   <button
                     type="button"
                     aria-current={isActive ? 'page' : undefined}
-                    className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                    title={item.label}
+                    className={`flex w-full items-center justify-center gap-3 rounded-md px-2 py-2.5 text-sm font-medium transition-colors xl:justify-start xl:px-3 xl:text-left ${
                       isActive
                         ? 'bg-app-primary-selected text-app-primary-foreground'
                         : 'text-app-muted hover:text-app-text hover:bg-app-surface-hover'
@@ -74,7 +75,7 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
                     onClick={() => onNavigate(item.id)}
                   >
                     <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
-                    <span>{item.label}</span>
+                    <span className="sr-only xl:not-sr-only">{item.label}</span>
                   </button>
                 </li>
               );
@@ -82,10 +83,10 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
           </ul>
         </nav>
 
-        <div className="border-app-border border-t p-4">
-          <div className="text-app-muted flex items-center gap-2 text-xs">
+        <div className="border-app-border border-t p-3 xl:p-4">
+          <div className="text-app-muted flex items-center justify-center gap-2 text-xs xl:justify-start">
             <HardDrive aria-hidden="true" size={15} />
-            <span>Lokale Desktop-Anwendung</span>
+            <span className="hidden xl:inline">Lokale Desktop-Anwendung</span>
           </div>
         </div>
       </aside>

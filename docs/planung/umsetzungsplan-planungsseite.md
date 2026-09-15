@@ -161,13 +161,13 @@ und setzt die beabsichtigte Aktion nicht fort.
 **Ziel:** Die fertige Planungsseite bleibt im unterstützten Desktopbereich
 verständlich und per Maus und Tastatur bedienbar.
 
-- [ ] Hauptnavigation zwischen `1024` und `1279` Pixeln als zugänglich
+- [x] Hauptnavigation zwischen `1024` und `1279` Pixeln als zugänglich
       beschriftete Symbolleiste und ab `1280` Pixeln vollständig darstellen.
-- [ ] Werkzeugleiste, Hinweise, Dialoge und Tabelle bei beiden Breiten sinnvoll
+- [x] Werkzeugleiste, Hinweise, Dialoge und Tabelle bei beiden Breiten sinnvoll
       anordnen, ohne Pflichtaktionen abzuschneiden.
-- [ ] Planungszellen und Aktionen zugänglich benennen sowie Fokusführung und
+- [x] Planungszellen und Aktionen zugänglich benennen sowie Fokusführung und
       Fokusrückgabe von Dialogen und Popovern prüfen.
-- [ ] Sicherstellen, dass gemeinsame Layoutänderungen Team- und
+- [x] Sicherstellen, dass gemeinsame Layoutänderungen Team- und
       Planungseintragverwaltung nicht verschlechtern.
 
 **Abnahme:** Die Kernabläufe sind bei `1024 × 700` und ab `1280` Pixeln mit
