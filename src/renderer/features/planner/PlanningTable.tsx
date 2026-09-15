@@ -4,13 +4,25 @@ import {
   formatDuration,
   formatTimeDifference,
 } from '../../../shared/calculations';
-import type { PlanEntry } from '../../../shared/schemas';
+import type { MonthlyPlan, PlanEntry } from '../../../shared/schemas';
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
+import {
+  DayNoteCellPopover,
+  OnCallCellPopover,
+  PlanEntryCellPopover,
+} from './PlannerCellPopovers';
+import {
+  removeDraftPlanEntry,
+  setDraftDayNote,
+  setDraftOnCallEmployee,
+  setDraftPlanEntry,
+} from './plannerDraft';
 import { createPlannerTableModel } from './plannerTableModel';
 import type { PlannerDocumentState } from './plannerState';
 
 type PlanningTableProps = {
   document: PlannerDocumentState;
+  onDraftChange?: (plan: MonthlyPlan) => void;
 };
 
 const WEEKDAY_NAMES = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as const;
@@ -30,8 +42,9 @@ function getDayClasses(isHoliday: boolean, isWeekend: boolean): string {
 }
 
 /** Stellt Vorschau und gespeicherten Plan als gemeinsame Monatsmatrix dar. */
-export function PlanningTable({ document }: PlanningTableProps) {
+export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
   const model = useMemo(() => createPlannerTableModel(document), [document]);
+  const editablePlan = document.kind === 'plan' ? document.draft : null;
   const employeesById = useMemo(
     () => new Map(model.employees.map((employee) => [employee.id, employee])),
     [model.employees],
@@ -161,11 +174,38 @@ export function PlanningTable({ document }: PlanningTableProps) {
                         key={`${calendarDay.date}-${employee.id}-entry`}
                         className="border-app-border text-app-text border-r border-b p-1 text-center font-semibold"
                       >
-                        <span
-                          aria-label={`${calendarDay.date}, ${employee.firstName} ${employee.lastName}, ${entry?.code ?? 'kein Eintrag'}`}
-                        >
-                          {entry?.code ?? '—'}
-                        </span>
+                        {editablePlan && planDay && onDraftChange ? (
+                          <PlanEntryCellPopover
+                            date={calendarDay.date}
+                            employeeName={`${employee.firstName} ${employee.lastName}`}
+                            currentEntry={entry}
+                            onSelect={(entryType) =>
+                              onDraftChange(
+                                setDraftPlanEntry(
+                                  editablePlan,
+                                  planDay.id,
+                                  employee.id,
+                                  entryType,
+                                ),
+                              )
+                            }
+                            onRemove={() =>
+                              onDraftChange(
+                                removeDraftPlanEntry(
+                                  editablePlan,
+                                  planDay.id,
+                                  employee.id,
+                                ),
+                              )
+                            }
+                          />
+                        ) : (
+                          <span
+                            aria-label={`${calendarDay.date}, ${employee.firstName} ${employee.lastName}, kein Eintrag`}
+                          >
+                            {entry?.code ?? '—'}
+                          </span>
+                        )}
                       </td>,
                       <td
                         key={`${calendarDay.date}-${employee.id}-time`}
@@ -177,14 +217,43 @@ export function PlanningTable({ document }: PlanningTableProps) {
                   })}
 
                   <td className="border-app-border text-app-muted border-r border-b p-1">
-                    {onCallEmployee
-                      ? `${onCallEmployee.firstName} ${onCallEmployee.lastName}`
-                      : '—'}
+                    {editablePlan && planDay && onDraftChange ? (
+                      <OnCallCellPopover
+                        date={calendarDay.date}
+                        employees={editablePlan.employees}
+                        selectedEmployeeId={planDay.onCallEmployeeId}
+                        onSelect={(employeeId) =>
+                          onDraftChange(
+                            setDraftOnCallEmployee(
+                              editablePlan,
+                              planDay.id,
+                              employeeId,
+                            ),
+                          )
+                        }
+                      />
+                    ) : onCallEmployee ? (
+                      `${onCallEmployee.firstName} ${onCallEmployee.lastName}`
+                    ) : (
+                      '—'
+                    )}
                   </td>
                   <td className="border-app-border text-app-muted max-w-56 border-b p-1">
-                    <span className="block truncate px-2 py-1">
-                      {planDay?.note ?? ''}
-                    </span>
+                    {editablePlan && planDay && onDraftChange ? (
+                      <DayNoteCellPopover
+                        date={calendarDay.date}
+                        note={planDay.note}
+                        onApply={(note) =>
+                          onDraftChange(
+                            setDraftDayNote(editablePlan, planDay.id, note),
+                          )
+                        }
+                      />
+                    ) : (
+                      <span className="block truncate px-2 py-1">
+                        {planDay?.note ?? ''}
+                      </span>
+                    )}
                   </td>
                 </tr>
               );

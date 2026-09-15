@@ -32,12 +32,15 @@ import {
   getAdjacentPlannerPeriod,
   getPlannerYearOptions,
   openPlannerPlan,
+  replacePlannerDraft,
   returnToPlannerPreview,
   selectPlannerPeriod,
 } from './plannerState';
 import { CreateMonthlyPlanDialog } from './CreateMonthlyPlanDialog';
+import { EditPlanTitleDialog } from './EditPlanTitleDialog';
 import { LoadMonthlyPlanDialog } from './LoadMonthlyPlanDialog';
 import { PlanningTable } from './PlanningTable';
+import { setDraftPlanTitle } from './plannerDraft';
 
 type PlannerPageProps = {
   onNavigate: (page: AppPage) => void;
@@ -246,7 +249,20 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
                   ? 'Aus Sicherung geladen · Speichern erforderlich'
                   : 'Gespeichert'}
               </Badge>
-              <CardTitle>{activePlan.title}</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle>{activePlan.title}</CardTitle>
+                <EditPlanTitleDialog
+                  plan={activePlan}
+                  onApply={(title) =>
+                    setState((currentState) =>
+                      replacePlannerDraft(
+                        currentState,
+                        setDraftPlanTitle(activePlan, title),
+                      ),
+                    )
+                  }
+                />
+              </div>
               <CardDescription>
                 {PLANNER_MONTHS[activePlan.month - 1]} {activePlan.year} ·{' '}
                 {activePlan.employees.length} Mitarbeiter ·{' '}
@@ -389,7 +405,14 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
         (state.load.status === 'ready' &&
           preview &&
           preview.employees.length > 0) ? (
-          <PlanningTable document={state.document} />
+          <PlanningTable
+            document={state.document}
+            onDraftChange={(draft) =>
+              setState((currentState) =>
+                replacePlannerDraft(currentState, draft),
+              )
+            }
+          />
         ) : null}
       </div>
     </>

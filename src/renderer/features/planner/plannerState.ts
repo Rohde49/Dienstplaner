@@ -214,6 +214,30 @@ export function openPlannerPlan(
   };
 }
 
+/** Übernimmt einen validierten Plan ausschließlich als aktuellen Entwurf. */
+export function replacePlannerDraft(
+  state: PlannerPageState,
+  draft: MonthlyPlan,
+): PlannerPageState {
+  if (state.document.kind !== 'plan') {
+    throw new Error('Eine Vorschau kann nicht bearbeitet werden.');
+  }
+
+  const validatedDraft = monthlyPlanSchema.parse(draft);
+
+  if (validatedDraft.id !== state.document.baseline.id) {
+    throw new Error('Der Entwurf gehört nicht zum geöffneten Monatsplan.');
+  }
+
+  return {
+    ...state,
+    document: {
+      ...state.document,
+      draft: validatedDraft,
+    },
+  };
+}
+
 /** Kehrt nach dem Löschen des geöffneten Plans zur Vorschau desselben Zeitraums zurück. */
 export function returnToPlannerPreview(
   state: PlannerPageState,

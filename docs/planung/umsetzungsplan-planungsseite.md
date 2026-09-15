@@ -121,15 +121,15 @@ Fachfunktionen.
 **Ziel:** Alle Inhalte des Plans lassen sich lokal im Entwurf ändern und wirken
 sich sofort auf Tabelle und Kennzahlen aus.
 
-- [ ] Kleine testbare Entwurfsoperationen bereitstellen und dabei vorhandene
+- [x] Kleine testbare Entwurfsoperationen bereitstellen und dabei vorhandene
       Snapshot- und Validierungslogik wiederverwenden.
-- [ ] Planungseinträge über ein tastaturbedienbares Popover setzen, ersetzen
+- [x] Planungseinträge über ein tastaturbedienbares Popover setzen, ersetzen
       und ohne Bestätigung entfernen; nur aktive Eintragsarten anbieten.
-- [ ] Rufbereitschaft aus den im Plan gespeicherten Erziehern auswählen oder
+- [x] Rufbereitschaft aus den im Plan gespeicherten Erziehern auswählen oder
       entfernen.
-- [ ] Tagesbemerkung mit 60-Zeichen-Grenze sowie „Übernehmen“ und „Abbrechen“
+- [x] Tagesbemerkung mit 60-Zeichen-Grenze sowie „Übernehmen“ und „Abbrechen“
       bearbeiten und den Plantitel über die Stift-Aktion ändern.
-- [ ] Nach jeder übernommenen Änderung die sichtbaren Kennzahlen aus dem
+- [x] Nach jeder übernommenen Änderung die sichtbaren Kennzahlen aus dem
       aktuellen Entwurf neu berechnen.
 
 **Abnahme:** Alle Bearbeitungen verändern nur den Entwurf. Ohne Speichern bleibt
