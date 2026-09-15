@@ -60,11 +60,11 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
     <div className="space-y-3">
       <div className="border-app-border max-h-[calc(100vh-19rem)] min-h-80 overflow-auto rounded-lg border shadow-sm">
         <table className="w-max min-w-full border-separate border-spacing-0 text-left text-xs">
-          <thead className="sticky top-0 z-30">
+          <thead className="sticky top-0 z-30 shadow-sm">
             <tr>
               <th
                 rowSpan={2}
-                className="border-app-border bg-app-surface-muted sticky left-0 z-40 w-32 min-w-32 border-r border-b px-3 py-2 text-center font-semibold"
+                className="border-app-border-strong sticky left-0 z-40 w-32 min-w-32 border-r-2 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
                 scope="col"
               >
                 Datum
@@ -79,7 +79,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     key={employee.id}
                     colSpan={2}
                     scope="colgroup"
-                    className={`min-w-48 border-r border-b text-center ${colorStyle.plannerHeaderClass}`}
+                    className={`min-w-48 border-r-2 border-b text-center ${colorStyle.plannerHeaderClass}`}
                   >
                     <span className="block px-3 py-2">
                       <span className="block font-semibold">
@@ -128,14 +128,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border bg-app-surface-muted min-w-40 border-r border-b px-3 py-2 text-center font-semibold"
+                className="border-app-border-strong min-w-40 border-r-2 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
               >
                 Rufbereitschaft
               </th>
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border bg-app-surface-muted min-w-56 border-b px-3 py-2 text-center font-semibold"
+                className="border-app-border-strong min-w-56 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
               >
                 Bemerkung
               </th>
@@ -146,14 +146,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                 <th
                   key={`${employee.id}-entry`}
                   scope="col"
-                  className="border-app-border bg-app-surface-muted min-w-20 border-r border-b px-2 py-1.5 text-center font-medium"
+                  className="border-app-border-strong min-w-20 border-r border-b-2 bg-slate-100 px-2 py-1.5 text-center font-medium"
                 >
                   Eintrag
                 </th>,
                 <th
                   key={`${employee.id}-time`}
                   scope="col"
-                  className="border-app-border bg-app-surface-muted min-w-28 border-r border-b px-2 py-1.5 text-center font-medium"
+                  className="border-app-border-strong min-w-28 border-r-2 border-b-2 bg-slate-100 px-2 py-1.5 text-center font-medium"
                 >
                   Zeit
                 </th>,
@@ -188,7 +188,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                 >
                   <th
                     scope="row"
-                    className={`border-app-border sticky left-0 z-10 w-32 min-w-32 border-r border-b text-center font-medium ${rowClasses}`}
+                    className={`border-app-border border-r-app-border-strong sticky left-0 z-10 w-32 min-w-32 border-r-2 border-b text-center font-medium ${rowClasses}`}
                   >
                     <button
                       type="button"
@@ -272,14 +272,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       </td>,
                       <td
                         key={`${calendarDay.date}-${employee.id}-time`}
-                        className="border-app-border text-app-muted border-r border-b px-2 py-2 text-center tabular-nums"
+                        className="border-app-border border-r-app-border-strong text-app-muted border-r-2 border-b px-2 py-2 text-center tabular-nums"
                       >
                         {formatEntryTime(entry)}
                       </td>,
                     ];
                   })}
 
-                  <td className="border-app-border text-app-muted border-r border-b p-1 text-center">
+                  <td className="border-app-border border-r-app-border-strong text-app-muted border-r-2 border-b p-1 text-center">
                     {editablePlan && planDay && onDraftChange ? (
                       <OnCallCellPopover
                         date={calendarDay.date}
@@ -331,7 +331,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               <tr key={valueType}>
                 <th
                   scope="row"
-                  className="border-app-border bg-app-surface-muted sticky left-0 z-10 w-32 min-w-32 border-r border-b px-3 py-2 text-center font-semibold"
+                  className="border-app-border border-r-app-border-strong bg-app-surface-muted sticky left-0 z-10 w-32 min-w-32 border-r-2 border-b px-3 py-2 text-center font-semibold"
                 >
                   {valueType === 'actual' ? 'Ist' : 'Soll'}
                 </th>
@@ -339,7 +339,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                   <td
                     key={`${valueType}-${employee.id}`}
                     colSpan={2}
-                    className="border-app-border text-app-text border-r border-b px-3 py-2 text-center font-semibold tabular-nums"
+                    className="border-app-border border-r-app-border-strong text-app-text border-r-2 border-b px-3 py-2 text-center font-semibold tabular-nums"
                   >
                     {formatDuration(
                       valueType === 'actual'
@@ -348,10 +348,8 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     )}
                   </td>
                 ))}
-                <td
-                  colSpan={2}
-                  className="border-app-border border-b px-3 py-2"
-                />
+                <td className="border-app-border border-r-app-border-strong border-r-2 border-b px-3 py-2" />
+                <td className="border-app-border border-b px-3 py-2" />
               </tr>
             ))}
           </tfoot>

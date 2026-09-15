@@ -225,6 +225,13 @@ Datumsspalte bleibt beim horizontalen Scrollen links stehen. Abschlusszeilen
 für Ist- und Soll-Arbeitszeit verbleiben am normalen Tabellenende und werden
 nicht fixiert.
 
+Ein etwas dunklerer Bereich für die Teilspalten und eine deutliche untere Linie
+heben den Tabellenkopf von den Kalendertagszeilen ab. Kräftigere senkrechte
+Trennlinien kennzeichnen das Ende der Datumsspalte, jeder Mitarbeitergruppe und
+der Rufbereitschaftsspalte. Die beiden Teilspalten eines Mitarbeiters bleiben
+durch eine zurückhaltendere Linie voneinander getrennt. Diese Gruppierung setzt
+sich bis in die Abschlusszeilen fort.
+
 ### Farben und Kalendertage
 
 - Wochenendzeilen erhalten eine graue beziehungsweise dunklere Kennzeichnung.
