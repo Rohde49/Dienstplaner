@@ -80,6 +80,14 @@
   }
 }
 
+.planner-empty-field {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 7px,
+    var(--color-app-border-strong) 7px 8px
+  );
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

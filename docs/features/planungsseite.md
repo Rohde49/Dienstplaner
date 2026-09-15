@@ -199,6 +199,16 @@ Jeder Mitarbeiter besitzt zwei Teilspalten:
 2. **Zeit:** nicht bearbeitbare Anzeige von Beginn und Ende, beispielsweise
    `06:00–14:00`.
 
+Noch unbelegte Zellen für Planungseinträge und Rufbereitschaften zeigen eine
+helle graue Schraffur statt eines Strichs. Das gilt auch in der nicht
+bearbeitbaren Vorschau. Ein gesetzter Wert ersetzt die Schraffur. Die Zeitspalte
+und leere Bemerkungen erhalten keine Schraffur. Eine Legende erklärt die
+Markierung.
+
+Ohne Planungseintrag bleibt die zugehörige Zeitspalte leer. Ein gesetzter
+Planungseintrag ohne Start- und Endzeit zeigt dort einen Strich; vorhandene
+Uhrzeiten werden als Zeitspanne angezeigt.
+
 Uhrzeiten stammen aus dem gespeicherten Eintragssnapshot und werden nicht in der
 Planungszelle bearbeitet. Ein über Mitternacht reichender Eintrag bleibt dem Tag
 seiner Planungszelle zugeordnet.

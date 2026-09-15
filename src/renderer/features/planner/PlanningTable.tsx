@@ -28,7 +28,11 @@ type PlanningTableProps = {
 const WEEKDAY_NAMES = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as const;
 
 function formatEntryTime(entry: PlanEntry | undefined): string {
-  return entry?.startTime && entry.endTime
+  if (!entry) {
+    return '';
+  }
+
+  return entry.startTime && entry.endTime
     ? `${entry.startTime}–${entry.endTime}`
     : '—';
 }
@@ -255,9 +259,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                           />
                         ) : (
                           <span
-                            aria-label={`${calendarDay.date}, ${employee.firstName} ${employee.lastName}, kein Eintrag`}
+                            className={
+                              entry
+                                ? undefined
+                                : 'planner-empty-field block min-h-8 w-full rounded'
+                            }
+                            aria-label={`${calendarDay.date}, ${employee.firstName} ${employee.lastName}, ${entry ? `Eintrag ${entry.code}` : 'kein Eintrag'}`}
                           >
-                            {entry?.code ?? '—'}
+                            {entry?.code}
                           </span>
                         )}
                       </td>,
@@ -289,7 +298,10 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     ) : onCallEmployee ? (
                       `${onCallEmployee.firstName} ${onCallEmployee.lastName}`
                     ) : (
-                      '—'
+                      <span
+                        className="planner-empty-field block min-h-8 w-full rounded"
+                        aria-label={`${calendarDay.date}, keine Rufbereitschaft`}
+                      />
                     )}
                   </td>
                   <td className="border-app-border text-app-muted max-w-56 border-b p-1">
@@ -365,6 +377,13 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
             className="border-app-danger-border size-3 rounded-sm border bg-red-50"
           />
           Feiertag
+        </span>
+        <span className="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            className="planner-empty-field border-app-border bg-app-surface size-5 rounded-sm border"
+          />
+          Noch unbelegt (Eintrag oder Rufbereitschaft)
         </span>
         <span>Mitarbeiterfarben kennzeichnen die jeweiligen Spaltenköpfe.</span>
       </div>

@@ -129,10 +129,10 @@ export function PlanEntryCellPopover({
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className="hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-center font-semibold"
+          className={`${currentEntry ? '' : 'planner-empty-field'} hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-center font-semibold`}
           aria-label={`${date}, ${employeeName}, ${currentEntry ? `Eintrag ${currentEntry.code}` : 'kein Eintrag'}`}
         >
-          {currentEntry?.code ?? '—'}
+          {currentEntry?.code}
         </button>
       </PopoverPrimitive.Trigger>
 
@@ -236,8 +236,8 @@ export function OnCallCellPopover({
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className="hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-left"
-          aria-label={`${date}, Rufbereitschaft bearbeiten`}
+          className={`${selectedEmployeeId ? '' : 'planner-empty-field'} hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-left`}
+          aria-label={`${date}, ${selectedEmployeeId ? 'Rufbereitschaft bearbeiten' : 'keine Rufbereitschaft, bearbeiten'}`}
         >
           {selectedEmployeeId
             ? (() => {
@@ -246,9 +246,9 @@ export function OnCallCellPopover({
                 );
                 return employee
                   ? `${employee.firstName} ${employee.lastName}`
-                  : '—';
+                  : null;
               })()
-            : '—'}
+            : null}
         </button>
       </PopoverPrimitive.Trigger>
 

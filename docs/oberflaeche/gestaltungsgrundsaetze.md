@@ -106,8 +106,8 @@ Für Farben gelten folgende Regeln:
 - Keine Information wird ausschließlich über Farbe vermittelt.
 - Statusfarben werden durch Text, Symbol oder Struktur ergänzt.
 - Texte und Bedienelemente müssen ausreichenden Kontrast besitzen.
-- Rot kennzeichnet außerhalb der Mitarbeiterfarben Fehler und gefährliche
-  Aktionen.
+- Rot kennzeichnet außerhalb der Mitarbeiterfarben Fehler, gefährliche
+  Aktionen und Feiertage.
 - Mitarbeiterfarben dienen ausschließlich der Zuordnung einer Person und sind
   von globalen Statusfarben getrennt.
 - Mitarbeiterköpfe dürfen ihre festgelegte Farbe tragen; gewöhnliche
