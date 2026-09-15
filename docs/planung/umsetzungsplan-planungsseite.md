@@ -101,15 +101,15 @@ verständlich und weiter bedienbar zurück.
 **Ziel:** Vorschau und gespeicherter Plan werden als lesbare Monatsmatrix
 dargestellt, zunächst noch ohne Bearbeitung.
 
-- [ ] Kalendertage, Mitarbeiter-Teilspalten, Rufbereitschaft und Bemerkung in
+- [x] Kalendertage, Mitarbeiter-Teilspalten, Rufbereitschaft und Bemerkung in
       der dokumentierten Tabellenstruktur darstellen.
-- [ ] Für geladene Pläne ausschließlich gespeicherte Snapshots und für die
+- [x] Für geladene Pläne ausschließlich gespeicherte Snapshots und für die
       Vorschau den aktuellen Mitarbeiterstand verwenden.
-- [ ] Fixierten Tabellenkopf, fixierte Datumsspalte und erreichbaren
+- [x] Fixierten Tabellenkopf, fixierte Datumsspalte und erreichbaren
       horizontalen sowie vertikalen Bildlauf umsetzen.
-- [ ] Wochenenden, Feiertage und Mitarbeiterzuordnung regelkonform und nicht
+- [x] Wochenenden, Feiertage und Mitarbeiterzuordnung regelkonform und nicht
       ausschließlich über Farbe kennzeichnen.
-- [ ] Kopfkennzahlen sowie Ist- und Soll-Arbeitszeit ausschließlich aus der
+- [x] Kopfkennzahlen sowie Ist- und Soll-Arbeitszeit ausschließlich aus der
       gemeinsamen Monatsauswertung anzeigen.
 
 **Abnahme:** Leere Vorschau und gespeicherter Plan sind vollständig lesbar;

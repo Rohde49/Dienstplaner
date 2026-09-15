@@ -37,6 +37,7 @@ import {
 } from './plannerState';
 import { CreateMonthlyPlanDialog } from './CreateMonthlyPlanDialog';
 import { LoadMonthlyPlanDialog } from './LoadMonthlyPlanDialog';
+import { PlanningTable } from './PlanningTable';
 
 type PlannerPageProps = {
   onNavigate: (page: AppPage) => void;
@@ -382,6 +383,13 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
               )}
             </CardContent>
           </Card>
+        ) : null}
+
+        {activePlan ||
+        (state.load.status === 'ready' &&
+          preview &&
+          preview.employees.length > 0) ? (
+          <PlanningTable document={state.document} />
         ) : null}
       </div>
     </>

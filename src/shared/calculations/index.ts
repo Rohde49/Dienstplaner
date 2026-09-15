@@ -20,7 +20,10 @@ export {
 
 export type { CalendarDay, IsoWeekday } from './calendar';
 
-export { calculateMonthlyPlanEvaluation } from './monthlyPlanEvaluation';
+export {
+  calculateEmptyMonthlyPlanEvaluation,
+  calculateMonthlyPlanEvaluation,
+} from './monthlyPlanEvaluation';
 
 export type {
   EmployeeMonthlyEvaluation,

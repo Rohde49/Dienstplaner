@@ -1,4 +1,10 @@
-import { monthlyPlanSchema, type MonthlyPlan } from '../schemas';
+import {
+  monthlyPlanSchema,
+  type Employee,
+  type MonthlyPlan,
+  type PlanDay,
+  type PlanEmployee,
+} from '../schemas';
 import { countWorkingDays, createMonthCalendar } from './calendar';
 
 export interface EmployeeMonthlyEvaluation {
@@ -24,6 +30,16 @@ export interface MonthlyPlanEvaluation {
   workingDayCount: number;
   employees: EmployeeMonthlyEvaluation[];
 }
+
+type EvaluationInput = {
+  year: number;
+  month: number;
+  employees: readonly Pick<
+    PlanEmployee,
+    'id' | 'role' | 'weeklyWorkingMinutes'
+  >[];
+  days: readonly Pick<PlanDay, 'date' | 'onCallEmployeeId' | 'entries'>[];
+};
 
 function addSafeMinutes(
   currentMinutes: number,
@@ -66,25 +82,19 @@ function calculateRoundedFraction(
   return remainder * 2 >= divisor ? wholeMinutes + 1 : wholeMinutes;
 }
 
-/** Berechnet sämtliche festgelegten Monatskennzahlen aus den gespeicherten Snapshots. */
-export function calculateMonthlyPlanEvaluation(
-  plan: MonthlyPlan,
-): MonthlyPlanEvaluation {
-  const validatedPlan = monthlyPlanSchema.parse(plan);
-
-  const calendarDays = createMonthCalendar(
-    validatedPlan.year,
-    validatedPlan.month,
-  );
+function calculateEvaluation({
+  year,
+  month,
+  employees: inputEmployees,
+  days,
+}: EvaluationInput): MonthlyPlanEvaluation {
+  const calendarDays = createMonthCalendar(year, month);
   const calendarDaysByDate = new Map(
     calendarDays.map((calendarDay) => [calendarDay.date, calendarDay]),
   );
-  const workingDayCount = countWorkingDays(
-    validatedPlan.year,
-    validatedPlan.month,
-  );
+  const workingDayCount = countWorkingDays(year, month);
 
-  const employees = validatedPlan.employees.map(
+  const employees = inputEmployees.map(
     (planEmployee): EmployeeMonthlyEvaluation => {
       let snfServiceCount = 0;
       let freeDayCount = 0;
@@ -97,7 +107,7 @@ export function calculateMonthlyPlanEvaluation(
       let nightWorkMinutes = 0;
       let sundayOrHolidayWorkingWithoutNightReadinessMinutes = 0;
 
-      validatedPlan.days.forEach((day) => {
+      days.forEach((day) => {
         if (day.onCallEmployeeId === planEmployee.id) {
           onCallCount += 1;
         }
@@ -207,4 +217,31 @@ export function calculateMonthlyPlanEvaluation(
   );
 
   return { workingDayCount, employees };
+}
+
+/** Berechnet sämtliche festgelegten Monatskennzahlen aus den gespeicherten Snapshots. */
+export function calculateMonthlyPlanEvaluation(
+  plan: MonthlyPlan,
+): MonthlyPlanEvaluation {
+  return calculateEvaluation(monthlyPlanSchema.parse(plan));
+}
+
+/** Berechnet den leeren Vorschauzustand ohne künstliche Plan-Snapshots. */
+export function calculateEmptyMonthlyPlanEvaluation(
+  year: number,
+  month: number,
+  employees: readonly Pick<Employee, 'id' | 'role' | 'weeklyWorkingMinutes'>[],
+): MonthlyPlanEvaluation {
+  return calculateEvaluation({
+    year,
+    month,
+    employees,
+    days: createMonthCalendar(year, month).map(
+      (day): EvaluationInput['days'][number] => ({
+        date: day.date,
+        onCallEmployeeId: null,
+        entries: [],
+      }),
+    ),
+  });
 }
