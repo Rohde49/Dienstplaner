@@ -5,7 +5,11 @@ import {
   createMonthCalendar,
   type CalendarDay,
 } from '../../../shared/calculations';
-import type { Employee, MonthlyPlan } from '../../../shared/schemas';
+import {
+  monthlyPlanSchema,
+  type Employee,
+  type MonthlyPlan,
+} from '../../../shared/schemas';
 
 export const PLANNER_MONTHS = [
   'Januar',
@@ -69,14 +73,26 @@ function assertValidPeriod(period: PlannerPeriod): void {
 }
 
 /** Liefert die dokumentierte Jahresauswahl rund um das aktuelle Jahr. */
-export function getPlannerYearOptions(referenceYear: number): number[] {
+export function getPlannerYearOptions(
+  referenceYear: number,
+  selectedYear = referenceYear,
+): number[] {
   const firstYear = Math.max(MIN_CALENDAR_YEAR, referenceYear - 2);
   const lastYear = Math.min(MAX_CALENDAR_YEAR, referenceYear + 2);
-
-  return Array.from(
-    { length: lastYear - firstYear + 1 },
-    (_, index) => firstYear + index,
+  const years = new Set(
+    Array.from(
+      { length: lastYear - firstYear + 1 },
+      (_, index) => firstYear + index,
+    ),
   );
+
+  for (let year = selectedYear - 1; year <= selectedYear + 1; year += 1) {
+    if (year >= MIN_CALENDAR_YEAR && year <= MAX_CALENDAR_YEAR) {
+      years.add(year);
+    }
+  }
+
+  return [...years].sort((first, second) => first - second);
 }
 
 /** Erzeugt die Vorschau ausschließlich aus aktuellem Team und Kalenderlogik. */
@@ -134,7 +150,10 @@ export function completePlannerTeamLoad(
   return {
     ...state,
     team,
-    document: createPreviewDocument(state.period, team),
+    document:
+      state.document.kind === 'plan'
+        ? state.document
+        : createPreviewDocument(state.period, team),
     load: { status: 'ready', errorMessage: null },
   };
 }
@@ -171,6 +190,37 @@ export function selectPlannerPeriod(
     ...state,
     period,
     document: createPreviewDocument(period, state.team),
+  };
+}
+
+/** Übernimmt ausschließlich einen vollständig validierten gespeicherten Plan. */
+export function openPlannerPlan(
+  state: PlannerPageState,
+  plan: MonthlyPlan,
+  recoveredFromBackup: boolean,
+): PlannerPageState {
+  const baseline = monthlyPlanSchema.parse(plan);
+
+  return {
+    ...state,
+    period: { year: baseline.year, month: baseline.month },
+    document: {
+      kind: 'plan',
+      preview: null,
+      baseline,
+      draft: structuredClone(baseline),
+      recoveredFromBackup,
+    },
+  };
+}
+
+/** Kehrt nach dem Löschen des geöffneten Plans zur Vorschau desselben Zeitraums zurück. */
+export function returnToPlannerPreview(
+  state: PlannerPageState,
+): PlannerPageState {
+  return {
+    ...state,
+    document: createPreviewDocument(state.period, state.team),
   };
 }
 

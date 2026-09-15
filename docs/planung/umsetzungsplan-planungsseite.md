@@ -81,15 +81,15 @@ soweit er als reine Logik ausgelagert werden kann.
 **Ziel:** Die vollständige Verwaltung gespeicherter Monatspläne ist über die
 vorhandene API bedienbar.
 
-- [ ] Plantitel-Dialog umsetzen und einen neuen Plan über
+- [x] Plantitel-Dialog umsetzen und einen neuen Plan über
       `monthlyPlans.create` unmittelbar speichern und öffnen.
-- [ ] Globalen Ladedialog mit allen dokumentierten Angaben sowie Lade-, Leer-
+- [x] Globalen Ladedialog mit allen dokumentierten Angaben sowie Lade-, Leer-
       und Fehlerzustand umsetzen.
-- [ ] Ausgewählten Plan laden, Zeitraum und Seitenzustand synchronisieren und
+- [x] Ausgewählten Plan laden, Zeitraum und Seitenzustand synchronisieren und
       eine Sicherungswiederherstellung sichtbar übernehmen.
-- [ ] Planlöschung mit Bestätigung, gesperrten Parallelaktionen und
+- [x] Planlöschung mit Bestätigung, gesperrten Parallelaktionen und
       anschließender Listen- beziehungsweise Seitenaktualisierung umsetzen.
-- [ ] Alle Vorgänge verwenden ausschließlich die gewählte Plan-UUID und den
+- [x] Alle Vorgänge verwenden ausschließlich die gewählte Plan-UUID und den
       vom Main Process zurückgegebenen Stand.
 
 **Abnahme:** Mehrere Pläne desselben Monats lassen sich eindeutig anlegen,

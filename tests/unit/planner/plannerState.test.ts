@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
 import {
   beginPlannerTeamLoad,
   completePlannerTeamLoad,
@@ -7,6 +8,8 @@ import {
   failPlannerTeamLoad,
   getAdjacentPlannerPeriod,
   getPlannerYearOptions,
+  openPlannerPlan,
+  returnToPlannerPreview,
   selectPlannerPeriod,
 } from '../../../src/renderer/features/planner/plannerState';
 import type { Employee } from '../../../src/shared/schemas';
@@ -99,6 +102,9 @@ describe('Planungsseitenzustand', () => {
     expect(getPlannerYearOptions(2026)).toEqual([2024, 2025, 2026, 2027, 2028]);
     expect(getPlannerYearOptions(2000)).toEqual([2000, 2001, 2002]);
     expect(getPlannerYearOptions(2100)).toEqual([2098, 2099, 2100]);
+    expect(getPlannerYearOptions(2026, 2010)).toEqual([
+      2009, 2010, 2011, 2024, 2025, 2026, 2027, 2028,
+    ]);
   });
 
   it('trennt Fehler und erneuten Ladevorgang eindeutig von der Vorschau', () => {
@@ -136,6 +142,72 @@ describe('Planungsseitenzustand', () => {
     expect(
       getAdjacentPlannerPeriod({ year: 2028, month: 12 }, 1, years),
     ).toBeNull();
+  });
+
+  it('übernimmt einen geladenen Plan als getrennten Ausgangsstand und Entwurf', () => {
+    const initialState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2010,
+      month: 4,
+      title: 'Historischer Plan',
+      employees: initialState.team,
+    });
+
+    const state = openPlannerPlan(initialState, plan, true);
+
+    expect(state.period).toEqual({ year: 2010, month: 4 });
+    expect(state.document.kind).toBe('plan');
+    if (state.document.kind !== 'plan') {
+      throw new Error('Planansicht erwartet.');
+    }
+    expect(state.document.baseline).toEqual(plan);
+    expect(state.document.draft).toEqual(plan);
+    expect(state.document.draft).not.toBe(state.document.baseline);
+    expect(state.document.recoveredFromBackup).toBe(true);
+  });
+
+  it('verwirft einen bereits geöffneten Plan nicht durch ein später geladenes Team', () => {
+    const employee = createEmployee('10000000-0000-4000-8000-000000000001');
+    const initialState = createInitialPlannerPageState(new Date(2026, 8, 15));
+    const plan = createMonthlyPlan({
+      year: 2027,
+      month: 3,
+      title: 'Geladener Plan',
+      employees: [employee],
+    });
+    const openedState = openPlannerPlan(initialState, plan, false);
+
+    const state = completePlannerTeamLoad(openedState, [employee]);
+
+    expect(state.document.kind).toBe('plan');
+    expect(state.period).toEqual({ year: 2027, month: 3 });
+  });
+
+  it('kehrt nach dem Löschen des geöffneten Plans im selben Zeitraum zur Vorschau zurück', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2027,
+      month: 2,
+      title: 'Februarplan',
+      employees: readyState.team,
+    });
+    const loadedState = openPlannerPlan(readyState, plan, false);
+
+    const state = returnToPlannerPreview(loadedState);
+
+    expect(state.period).toEqual({ year: 2027, month: 2 });
+    expect(state.document.kind).toBe('preview');
+    if (state.document.kind !== 'preview') {
+      throw new Error('Vorschauzustand erwartet.');
+    }
+    expect(state.document.preview.calendarDays).toHaveLength(28);
+    expect(state.document.preview.employees).toHaveLength(1);
   });
 
   it('sperrt die Plananlage ohne aktive Mitarbeiter fachlich durch eine leere Vorschau', () => {

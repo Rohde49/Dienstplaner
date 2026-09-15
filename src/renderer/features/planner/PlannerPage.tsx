@@ -1,4 +1,11 @@
-import { CalendarDays, ChevronLeft, ChevronRight, Users } from 'lucide-react';
+import {
+  CalendarDays,
+  CalendarPlus,
+  ChevronLeft,
+  ChevronRight,
+  FolderOpen,
+  Users,
+} from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PageHeader, Toolbar, type AppPage } from '../../components/layout';
@@ -24,8 +31,12 @@ import {
   failPlannerTeamLoad,
   getAdjacentPlannerPeriod,
   getPlannerYearOptions,
+  openPlannerPlan,
+  returnToPlannerPreview,
   selectPlannerPeriod,
 } from './plannerState';
+import { CreateMonthlyPlanDialog } from './CreateMonthlyPlanDialog';
+import { LoadMonthlyPlanDialog } from './LoadMonthlyPlanDialog';
 
 type PlannerPageProps = {
   onNavigate: (page: AppPage) => void;
@@ -44,8 +55,8 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
   );
   const referenceYear = useMemo(() => new Date().getFullYear(), []);
   const yearOptions = useMemo(
-    () => getPlannerYearOptions(referenceYear),
-    [referenceYear],
+    () => getPlannerYearOptions(referenceYear, state.period.year),
+    [referenceYear, state.period.year],
   );
 
   const loadTeam = useCallback(async (): Promise<void> => {
@@ -73,6 +84,25 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
   const nextPeriod = getAdjacentPlannerPeriod(state.period, 1, yearOptions);
   const preview =
     state.document.kind === 'preview' ? state.document.preview : null;
+  const activePlan =
+    state.document.kind === 'plan' ? state.document.draft : null;
+  const currentPlanId = activePlan?.id ?? null;
+  const canCreatePlan =
+    state.load.status === 'ready' &&
+    state.team.some((employee) => employee.active);
+
+  function handleDeletedPlan(planId: string): void {
+    setState((currentState) => {
+      if (
+        currentState.document.kind === 'plan' &&
+        currentState.document.baseline.id === planId
+      ) {
+        return returnToPlannerPreview(currentState);
+      }
+
+      return currentState;
+    });
+  }
 
   function changeMonth(monthOffset: -1 | 1): void {
     const period = getAdjacentPlannerPeriod(
@@ -94,7 +124,52 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
       />
 
       <div className="space-y-4 p-6 lg:p-8">
-        <Toolbar label="Zeitraum auswählen">
+        <Toolbar
+          label="Zeitraum und Dienstpläne"
+          actions={
+            <>
+              <LoadMonthlyPlanDialog
+                currentPlanId={currentPlanId}
+                canDeleteCurrentPlan
+                trigger={
+                  <Button variant="secondary">
+                    <FolderOpen aria-hidden="true" size={17} />
+                    Laden
+                  </Button>
+                }
+                onLoaded={(result, closeDialog) => {
+                  if (result.plan) {
+                    setState((currentState) =>
+                      openPlannerPlan(
+                        currentState,
+                        result.plan!,
+                        result.recoveryWarning !== null,
+                      ),
+                    );
+                    closeDialog();
+                  }
+                }}
+                onDeleted={handleDeletedPlan}
+              />
+
+              <CreateMonthlyPlanDialog
+                period={state.period}
+                trigger={
+                  <Button disabled={!canCreatePlan}>
+                    <CalendarPlus aria-hidden="true" size={17} />
+                    Dienstplan erstellen
+                  </Button>
+                }
+                onRequestOpen={(openDialog) => openDialog()}
+                onCreated={(plan) =>
+                  setState((currentState) =>
+                    openPlannerPlan(currentState, plan, false),
+                  )
+                }
+              />
+            </>
+          }
+        >
           <IconButton
             label="Vorheriger Monat"
             variant="secondary"
@@ -154,7 +229,51 @@ export function PlannerPage({ onNavigate }: PlannerPageProps) {
           </IconButton>
         </Toolbar>
 
-        {state.load.status === 'loading' ? (
+        {activePlan ? (
+          <Card>
+            <CardHeader>
+              <Badge
+                variant={
+                  state.document.kind === 'plan' &&
+                  state.document.recoveredFromBackup
+                    ? 'warning'
+                    : 'success'
+                }
+              >
+                {state.document.kind === 'plan' &&
+                state.document.recoveredFromBackup
+                  ? 'Aus Sicherung geladen · Speichern erforderlich'
+                  : 'Gespeichert'}
+              </Badge>
+              <CardTitle>{activePlan.title}</CardTitle>
+              <CardDescription>
+                {PLANNER_MONTHS[activePlan.month - 1]} {activePlan.year} ·{' '}
+                {activePlan.employees.length} Mitarbeiter ·{' '}
+                {activePlan.days.length} Kalendertage
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              <Alert
+                title={
+                  state.document.kind === 'plan' &&
+                  state.document.recoveredFromBackup
+                    ? 'Aus Sicherung geladen · Speichern erforderlich'
+                    : 'Dienstplan geöffnet'
+                }
+                variant={
+                  state.document.kind === 'plan' &&
+                  state.document.recoveredFromBackup
+                    ? 'warning'
+                    : 'info'
+                }
+              >
+                Mitarbeiter- und Kalenderstand stammen ausschließlich aus dem
+                gespeicherten Plan.
+              </Alert>
+            </CardContent>
+          </Card>
+        ) : state.load.status === 'loading' ? (
           <Card>
             <div className="flex min-h-56 items-center justify-center gap-3">
               <Spinner label="Vorschau wird geladen" />
