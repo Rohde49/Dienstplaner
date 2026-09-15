@@ -83,7 +83,11 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                         {employee.role}
                       </span>
                     </span>
-                    <span className="grid grid-cols-3 border-t border-current/20 text-[10px] tabular-nums">
+                    <span
+                      className={`grid border-t border-current/20 text-[10px] tabular-nums ${
+                        showServiceCount ? 'grid-cols-3' : 'grid-cols-2'
+                      }`}
+                    >
                       {showServiceCount ? (
                         <span className="px-1 py-1.5">
                           <span className="block font-normal">SN/F</span>
@@ -91,10 +95,12 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                             {employee.evaluation.snfServiceCount}
                           </span>
                         </span>
-                      ) : (
-                        <span aria-hidden="true" />
-                      )}
-                      <span className="border-l border-current/20 px-1 py-1.5">
+                      ) : null}
+                      <span
+                        className={`${
+                          showServiceCount ? 'border-l' : ''
+                        } border-current/20 px-1 py-1.5`}
+                      >
                         <span className="block font-normal">Frei</span>
                         <span className="block font-semibold">
                           {employee.evaluation.freeDayCount}
