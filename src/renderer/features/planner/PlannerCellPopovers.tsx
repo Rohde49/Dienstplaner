@@ -14,6 +14,7 @@ import {
   Spinner,
   Textarea,
 } from '../../components/ui';
+import { formatOnCallName } from './formatOnCallName';
 
 type PlannerPopoverContentProps = {
   title: string;
@@ -129,7 +130,7 @@ export function PlanEntryCellPopover({
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className={`${currentEntry ? '' : 'planner-empty-field'} hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-center font-semibold`}
+          className={`${currentEntry ? '' : 'planner-empty-field'} hover:bg-app-primary-selected min-h-8 w-full rounded px-2 py-1 text-center font-semibold`}
           aria-label={`${date}, ${employeeName}, ${currentEntry ? `Eintrag ${currentEntry.code}` : 'kein Eintrag'}`}
         >
           {currentEntry?.code}
@@ -230,25 +231,19 @@ export function OnCallCellPopover({
   const educators = employees.filter(
     (employee) => employee.role === 'Erzieher',
   );
+  const selectedEmployee = selectedEmployeeId
+    ? employees.find((employee) => employee.id === selectedEmployeeId)
+    : null;
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className={`${selectedEmployeeId ? '' : 'planner-empty-field'} hover:bg-app-surface-hover min-h-8 w-full rounded px-2 py-1 text-left`}
-          aria-label={`${date}, ${selectedEmployeeId ? 'Rufbereitschaft bearbeiten' : 'keine Rufbereitschaft, bearbeiten'}`}
+          className={`${selectedEmployeeId ? '' : 'planner-empty-field'} hover:bg-app-primary-selected min-h-8 w-full rounded px-2 py-1 text-center`}
+          aria-label={`${date}, ${selectedEmployee ? `Rufbereitschaft ${selectedEmployee.firstName} ${selectedEmployee.lastName} bearbeiten` : 'keine Rufbereitschaft, bearbeiten'}`}
         >
-          {selectedEmployeeId
-            ? (() => {
-                const employee = employees.find(
-                  (candidate) => candidate.id === selectedEmployeeId,
-                );
-                return employee
-                  ? `${employee.firstName} ${employee.lastName}`
-                  : null;
-              })()
-            : null}
+          {selectedEmployee ? formatOnCallName(selectedEmployee) : null}
         </button>
       </PopoverPrimitive.Trigger>
 
@@ -342,7 +337,7 @@ export function DayNoteCellPopover({
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className="hover:bg-app-surface-hover min-h-8 w-full max-w-56 truncate rounded px-2 py-1 text-left"
+          className="hover:bg-app-primary-selected min-h-8 w-full max-w-56 truncate rounded px-2 py-1 text-center"
           aria-label={`${date}, Bemerkung bearbeiten${note ? `, aktuell ${note}` : ''}`}
         >
           {note ?? ''}

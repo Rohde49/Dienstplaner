@@ -192,6 +192,13 @@ Die Planungstabelle führt die Kalendertage zeilenweise und die im Plan
 gespeicherten Mitarbeiter spaltenweise. Rechts hinter den Mitarbeiterspalten
 stehen „Rufbereitschaft“ und „Bemerkung“.
 
+Die kompakte Datumsspalte zeigt Wochentag und vollständiges Datum in dieser
+Reihenfolge, etwa `Di · 01.09.2026`. Datum und Spaltenüberschrift sind zentriert.
+Längere Feiertagsnamen dürfen innerhalb der Datumsspalte umbrechen. Die
+Rufbereitschafts- und Bemerkungsspalte halten Überschrift und Zellinhalt mittig.
+Ein gesetzter Rufbereitschaftsname erscheint mit dem ersten Buchstaben des
+Vornamens und dem vollständigen Nachnamen, beispielsweise `E. Rohde`.
+
 Jeder Mitarbeiter besitzt zwei Teilspalten:
 
 1. **Eintrag:** bearbeitbare Zelle zum Setzen eines Planungseintrags und zur
@@ -238,6 +245,9 @@ verschiebt sie dorthin; ein Klick auf das Datum der hervorgehobenen Zeile hebt
 sie auf. Während der Auswahl hat die Hervorhebung Vorrang vor dem normalen
 Wochenend- oder Feiertagshintergrund. Wochentag und Feiertagsname bleiben
 weiterhin textlich erkennbar.
+
+Nur bedienbare Zellen erhalten beim Darüberfahren mit der Maus einen blauen
+Hintergrund. Dadurch bleibt der Hoverzustand auch auf Wochenendzeilen sichtbar.
 
 Die fachlichen Kalender- und Feiertagsregeln stehen unter
 [Kalender und Arbeitstage](../fachlichkeit/berechnungen/kalender-und-arbeitstage.md).
@@ -314,8 +324,9 @@ Im Mitarbeiterkopf erscheinen:
 | Wirtschaftskraft | freie Tage, Soll-Ist-Differenz               |
 
 Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
-Soll-Arbeitszeit. Diese Werte unterstützen die laufende Planung, ersetzen aber
-nicht die spätere ausführliche Auswertung.
+Soll-Arbeitszeit. Die beiden Zeilen tragen die kurzen Beschriftungen „Ist“ und
+„Soll“. Diese Werte unterstützen die laufende Planung, ersetzen aber nicht die
+spätere ausführliche Auswertung.
 
 Die verbindlichen Regeln stehen unter
 [Tagesbezogene Kennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),

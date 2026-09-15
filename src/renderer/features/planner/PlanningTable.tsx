@@ -17,6 +17,7 @@ import {
   setDraftOnCallEmployee,
   setDraftPlanEntry,
 } from './plannerDraft';
+import { formatOnCallName } from './formatOnCallName';
 import { createPlannerTableModel } from './plannerTableModel';
 import type { PlannerDocumentState } from './plannerState';
 
@@ -63,7 +64,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
             <tr>
               <th
                 rowSpan={2}
-                className="border-app-border bg-app-surface-muted sticky left-0 z-40 w-40 min-w-40 border-r border-b px-3 py-2 font-semibold"
+                className="border-app-border bg-app-surface-muted sticky left-0 z-40 w-32 min-w-32 border-r border-b px-3 py-2 text-center font-semibold"
                 scope="col"
               >
                 Datum
@@ -127,14 +128,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border bg-app-surface-muted min-w-40 border-r border-b px-3 py-2 font-semibold"
+                className="border-app-border bg-app-surface-muted min-w-40 border-r border-b px-3 py-2 text-center font-semibold"
               >
                 Rufbereitschaft
               </th>
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border bg-app-surface-muted min-w-56 border-b px-3 py-2 font-semibold"
+                className="border-app-border bg-app-surface-muted min-w-56 border-b px-3 py-2 text-center font-semibold"
               >
                 Bemerkung
               </th>
@@ -162,6 +163,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
 
           <tbody>
             {model.days.map(({ calendarDay, planDay }) => {
+              const dayLabel = `${WEEKDAY_NAMES[calendarDay.weekday - 1]} · ${calendarDay.date.slice(8, 10)}.${calendarDay.date.slice(5, 7)}.${calendarDay.date.slice(0, 4)}`;
               const isSelected = selectedDate === calendarDay.date;
               const rowClasses = isSelected
                 ? 'bg-orange-100'
@@ -186,14 +188,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                 >
                   <th
                     scope="row"
-                    className={`border-app-border sticky left-0 z-10 border-r border-b font-medium ${rowClasses}`}
+                    className={`border-app-border sticky left-0 z-10 w-32 min-w-32 border-r border-b text-center font-medium ${rowClasses}`}
                   >
                     <button
                       type="button"
                       data-planner-date-toggle
                       aria-pressed={isSelected}
-                      aria-label={`${calendarDay.date}, Zeilenhervorhebung ${isSelected ? 'aufheben' : 'einschalten'}`}
-                      className="w-full rounded-sm px-3 py-2 text-left"
+                      aria-label={`${dayLabel}, Zeilenhervorhebung ${isSelected ? 'aufheben' : 'einschalten'}`}
+                      className="hover:bg-app-primary-selected w-full rounded-sm px-2 py-2 text-center"
                       onClick={(event) => {
                         event.stopPropagation();
                         setSelectedDate((currentDate) =>
@@ -204,18 +206,16 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       }}
                     >
                       <span
-                        className={
+                        className={`whitespace-nowrap ${
                           calendarDay.isHoliday
                             ? 'text-app-danger'
                             : 'text-app-text'
-                        }
+                        }`}
                       >
-                        {calendarDay.date.slice(8, 10)}.
-                        {calendarDay.date.slice(5, 7)}. ·{' '}
-                        {WEEKDAY_NAMES[calendarDay.weekday - 1]}
+                        {dayLabel}
                       </span>
                       {calendarDay.holidayNames.length > 0 ? (
-                        <span className="text-app-danger mt-0.5 block max-w-36 text-[10px] leading-3">
+                        <span className="text-app-danger mt-0.5 block max-w-full text-center text-[10px] leading-3 break-words">
                           {calendarDay.holidayNames.join(', ')}
                         </span>
                       ) : null}
@@ -279,7 +279,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     ];
                   })}
 
-                  <td className="border-app-border text-app-muted border-r border-b p-1">
+                  <td className="border-app-border text-app-muted border-r border-b p-1 text-center">
                     {editablePlan && planDay && onDraftChange ? (
                       <OnCallCellPopover
                         date={calendarDay.date}
@@ -296,7 +296,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                         }
                       />
                     ) : onCallEmployee ? (
-                      `${onCallEmployee.firstName} ${onCallEmployee.lastName}`
+                      formatOnCallName(onCallEmployee)
                     ) : (
                       <span
                         className="planner-empty-field block min-h-8 w-full rounded"
@@ -304,7 +304,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       />
                     )}
                   </td>
-                  <td className="border-app-border text-app-muted max-w-56 border-b p-1">
+                  <td className="border-app-border text-app-muted max-w-56 border-b p-1 text-center">
                     {editablePlan && planDay && onDraftChange ? (
                       <DayNoteCellPopover
                         date={calendarDay.date}
@@ -316,7 +316,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                         }
                       />
                     ) : (
-                      <span className="block truncate px-2 py-1">
+                      <span className="block truncate px-2 py-1 text-center">
                         {planDay?.note ?? ''}
                       </span>
                     )}
@@ -331,11 +331,9 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               <tr key={valueType}>
                 <th
                   scope="row"
-                  className="border-app-border bg-app-surface-muted sticky left-0 z-10 border-r border-b px-3 py-2 font-semibold"
+                  className="border-app-border bg-app-surface-muted sticky left-0 z-10 w-32 min-w-32 border-r border-b px-3 py-2 text-center font-semibold"
                 >
-                  {valueType === 'actual'
-                    ? 'Ist-Arbeitszeit'
-                    : 'Soll-Arbeitszeit'}
+                  {valueType === 'actual' ? 'Ist' : 'Soll'}
                 </th>
                 {model.employees.map((employee) => (
                   <td
