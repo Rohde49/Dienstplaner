@@ -221,6 +221,14 @@ nicht fixiert.
 - Die Mitarbeiterfarbe wird im jeweiligen Mitarbeiterkopf eingesetzt, trägt
   die Zuordnung aber nicht allein.
 
+Eine angeklickte oder per Tastatur gewählte Tabellenzelle hebt ihre gesamte
+Kalendertagszeile orange hervor. Die Hervorhebung bleibt nach einer Änderung
+des Planentwurfs bestehen. Die Auswahl einer Zelle in einer anderen Zeile
+verschiebt sie dorthin; ein Klick auf das Datum der hervorgehobenen Zeile hebt
+sie auf. Während der Auswahl hat die Hervorhebung Vorrang vor dem normalen
+Wochenend- oder Feiertagshintergrund. Wochentag und Feiertagsname bleiben
+weiterhin textlich erkennbar.
+
 Die fachlichen Kalender- und Feiertagsregeln stehen unter
 [Kalender und Arbeitstage](../fachlichkeit/berechnungen/kalender-und-arbeitstage.md).
 

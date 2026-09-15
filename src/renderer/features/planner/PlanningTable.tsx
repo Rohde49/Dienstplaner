@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   formatDuration,
@@ -44,6 +44,7 @@ function getDayClasses(isHoliday: boolean, isWeekend: boolean): string {
 /** Stellt Vorschau und gespeicherten Plan als gemeinsame Monatsmatrix dar. */
 export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
   const model = useMemo(() => createPlannerTableModel(document), [document]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const editablePlan = document.kind === 'plan' ? document.draft : null;
   const employeesById = useMemo(
     () => new Map(model.employees.map((employee) => [employee.id, employee])),
@@ -157,36 +158,64 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
 
           <tbody>
             {model.days.map(({ calendarDay, planDay }) => {
-              const rowClasses = getDayClasses(
-                calendarDay.isHoliday,
-                calendarDay.isWeekend,
-              );
+              const isSelected = selectedDate === calendarDay.date;
+              const rowClasses = isSelected
+                ? 'bg-orange-100'
+                : getDayClasses(calendarDay.isHoliday, calendarDay.isWeekend);
               const onCallEmployee = planDay?.onCallEmployeeId
                 ? employeesById.get(planDay.onCallEmployeeId)
                 : undefined;
 
               return (
-                <tr key={calendarDay.date} className={rowClasses}>
+                <tr
+                  key={calendarDay.date}
+                  className={rowClasses}
+                  onClick={() => setSelectedDate(calendarDay.date)}
+                  onFocusCapture={(event) => {
+                    if (
+                      event.target instanceof HTMLElement &&
+                      !event.target.closest('[data-planner-date-toggle]')
+                    ) {
+                      setSelectedDate(calendarDay.date);
+                    }
+                  }}
+                >
                   <th
                     scope="row"
-                    className={`border-app-border sticky left-0 z-10 border-r border-b px-3 py-2 font-medium ${rowClasses}`}
+                    className={`border-app-border sticky left-0 z-10 border-r border-b font-medium ${rowClasses}`}
                   >
-                    <span
-                      className={
-                        calendarDay.isHoliday
-                          ? 'text-app-danger'
-                          : 'text-app-text'
-                      }
+                    <button
+                      type="button"
+                      data-planner-date-toggle
+                      aria-pressed={isSelected}
+                      aria-label={`${calendarDay.date}, Zeilenhervorhebung ${isSelected ? 'aufheben' : 'einschalten'}`}
+                      className="w-full rounded-sm px-3 py-2 text-left"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelectedDate((currentDate) =>
+                          currentDate === calendarDay.date
+                            ? null
+                            : calendarDay.date,
+                        );
+                      }}
                     >
-                      {calendarDay.date.slice(8, 10)}.
-                      {calendarDay.date.slice(5, 7)}. ·{' '}
-                      {WEEKDAY_NAMES[calendarDay.weekday - 1]}
-                    </span>
-                    {calendarDay.holidayNames.length > 0 ? (
-                      <span className="text-app-danger mt-0.5 block max-w-36 text-[10px] leading-3">
-                        {calendarDay.holidayNames.join(', ')}
+                      <span
+                        className={
+                          calendarDay.isHoliday
+                            ? 'text-app-danger'
+                            : 'text-app-text'
+                        }
+                      >
+                        {calendarDay.date.slice(8, 10)}.
+                        {calendarDay.date.slice(5, 7)}. ·{' '}
+                        {WEEKDAY_NAMES[calendarDay.weekday - 1]}
                       </span>
-                    ) : null}
+                      {calendarDay.holidayNames.length > 0 ? (
+                        <span className="text-app-danger mt-0.5 block max-w-36 text-[10px] leading-3">
+                          {calendarDay.holidayNames.join(', ')}
+                        </span>
+                      ) : null}
+                    </button>
                   </th>
 
                   {model.employees.flatMap((employee) => {
