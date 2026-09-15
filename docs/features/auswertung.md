@@ -108,6 +108,11 @@ bereits dauerhaft gespeichert wurde.
 - Die Auswertung nutzt die verfügbare Inhaltsbreite, ohne die Zuordnung zwischen
   Mitarbeiter und Kennzahl beim Scrollen zu verlieren.
 
+In der eingeklappten Werkzeugleiste der Planungsseite ist „Auswertung“ zunächst
+nur als deaktivierter Platzhalter sichtbar. Die spätere funktionsfähige Aktion
+soll einen Auswertungsdialog öffnen; Dialoginhalt und Verhalten werden erst bei
+der Umsetzung dieses Features konkretisiert.
+
 ## Fehlerverhalten
 
 Ein ungültiger oder unvollständiger Monatsplan wird nicht teilweise
@@ -121,7 +126,7 @@ Vor der konkreten Oberflächengestaltung sind insbesondere festzulegen:
 - die endgültige Gruppierung und Reihenfolge der Kennzahlen,
 - die genaue Anordnung der Mitarbeiter und Werte,
 - mögliche Ein- und Ausblendungen für große Tabellen und
-- der konkrete Zugang von der Planungsseite zur ausführlichen Auswertung.
+- die genaue Gestaltung und Bedienung des Auswertungsdialogs.
 
 ## Abgrenzung
 

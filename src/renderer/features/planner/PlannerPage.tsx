@@ -1,8 +1,12 @@
 import {
+  BarChart3,
   CalendarDays,
   CalendarPlus,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  Download,
   FolderOpen,
   Save,
   Users,
@@ -11,15 +15,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { MonthlyPlan } from '../../../shared/schemas';
+import { countWorkingDays } from '../../../shared/calculations';
 import { PageHeader, Toolbar, type AppPage } from '../../components/layout';
 import {
   Alert,
   Badge,
   Button,
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
   CardTitle,
   EmptyState,
   IconButton,
@@ -73,6 +75,7 @@ export function PlannerPage({
     createInitialPlannerPageState(new Date()),
   );
   const [protectionDialogOpen, setProtectionDialogOpen] = useState(false);
+  const [toolbarExpanded, setToolbarExpanded] = useState(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
   const referenceYear = useMemo(() => new Date().getFullYear(), []);
   const yearOptions = useMemo(
@@ -129,6 +132,9 @@ export function PlannerPage({
     state.document.kind === 'preview' ? state.document.preview : null;
   const activePlan =
     state.document.kind === 'plan' ? state.document.draft : null;
+  const toolbarTitle = activePlan
+    ? activePlan.title
+    : `${PLANNER_MONTHS[state.period.month - 1]} ${state.period.year}`;
   const hasUnsavedChanges = hasUnsavedPlannerChanges(state);
   const isSaving = state.save.status === 'saving';
   const currentPlanId =
@@ -215,38 +221,112 @@ export function PlannerPage({
     <>
       <PageHeader
         title="Dienstplan"
-        description="Monatspläne erstellen, bearbeiten und auswerten"
+        description="Monatspläne erstellen und bearbeiten"
         actions={
-          activePlan ? (
-            <Button
-              disabled={!hasUnsavedChanges || isSaving}
-              onClick={() => void savePlan(activePlan)}
+          <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+            <div
+              role="group"
+              aria-label="Zeitraum wählen"
+              className="flex items-end gap-2"
             >
-              {isSaving ? (
-                <>
-                  <Spinner
-                    size="sm"
-                    label="Dienstplan wird gespeichert"
-                    className="text-app-on-primary"
-                  />
-                  Wird gespeichert …
-                </>
-              ) : (
-                <>
-                  <Save aria-hidden="true" size={17} />
-                  Speichern
-                </>
-              )}
-            </Button>
-          ) : null
-        }
-      />
+              <IconButton
+                label="Vorheriger Monat"
+                variant="secondary"
+                disabled={!previousPeriod || isSaving}
+                onClick={() => changeMonth(-1)}
+              >
+                <ChevronLeft aria-hidden="true" size={17} />
+              </IconButton>
 
-      <div className="space-y-4 p-6 lg:p-8">
-        <Toolbar
-          label="Zeitraum und Dienstpläne"
-          actions={
-            <>
+              <div className="w-32 shrink-0">
+                <label
+                  htmlFor="planner-month"
+                  className="text-app-muted mb-1 block text-xs font-medium"
+                >
+                  Monat
+                </label>
+                <div className="relative">
+                  <Select
+                    id="planner-month"
+                    className="appearance-none pr-9"
+                    value={state.period.month}
+                    disabled={isSaving}
+                    onChange={(event) => {
+                      const month = Number(event.target.value);
+                      requestProtectedAction(() =>
+                        setState((currentState) =>
+                          selectPlannerPeriod(currentState, {
+                            ...currentState.period,
+                            month,
+                          }),
+                        ),
+                      );
+                    }}
+                  >
+                    {PLANNER_MONTHS.map((monthName, index) => (
+                      <option key={monthName} value={index + 1}>
+                        {monthName}
+                      </option>
+                    ))}
+                  </Select>
+                  <ChevronDown
+                    aria-hidden="true"
+                    size={16}
+                    className="text-app-muted pointer-events-none absolute right-3 bottom-2.5"
+                  />
+                </div>
+              </div>
+
+              <div className="w-24 shrink-0">
+                <label
+                  htmlFor="planner-year"
+                  className="text-app-muted mb-1 block text-xs font-medium"
+                >
+                  Jahr
+                </label>
+                <div className="relative">
+                  <Select
+                    id="planner-year"
+                    className="appearance-none pr-9 tabular-nums"
+                    value={state.period.year}
+                    disabled={isSaving}
+                    onChange={(event) => {
+                      const year = Number(event.target.value);
+                      requestProtectedAction(() =>
+                        setState((currentState) =>
+                          selectPlannerPeriod(currentState, {
+                            ...currentState.period,
+                            year,
+                          }),
+                        ),
+                      );
+                    }}
+                  >
+                    {yearOptions.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </Select>
+                  <ChevronDown
+                    aria-hidden="true"
+                    size={16}
+                    className="text-app-muted pointer-events-none absolute right-3 bottom-2.5"
+                  />
+                </div>
+              </div>
+
+              <IconButton
+                label="Nächster Monat"
+                variant="secondary"
+                disabled={!nextPeriod || isSaving}
+                onClick={() => changeMonth(1)}
+              >
+                <ChevronRight aria-hidden="true" size={17} />
+              </IconButton>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <LoadMonthlyPlanDialog
                 currentPlanId={currentPlanId}
                 canDeleteCurrentPlan={canDeleteCurrentPlan}
@@ -302,75 +382,194 @@ export function PlannerPage({
                   )
                 }
               />
-            </>
-          }
-        >
-          <IconButton
-            label="Vorheriger Monat"
-            variant="secondary"
-            disabled={!previousPeriod || isSaving}
-            onClick={() => changeMonth(-1)}
-          >
-            <ChevronLeft aria-hidden="true" size={17} />
-          </IconButton>
+            </div>
+          </div>
+        }
+      />
 
-          <Select
-            aria-label="Monat"
-            className="w-36"
-            value={state.period.month}
-            disabled={isSaving}
-            onChange={(event) => {
-              const month = Number(event.target.value);
-              requestProtectedAction(() =>
-                setState((currentState) =>
-                  selectPlannerPeriod(currentState, {
-                    ...currentState.period,
-                    month,
-                  }),
-                ),
-              );
-            }}
-          >
-            {PLANNER_MONTHS.map((monthName, index) => (
-              <option key={monthName} value={index + 1}>
-                {monthName}
-              </option>
-            ))}
-          </Select>
+      <div className="space-y-4 p-6 lg:p-8">
+        {(activePlan || (state.load.status === 'ready' && preview)) && (
+          <Toolbar label="Planungswerkzeuge" className="relative mb-3 pb-4">
+            <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,1fr)]">
+              <div className="col-start-1 row-start-1 flex min-w-0 items-center gap-3">
+                <span className="border-app-border bg-app-surface-muted text-app-muted flex size-10 shrink-0 items-center justify-center rounded-md border">
+                  <CalendarDays aria-hidden="true" size={19} />
+                </span>
+                <Badge
+                  className="max-w-full min-w-0"
+                  variant={
+                    activePlan
+                      ? state.document.kind === 'plan' &&
+                        state.document.recoveredFromBackup
+                        ? 'warning'
+                        : hasUnsavedChanges
+                          ? 'warning'
+                          : 'success'
+                      : 'warning'
+                  }
+                >
+                  {activePlan
+                    ? state.document.kind === 'plan' &&
+                      state.document.recoveredFromBackup
+                      ? 'Aus Sicherung geladen · Speichern erforderlich'
+                      : hasUnsavedChanges
+                        ? 'Ungespeicherte Änderungen'
+                        : 'Gespeichert'
+                    : 'Vorschau · nicht angelegt'}
+                </Badge>
+              </div>
 
-          <Select
-            aria-label="Jahr"
-            className="w-28"
-            value={state.period.year}
-            disabled={isSaving}
-            onChange={(event) => {
-              const year = Number(event.target.value);
-              requestProtectedAction(() =>
-                setState((currentState) =>
-                  selectPlannerPeriod(currentState, {
-                    ...currentState.period,
-                    year,
-                  }),
-                ),
-              );
-            }}
-          >
-            {yearOptions.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </Select>
+              <div className="col-span-2 row-start-2 flex w-full min-w-0 items-center justify-center gap-2 min-[1280px]:col-span-1 min-[1280px]:col-start-2 min-[1280px]:row-start-1">
+                <CardTitle
+                  title={toolbarTitle}
+                  className="min-w-0 truncate text-center text-lg tracking-tight"
+                >
+                  {toolbarTitle}
+                </CardTitle>
+                {activePlan ? (
+                  <EditPlanTitleDialog
+                    plan={activePlan}
+                    disabled={isSaving}
+                    onApply={(title) =>
+                      setState((currentState) =>
+                        replacePlannerDraft(
+                          currentState,
+                          setDraftPlanTitle(activePlan, title),
+                        ),
+                      )
+                    }
+                  />
+                ) : null}
+              </div>
 
-          <IconButton
-            label="Nächster Monat"
-            variant="secondary"
-            disabled={!nextPeriod || isSaving}
-            onClick={() => changeMonth(1)}
-          >
-            <ChevronRight aria-hidden="true" size={17} />
-          </IconButton>
-        </Toolbar>
+              <div className="col-start-2 row-start-1 flex flex-wrap items-center justify-end gap-2 min-[1280px]:col-start-3">
+                {activePlan ? (
+                  <Button
+                    variant={hasUnsavedChanges ? 'primary' : 'secondary'}
+                    disabled={!hasUnsavedChanges || isSaving}
+                    onClick={() => void savePlan(activePlan)}
+                  >
+                    {isSaving ? (
+                      <>
+                        <Spinner
+                          size="sm"
+                          label="Dienstplan wird gespeichert"
+                          className="text-app-on-primary"
+                        />
+                        Wird gespeichert …
+                      </>
+                    ) : (
+                      <>
+                        <Save aria-hidden="true" size={17} />
+                        Speichern
+                      </>
+                    )}
+                  </Button>
+                ) : null}
+                <Button
+                  variant="secondary"
+                  disabled
+                  title="Auswertung noch nicht verfügbar"
+                >
+                  <BarChart3 aria-hidden="true" size={17} />
+                  Auswertung
+                </Button>
+              </div>
+            </div>
+
+            <div
+              id="planner-toolbar-details"
+              hidden={!toolbarExpanded}
+              className="border-app-border mt-3 w-full border-t pt-3"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                <dl className="divide-app-border grid max-w-2xl min-w-96 flex-1 grid-cols-3 divide-x">
+                  <div className="pr-4">
+                    <dt className="text-app-muted text-xs">
+                      {activePlan
+                        ? 'Mitarbeiter im Plan'
+                        : 'Aktive Mitarbeiter'}
+                    </dt>
+                    <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
+                      {activePlan
+                        ? activePlan.employees.length
+                        : (preview?.employees.length ?? 0)}
+                    </dd>
+                  </div>
+                  <div className="px-4">
+                    <dt className="text-app-muted text-xs">Kalendertage</dt>
+                    <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
+                      {activePlan
+                        ? activePlan.days.length
+                        : (preview?.calendarDays.length ?? 0)}
+                    </dd>
+                  </div>
+                  <div className="pl-4">
+                    <dt className="text-app-muted text-xs">Arbeitstage</dt>
+                    <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
+                      {activePlan
+                        ? countWorkingDays(activePlan.year, activePlan.month)
+                        : (preview?.workingDayCount ?? 0)}
+                    </dd>
+                  </div>
+                </dl>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div
+                    role="group"
+                    aria-label="Ansicht, Kompaktansicht in Vorbereitung"
+                    className="border-app-border bg-app-surface-muted inline-flex h-9 items-center rounded-md border p-1 text-sm"
+                  >
+                    <span
+                      aria-current="true"
+                      className="bg-app-surface text-app-text rounded-sm px-3 py-1 font-medium shadow-sm"
+                    >
+                      Plan
+                    </span>
+                    <button
+                      type="button"
+                      disabled
+                      title="Kompaktansicht noch nicht verfügbar"
+                      className="text-app-text-disabled cursor-not-allowed px-3 py-1"
+                    >
+                      Kompakt
+                    </button>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    disabled
+                    title="Export noch nicht verfügbar"
+                  >
+                    <Download aria-hidden="true" size={17} />
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="border-app-border bg-app-surface text-app-muted hover:bg-app-surface-muted hover:text-app-text absolute -bottom-3 left-1/2 z-10 flex h-6 w-11 -translate-x-1/2 items-center justify-center rounded-b-md border-x border-b transition-colors"
+              aria-label={
+                toolbarExpanded
+                  ? 'Planungswerkzeuge einklappen'
+                  : 'Planungswerkzeuge ausklappen'
+              }
+              title={
+                toolbarExpanded
+                  ? 'Planungswerkzeuge einklappen'
+                  : 'Planungswerkzeuge ausklappen'
+              }
+              aria-expanded={toolbarExpanded}
+              aria-controls="planner-toolbar-details"
+              onClick={() => setToolbarExpanded((expanded) => !expanded)}
+            >
+              {toolbarExpanded ? (
+                <ChevronUp aria-hidden="true" size={16} />
+              ) : (
+                <ChevronDown aria-hidden="true" size={16} />
+              )}
+            </button>
+          </Toolbar>
+        )}
 
         {state.save.status === 'error' ? (
           <Alert title="Speichern fehlgeschlagen" variant="danger">
@@ -388,68 +587,18 @@ export function PlannerPage({
           </Alert>
         ) : null}
 
-        {activePlan ? (
-          <Card>
-            <CardHeader>
-              <Badge
-                variant={
-                  state.document.kind === 'plan' &&
-                  state.document.recoveredFromBackup
-                    ? 'warning'
-                    : hasUnsavedChanges
-                      ? 'warning'
-                      : 'success'
-                }
-              >
-                {state.document.kind === 'plan' &&
-                state.document.recoveredFromBackup
-                  ? 'Aus Sicherung geladen · Speichern erforderlich'
-                  : hasUnsavedChanges
-                    ? 'Ungespeicherte Änderungen'
-                    : 'Gespeichert'}
-              </Badge>
-              <div className="flex items-center gap-2">
-                <CardTitle>{activePlan.title}</CardTitle>
-                <EditPlanTitleDialog
-                  plan={activePlan}
-                  disabled={isSaving}
-                  onApply={(title) =>
-                    setState((currentState) =>
-                      replacePlannerDraft(
-                        currentState,
-                        setDraftPlanTitle(activePlan, title),
-                      ),
-                    )
-                  }
-                />
-              </div>
-              <CardDescription>
-                {PLANNER_MONTHS[activePlan.month - 1]} {activePlan.year} ·{' '}
-                {activePlan.employees.length} Mitarbeiter ·{' '}
-                {activePlan.days.length} Kalendertage
-              </CardDescription>
-            </CardHeader>
+        {state.document.kind === 'plan' &&
+        state.document.recoveredFromBackup ? (
+          <Alert
+            title="Aus Sicherung geladen · Speichern erforderlich"
+            variant="warning"
+          >
+            Der wiederhergestellte Stand muss ausdrücklich gespeichert werden,
+            bevor er als regulärer Ausgangsstand gilt.
+          </Alert>
+        ) : null}
 
-            <CardContent>
-              {state.document.kind === 'plan' &&
-              state.document.recoveredFromBackup ? (
-                <Alert
-                  title="Aus Sicherung geladen · Speichern erforderlich"
-                  variant="warning"
-                >
-                  Der wiederhergestellte Stand muss ausdrücklich gespeichert
-                  werden, bevor er als regulärer Ausgangsstand gilt.
-                </Alert>
-              ) : (
-                <Alert title="Dienstplan geöffnet">
-                  Der gespeicherte Plan wurde über seine eindeutige Plan-ID
-                  geladen. Mitarbeiter- und Kalenderstand stammen ausschließlich
-                  aus diesem Plan.
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
-        ) : state.load.status === 'loading' ? (
+        {state.load.status === 'loading' ? (
           <Card>
             <div className="flex min-h-56 items-center justify-center gap-3">
               <Spinner label="Vorschau wird geladen" />
@@ -467,96 +616,24 @@ export function PlannerPage({
               >
                 {state.load.errorMessage}
               </Alert>
-
               <Button variant="secondary" onClick={() => void loadTeam()}>
                 Erneut laden
               </Button>
             </div>
           </Card>
-        ) : preview ? (
-          <Card>
-            <CardHeader>
-              <Badge variant="warning">Vorschau · nicht angelegt</Badge>
-              <CardTitle>
-                {PLANNER_MONTHS[preview.period.month - 1]} {preview.period.year}
-              </CardTitle>
-              <CardDescription>
-                Diese Vorschau verwendet den aktuellen Teamstand und ist noch
-                nicht bearbeitbar oder gespeichert.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent>
-              {preview.employees.length === 0 ? (
-                <EmptyState
-                  icon={Users}
-                  title="Keine aktiven Mitarbeiter vorhanden"
-                  description="Aktiviere oder ergänze mindestens einen Mitarbeiter, bevor ein Dienstplan angelegt werden kann."
-                  action={
-                    <Button onClick={() => onNavigate('team')}>
-                      <Users aria-hidden="true" size={17} />
-                      Zur Teamverwaltung
-                    </Button>
-                  }
-                />
-              ) : (
-                <div className="space-y-5">
-                  <Alert title="Noch kein Dienstplan angelegt">
-                    Ein Wechsel des Zeitraums zeigt immer eine neue Vorschau und
-                    lädt keinen gespeicherten Plan automatisch.
-                  </Alert>
-
-                  <dl className="grid gap-3 sm:grid-cols-3">
-                    <div className="border-app-border bg-app-surface-muted rounded-md border p-4">
-                      <dt className="text-app-muted text-xs font-medium">
-                        Kalendertage
-                      </dt>
-                      <dd className="text-app-text mt-1 text-xl font-semibold tabular-nums">
-                        {preview.calendarDays.length}
-                      </dd>
-                    </div>
-                    <div className="border-app-border bg-app-surface-muted rounded-md border p-4">
-                      <dt className="text-app-muted text-xs font-medium">
-                        Arbeitstage
-                      </dt>
-                      <dd className="text-app-text mt-1 text-xl font-semibold tabular-nums">
-                        {preview.workingDayCount}
-                      </dd>
-                    </div>
-                    <div className="border-app-border bg-app-surface-muted rounded-md border p-4">
-                      <dt className="text-app-muted text-xs font-medium">
-                        Aktive Mitarbeiter
-                      </dt>
-                      <dd className="text-app-text mt-1 text-xl font-semibold tabular-nums">
-                        {preview.employees.length}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <div>
-                    <div className="mb-2 flex items-center gap-2">
-                      <CalendarDays
-                        aria-hidden="true"
-                        className="text-app-muted"
-                        size={17}
-                      />
-                      <h2 className="text-app-text text-sm font-semibold">
-                        Team in der Vorschau
-                      </h2>
-                    </div>
-                    <ul className="flex flex-wrap gap-2">
-                      {preview.employees.map((employee) => (
-                        <li key={employee.id}>
-                          <Badge>
-                            {employee.firstName} {employee.lastName}
-                          </Badge>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </CardContent>
+        ) : preview && preview.employees.length === 0 ? (
+          <Card className="p-4">
+            <EmptyState
+              icon={Users}
+              title="Keine aktiven Mitarbeiter vorhanden"
+              description="Aktiviere oder ergänze mindestens einen Mitarbeiter, bevor ein Dienstplan angelegt werden kann."
+              action={
+                <Button onClick={() => onNavigate('team')}>
+                  <Users aria-hidden="true" size={17} />
+                  Zur Teamverwaltung
+                </Button>
+              }
+            />
           </Card>
         ) : null}
 

@@ -9,7 +9,7 @@ type PageHeaderProps = {
 /** Zeigt Titel, Beschreibung und mögliche Aktionen einer Seite an. */
 export function PageHeader({ title, description, actions }: PageHeaderProps) {
   return (
-    <header className="border-app-border bg-app-surface flex min-h-20 items-start justify-between gap-6 border-b px-6 py-5 lg:px-8">
+    <header className="border-app-border bg-app-surface flex min-h-20 flex-wrap items-center justify-between gap-x-6 gap-y-4 border-b px-6 py-5 lg:px-8">
       <div className="min-w-0">
         <h1 className="text-app-text text-2xl font-semibold tracking-tight">
           {title}
@@ -21,7 +21,7 @@ export function PageHeader({ title, description, actions }: PageHeaderProps) {
       </div>
 
       {actions ? (
-        <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
           {actions}
         </div>
       ) : null}

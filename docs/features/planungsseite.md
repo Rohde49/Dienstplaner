@@ -30,11 +30,34 @@ Pixel.
 
 Die Planungsseite nutzt die verbleibende Inhaltsbreite und gliedert sich in:
 
-1. Seitenkopf mit Titel, Speicherstatus und Aktion „Speichern“,
-2. Werkzeugleiste mit Zeitraum, „Laden“ und „Dienstplan erstellen“,
-3. dauerhafte Lade-, Fehler-, Sicherungs- oder Änderungshinweise,
+1. Seitenkopf mit Seitenüberschrift, Zeitraumsauswahl sowie den Aktionen
+   „Laden“ und „Dienstplan erstellen“,
+2. eine ein- und ausklappbare Planungswerkzeugleiste direkt oberhalb der
+   Tabelle,
+3. dauerhafte Lade-, Fehler- oder Sicherungshinweise,
 4. Planungstabelle und
 5. Legende.
+
+Eingeklappt zeigt die Werkzeugleiste links das zurückhaltende Plansymbol und
+mit angemessenem Abstand daneben den Speicher- beziehungsweise Vorschaustatus.
+Plantitel oder Vorschauzeitraum stehen mittig; beim geöffneten Plan sitzt die
+Stiftaktion unmittelbar neben dem Titel. Bei schmaleren Fenstern darf diese
+Titelgruppe in eine eigene zentrierte Zeile wechseln. Ein zusätzlicher Text wie
+„Aktueller Plan“ ist nicht erforderlich. Bei geöffneten Plänen steht
+„Speichern“ rechts bereit; der deaktivierte Platzhalter „Auswertung“ bleibt
+daneben sichtbar. Ausgeklappt ergänzt eine flache, durch Linien
+getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender- und
+Arbeitstagen. Die deaktivierten Platzhalter „Plan / Kompakt“ und „Export“ stehen
+daneben. Die Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
+Rand eine schmale, ohne Schatten direkt an die Kartenkante angeschlossene
+Pfeil-Lasche zum Ein- und Ausklappen. Sie erhält einen
+zugänglichen Namen und einen sichtbaren Tastaturfokus, benötigt aber keine
+sichtbare Textbeschriftung. Dauerhafte Fehler- und Sicherungshinweise bleiben
+unabhängig vom Leistenstatus sichtbar.
+
+Die Platzhalter „Auswertung“, „Plan / Kompakt“ und „Export“ führen noch keine
+Aktion aus. Sie kennzeichnen nur die vorgesehenen Stellen in der Werkzeugleiste
+und gelten nicht als Umsetzung der eigenständigen späteren Features.
 
 Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
 schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
@@ -70,6 +93,12 @@ kein gespeicherter Monatsplan und besitzt noch keine verbindlichen Snapshots.
 Planungseinträge, Rufbereitschaften und Bemerkungen können erst nach der
 Plananlage bearbeitet werden.
 
+Bei aktiven Mitarbeitern erscheinen Status und Zeitraum in der eingeklappten
+Werkzeugleiste. Die Anzahl der Kalender- und Arbeitstage sowie der aktiven
+Mitarbeiter steht in ihrem ausklappbaren Detailbereich. Die Mitarbeiternamen
+stehen in den Tabellenköpfen; eine zusätzliche Namensliste und ein allgemeiner
+Informationskasten zur Vorschau sind nicht erforderlich.
+
 Sind keine aktiven Mitarbeiter vorhanden, bleibt die Zeitraumsauswahl
 verfügbar. Anstelle der Monatstabelle erscheint ein verständlicher Leerzustand
 mit der Aktion „Zur Teamverwaltung“. „Dienstplan erstellen“ ist in diesem
@@ -103,6 +132,14 @@ Der Plantitel steht oberhalb der Planungstabelle und kann über eine Stift-Aktio
 bearbeitet werden. Eine Titeländerung gehört zunächst zum Entwurf und wird erst
 mit dem gesamten Plan gespeichert. In der Vorschau steht diese Bearbeitung
 nicht zur Verfügung.
+
+Bei einem geöffneten Plan stehen Titel und Speicherstatus in der eingeklappten
+Werkzeugleiste. Die Titelbearbeitung steht als zugänglich beschriftete
+Stiftaktion direkt beim Titel; „Speichern“ steht im selben Bereich und ist nur
+bei Änderungen beziehungsweise einem Sicherungsstand verfügbar. Zeitraum und
+weitere Kennzahlen sind über die Seitenkopfzeile beziehungsweise den
+ausklappbaren Detailbereich erkennbar. Fehler- und Sicherungswarnungen bleiben
+deutlich sichtbar.
 
 ## Monatsplan laden
 
@@ -339,5 +376,7 @@ Nicht zur Planungsseite gehören:
 - das nachträgliche Ergänzen, Entfernen oder Umsortieren der im Plan
   eingefrorenen Mitarbeiter.
 
-Für Kompaktansicht, Drucken und PDF-Export werden keine funktionslosen Aktionen
-oder Platzhalter auf der Planungsseite angezeigt.
+Die ausklappbare Werkzeugleiste darf die erkennbar deaktivierten Platzhalter
+„Plan / Kompakt“ und „Export“ zeigen. Eine Druckaktion oder funktionsfähige
+Kompaktansicht und ein PDF-Export gehören erst zu ihren jeweiligen späteren
+Features.

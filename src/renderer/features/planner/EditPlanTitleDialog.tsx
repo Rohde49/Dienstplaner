@@ -7,12 +7,12 @@ import {
 } from '../../../shared/schemas';
 import {
   Button,
+  IconButton,
   DialogClose,
   DialogContent,
   DialogRoot,
   DialogTrigger,
   FormField,
-  IconButton,
   Input,
 } from '../../components/ui';
 
@@ -71,7 +71,7 @@ export function EditPlanTitleDialog({
       <DialogTrigger asChild>
         <IconButton
           label="Plantitel bearbeiten"
-          className="size-8"
+          className="size-8 shrink-0"
           disabled={disabled}
         >
           <Pencil aria-hidden="true" size={16} />

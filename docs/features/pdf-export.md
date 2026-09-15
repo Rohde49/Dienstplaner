@@ -45,8 +45,10 @@ nicht.
 
 ## Bedien- und Fehlerverhalten
 
-- Die Exportaktion wird erst angezeigt, wenn sie tatsächlich funktionsfähig
-  ist.
+- Eine funktionsfähige Exportaktion wird erst angeboten, wenn der PDF-Export
+  tatsächlich umgesetzt ist. Bis dahin darf die Planungsseite im ausklappbaren
+  Detailbereich der Werkzeugleiste einen sichtbar deaktivierten und als noch
+  nicht verfügbar gekennzeichneten Platzhalter „Export“ zeigen.
 - Während der Erzeugung wird ein eindeutiger Beschäftigtzustand angezeigt und
   ein Mehrfachauslösen verhindert.
 - Ein erfolgreicher Export wird knapp bestätigt.

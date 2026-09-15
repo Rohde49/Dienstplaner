@@ -29,6 +29,11 @@ Ein Wechsel in die Kompaktansicht verändert den Plan nicht. Ist der betrachtete
 Planstand noch nicht gespeichert, muss dieser Entwurfsstatus eindeutig
 erkennbar bleiben.
 
+Ein sichtbarer, noch deaktivierter Schalter „Plan / Kompakt“ im ausklappbaren
+Detailbereich der Planungswerkzeugleiste markiert den vorgesehenen
+Ansichtswechsel. Er führt bis zur Umsetzung der Kompaktansicht keinen Wechsel
+aus.
+
 ## Datengrundlage und Darstellung
 
 Die Ansicht verwendet ausschließlich den aktuell ausgewählten Monatsplan. Namen,
