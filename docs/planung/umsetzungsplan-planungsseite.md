@@ -179,14 +179,14 @@ Farbe abhängig.
 **Ziel:** Der vollständige Ablauf ist nachvollziehbar geprüft und verbleibende
 Abweichungen sind ausdrücklich bekannt.
 
-- [ ] Neue reine Zustands- und Entwurfslogik sowie neue Prozessgrenzen gezielt
+- [x] Neue reine Zustands- und Entwurfslogik sowie neue Prozessgrenzen gezielt
       automatisiert testen.
-- [ ] Vorschau, Anlage, Laden, Bearbeiten, Speichern,
+- [x] Vorschau, Anlage, Laden, Bearbeiten, Speichern,
       Sicherungswiederherstellung und Löschen als Kernablauf mit isolierten
       Testdaten prüfen.
 - [ ] Tastaturbedienung, Fokusführung und Darstellung bei `1024 × 700` sowie ab
       `1280` Pixeln manuell prüfen.
-- [ ] `npm test`, `npm run typecheck`, `npm run lint` und
+- [x] `npm test`, `npm run typecheck`, `npm run lint` und
       `npm run format:check` erfolgreich ausführen.
 - [ ] Verbleibende Abweichungen dokumentieren und die sichtbare Oberfläche
       abschließend durch den Benutzer abnehmen lassen.
