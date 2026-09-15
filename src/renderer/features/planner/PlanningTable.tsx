@@ -73,22 +73,41 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     key={employee.id}
                     colSpan={2}
                     scope="colgroup"
-                    className={`min-w-48 border-r border-b px-3 py-2 text-center ${colorStyle.plannerHeaderClass}`}
+                    className={`min-w-48 border-r border-b text-center ${colorStyle.plannerHeaderClass}`}
                   >
-                    <span className="block font-semibold">
-                      {employee.firstName} {employee.lastName}
+                    <span className="block px-3 py-2">
+                      <span className="block font-semibold">
+                        {employee.firstName} {employee.lastName}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] font-normal">
+                        {employee.role}
+                      </span>
                     </span>
-                    <span className="mt-0.5 block text-[11px] font-normal">
-                      {employee.role}
-                    </span>
-                    <span className="mt-1 block text-[11px] font-medium tabular-nums">
-                      {showServiceCount
-                        ? `SN/F ${employee.evaluation.snfServiceCount} · `
-                        : ''}
-                      Frei {employee.evaluation.freeDayCount} · Δ{' '}
-                      {formatTimeDifference(
-                        employee.evaluation.workingDifferenceMinutes,
+                    <span className="grid grid-cols-3 border-t border-current/20 text-[10px] tabular-nums">
+                      {showServiceCount ? (
+                        <span className="px-1 py-1.5">
+                          <span className="block font-normal">SN/F</span>
+                          <span className="block font-semibold">
+                            {employee.evaluation.snfServiceCount}
+                          </span>
+                        </span>
+                      ) : (
+                        <span aria-hidden="true" />
                       )}
+                      <span className="border-l border-current/20 px-1 py-1.5">
+                        <span className="block font-normal">Frei</span>
+                        <span className="block font-semibold">
+                          {employee.evaluation.freeDayCount}
+                        </span>
+                      </span>
+                      <span className="border-l border-current/20 px-1 py-1.5">
+                        <span className="block font-normal">Differenz</span>
+                        <span className="block font-semibold">
+                          {formatTimeDifference(
+                            employee.evaluation.workingDifferenceMinutes,
+                          )}
+                        </span>
+                      </span>
                     </span>
                   </th>
                 );
