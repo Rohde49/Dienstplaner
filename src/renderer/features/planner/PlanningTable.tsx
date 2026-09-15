@@ -46,6 +46,14 @@ function getDayClasses(isHoliday: boolean, isWeekend: boolean): string {
   return isWeekend ? 'bg-slate-100' : 'bg-app-surface';
 }
 
+function getDifferenceClasses(minutes: number): string {
+  if (minutes < 0) {
+    return 'text-red-800';
+  }
+
+  return minutes > 0 ? 'text-green-800' : '';
+}
+
 /** Stellt Vorschau und gespeicherten Plan als gemeinsame Monatsmatrix dar. */
 export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
   const model = useMemo(() => createPlannerTableModel(document), [document]);
@@ -79,7 +87,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     key={employee.id}
                     colSpan={2}
                     scope="colgroup"
-                    className={`min-w-48 border-r-2 border-b text-center ${colorStyle.plannerHeaderClass}`}
+                    className={`border-r-app-border-strong border-b-app-border-strong min-w-48 border-r-2 border-b text-center ${colorStyle.plannerHeaderClass}`}
                   >
                     <span className="block px-3 py-2">
                       <span className="block font-semibold">
@@ -90,7 +98,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       </span>
                     </span>
                     <span
-                      className={`grid border-t border-current/20 text-[10px] tabular-nums ${
+                      className={`border-t-app-border text-app-text grid border-t bg-slate-100 text-[10px] tabular-nums ${
                         showServiceCount ? 'grid-cols-3' : 'grid-cols-2'
                       }`}
                     >
@@ -113,11 +121,17 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                         </span>
                       </span>
                       <span className="border-l border-current/20 px-1 py-1.5">
-                        <span className="block font-normal">Differenz</span>
-                        <span className="block font-semibold">
-                          {formatTimeDifference(
+                        <span
+                          className={`block ${getDifferenceClasses(
                             employee.evaluation.workingDifferenceMinutes,
-                          )}
+                          )}`}
+                        >
+                          <span className="block font-normal">Differenz</span>
+                          <span className="block font-semibold">
+                            {formatTimeDifference(
+                              employee.evaluation.workingDifferenceMinutes,
+                            )}
+                          </span>
                         </span>
                       </span>
                     </span>

@@ -232,6 +232,11 @@ der Rufbereitschaftsspalte. Die beiden Teilspalten eines Mitarbeiters bleiben
 durch eine zurückhaltendere Linie voneinander getrennt. Diese Gruppierung setzt
 sich bis in die Abschlusszeilen fort.
 
+Kennzahlen sowie die Teilspalten „Eintrag“ und „Zeit“ stehen auf einem neutralen
+Hintergrund. Name und Rolle tragen die jeweilige Mitarbeiterfarbe. Die
+Trennlinien zwischen Mitarbeitergruppen und unter den Kennzahlen bleiben auch
+im farbigen Kopfbereich einheitlich grau.
+
 ### Farben und Kalendertage
 
 - Wochenendzeilen erhalten eine graue beziehungsweise dunklere Kennzeichnung.
@@ -329,6 +334,10 @@ Im Mitarbeiterkopf erscheinen:
 | Erzieher         | SN/F-Dienste, freie Tage, Soll-Ist-Differenz |
 | Praktikant       | SN/F-Dienste, freie Tage, Soll-Ist-Differenz |
 | Wirtschaftskraft | freie Tage, Soll-Ist-Differenz               |
+
+Beschriftung und Wert der Differenz werden bei negativen Werten rot und bei
+positiven Werten grün angezeigt. Ein ausgeglichener Wert bleibt neutral. Das
+Vorzeichen der Zahl macht die Richtung auch ohne Farbe erkennbar.
 
 Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
 Soll-Arbeitszeit. Die beiden Zeilen tragen die kurzen Beschriftungen „Ist“ und
