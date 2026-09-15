@@ -221,9 +221,10 @@ Planungszelle bearbeitet. Ein über Mitternacht reichender Eintrag bleibt dem Ta
 seiner Planungszelle zugeordnet.
 
 Der vollständige Tabellenkopf bleibt beim vertikalen Scrollen sichtbar. Die
-Datumsspalte bleibt beim horizontalen Scrollen links stehen. Abschlusszeilen
-für Ist- und Soll-Arbeitszeit verbleiben am normalen Tabellenende und werden
-nicht fixiert.
+Datumsspalte bleibt beim horizontalen Scrollen links stehen; die
+Bemerkungsspalte bleibt rechts stehen. Abschlusszeilen für Ist- und
+Soll-Arbeitszeit verbleiben am normalen Tabellenende und werden nicht vertikal
+fixiert.
 
 Ein etwas dunklerer Bereich für die Teilspalten und eine deutliche untere Linie
 heben den Tabellenkopf von den Kalendertagszeilen ab. Kräftigere senkrechte
@@ -310,9 +311,10 @@ Eine Bemerkung gehört zu genau einem Kalendertag, ist optional und auf 60
 Zeichen begrenzt. Äußere Leerzeichen werden entfernt; ein anschließend leerer
 Wert wird als nicht vorhandene Bemerkung gespeichert.
 
-Eine leere Zelle zeigt keinen Platzhalter. Vorhandener Inhalt erscheint als
-gekürzte Vorschau und darf die Zeilenhöhe nicht unkontrolliert vergrößern. Die
-Bearbeitung erfolgt in einem Popover mit:
+Eine leere Zelle zeigt keinen Platzhalter. Die kompakte Bemerkungsspalte zeigt
+vorhandenen Inhalt vollständig an. Passt er nicht in die Spaltenbreite, bricht
+der Text um und die Tabellenzeile wird entsprechend höher. Die Bearbeitung
+erfolgt in einem Popover mit:
 
 - einem beschrifteten mehrzeiligen Eingabefeld,
 - einer Anzeige der verwendeten Zeichen und

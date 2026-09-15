@@ -337,7 +337,7 @@ export function DayNoteCellPopover({
       <PopoverPrimitive.Trigger asChild>
         <button
           type="button"
-          className="hover:bg-app-primary-selected min-h-8 w-full max-w-56 truncate rounded px-2 py-1 text-center"
+          className="hover:bg-app-primary-selected min-h-8 w-full rounded px-2 py-1 text-center [overflow-wrap:anywhere] whitespace-pre-wrap"
           aria-label={`${date}, Bemerkung bearbeiten${note ? `, aktuell ${note}` : ''}`}
         >
           {note ?? ''}

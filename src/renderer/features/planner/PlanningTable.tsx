@@ -142,14 +142,14 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border-strong min-w-40 border-r-2 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
+                className="border-app-border-strong min-w-40 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
               >
                 Rufbereitschaft
               </th>
               <th
                 rowSpan={2}
                 scope="col"
-                className="border-app-border-strong min-w-56 border-b-2 bg-slate-100 px-3 py-2 text-center font-semibold"
+                className="border-app-border-strong border-l-app-border-strong sticky right-0 z-40 w-48 max-w-48 min-w-48 border-b-2 border-l-2 bg-slate-100 px-3 py-2 text-center font-semibold"
               >
                 Bemerkung
               </th>
@@ -293,7 +293,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     ];
                   })}
 
-                  <td className="border-app-border border-r-app-border-strong text-app-muted border-r-2 border-b p-1 text-center">
+                  <td className="border-app-border text-app-muted border-b p-1 text-center">
                     {editablePlan && planDay && onDraftChange ? (
                       <OnCallCellPopover
                         date={calendarDay.date}
@@ -318,7 +318,9 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       />
                     )}
                   </td>
-                  <td className="border-app-border text-app-muted max-w-56 border-b p-1 text-center">
+                  <td
+                    className={`border-app-border border-l-app-border-strong text-app-muted sticky right-0 z-10 w-48 max-w-48 min-w-48 border-b border-l-2 p-1 text-center ${rowClasses}`}
+                  >
                     {editablePlan && planDay && onDraftChange ? (
                       <DayNoteCellPopover
                         date={calendarDay.date}
@@ -330,7 +332,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                         }
                       />
                     ) : (
-                      <span className="block truncate px-2 py-1 text-center">
+                      <span className="block px-2 py-1 text-center [overflow-wrap:anywhere] whitespace-pre-wrap">
                         {planDay?.note ?? ''}
                       </span>
                     )}
@@ -362,8 +364,8 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     )}
                   </td>
                 ))}
-                <td className="border-app-border border-r-app-border-strong border-r-2 border-b px-3 py-2" />
                 <td className="border-app-border border-b px-3 py-2" />
+                <td className="border-app-border border-l-app-border-strong bg-app-surface-muted sticky right-0 z-10 w-48 max-w-48 min-w-48 border-b border-l-2 px-3 py-2" />
               </tr>
             ))}
           </tfoot>
