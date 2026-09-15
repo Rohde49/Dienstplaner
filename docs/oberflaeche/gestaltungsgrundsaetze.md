@@ -66,6 +66,10 @@ Bei geringerer Breite darf sie auf Symbole reduziert werden, sofern die
 Bezeichnungen als zugängliche Namen und verständliche Hinweise erhalten
 bleiben.
 
+Die Navigationsleiste bleibt beim Scrollen langer Seiten innerhalb der
+Fensterhöhe stehen. Ihre unteren Bedienelemente und der Fußbereich bleiben
+dadurch erreichbar.
+
 ## Typografie und Dichte
 
 - Es wird eine lokal verfügbare, Windows-nahe Systemschrift verwendet.

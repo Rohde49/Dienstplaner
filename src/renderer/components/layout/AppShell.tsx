@@ -1,11 +1,15 @@
 import {
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
   ClipboardList,
   HardDrive,
   Users,
   type LucideIcon,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+
+import { Button } from '../ui';
 
 export type AppPage = 'planner' | 'team' | 'entry-types';
 
@@ -41,21 +45,56 @@ const navigationItems: NavigationItem[] = [
 
 /** Zeigt den festen Seitenrahmen mit Navigation und aktuellem Seiteninhalt. */
 export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
+  const [isWideWindow, setIsWideWindow] = useState(
+    () => window.matchMedia('(min-width: 1280px)').matches,
+  );
+  const [manualExpansion, setManualExpansion] = useState<boolean | null>(null);
+  const isExpanded = manualExpansion ?? isWideWindow;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1280px)');
+    const handleWidthChange = (event: MediaQueryListEvent): void => {
+      setIsWideWindow(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleWidthChange);
+    return () => mediaQuery.removeEventListener('change', handleWidthChange);
+  }, []);
+
+  const toggleLabel = isExpanded
+    ? 'Navigationsleiste einklappen'
+    : 'Navigationsleiste ausklappen';
+
   return (
-    <div className="bg-app-background grid min-h-screen grid-cols-[4.5rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)]">
-      <aside className="border-app-border bg-app-surface flex min-h-screen flex-col border-r">
-        <div className="border-app-border flex h-16 items-center justify-center gap-3 border-b px-3 xl:justify-start xl:px-5">
+    <div
+      className={`bg-app-background grid min-h-screen motion-safe:transition-[grid-template-columns] motion-safe:duration-150 ${
+        isExpanded
+          ? 'grid-cols-[15rem_minmax(0,1fr)]'
+          : 'grid-cols-[4.5rem_minmax(0,1fr)]'
+      }`}
+    >
+      <aside className="border-app-border bg-app-surface sticky top-0 flex h-screen flex-col self-start border-r">
+        <div
+          className={`border-app-border flex h-16 items-center gap-3 border-b ${
+            isExpanded ? 'justify-start px-5' : 'justify-center px-3'
+          }`}
+        >
           <div className="bg-app-primary text-app-on-primary flex size-9 items-center justify-center rounded-lg">
             <CalendarDays aria-hidden="true" size={20} strokeWidth={1.8} />
           </div>
 
-          <div className="hidden xl:block">
+          <div className={isExpanded ? 'block' : 'hidden'}>
             <p className="text-app-text font-semibold">Dienstplaner</p>
             <p className="text-app-muted text-xs">Dienstplanung</p>
           </div>
         </div>
 
-        <nav aria-label="Hauptnavigation" className="flex-1 p-2 xl:p-3">
+        <nav
+          aria-label="Hauptnavigation"
+          className={`flex min-h-0 flex-1 flex-col ${
+            isExpanded ? 'p-3' : 'p-2'
+          }`}
+        >
           <ul className="space-y-1">
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -67,7 +106,11 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
                     type="button"
                     aria-current={isActive ? 'page' : undefined}
                     title={item.label}
-                    className={`flex w-full items-center justify-center gap-3 rounded-md px-2 py-2.5 text-sm font-medium transition-colors xl:justify-start xl:px-3 xl:text-left ${
+                    className={`flex w-full items-center gap-3 rounded-md py-2.5 text-sm font-medium transition-colors ${
+                      isExpanded
+                        ? 'justify-start px-3 text-left'
+                        : 'justify-center px-2'
+                    } ${
                       isActive
                         ? 'bg-app-primary-selected text-app-primary-foreground'
                         : 'text-app-muted hover:text-app-text hover:bg-app-surface-hover'
@@ -75,18 +118,47 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
                     onClick={() => onNavigate(item.id)}
                   >
                     <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
-                    <span className="sr-only xl:not-sr-only">{item.label}</span>
+                    <span className={isExpanded ? '' : 'sr-only'}>
+                      {item.label}
+                    </span>
                   </button>
                 </li>
               );
             })}
           </ul>
+
+          <div className="mt-auto pt-4">
+            <Button
+              variant="ghost"
+              size={isExpanded ? 'md' : 'icon'}
+              className={isExpanded ? 'w-full justify-start px-3' : 'mx-auto'}
+              aria-label={toggleLabel}
+              title={toggleLabel}
+              aria-expanded={isExpanded}
+              onClick={() => setManualExpansion(!isExpanded)}
+            >
+              {isExpanded ? (
+                <ChevronLeft aria-hidden="true" size={18} />
+              ) : (
+                <ChevronRight aria-hidden="true" size={18} />
+              )}
+              {isExpanded ? <span>Navigation einklappen</span> : null}
+            </Button>
+          </div>
         </nav>
 
-        <div className="border-app-border border-t p-3 xl:p-4">
-          <div className="text-app-muted flex items-center justify-center gap-2 text-xs xl:justify-start">
+        <div
+          className={`border-app-border border-t ${isExpanded ? 'p-4' : 'p-3'}`}
+        >
+          <div
+            className={`text-app-muted flex items-center gap-2 text-xs ${
+              isExpanded ? 'justify-start' : 'justify-center'
+            }`}
+          >
             <HardDrive aria-hidden="true" size={15} />
-            <span className="hidden xl:inline">Lokale Desktop-Anwendung</span>
+            <span className={isExpanded ? '' : 'hidden'}>
+              Lokale Desktop-Anwendung
+            </span>
           </div>
         </div>
       </aside>

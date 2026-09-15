@@ -39,7 +39,13 @@ Die Planungsseite nutzt die verbleibende Inhaltsbreite und gliedert sich in:
 Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
 schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
 Beschriftungen oder Tooltips verfügbar. Ab `1280` Pixeln werden Symbol und
-Beschriftung gemeinsam angezeigt.
+Beschriftung gemeinsam angezeigt. Über eine Schaltfläche am unteren Ende der
+Hauptnavigation kann die Teamleitung diese unabhängig von der Fensterbreite
+ein- oder ausklappen. Diese
+manuelle Auswahl bleibt während der laufenden App-Sitzung erhalten; beim
+nächsten Start gilt wieder die zur Fensterbreite passende Ausgangsdarstellung.
+Die Navigation einschließlich Schaltfläche und Fußbereich bleibt beim Scrollen
+der Planungsseite sichtbar.
 
 ## Anfangszustand und Vorschau
 
