@@ -184,11 +184,11 @@ Abweichungen sind ausdrücklich bekannt.
 - [x] Vorschau, Anlage, Laden, Bearbeiten, Speichern,
       Sicherungswiederherstellung und Löschen als Kernablauf mit isolierten
       Testdaten prüfen.
-- [ ] Tastaturbedienung, Fokusführung und Darstellung bei `1024 × 700` sowie ab
+- [x] Tastaturbedienung, Fokusführung und Darstellung bei `1024 × 700` sowie ab
       `1280` Pixeln manuell prüfen.
 - [x] `npm test`, `npm run typecheck`, `npm run lint` und
       `npm run format:check` erfolgreich ausführen.
-- [ ] Verbleibende Abweichungen dokumentieren und die sichtbare Oberfläche
+- [x] Verbleibende Abweichungen dokumentieren und die sichtbare Oberfläche
       abschließend durch den Benutzer abnehmen lassen.
 
 **Abnahme:** Automatische Prüfungen und Kernablauf sind erfolgreich. Die
@@ -198,9 +198,9 @@ manuelle Sichtprüfung ist bestätigt oder enthält konkrete offene Restpunkte.
 
 Die Planungsseite gilt als abgeschlossen, wenn:
 
-- [ ] alle sieben Implementierungsabschnitte abgenommen sind,
-- [ ] keine wesentliche Abweichung zur Feature-Dokumentation offen ist und
-- [ ] die [Roadmap](roadmap.md) aktualisiert wurde.
+- [x] alle sieben Implementierungsabschnitte abgenommen sind,
+- [x] keine wesentliche Abweichung zur Feature-Dokumentation offen ist und
+- [x] die [Roadmap](roadmap.md) aktualisiert wurde.
 
 Auswertung, Kompaktansicht und PDF-Export bleiben eigenständige spätere
 Features.

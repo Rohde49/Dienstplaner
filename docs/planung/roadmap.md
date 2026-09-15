@@ -14,56 +14,37 @@ abgeschlossen wurde.
 
 - [Teamverwaltung](../features/teamverwaltung.md)
 - [Planungseinträge](../features/planungseintraege.md)
+- [Planungsseite](../features/planungsseite.md)
 
 ## Aktueller Schwerpunkt
 
-### Planungsseite
+### Auswertung
 
-Als nächstes wird die bisherige Platzhalterseite durch die eigentliche
-Oberfläche für Monatspläne ersetzt. Sie baut auf den bereits vorhandenen
-Grundlagen für Monatspläne, Speicherung und Berechnungen auf.
-
-Zum Arbeitspaket gehören insbesondere:
-
-- Zeitraum auswählen und eine noch nicht gespeicherte Vorschau anzeigen,
-- Monatspläne anlegen, laden und löschen,
-- Planungseinträge, Rufbereitschaften und Tagesbemerkungen bearbeiten,
-- ungespeicherte Änderungen erkennbar machen und vor Verlust schützen,
-- Kennzahlen aus dem aktuellen Entwurf anzeigen und
-- Monatspläne bewusst speichern.
-
-Die verbindliche fachliche Beschreibung steht in der
-[Planungsseite](../features/planungsseite.md).
-Der überprüfte Fortschritt und die nächsten Implementierungsabschnitte stehen
-im [Umsetzungsplan der Planungsseite](umsetzungsplan-planungsseite.md).
+Als nächstes wird die ausführliche [Auswertung](../features/auswertung.md) eines
+Monatsplans auf Grundlage der verbindlichen Berechnungsregeln dargestellt.
 
 ## Anschließende Arbeitspakete
 
-### 1. Auswertung
-
-Die ausführliche [Auswertung](../features/auswertung.md) eines Monatsplans wird
-auf Grundlage der verbindlichen Berechnungsregeln dargestellt.
-
-### 2. Kompaktansicht
+### 1. Kompaktansicht
 
 Eine eigenständige [Kompaktansicht](../features/kompaktansicht.md) des
 Monatsplans wird fachlich abschließend konkretisiert und anschließend
 umgesetzt. Sie ist keine Druckvorschau.
 
-### 3. PDF-Export und Ausgabe
+### 2. PDF-Export und Ausgabe
 
 Der Dienstplan wird für eine verlässliche Ausgabe aufbereitet und als
 [PDF](../features/pdf-export.md) exportierbar gemacht. Ob zusätzlich eine
 direkte Druckfunktion benötigt wird, ist vor diesem Arbeitspaket fachlich zu
 entscheiden.
 
-### 4. Auslieferung
+### 3. Auslieferung
 
 Die Anwendung wird als Windows-Anwendung paketiert und über einen Installer
 bereitgestellt. Die Installation und der lokale Betrieb werden auf einem dafür
 geeigneten System geprüft.
 
-### 5. Abschluss und Gesamtprüfung
+### 4. Abschluss und Gesamtprüfung
 
 Zum Abschluss werden die wesentlichen Benutzerabläufe, Berechnungen,
 Speicherabläufe und Fehlerfälle gemeinsam geprüft. Verbleibende Abweichungen
