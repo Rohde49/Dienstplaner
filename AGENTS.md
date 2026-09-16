@@ -38,8 +38,6 @@ Dienstplaner ist eine lokale Windows-Desktop-Anwendung zur Erstellung und Verwal
 
 - Bestehende Architektur, Projektstruktur, Benennung und etablierte Muster beibehalten.
 - Bestehende Komponenten, Schemas, Berechnungen und andere geeignete Lösungen wiederverwenden.
-- Die kleinste zusammenhängende Änderung bevorzugen, die die Aufgabe vollständig erfüllt.
-- Keine nicht angeforderten Refactorings oder sonstigen Änderungen durchführen.
 - Abhängigkeiten nur mit ausdrücklicher Zustimmung hinzufügen, entfernen oder aktualisieren.
 - Analyse, Prüfung, Review und Planung sind grundsätzlich lesend, solange keine Änderung ausdrücklich beauftragt wurde.
 - Keine Commits, Pushes oder sonstigen Änderungen an der Git-Historie ohne ausdrückliche Anweisung.
