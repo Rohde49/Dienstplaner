@@ -273,9 +273,18 @@ ausschließlich aktuell aktive Eintragsarten an. Jede Auswahl zeigt gleichwertig
 - Kürzel und
 - Zeitspanne.
 
+Der Kopf des Popovers nennt Mitarbeiter und formatiertes Datum. Ein kleiner
+Pfeil verbindet das Popover sichtbar mit der auslösenden Tabellenzelle. Die
+Eintragsarten erscheinen als vollständig bedienbare Auswahlzeilen mit einem
+Kürzel-Badge und einem Uhrsymbol an der Zeitspanne. Ein Eintrag ohne Uhrzeit
+bleibt mit Symbol und dem Text „Keine Uhrzeit“ eindeutig erkennbar. Hover- und
+Fokuszustände heben die gesamte Auswahlzeile hervor.
+
 Die ausführliche Bezeichnung wird in dieser kompakten Auswahl nicht angezeigt.
-Der aktuell gesetzte Eintrag ist deutlich markiert. Bei einer belegten Zelle
-wird zusätzlich „Eintrag entfernen“ angeboten. Das Entfernen benötigt keine
+Der aktuell gesetzte Eintrag ist durch Hintergrund, Häkchen und die sichtbare
+Beschriftung „Aktuell“ markiert. Bei vielen Eintragsarten scrollt ausschließlich
+die Auswahlliste. Bei einer belegten Zelle wird „Eintrag entfernen“ als eigener
+roter Aktionsbereich unterhalb der Liste angeboten. Das Entfernen benötigt keine
 Bestätigung, weil es zunächst nur den Entwurf verändert.
 
 Steht keine aktive Eintragsart zur Verfügung, erscheint der Hinweis nur im
