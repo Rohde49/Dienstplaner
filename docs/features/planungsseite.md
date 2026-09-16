@@ -34,9 +34,8 @@ Die Planungsseite nutzt die verbleibende Inhaltsbreite und gliedert sich in:
    „Laden“ und „Dienstplan erstellen“,
 2. eine ein- und ausklappbare Planungswerkzeugleiste direkt oberhalb der
    Tabelle,
-3. dauerhafte Lade-, Fehler- oder Sicherungshinweise,
-4. Planungstabelle und
-5. Legende.
+3. dauerhafte Lade-, Fehler- oder Sicherungshinweise und
+4. Planungstabelle.
 
 Eingeklappt zeigt die Werkzeugleiste links das zurückhaltende Plansymbol und
 mit angemessenem Abstand daneben den Speicher- beziehungsweise Vorschaustatus.
@@ -210,8 +209,8 @@ Jeder Mitarbeiter besitzt zwei Teilspalten:
 Noch unbelegte Zellen für Planungseinträge und Rufbereitschaften zeigen eine
 helle graue Schraffur statt eines Strichs. Das gilt auch in der nicht
 bearbeitbaren Vorschau. Ein gesetzter Wert ersetzt die Schraffur. Die Zeitspalte
-und leere Bemerkungen erhalten keine Schraffur. Eine Legende erklärt die
-Markierung.
+und leere Bemerkungen erhalten keine Schraffur. Zugängliche Beschriftungen
+bezeichnen unbelegte Zellen unabhängig von dieser sichtbaren Markierung.
 
 Ohne Planungseintrag bleibt die zugehörige Zeitspalte leer. Ein gesetzter
 Planungseintrag ohne Start- und Endzeit zeigt dort einen Strich; vorhandene

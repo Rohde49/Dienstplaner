@@ -66,7 +66,7 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
 
   return (
     <div className="space-y-3">
-      <div className="border-app-border max-h-[calc(100vh-19rem)] min-h-80 overflow-auto rounded-lg border shadow-sm">
+      <div className="border-app-border max-h-[calc(100vh-16rem)] min-h-80 overflow-auto rounded-lg border shadow-sm">
         <table className="w-max min-w-full border-separate border-spacing-0 text-left text-xs">
           <thead className="sticky top-0 z-30 shadow-sm">
             <tr>
@@ -370,34 +370,6 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
             ))}
           </tfoot>
         </table>
-      </div>
-
-      <div
-        aria-label="Legende der Planungstabelle"
-        className="text-app-muted flex flex-wrap items-center gap-x-5 gap-y-2 text-xs"
-      >
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="border-app-border size-3 rounded-sm border bg-slate-100"
-          />
-          Wochenende
-        </span>
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="border-app-danger-border size-3 rounded-sm border bg-red-50"
-          />
-          Feiertag
-        </span>
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="planner-empty-field border-app-border bg-app-surface size-5 rounded-sm border"
-          />
-          Noch unbelegt (Eintrag oder Rufbereitschaft)
-        </span>
-        <span>Mitarbeiterfarben kennzeichnen die jeweiligen Spaltenköpfe.</span>
       </div>
     </div>
   );
