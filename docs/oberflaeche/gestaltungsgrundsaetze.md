@@ -42,6 +42,14 @@ nachzuahmen.
 - Dienstplan und Auswertung nutzen die verfügbare Inhaltsbreite. Einfache
   Verwaltungsbereiche dürfen ihre Inhaltsbreite begrenzen.
 
+Layoutgetreue Dokumentvorschauen stellen eine weiße Ausgabeseite zentriert auf
+einer neutralen Arbeitsfläche dar. Bildschirmrand und Schatten unterstützen nur
+die räumliche Orientierung und gehören nicht zum Ausgabedokument. Eine
+Skalierung darf die festgelegten Umbrüche nicht verändern; bei begrenzter Höhe
+hat vertikales Scrollen Vorrang vor unleserlich kleiner Darstellung. Die
+jeweilige Feature-Dokumentation legt Seitenformat, Inhalt und Passungsregeln
+fest.
+
 ## Seitenaufbau und Navigation
 
 Jede Hauptansicht folgt grundsätzlich derselben Reihenfolge:

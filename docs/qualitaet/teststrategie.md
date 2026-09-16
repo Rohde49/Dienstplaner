@@ -87,6 +87,31 @@ Oberflächenänderungen zusätzlich manuell geprüft. Dazu gehören mindestens:
 Eine erfolgreiche technische Prüfung belegt nicht automatisch eine visuell
 oder praktisch geeignete Oberfläche.
 
+### A4-Dokumentansichten und PDF
+
+Eine layoutgetreue Dokumentvorschau benötigt zusätzlich zur gewöhnlichen
+Oberflächenprüfung einen Abgleich ihrer aufbereiteten Inhalte und ihrer festen
+Seitenfläche.
+
+Für die Kompaktansicht werden insbesondere automatisiert geprüft:
+
+- die ausschließliche Verwendung des gespeicherten Planstands,
+- kompakte Uhrzeitformate und unveränderte Zeitdauern,
+- eindeutige Namen bei identischen Nachnamen,
+- Feiertagsmarkierungen und Feiertagslegende sowie
+- die Abschlusswerte für Ist, Soll und Wochenarbeitszeit.
+
+Die manuelle Sichtprüfung umfasst einen normalen Plan mit sechs bis sieben
+Mitarbeitern sowie den Grenzfall mit neun Mitarbeitern und 31 Tagen. Zusätzlich
+werden lange Namen, umgebrochene Bemerkungen, Einträge ohne Uhrzeit,
+Wochenenden, Feiertage und die kleinste Fenstergröße `1024 × 700` geprüft.
+Mindestschriftgröße, Skalierung, Zeilenhöhe und Bemerkungsbreite werden erst am
+gerenderten A4-Prototyp verbindlich abgenommen.
+
+Der spätere PDF-Export muss zusätzlich das erzeugte PDF selbst rendern und
+gegen das gemeinsame Dokumentlayout prüfen. Eine korrekte Kompaktansicht allein
+belegt noch keine korrekte PDF-Datei.
+
 ## Risikoprioritäten
 
 ### Höchste Priorität

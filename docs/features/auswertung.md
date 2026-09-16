@@ -116,10 +116,12 @@ bereits dauerhaft gespeichert wurde.
 
 „Auswertung“ in der Werkzeugleiste der Planungsseite öffnet den zentralen
 Dialog für den aktuell geöffneten Monatsplan. Ohne geöffneten Plan bleibt die
-Aktion deaktiviert. Ein leicht unscharfer Hintergrund und die modale Bedienung
-halten die Planungsseite währenddessen unverändert. Nach dem Schließen bleiben
-Entwurf, Zeitraum, Scrollstand und Leistenstatus erhalten. Der Dialog ist mit
-Maus und Tastatur bedienbar.
+Aktion deaktiviert. Sie ist außerdem in der Kompaktansicht deaktiviert, weil
+dort der gespeicherte Ausgangsstand sichtbar ist, während die Auswertung den
+aktuellen Entwurf verwendet. Ein leicht unscharfer Hintergrund und die modale
+Bedienung halten die Planungsseite währenddessen unverändert. Nach dem Schließen
+bleiben Entwurf, Zeitraum, Scrollstand und Leistenstatus erhalten. Der Dialog
+ist mit Maus und Tastatur bedienbar.
 
 ## Fehlerverhalten
 

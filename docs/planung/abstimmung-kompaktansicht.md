@@ -1,17 +1,23 @@
 # Abstimmung zur Kompaktansicht
 
+## Status
+
+Die fachliche, gestalterische und technische Abstimmung ist abgeschlossen. Die
+bestätigten Ergebnisse wurden in die zuständigen Dokumente unter `docs/`
+übernommen. Für das dauerhafte Zielverhalten ist nun insbesondere die
+[Kompaktansicht](../features/kompaktansicht.md) maßgeblich; die weitere Arbeit
+steuert der [Umsetzungsplan](umsetzungsplan-kompaktansicht.md).
+
+Dieses Dokument bleibt als nachvollziehbares Entscheidungsprotokoll erhalten.
+Konkrete Schriftgrößen, Spaltenbreiten und Skalierungsgrenzen werden wie
+vereinbart erst am sichtbaren A4-Prototyp entschieden.
+
 ## Zweck dieses Dokuments
 
-Dieses Arbeitsdokument hält die laufende fachliche, gestalterische und
-technische Abstimmung zur Kompaktansicht fest. Es trennt bestätigte
-Festlegungen von offenen Entscheidungen und verhindert, dass einzelne
-Zwischenstände bereits als vollständige Feature-Spezifikation erscheinen.
-
-Bis zum Abschluss der Abstimmung bleiben die bestehenden Dokumente unter
-`docs/` der aktuelle Dokumentationsstand. Danach werden die bestätigten
-Ergebnisse in die jeweils zuständigen Feature-, Oberflächen- und
-Planungsdokumente übernommen. Dabei werden auch Widersprüche zu bisherigen
-Festlegungen bereinigt.
+Dieses Protokoll hält die abgeschlossene fachliche, gestalterische und
+technische Abstimmung zur Kompaktansicht sowie ihre Herleitung fest. Es ersetzt
+weder die dauerhafte Feature-Dokumentation noch den fortzuschreibenden
+Umsetzungsplan.
 
 ## Bestätigte Festlegungen
 
@@ -392,11 +398,9 @@ umgesetzt wird.
 - [x] Sonder- und Leerzustände
 - [x] Technische Umsetzung und Prüfung
 
-## Erkannter Dokumentationskonflikt
+## Aufgelöster Dokumentationskonflikt
 
-Das aktuelle Feature-Dokument `docs/features/kompaktansicht.md` grenzt die
-Kompaktansicht noch ausdrücklich von einer Druckvorschau ab und beschreibt sie
-als vom PDF-Export unabhängige Ansicht. Diese bisherige Festlegung stimmt nicht
-mehr vollständig mit der laufenden Abstimmung überein. Sie wird erst nach
-Abschluss der fachlichen Entscheidungen gemeinsam mit den übrigen betroffenen
-Dokumenten angepasst.
+Das frühere Feature-Dokument grenzte die Kompaktansicht ausdrücklich von einer
+Druckvorschau ab und beschrieb sie als vom PDF-Export unabhängige Ansicht. Diese
+Festlegung wurde durch die bestätigte layoutgetreue A4-Dokumentvorschau ersetzt
+und in den zuständigen Dokumenten bereinigt.

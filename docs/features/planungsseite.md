@@ -35,7 +35,7 @@ Die Planungsseite nutzt die verbleibende Inhaltsbreite und gliedert sich in:
 2. eine ein- und ausklappbare Planungswerkzeugleiste direkt oberhalb der
    Tabelle,
 3. dauerhafte Lade-, Fehler- oder Sicherungshinweise und
-4. Planungstabelle.
+4. die gewählte Plan- oder Kompaktansicht.
 
 Eingeklappt zeigt die Werkzeugleiste links das zurückhaltende Plansymbol und
 mit angemessenem Abstand daneben den Speicher- beziehungsweise Vorschaustatus.
@@ -43,11 +43,14 @@ Plantitel oder Vorschauzeitraum stehen mittig; beim geöffneten Plan sitzt die
 Stiftaktion unmittelbar neben dem Titel. Bei schmaleren Fenstern darf diese
 Titelgruppe in eine eigene zentrierte Zeile wechseln. Ein zusätzlicher Text wie
 „Aktueller Plan“ ist nicht erforderlich. Bei geöffneten Plänen steht
-„Speichern“ und „Auswertung“ rechts bereit. Ohne geöffneten Plan bleibt
-„Auswertung“ deaktiviert. Ausgeklappt ergänzt eine flache, durch Linien
+„Speichern“ und „Auswertung“ rechts bereit. Ohne geöffneten Plan bleiben diese
+Aktionen deaktiviert. In der Kompaktansicht sind beide Aktionen ebenfalls
+deaktiviert, weil dort ausschließlich der gespeicherte Ausgangsstand sichtbar
+ist. Ausgeklappt ergänzt eine flache, durch Linien
 getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender- und
-Arbeitstagen. Die deaktivierten Platzhalter „Plan / Kompakt“ und „Export“ stehen
-daneben. Die Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
+Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“ und der weiterhin
+deaktivierte Platzhalter „Export“ stehen daneben. Die Werkzeugleiste startet
+eingeklappt und besitzt mittig am unteren
 Rand eine schmale, ohne Schatten direkt an die Kartenkante angeschlossene
 Pfeil-Lasche zum Ein- und Ausklappen. Sie erhält einen
 zugänglichen Namen und einen sichtbaren Tastaturfokus, benötigt aber keine
@@ -55,9 +58,12 @@ sichtbare Textbeschriftung. Dauerhafte Fehler- und Sicherungshinweise bleiben
 unabhängig vom Leistenstatus sichtbar.
 
 „Auswertung“ öffnet den Dialog des eigenständigen
-[Auswertungsfeatures](./auswertung.md). Die Platzhalter „Plan / Kompakt“ und
-„Export“ führen noch keine Aktion aus und kennzeichnen die Stellen ihrer
-späteren Features.
+[Auswertungsfeatures](./auswertung.md). „Plan / Kompakt“ wechselt bei einem
+regulär gespeicherten, geöffneten Monatsplan zwischen der bearbeitbaren
+Planungstabelle und der schreibgeschützten
+[Kompaktansicht](./kompaktansicht.md). Der Wechsel verändert oder verwirft den
+Entwurf nicht. „Export“ führt noch keine Aktion aus und kennzeichnet die Stelle
+des späteren [PDF-Exports](./pdf-export.md).
 
 Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
 schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
@@ -434,13 +440,12 @@ ist nicht vorgesehen.
 Nicht zur Planungsseite gehören:
 
 - die ausführliche Auswertungstabelle,
-- die eigenständige Kompaktansicht,
-- eine Druckvorschau,
 - Drucken und PDF-Export sowie
 - das nachträgliche Ergänzen, Entfernen oder Umsortieren der im Plan
   eingefrorenen Mitarbeiter.
 
-Die ausklappbare Werkzeugleiste darf die erkennbar deaktivierten Platzhalter
-„Plan / Kompakt“ und „Export“ zeigen. Eine Druckaktion oder funktionsfähige
-Kompaktansicht und ein PDF-Export gehören erst zu ihren jeweiligen späteren
-Features.
+Das A4-Dokumentlayout, seine gespeicherte Datengrundlage und die
+Darstellungsregeln der integrierten Kompaktansicht werden ausschließlich im
+zugehörigen Feature-Dokument festgelegt. Die Werkzeugleiste zeigt weiterhin
+den erkennbar deaktivierten Platzhalter „Export“; Dateierzeugung und
+Druckaktionen gehören zum späteren PDF- beziehungsweise Ausgabefeature.

@@ -202,5 +202,6 @@ Die Planungsseite gilt als abgeschlossen, wenn:
 - [x] keine wesentliche Abweichung zur Feature-Dokumentation offen ist und
 - [x] die [Roadmap](roadmap.md) aktualisiert wurde.
 
-Auswertung, Kompaktansicht und PDF-Export bleiben eigenständige spätere
-Features.
+Auswertung, Kompaktansicht und PDF-Export bleiben eigenständige Features. Die
+weitere Arbeit an der integrierten Dokumentvorschau wird im
+[Umsetzungsplan Kompaktansicht](umsetzungsplan-kompaktansicht.md) geführt.

@@ -1,41 +1,45 @@
 # PDF-Export
 
-Der PDF-Export soll einen Monatsplan als verlässliche lokale Datei ausgeben. Er
-ist ein eigener Funktionsbereich und wird nicht durch eine bloße
-Bildschirmansicht oder die Kompaktansicht ersetzt.
+Der PDF-Export soll den gespeicherten Stand eines geöffneten Monatsplans als
+verlässliche lokale Datei ausgeben. Er verwendet dasselbe A4-Dokumentlayout wie
+die [Kompaktansicht](./kompaktansicht.md), ergänzt dieses aber um Dateierzeugung,
+Speicherablauf und Rückmeldungen.
 
 ## Zweck und Umfang
 
 Der Export soll:
 
-- einen Monatsplan in ein festgelegtes PDF-Layout übertragen,
-- die für die Weitergabe benötigten Planinformationen vollständig und lesbar
-  darstellen,
+- das in der Kompaktansicht geprüfte Dokumentlayout unverändert als PDF
+  ausgeben,
+- die benötigten Planinformationen vollständig und lesbar darstellen,
 - ausschließlich lokal und ohne Server- oder Cloud-Dienst funktionieren,
 - einen nachvollziehbaren Speicherort beziehungsweise Dateidialog verwenden
   und
-- Erfolg oder Fehler verständlich zurückmelden.
+- Erfolg, Abbruch oder Fehler verständlich zurückmelden.
 
-## Bezug zum Monatsplan
-
-Die PDF-Datei wird aus genau einem ausgewählten Monatsplan erzeugt.
-Ungespeicherte Änderungen oder ein aus einer Sicherung geladener Stand dürfen
-dabei nicht unbemerkt als regulär gespeicherter Plan erscheinen.
-
-Ob ausschließlich ein gespeicherter Plan exportiert werden darf oder auch ein
-eindeutig gekennzeichneter Entwurf, ist noch fachlich zu entscheiden.
+Die Kompaktansicht bleibt die zugehörige Bildschirmvorschau. Der PDF-Export ist
+der davon getrennte Vorgang, der eine Datei erzeugt.
 
 ## Datengrundlage
 
-Die Ausgabe verwendet ausschließlich den vollständigen Monatsplan mit seinen:
+Die PDF-Datei verwendet ausschließlich den regulär gespeicherten Ausgangsstand
+des geöffneten Monatsplans. Ungespeicherte Entwurfsänderungen werden nicht
+exportiert.
 
-- Mitarbeiter-Snapshots,
-- Kalendertagen,
+Ein aus einer Sicherungsdatei wiederhergestellter Stand muss zuerst
+ausdrücklich gespeichert werden. Erst danach darf er als regulärer Planstand
+exportiert werden.
+
+Die Ausgabe verwendet die im Plan gespeicherten:
+
+- Mitarbeiter-Snapshots einschließlich Reihenfolge, Farben und
+  Wochenarbeitszeiten,
+- Kalendertage,
 - Planungseintrag-Snapshots,
 - Rufbereitschaften und
 - Bemerkungen.
 
-Benötigte Kalendermerkmale und Kennzahlen werden mit denselben gemeinsamen
+Kalendermerkmale sowie Ist- und Sollwerte werden mit denselben gemeinsamen
 Funktionen ermittelt wie in der Anwendung. Aktuelle Stammdaten dürfen einen
 älteren gespeicherten Plan nicht verändern.
 
@@ -43,47 +47,73 @@ Die PDF-Datei ist eine abgeleitete Ausgabe. Sie gehört nicht zur primären
 [Datenhaltung](../architektur/datenhaltung.md) und verändert den Monatsplan
 nicht.
 
+## Gemeinsames Dokumentlayout
+
+Kompaktansicht und PDF verwenden dieselbe Dokumentdarstellung. Verbindlich sind
+insbesondere:
+
+- eine A4-Seite im Hochformat,
+- identische Spalten, Zeilen, Inhalte und Umbrüche,
+- Plantitel, Monat/Jahr und Speicherdatum,
+- die kompakte Monatsplantabelle,
+- Feiertagslegende,
+- die Abschlusszeilen `Ist`, `Soll` und `h/Woche` sowie
+- der Bereich `Datum` und `Freigabe / Unterschrift`.
+
+Die vollständigen Darstellungsregeln stehen in der
+[Kompaktansicht](./kompaktansicht.md) und werden hier nicht dupliziert.
+
+Der aktuelle Zielumfang ist eine lesbare Seite mit bis zu neun
+Mitarbeiterspalten und 31 Kalendertagen. Passt ein Plan trotz zulässiger
+Skalierung nicht vollständig und lesbar auf diese Seite, wird der Export
+verhindert. Inhalte werden weder abgeschnitten noch verborgen.
+
+Eine spätere Erweiterung darf breitere Pläne kontrolliert auf mehrere Seiten
+verteilen. Die dafür notwendigen Regeln werden erst vor diesem späteren
+Arbeitspaket festgelegt.
+
 ## Bedien- und Fehlerverhalten
 
-- Eine funktionsfähige Exportaktion wird erst angeboten, wenn der PDF-Export
-  tatsächlich umgesetzt ist. Bis dahin darf die Planungsseite im ausklappbaren
-  Detailbereich der Werkzeugleiste einen sichtbar deaktivierten und als noch
-  nicht verfügbar gekennzeichneten Platzhalter „Export“ zeigen.
+- Eine funktionsfähige Exportaktion wird erst angeboten, wenn Dateierzeugung
+  und Speicherablauf vollständig umgesetzt sind. Bis dahin bleibt `Export` in
+  der Planungswerkzeugleiste als nicht verfügbar gekennzeichneter Platzhalter
+  deaktiviert.
+- Der Export ist nur für einen regulär gespeicherten, geöffneten Monatsplan
+  verfügbar.
 - Während der Erzeugung wird ein eindeutiger Beschäftigtzustand angezeigt und
   ein Mehrfachauslösen verhindert.
 - Ein erfolgreicher Export wird knapp bestätigt.
-- Ein fehlgeschlagener oder abgebrochener Export erzeugt keinen falschen
-  Erfolgszustand.
-- Fehlermeldungen erklären die Ursache soweit möglich verständlich und lassen
-  den Monatsplan unverändert.
+- Ein abgebrochener Dateidialog gilt nicht als Fehler und erzeugt keine falsche
+  Erfolgsmeldung.
+- Ein fehlgeschlagener Export lässt den Monatsplan unverändert und erklärt die
+  Ursache soweit möglich verständlich.
+- Ein Plan, der die festgelegte A4-Passung überschreitet, erhält denselben
+  dauerhaften Hinweis wie in der Kompaktansicht und kann nicht exportiert
+  werden.
 
 ## Qualitätsanforderungen
 
 Die erzeugte PDF-Datei muss:
 
-- auf dem festgelegten Seitenformat vollständig lesbar sein,
-- keine abgeschnittenen Tabellen, Texte oder Bemerkungen enthalten,
+- visuell und inhaltlich der Kompaktansicht entsprechen,
+- alle vorgesehenen Inhalte vollständig und lesbar enthalten,
 - Mitarbeiter, Tage und Planungseinträge eindeutig zuordnen,
-- Wochenenden und Feiertage auch ohne alleinige Farberkennung kennzeichnen,
+- Wochenenden und Feiertage nicht ausschließlich über Farbe kennzeichnen,
 - auf einem üblichen PDF-Betrachter ohne externe Ressourcen funktionieren und
 - bei identischem gespeicherten Planstand fachlich identische Inhalte liefern.
 
-Die technische Prüfung muss neben dem erfolgreichen Erzeugen auch das
-gerenderte Ergebnis kontrollieren. Eine bestandene Typ- oder Buildprüfung allein
-belegt kein korrektes PDF-Layout.
+Die Prüfung muss neben dem erfolgreichen Erzeugen auch das tatsächlich
+gerenderte Dokument kontrollieren. Typprüfung, Build oder eine korrekt
+angezeigte Bildschirmvorschau allein belegen noch keine korrekte PDF-Datei.
 
-## Noch fachlich festzulegen
+## Noch festzulegen
 
-Vor der Umsetzung sind insbesondere festzulegen:
+Vor der späteren Exportumsetzung sind noch zu entscheiden:
 
-- Seitenformat und Ausrichtung,
-- verbindlicher Tabelleninhalt und Umgang mit breiten Plänen,
-- Kopf-, Fuß- und Metainformationen,
-- Dateiname und vorausgewählter Speicherort,
-- Verhalten bei einer bereits vorhandenen Datei,
-- Umgang mit ungespeicherten oder aus einer Sicherung geladenen Planständen,
-- Verhalten bei mehreren Seiten und
-- ob neben dem PDF-Export eine direkte Druckfunktion benötigt wird.
+- Dateiname,
+- vorausgewählter Speicherort,
+- Verhalten bei einer bereits vorhandenen Datei und
+- ob zusätzlich eine direkte Druckfunktion benötigt wird.
 
 ## Abgrenzung
 
@@ -92,5 +122,5 @@ Der PDF-Export:
 - ist keine allgemeine Datensicherung,
 - exportiert keine bearbeitbare Monatsplandatei,
 - synchronisiert keine Daten mit externen Diensten,
-- ersetzt keine Kompaktansicht und
-- definiert noch keine eigenständige Druckvorschau oder direkte Druckfunktion.
+- definiert keine zweite unabhängige Dokumentdarstellung und
+- umfasst zunächst weder direkte Druckfunktion noch mehrseitige Ausgabe.

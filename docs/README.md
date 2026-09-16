@@ -63,6 +63,10 @@ den jeweils zuständigen Dokumenten festgehalten.
 - [Gestaltungsgrundsätze](./oberflaeche/gestaltungsgrundsaetze.md)
 - [Teststrategie](./qualitaet/teststrategie.md)
 
+### Planung
+
+- [Umsetzungsplan Kompaktansicht](./planung/umsetzungsplan-kompaktansicht.md)
+
 ## Pflegegrundsätze
 
 - Jede Information besitzt einen maßgeblichen Hauptablageort.
