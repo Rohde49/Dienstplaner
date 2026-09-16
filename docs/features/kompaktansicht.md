@@ -201,6 +201,8 @@ Wochenarbeitszeit. Alle drei Zeilen zeigen Dauern als `HH:MM`, beispielsweise
 
 Die Zellen unter `RB` und `Bemerkung` bleiben leer. Eine Differenzzeile sowie
 weitere Kennzahlen wie SN/F-Dienste oder freie Tage erscheinen nicht.
+Eine stärkere obere Trennlinie setzt den gesamten Abschlussblock sichtbar von
+den Kalendertagen ab.
 
 ## Freigabebereich
 

@@ -162,7 +162,14 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
         </tbody>
         <tfoot>
           {footerRows.map((footerRow) => (
-            <tr key={footerRow.label} className="bg-slate-100 font-semibold">
+            <tr
+              key={footerRow.label}
+              className={`bg-slate-100 font-semibold ${
+                footerRow.label === 'Ist'
+                  ? '[&>*]:border-t-2 [&>*]:border-t-slate-400'
+                  : ''
+              }`}
+            >
               <th
                 scope="row"
                 className="border border-slate-400 px-1 py-1 text-center"
