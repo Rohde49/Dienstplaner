@@ -19,8 +19,8 @@ gewünschte Reihenfolge lautet:
 6. Nachtbereitschaft gesamt
 7. +Nachtbereitschaft 25 %
 8. Anzahl Rufbereitschaften
-9. Ist-Arbeitszeit
-10. Anzahl Arbeitstage
+9. Anzahl Arbeitstage
+10. Ist-Arbeitszeit
 11. Soll-Arbeitszeit
 12. Differenz Soll/Ist
 
@@ -59,15 +59,17 @@ Auswertungskreis, Zeilenumfang und dieselbe Bedeutung von „Arbeitstage“.
 Den vorhandenen Button für einen geöffneten Monatsplan aktivieren und den
 Dialog mit dem etablierten Dialogmuster umsetzen. Plantitel, Zeitraum und
 Entwurfsstatus zeigen den ausgewerteten Stand. Eine gut lesbare Tabelle führt
-die festgelegten Zeilen und die Mitarbeiter in Planreihenfolge auf. Bei vielen
-Mitarbeitern bleibt die Kennzahl beim horizontalen Scrollen erkennbar; die
-Tabelle bleibt bei der unterstützten Mindestgröße `1024 × 700` erreichbar.
+die festgelegten Zeilen und die Mitarbeiter in Planreihenfolge auf. Seine
+Breite richtet sich am Tabelleninhalt aus; Kennzahl und Mitarbeiter erhalten
+nur die benötigte Spaltenbreite. Alle zwölf Zeilen und alle Mitarbeiterspalten
+bleiben auch bei der unterstützten Mindestgröße `1024 × 700` ohne Bildlauf
+sichtbar.
 Zeitwerte erscheinen als Stunden und Minuten, die Soll-/Ist-Differenz mit
 Vorzeichen. Ein Plan ohne Mitarbeiter im festgelegten Auswertungskreis erhält
 einen verständlichen Leerzustand. Berechnungsfehler werden verständlich
 angezeigt, ohne Teilwerte als vollständige Auswertung auszugeben.
 
-**Abnahme:** Öffnen, Lesen, Scrollen und Schließen funktionieren mit Maus und
+**Abnahme:** Öffnen, vollständiges Lesen und Schließen funktionieren mit Maus und
 Tastatur. Der Entwurf und die Übersicht der Planungsseite bleiben erhalten;
 angezeigte Werte stammen aus der gemeinsamen Berechnung.
 
@@ -77,7 +79,7 @@ Die Werte für einen geänderten, noch ungespeicherten Entwurf und für einen
 gespeicherten Plan abgleichen. Die vorhandenen fachlichen Berechnungstests
 wiederverwenden und nur für neue Anzeige- oder Zustandslogik gezielt ergänzen.
 Die vier Projektprüfungen (`npm test`, `npm run typecheck`, `npm run lint`,
-`npm run format:check`) ausführen; Dialoggröße, Scrollen, Fokus und Rückkehr
+`npm run format:check`) ausführen; Dialoggröße, vollständige Tabelle, Fokus und Rückkehr
 zur Planung bei schmalem und breitem Fenster manuell prüfen.
 
 **Abnahme:** Kennzahlen entsprechen dem aktuellen Entwurf; Öffnen und

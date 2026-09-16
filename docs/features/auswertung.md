@@ -8,7 +8,7 @@ eine ausführliche, mitarbeiterbezogene Darstellung.
 
 Die Auswertung soll:
 
-- alle im Monatsplan gespeicherten Mitarbeiter berücksichtigen,
+- die im Monatsplan gespeicherten Erzieher berücksichtigen,
 - Tageszähler und zeitbezogene Monatswerte übersichtlich zusammenführen,
 - Soll, Ist und Abweichung verständlich gegenüberstellen,
 - auf dem aktuell betrachteten Monatsplanstand beruhen und
@@ -38,43 +38,35 @@ Auswertungsstand gespeichert.
 
 ## Auswertungskreis
 
-Die allgemeinen Berechnungen sind rollenunabhängig. Die ausführliche Auswertung
-führt jeden im Monatsplan enthaltenen Mitarbeiter unabhängig von seiner
-Snapshot-Rolle auf.
-
-Rollenabhängige Einschränkungen gelten nur für fachliche Vorgänge, für die eine
-ausdrückliche Regel besteht. So darf eine Rufbereitschaft ausschließlich einem
-Mitarbeiter mit der im Plan gespeicherten Rolle `Erzieher` zugeordnet sein; die
-übrigen Kennzahlen werden deshalb nicht auf Erzieher beschränkt.
+Die allgemeinen Berechnungen bleiben rollenunabhängig. Der Auswertungsdialog
+zeigt ausschließlich Mitarbeiter mit der im Monatsplan gespeicherten Rolle
+`Erzieher`. Die Auswahl verändert weder die Berechnung noch den Monatsplan.
+Enthält der Plan keinen Erzieher, zeigt der Dialog einen verständlichen
+Leerzustand.
 
 ## Dargestellte Informationen
 
-### Monatsbezogene Grundlage
+Plantitel und Monat/Jahr kennzeichnen den ausgewerteten Plan. In der Tabelle
+stehen die Erzieher spaltenweise in Planreihenfolge und genau diese Kennzahlen
+zeilenweise:
 
-- Monat und Jahr des ausgewerteten Plans,
-- Plantitel und
-- kalendarische Arbeitstagszahl.
+1. Anzahl SN/F
+2. Anzahl freier Tage
+3. Anzahl freier Samstage
+4. Anzahl freier Sonntage
+5. reine Arbeitszeit gesamt
+6. Nachtbereitschaft gesamt
+7. +Nachtbereitschaft 25 %
+8. Anzahl Rufbereitschaften
+9. Anzahl Arbeitstage
+10. Ist-Arbeitszeit
+11. Soll-Arbeitszeit
+12. Differenz Soll/Ist
 
-### Tagesbezogene Kennzahlen je Mitarbeiter
-
-- Anzahl der SN/F-Dienste,
-- Anzahl der freien Tage,
-- Anzahl der freien Samstage,
-- Anzahl der freien Sonntage und
-- Anzahl der Rufbereitschaften.
-
-### Zeitbezogene Kennzahlen je Mitarbeiter
-
-- Arbeitszeit mit Nachtbereitschaft,
-- reine Arbeitszeit,
-- Nachtbereitschaft,
-- Nachtarbeit,
-- reine Arbeitszeit an Sonntagen und Feiertagen,
-- Nachtzuschlag,
-- Nachtbereitschaftszuschlag,
-- Soll-Arbeitszeit,
-- Ist-Arbeitszeit und
-- Soll-/Ist-Differenz.
+„Anzahl Arbeitstage“ ist die kalendarische Arbeitstagszahl des vollständigen
+Monats. Sie ist für alle Mitarbeiter gleich und bildet die Grundlage der
+Soll-Arbeitszeit. Andere berechnete Kennzahlen bleiben in den Fachfunktionen
+verfügbar, erscheinen aber nicht in diesem Dialog.
 
 Die Auswertung zeigt ausschließlich Ergebnisse. Die dafür geltenden Formeln,
 Rundungszeitpunkte und Zählregeln stehen unter
@@ -97,36 +89,43 @@ bereits dauerhaft gespeichert wurde.
 
 ## Darstellung
 
-- Mitarbeiter werden mit ihrem im Monatsplan gespeicherten Namen und ihrer
-  Snapshot-Rolle bezeichnet.
+- Mitarbeiter werden mit ihrem im Monatsplan gespeicherten Namen bezeichnet.
+  Durch den festgelegten Auswertungskreis ist ihre Snapshot-Rolle eindeutig.
 - Zeitdauern werden einheitlich in Stunden und Minuten dargestellt.
 - Positive und negative Soll-/Ist-Abweichungen bleiben auch ohne Farberkennung
-  anhand ihres Vorzeichens verständlich.
+  anhand ihres Vorzeichens verständlich. Negative Werte werden zusätzlich rot,
+  positive Werte grün und ausgeglichene Werte neutral dargestellt.
 - Ein exakter Ausgleich wird ohne Vorzeichen angezeigt.
-- Große Wertemengen werden als lesbare Tabelle oder gleichwertig strukturierte
-  Darstellung präsentiert.
-- Die Auswertung nutzt die verfügbare Inhaltsbreite, ohne die Zuordnung zwischen
-  Mitarbeiter und Kennzahl beim Scrollen zu verlieren.
+- Die im Monatsplan gespeicherte Mitarbeiterfarbe kennzeichnet den jeweiligen
+  Tabellenkopf wie in der Planungstabelle.
+- Dezente Abschnittstrenner gliedern Dienst- und Freitage, Zeitwerte sowie den
+  Soll-Ist-Bereich. Der Soll-Ist-Bereich ist zurückhaltend hervorgehoben.
+- Eine dezente Hervorhebung der Tabellenzeile unterstützt den Vergleich beim
+  Bewegen der Maus, ohne die dauerhaft sichtbaren Mitarbeiterfarben zu
+  überlagern.
+- Der Tabellenrahmen ist abgerundet; innere Linien bleiben schwächer als die
+  Abschnittstrenner und der äußere Rahmen.
+- Feine neutrale vertikale Linien trennen die Mitarbeiterspalten. Die
+  Mitarbeiterfarben erscheinen als ruhige Kopfflächen ohne zusätzliche
+  Farblinien.
+- Der Dialog richtet seine Breite am Tabelleninhalt aus und bleibt so kompakt
+  wie möglich. Die Kennzahlenspalte und die Mitarbeiterspalten verwenden nur
+  die benötigte Breite; Namen dürfen innerhalb ihrer Spalte umbrechen.
+- Alle zwölf Kennzahlen und alle Erzieher-Spalten sind beim Öffnen vollständig
+  ohne Bildlauf sichtbar.
 
-In der eingeklappten Werkzeugleiste der Planungsseite ist „Auswertung“ zunächst
-nur als deaktivierter Platzhalter sichtbar. Die spätere funktionsfähige Aktion
-soll einen Auswertungsdialog öffnen; Dialoginhalt und Verhalten werden erst bei
-der Umsetzung dieses Features konkretisiert.
+„Auswertung“ in der Werkzeugleiste der Planungsseite öffnet den zentralen
+Dialog für den aktuell geöffneten Monatsplan. Ohne geöffneten Plan bleibt die
+Aktion deaktiviert. Ein leicht unscharfer Hintergrund und die modale Bedienung
+halten die Planungsseite währenddessen unverändert. Nach dem Schließen bleiben
+Entwurf, Zeitraum, Scrollstand und Leistenstatus erhalten. Der Dialog ist mit
+Maus und Tastatur bedienbar.
 
 ## Fehlerverhalten
 
 Ein ungültiger oder unvollständiger Monatsplan wird nicht teilweise
 ausgewertet. Kann die Berechnung nicht zuverlässig durchgeführt werden, wird
 ein verständlicher Fehler angezeigt.
-
-## Noch fachlich festzulegen
-
-Vor der konkreten Oberflächengestaltung sind insbesondere festzulegen:
-
-- die endgültige Gruppierung und Reihenfolge der Kennzahlen,
-- die genaue Anordnung der Mitarbeiter und Werte,
-- mögliche Ein- und Ausblendungen für große Tabellen und
-- die genaue Gestaltung und Bedienung des Auswertungsdialogs.
 
 ## Abgrenzung
 

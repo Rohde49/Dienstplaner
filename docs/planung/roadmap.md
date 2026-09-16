@@ -20,8 +20,10 @@ abgeschlossen wurde.
 
 ### Auswertung
 
-Als nächstes wird die ausführliche [Auswertung](../features/auswertung.md) eines
-Monatsplans auf Grundlage der verbindlichen Berechnungsregeln dargestellt.
+Der [Auswertungsdialog](../features/auswertung.md) ist technisch umgesetzt und
+nutzt die verbindlichen Berechnungsregeln. Die abschließende Sichtprüfung der
+vollständigen Tabelle und der Rückkehr zur Planung durch den Benutzer
+steht noch aus.
 
 ## Anschließende Arbeitspakete
 

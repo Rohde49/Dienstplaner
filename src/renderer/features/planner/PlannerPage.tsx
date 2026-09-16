@@ -1,5 +1,4 @@
 import {
-  BarChart3,
   CalendarDays,
   CalendarPlus,
   ChevronDown,
@@ -52,6 +51,7 @@ import { PlanningTable } from './PlanningTable';
 import { EditPlanTitleDialog } from './EditPlanTitleDialog';
 import { setDraftPlanTitle } from './plannerDraft';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
+import { EvaluationDialog } from './EvaluationDialog';
 
 export type PlannerProtectionHandler = (action: () => void) => void;
 
@@ -466,14 +466,18 @@ export function PlannerPage({
                     )}
                   </Button>
                 ) : null}
-                <Button
-                  variant="secondary"
-                  disabled
-                  title="Auswertung noch nicht verfügbar"
-                >
-                  <BarChart3 aria-hidden="true" size={17} />
-                  Auswertung
-                </Button>
+                <EvaluationDialog
+                  plan={activePlan}
+                  disabled={isSaving}
+                  status={
+                    state.document.kind === 'plan' &&
+                    state.document.recoveredFromBackup
+                      ? 'recovered'
+                      : hasUnsavedChanges
+                        ? 'draft'
+                        : 'saved'
+                  }
+                />
               </div>
             </div>
 

@@ -44,8 +44,8 @@ Plantitel oder Vorschauzeitraum stehen mittig; beim geöffneten Plan sitzt die
 Stiftaktion unmittelbar neben dem Titel. Bei schmaleren Fenstern darf diese
 Titelgruppe in eine eigene zentrierte Zeile wechseln. Ein zusätzlicher Text wie
 „Aktueller Plan“ ist nicht erforderlich. Bei geöffneten Plänen steht
-„Speichern“ rechts bereit; der deaktivierte Platzhalter „Auswertung“ bleibt
-daneben sichtbar. Ausgeklappt ergänzt eine flache, durch Linien
+„Speichern“ und „Auswertung“ rechts bereit. Ohne geöffneten Plan bleibt
+„Auswertung“ deaktiviert. Ausgeklappt ergänzt eine flache, durch Linien
 getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender- und
 Arbeitstagen. Die deaktivierten Platzhalter „Plan / Kompakt“ und „Export“ stehen
 daneben. Die Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
@@ -55,9 +55,10 @@ zugänglichen Namen und einen sichtbaren Tastaturfokus, benötigt aber keine
 sichtbare Textbeschriftung. Dauerhafte Fehler- und Sicherungshinweise bleiben
 unabhängig vom Leistenstatus sichtbar.
 
-Die Platzhalter „Auswertung“, „Plan / Kompakt“ und „Export“ führen noch keine
-Aktion aus. Sie kennzeichnen nur die vorgesehenen Stellen in der Werkzeugleiste
-und gelten nicht als Umsetzung der eigenständigen späteren Features.
+„Auswertung“ öffnet den Dialog des eigenständigen
+[Auswertungsfeatures](./auswertung.md). Die Platzhalter „Plan / Kompakt“ und
+„Export“ führen noch keine Aktion aus und kennzeichnen die Stellen ihrer
+späteren Features.
 
 Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
 schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
@@ -344,7 +345,7 @@ Vorzeichen der Zahl macht die Richtung auch ohne Farbe erkennbar.
 Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
 Soll-Arbeitszeit. Die beiden Zeilen tragen die kurzen Beschriftungen „Ist“ und
 „Soll“. Diese Werte unterstützen die laufende Planung, ersetzen aber nicht die
-spätere ausführliche Auswertung.
+ausführliche Auswertung im Dialog.
 
 Die verbindlichen Regeln stehen unter
 [Tagesbezogene Kennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),

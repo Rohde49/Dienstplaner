@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { IconButton } from './Button';
 
@@ -14,12 +14,14 @@ type DialogContentProps = Omit<
 > & {
   title: string;
   description: string;
+  headerAside?: ReactNode;
 };
 
 /** Zeigt den einheitlich gestalteten Inhalt eines Eingabedialogs an. */
 export function DialogContent({
   title,
   description,
+  headerAside,
   children,
   className,
   ...props
@@ -38,13 +40,19 @@ export function DialogContent({
         {...props}
       >
         <div className="border-app-border shrink-0 border-b px-6 py-5 pr-14">
-          <DialogPrimitive.Title className="text-app-text text-lg font-semibold">
-            {title}
-          </DialogPrimitive.Title>
+          <div className="flex min-w-0 flex-wrap items-start justify-between gap-x-4 gap-y-2">
+            <div className="min-w-0 flex-1">
+              <DialogPrimitive.Title className="text-app-text text-lg font-semibold">
+                {title}
+              </DialogPrimitive.Title>
 
-          <DialogPrimitive.Description className="text-app-muted mt-1 text-sm leading-6">
-            {description}
-          </DialogPrimitive.Description>
+              <DialogPrimitive.Description className="text-app-muted mt-1 text-sm leading-6">
+                {description}
+              </DialogPrimitive.Description>
+            </div>
+
+            {headerAside ? <div className="shrink-0">{headerAside}</div> : null}
+          </div>
         </div>
 
         {children}
