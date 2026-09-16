@@ -113,6 +113,19 @@ Festlegungen bereinigt.
 - Graue Arbeitsfläche, Seitenrand und Schatten dienen nur der
   Bildschirmorientierung und erscheinen nicht in der exportierten PDF.
 
+### Interaktion innerhalb der Vorschau
+
+- Die Tabelle innerhalb der A4-Vorschau ist vollständig schreibgeschützt und
+  enthält keine auswählbaren oder anklickbaren Zeilen und Zellen.
+- Es gibt keine orange Zeilenhervorhebung und keine Hovereffekte auf
+  Tabellenzellen.
+- Tabellenkopf und Spalten werden innerhalb der dargestellten A4-Seite nicht
+  fixiert. Sie bleiben Bestandteil des unveränderten Dokumentlayouts.
+- Die Vorschau öffnet keine Popover und bietet keine anderen
+  Bearbeitungsaktionen an.
+- Innerhalb der Vorschau ist ausschließlich das normale Scrollen durch das
+  Dokument vorgesehen.
+
 ### Einseitige Passung und Überlauf
 
 - Das Dokumentlayout wird für den realistischen Grenzfall mit 31 Kalendertagen
@@ -229,6 +242,15 @@ Festlegungen bereinigt.
 - Durch die ausgelagerte Legende verändern längere Feiertagsnamen nicht die
   Höhe der jeweiligen Tageszeile.
 
+### Freigabebereich
+
+- Unterhalb der Tabelle und der Feiertagslegende steht ein kompakter Bereich
+  für die spätere Freigabe des Dienstplans.
+- Der Bereich enthält nebeneinander die beiden beschrifteten Linien `Datum`
+  und `Freigabe / Unterschrift`.
+- Der Freigabebereich ist Bestandteil des gemeinsamen Dokumentlayouts und
+  erscheint sowohl in der Kompaktansicht als auch in der späteren PDF.
+
 ### Kennzahlen am Tabellenende
 
 - Unterhalb der Kalendertage stehen in dieser Reihenfolge die drei
@@ -278,6 +300,80 @@ Festlegungen bereinigt.
   Seitennummerierung und die Zuordnung von Rufbereitschaft und Bemerkung werden
   erst festgelegt, wenn diese Erweiterung tatsächlich umgesetzt wird.
 
+### Grenze der ersten Umsetzung
+
+- Die erste Umsetzung erstellt das vollständige gemeinsame A4-Dokumentlayout
+  und zeigt es als Kompaktansicht innerhalb der Planungsseite.
+- Sie prüft, ob der gespeicherte Monatsplan vollständig und lesbar auf die eine
+  A4-Seite passt, und zeigt gegebenenfalls den festgelegten Überlaufhinweis.
+- Die vorhandene Aktion `Export` bleibt in diesem Arbeitspaket deaktiviert.
+- Das Erzeugen einer PDF-Datei, ein Dateidialog und alle weiteren
+  Exportabläufe bleiben Bestandteil des eigenständigen späteren
+  PDF-Export-Arbeitspakets.
+- Das Dokumentlayout wird bereits so abgegrenzt, dass der spätere PDF-Export
+  dasselbe Layout ohne eine zweite unabhängige Darstellung verwenden kann.
+
+### Technische Aufteilung
+
+- Die Planungsseite verwaltet ausschließlich, ob die Plan- oder Kompaktansicht
+  aktiv ist, und setzt den Ansichtsmodus bei Laden, Anlegen oder Rückkehr zur
+  Vorschau auf `Plan` zurück.
+- Eine neue reine Aufbereitungsfunktion erzeugt aus dem gespeicherten
+  Ausgangsstand das Darstellungsmodell der Kompaktansicht. Sie übernimmt unter
+  anderem kurze Uhrzeiten, eindeutige Nachnamen, Feiertagslegende sowie Ist-,
+  Soll- und Wochenarbeitszeit.
+- Vorhandene Kalender-, Zeit- und Berechnungsfunktionen werden wiederverwendet.
+- Eine Bildschirmkomponente ist für Arbeitsfläche, Skalierung, Statushinweise
+  und Passungsprüfung verantwortlich.
+- Eine davon getrennte Dokumentkomponente rendert ausschließlich den Inhalt der
+  A4-Seite. Diese Dokumentkomponente soll später unverändert vom PDF-Export
+  wiederverwendet werden können.
+- Die Dokumentkomponente erhält ausschließlich den gespeicherten Ausgangsstand
+  des geöffneten Plans und niemals den aktuellen Entwurf.
+- Für die erste Kompaktansicht sind voraussichtlich keine Änderungen an
+  Datenmodell, Schemas, Repository, IPC oder Preload erforderlich.
+- Zuerst wird ein sichtbarer A4-Prototyp mit realistischen Daten für sechs bis
+  sieben Mitarbeiter erstellt und anschließend mit neun Mitarbeitern und 31
+  Tagen geprüft. Passungsprüfung und vollständige Einbindung folgen erst nach
+  der gemeinsamen Sichtfreigabe dieses Prototyps.
+
+### Verifikation
+
+Automatisiert werden mindestens geprüft:
+
+- ausschließliche Verwendung des gespeicherten Ausgangsstands statt des
+  aktuellen Entwurfs,
+- kurze Uhrzeitformatierung einschließlich voller Stunden,
+- eindeutige Namen bei identischen Nachnamen,
+- Feiertagsmarkierungen und Feiertagslegende,
+- Ist-, Soll- und Wochenarbeitszeit sowie
+- Zurücksetzen des Ansichtsmodus bei Anlegen, Laden und Monatsvorschau.
+
+Für diese reine Aufbereitungslogik werden die vorhandenen Vitest-Möglichkeiten
+genutzt und keine neue Testabhängigkeit eingeführt. Nach der Umsetzung werden
+die projektweiten Prüfungen `npm test`, `npm run typecheck`, `npm run lint` und
+`npm run format:check` ausgeführt.
+
+Die manuelle Sicht- und Bedienprüfung umfasst mindestens:
+
+- einen normalen Plan mit sechs bis sieben Mitarbeitern,
+- den Grenzfall mit neun Mitarbeitern und 31 Tagen,
+- längere Bemerkungen und lange Nachnamen,
+- identische Nachnamen,
+- Planungseinträge mit und ohne Zeitspanne,
+- Wochenenden und Feiertage,
+- einen ungespeicherten Entwurf gegenüber dem gespeicherten Stand,
+- die deaktivierte Kompaktansicht bei Monatsvorschau, laufendem Speichern und
+  Sicherungswiederherstellung,
+- das kleinste unterstützte Fenster mit `1024 × 700` Pixeln und ein maximiertes
+  Fenster sowie
+- die Tastaturbedienung des Ansichtsumschalters.
+
+Der sichtbare A4-Prototyp wird vor Passungsprüfung und weiterer Einbindung
+gesondert durch den Benutzer abgenommen. Eine tatsächlich erzeugte PDF-Datei
+wird in diesem Arbeitspaket noch nicht geprüft, weil der PDF-Export erst später
+umgesetzt wird.
+
 ## Offene Entscheidungen
 
 ### Einseitiges A4-Layout
@@ -287,14 +383,14 @@ Festlegungen bereinigt.
 
 ### Weitere Abstimmungsblöcke
 
-1. Datengrundlage und Verfügbarkeit im Detail
-2. Ansichtswechsel
-3. Grundaufbau der Tabelle
-4. Darstellung eines Planungseintrags
-5. Kennzahlen
-6. Gestaltung und Orientierung
-7. Sonder- und Leerzustände
-8. Technische Umsetzung und Prüfung
+- [x] Datengrundlage und Verfügbarkeit im Detail
+- [x] Ansichtswechsel
+- [x] Grundaufbau der Tabelle
+- [x] Darstellung eines Planungseintrags
+- [x] Kennzahlen
+- [x] Gestaltung und Orientierung
+- [x] Sonder- und Leerzustände
+- [x] Technische Umsetzung und Prüfung
 
 ## Erkannter Dokumentationskonflikt
 
