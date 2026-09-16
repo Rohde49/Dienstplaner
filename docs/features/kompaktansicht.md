@@ -139,7 +139,13 @@ Buchstaben des Vornamens, beispielsweise `E. Müller` und `M. Müller`.
 
 Lange Nachnamen dürfen auf höchstens zwei Zeilen umbrechen. Der Kopf trägt eine
 dezente Fläche in der gespeicherten Mitarbeiterfarbe und eine kontrastreiche
-dunkle Schrift. Rolle und weitere Mitarbeiterangaben erscheinen dort nicht.
+dunkle Schrift. Die angrenzenden Tabellenlinien bleiben unabhängig von der
+Mitarbeiterfarbe im einheitlichen neutralen Graublau. Rolle und weitere
+Mitarbeiterangaben erscheinen dort nicht.
+
+Eine einzelne neutrale Linie trennt die Mitarbeiterköpfe von den
+Kalendertagen. An den Übergängen zwischen Tabellenkopf, Tagesbereich und
+Abschlussblock werden keine verschiedenfarbigen Linien übereinandergelegt.
 
 ### Planungseintrag
 

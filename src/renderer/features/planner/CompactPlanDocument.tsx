@@ -80,7 +80,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                 key={employee.id}
                 scope="col"
                 title={employee.fullName}
-                className={`border px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].plannerHeaderClass}`}
+                className={`border border-slate-400 px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].compactHeaderClass}`}
               >
                 <span
                   data-compact-employee-name
@@ -105,7 +105,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="[&>tr:first-child>*]:border-t-0 [&>tr:last-child>*]:border-b-0">
           {model.days.map((day) => {
             const dayBackground = getDayBackground(day);
 
