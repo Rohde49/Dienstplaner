@@ -25,15 +25,22 @@ nutzt die verbindlichen Berechnungsregeln. Die abschließende Sichtprüfung der
 vollständigen Tabelle und der Rückkehr zur Planung durch den Benutzer
 steht noch aus.
 
+### Kompaktansicht – Grenzfälle
+
+Die [Kompaktansicht](../features/kompaktansicht.md) ist technisch umgesetzt und
+für einen realen Monatsplan visuell bestätigt. Vor dem endgültigen Abschluss
+stehen noch die gezielte manuelle Sichtprüfung des Neun-Mitarbeiter-Grenzfalls,
+besonders langer Inhalte und der kleinsten Fenstergröße aus.
+
 ## Aktueller Schwerpunkt
 
-### Kompaktansicht
+### Abschlussprüfung der Kompaktansicht
 
-Die [Kompaktansicht](../features/kompaktansicht.md) wird nach dem
-[Umsetzungsplan](umsetzungsplan-kompaktansicht.md) in kleinen, einzeln
-abnehmbaren Abschnitten umgesetzt. Sie zeigt ausschließlich den gespeicherten
-Planstand als layoutgetreue A4-Dokumentvorschau. Der sichtbare A4-Prototyp wird
-vor Passungsprüfung und vollständiger Einbindung gemeinsam abgenommen.
+Die technische Umsetzung folgt dem
+[Umsetzungsplan](umsetzungsplan-kompaktansicht.md). Das freigegebene
+A4-Dokumentlayout, der sichere Ansichtswechsel und die Passungsprüfung sind
+vorhanden. Offen sind nur noch die oben genannten manuellen Grenzfälle; danach
+kann das Arbeitspaket abgeschlossen werden.
 
 ## Anschließende Arbeitspakete
 

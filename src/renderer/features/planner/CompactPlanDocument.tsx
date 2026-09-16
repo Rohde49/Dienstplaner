@@ -1,8 +1,6 @@
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
 import type { CompactPlanDay, CompactPlanModel } from './compactPlanModel';
-
-export const A4_DOCUMENT_WIDTH = 794;
-export const A4_DOCUMENT_HEIGHT = 1123;
+import { A4_DOCUMENT_HEIGHT, A4_DOCUMENT_WIDTH } from './compactPlanLayout';
 
 type CompactPlanDocumentProps = {
   model: CompactPlanModel;
@@ -84,7 +82,10 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                 title={employee.fullName}
                 className={`border px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].plannerHeaderClass}`}
               >
-                <span className="[display:-webkit-box] overflow-hidden [overflow-wrap:anywhere] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                <span
+                  data-compact-employee-name
+                  className="block [overflow-wrap:anywhere]"
+                >
                   {employee.displayName}
                 </span>
               </th>

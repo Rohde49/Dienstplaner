@@ -2,12 +2,13 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { MonthlyPlan } from '../../../shared/schemas';
 import { Alert } from '../../components/ui';
+import { CompactPlanDocument } from './CompactPlanDocument';
+import { createCompactPlanModel } from './compactPlanModel';
 import {
   A4_DOCUMENT_HEIGHT,
   A4_DOCUMENT_WIDTH,
-  CompactPlanDocument,
-} from './CompactPlanDocument';
-import { createCompactPlanModel } from './compactPlanModel';
+  calculateCompactPlanLayoutMetrics,
+} from './compactPlanLayout';
 
 type CompactPlanPreviewProps = {
   plan: MonthlyPlan;
@@ -19,9 +20,17 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
   const workspaceRef = useRef<HTMLDivElement>(null);
   const documentRef = useRef<HTMLDivElement>(null);
   const [availableWidth, setAvailableWidth] = useState(A4_DOCUMENT_WIDTH);
-  const [documentHeight, setDocumentHeight] = useState(A4_DOCUMENT_HEIGHT);
-  const [doesOverflow, setDoesOverflow] = useState(false);
-  const scale = Math.min(1, availableWidth / A4_DOCUMENT_WIDTH);
+  const [contentSize, setContentSize] = useState({
+    width: A4_DOCUMENT_WIDTH,
+    height: A4_DOCUMENT_HEIGHT,
+    violatesContentLimits: false,
+  });
+  const layout = calculateCompactPlanLayoutMetrics(
+    availableWidth,
+    contentSize.width,
+    contentSize.height,
+    contentSize.violatesContentLimits,
+  );
 
   useLayoutEffect(() => {
     const workspace = workspaceRef.current;
@@ -33,17 +42,26 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
 
     const measure = (): void => {
       const width = Math.max(1, workspace.clientWidth - 48);
-      const contentHeight = Math.max(
-        A4_DOCUMENT_HEIGHT,
-        documentElement.scrollHeight,
-      );
 
       setAvailableWidth(width);
-      setDocumentHeight(contentHeight);
-      setDoesOverflow(
-        documentElement.scrollHeight > A4_DOCUMENT_HEIGHT + 1 ||
-          documentElement.scrollWidth > A4_DOCUMENT_WIDTH + 1,
-      );
+      setContentSize({
+        width: documentElement.scrollWidth,
+        height: documentElement.scrollHeight,
+        violatesContentLimits: Array.from(
+          documentElement.querySelectorAll<HTMLElement>(
+            '[data-compact-employee-name]',
+          ),
+        ).some((element) => {
+          const lineHeight = Number.parseFloat(
+            window.getComputedStyle(element).lineHeight,
+          );
+
+          return (
+            Number.isFinite(lineHeight) &&
+            element.scrollHeight > lineHeight * 2 + 1
+          );
+        }),
+      });
     };
 
     measure();
@@ -56,7 +74,7 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
 
   return (
     <div className="space-y-3">
-      {doesOverflow ? (
+      {layout.doesOverflow ? (
         <Alert title="A4-Seite überschritten" variant="warning">
           Der Dienstplan passt mit den aktuellen Inhalten nicht lesbar auf eine
           A4-Seite.
@@ -70,8 +88,8 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
         <div
           className="relative mx-auto"
           style={{
-            width: A4_DOCUMENT_WIDTH * scale,
-            height: documentHeight * scale,
+            width: A4_DOCUMENT_WIDTH * layout.scale,
+            height: layout.renderedHeight,
           }}
         >
           <div
@@ -80,7 +98,7 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
             style={{
               width: A4_DOCUMENT_WIDTH,
               minHeight: A4_DOCUMENT_HEIGHT,
-              transform: `scale(${scale})`,
+              transform: `scale(${layout.scale})`,
               transformOrigin: 'top left',
             }}
           >

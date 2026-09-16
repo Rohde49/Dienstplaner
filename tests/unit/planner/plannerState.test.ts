@@ -255,16 +255,21 @@ describe('Planungsseitenzustand', () => {
     });
     const regularState = openPlannerPlan(readyState, plan, false);
     const recoveredState = openPlannerPlan(readyState, plan, true);
+    const changedState = replacePlannerDraft(regularState, {
+      ...plan,
+      title: 'Ungespeicherter Entwurf',
+    });
 
     expect(canUseCompactPlannerView(readyState)).toBe(false);
     expect(setPlannerViewMode(readyState, 'compact')).toBe(readyState);
     expect(canUseCompactPlannerView(recoveredState)).toBe(false);
     expect(setPlannerViewMode(recoveredState, 'compact')).toBe(recoveredState);
+    expect(canUseCompactPlannerView(changedState)).toBe(true);
 
-    const compactState = setPlannerViewMode(regularState, 'compact');
+    const compactState = setPlannerViewMode(changedState, 'compact');
 
     expect(compactState.viewMode).toBe('compact');
-    expect(compactState.document).toBe(regularState.document);
+    expect(compactState.document).toBe(changedState.document);
     expect(() => beginPlannerSave(compactState)).toThrow(
       'Die Kompaktansicht kann nicht gespeichert werden.',
     );

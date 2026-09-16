@@ -106,7 +106,9 @@ Mitarbeitern sowie den Grenzfall mit neun Mitarbeitern und 31 Tagen. Zusätzlich
 werden lange Namen, umgebrochene Bemerkungen, Einträge ohne Uhrzeit,
 Wochenenden, Feiertage und die kleinste Fenstergröße `1024 × 700` geprüft.
 Mindestschriftgröße, Skalierung, Zeilenhöhe und Bemerkungsbreite werden erst am
-gerenderten A4-Prototyp verbindlich abgenommen.
+gerenderten A4-Prototyp verbindlich abgenommen. Für den bestätigten Stand gilt
+ein kleinster Bildschirmmaßstab von `84 %`; tatsächlicher horizontaler oder
+vertikaler Dokumentüberlauf wird unabhängig davon erkannt und gemeldet.
 
 Der spätere PDF-Export muss zusätzlich das erzeugte PDF selbst rendern und
 gegen das gemeinsame Dokumentlayout prüfen. Eine korrekte Kompaktansicht allein

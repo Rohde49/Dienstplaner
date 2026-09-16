@@ -32,8 +32,8 @@ nach tatsächlicher Umsetzung und angemessener Prüfung abgehakt.
       liegen vollständig als Plan-Snapshots vor.
 - [x] Kalender- und Feiertagslogik sowie Monatsauswertung sind zentral vorhanden
       und getestet.
-- [x] Die Werkzeugleiste enthält den noch deaktivierten Umschalter
-      `Plan | Kompakt` und den weiterhin deaktivierten Export-Platzhalter.
+- [x] Die Werkzeugleiste enthält den Umschalter `Plan | Kompakt` und den
+      weiterhin deaktivierten Export-Platzhalter.
 - [x] Die aktuelle Planungstabelle stellt alle benötigten Planinformationen
       bereits dar, ist aber kein wiederverwendbares A4-Dokumentlayout.
 - [x] Für die erste Kompaktansicht sind keine Änderungen an Persistenz, IPC,
@@ -44,16 +44,16 @@ nach tatsächlicher Umsetzung und angemessener Prüfung abgehakt.
 **Ziel:** Alle Inhalte der A4-Seite werden deterministisch aus einem
 gespeicherten Monatsplan aufbereitet, ohne Oberfläche oder Entwurfszustand.
 
-- [ ] Eine reine Aufbereitungsfunktion für Dokumentkopf, Tageszeilen,
+- [x] Eine reine Aufbereitungsfunktion für Dokumentkopf, Tageszeilen,
       Mitarbeiterköpfe, Rufbereitschaft, Bemerkungen, Feiertagslegende und
       Abschlusszeilen anlegen.
-- [ ] Ausschließlich einen vollständigen gespeicherten Monatsplan als Eingabe
+- [x] Ausschließlich einen vollständigen gespeicherten Monatsplan als Eingabe
       akzeptieren; keine aktuellen Stammdaten nachladen.
-- [ ] Kurze Uhrzeiten, unveränderte Dauern und eindeutige Namen bei identischen
+- [x] Kurze Uhrzeiten, unveränderte Dauern und eindeutige Namen bei identischen
       Nachnamen zentral aufbereiten.
-- [ ] Vorhandene Kalender-, Zeit- und Monatsberechnungen wiederverwenden und
+- [x] Vorhandene Kalender-, Zeit- und Monatsberechnungen wiederverwenden und
       keine zweite Berechnungslogik einführen.
-- [ ] Normale Fälle sowie Zeitformat, Namensgleichheit, Feiertage, Einträge ohne
+- [x] Normale Fälle sowie Zeitformat, Namensgleichheit, Feiertage, Einträge ohne
       Uhrzeit und Abschlusswerte gezielt mit Vitest prüfen.
 
 **Abnahme:** Das Modell liefert für denselben gespeicherten Plan reproduzierbar
@@ -65,16 +65,16 @@ verändern.
 **Ziel:** Der vorhandene Umschalter wechselt ohne Datenänderung zwischen
 Planansicht und gespeichertem Dokumentstand.
 
-- [ ] Den Ansichtsmodus in der Planungsseite ergänzen und `Plan` als
+- [x] Den Ansichtsmodus in der Planungsseite ergänzen und `Plan` als
       Ausgangsmodus verwenden.
-- [ ] Bei neuem, geladenem oder gelöschtem Plan sowie bei der Monatsvorschau
+- [x] Bei neuem, geladenem oder gelöschtem Plan sowie bei der Monatsvorschau
       zuverlässig auf `Plan` zurücksetzen.
-- [ ] `Kompakt` bei Monatsvorschau, laufendem Speichern und noch nicht
+- [x] `Kompakt` bei Monatsvorschau, laufendem Speichern und noch nicht
       bestätigter Sicherungswiederherstellung deaktivieren.
-- [ ] In der Kompaktansicht `Speichern` und `Auswertung` deaktivieren.
-- [ ] Bei einem abweichenden Entwurf den dauerhaften Hinweis auf den
+- [x] In der Kompaktansicht `Speichern` und `Auswertung` deaktivieren.
+- [x] Bei einem abweichenden Entwurf den dauerhaften Hinweis auf den
       gespeicherten Stand anzeigen.
-- [ ] Wechsel und Verlassen des Plans mit dem bestehenden Verlustschutz
+- [x] Wechsel und Verlassen des Plans mit dem bestehenden Verlustschutz
       abgleichen und als reine Zustandslogik testen.
 
 **Abnahme:** Der Ansichtswechsel verändert und verwirft keine Daten. Die
@@ -86,19 +86,19 @@ deaktivierten und geschützten Zustände entsprechen der Feature-Dokumentation.
 **Ziel:** Das gemeinsame A4-Dokumentlayout ist mit realistischen Daten sichtbar
 und kann vor weiterer Technik fachlich und gestalterisch abgenommen werden.
 
-- [ ] Eine reine Dokumentkomponente für die weiße A4-Seite im Hochformat
+- [x] Eine reine Dokumentkomponente für die weiße A4-Seite im Hochformat
       erstellen.
-- [ ] Dokumentkopf, Tabelle, Feiertagslegende, Abschlusszeilen und
+- [x] Dokumentkopf, Tabelle, Feiertagslegende, Abschlusszeilen und
       Freigabebereich gemäß Feature-Dokumentation darstellen.
-- [ ] Mitarbeiterfarben, Wochenenden und Feiertage dezent und unabhängig von
+- [x] Mitarbeiterfarben, Wochenenden und Feiertage dezent und unabhängig von
       alleiniger Farberkennung kennzeichnen.
-- [ ] Leere Zellen, Einträge mit und ohne Uhrzeit, Rufbereitschaft und
+- [x] Leere Zellen, Einträge mit und ohne Uhrzeit, Rufbereitschaft und
       vollständig umbrechende Bemerkungen abbilden.
-- [ ] Eine getrennte Bildschirmkomponente für graue Arbeitsfläche, Seitenrand,
+- [x] Eine getrennte Bildschirmkomponente für graue Arbeitsfläche, Seitenrand,
       Schatten und proportionale Skalierung anlegen.
 - [ ] Einen normalen Monatsplan mit sechs bis sieben Mitarbeitern sowie den
       Grenzfall mit neun Mitarbeitern und 31 Tagen sichtbar prüfen.
-- [ ] Konkrete Schriftgrößen, Bemerkungsbreite, Zeilenhöhe und
+- [x] Konkrete Schriftgrößen, Bemerkungsbreite, Zeilenhöhe und
       Mindestskalierung gemeinsam visuell abnehmen.
 
 **Abnahme:** Der Benutzer bestätigt die konkrete A4-Darstellung. Vor dieser
@@ -110,15 +110,15 @@ nachfolgende Layoutschritte umgesetzt.
 **Ziel:** Das bestätigte Dokumentlayout bleibt am unterstützten Fenster
 bedienbar und erkennt zuverlässig nicht lesbar passende Pläne.
 
-- [ ] Die A4-Seite bis `1024 × 700` vollständig in der Breite darstellen und
+- [x] Die A4-Seite bis `1024 × 700` vollständig in der Breite darstellen und
       vertikales Scrollen ermöglichen, ohne Dokumentumbrüche zu verändern.
-- [ ] Die bestätigte Mindestskalierung und den verfügbaren A4-Inhaltsbereich
+- [x] Die bestätigte Mindestskalierung und den verfügbaren A4-Inhaltsbereich
       als nachvollziehbare Passungsgrenze umsetzen.
-- [ ] Bei Überlauf den festgelegten dauerhaften Hinweis anzeigen und keine
+- [x] Bei Überlauf den festgelegten dauerhaften Hinweis anzeigen und keine
       Inhalte abschneiden oder verbergen.
-- [ ] Semantische Tabelle, zugängliche Namen leerer Zellen, sichtbaren Fokus und
+- [x] Semantische Tabelle, zugängliche Namen leerer Zellen, sichtbaren Fokus und
       Tastaturbedienung des Umschalters prüfen.
-- [ ] Sicherstellen, dass die A4-Vorschau keine Hover-, Auswahl-, Sticky- oder
+- [x] Sicherstellen, dass die A4-Vorschau keine Hover-, Auswahl-, Sticky- oder
       Bearbeitungszustände aus der Planungstabelle übernimmt.
 
 **Abnahme:** Normal- und Grenzfall bleiben vollständig lesbar. Ein tatsächlich
@@ -131,7 +131,7 @@ abgeschnitten.
 gemeinsam geprüft; der spätere PDF-Export kann dasselbe Dokumentlayout
 übernehmen.
 
-- [ ] Automatisierte Tests für Darstellungsmodell und neue Zustandslogik
+- [x] Automatisierte Tests für Darstellungsmodell und neue Zustandslogik
       vollständig ausführen und gezielt ergänzen.
 - [ ] Normalfall, Neun-Mitarbeiter-Grenzfall, lange Namen und Bemerkungen,
       Namensgleichheit, Feiertage sowie Einträge ohne Uhrzeit manuell prüfen.
@@ -139,11 +139,11 @@ gemeinsam geprüft; der spätere PDF-Export kann dasselbe Dokumentlayout
       Sperrzustände Vorschau, Speichern und Sicherungswiederherstellung prüfen.
 - [ ] Darstellung und Tastaturbedienung bei `1024 × 700` und im maximierten
       Fenster manuell prüfen.
-- [ ] `npm test`, `npm run typecheck`, `npm run lint` und
+- [x] `npm test`, `npm run typecheck`, `npm run lint` und
       `npm run format:check` erfolgreich ausführen.
-- [ ] Verbleibende Abweichungen ausdrücklich dokumentieren und die sichtbare
+- [x] Verbleibende Abweichungen ausdrücklich dokumentieren und die sichtbare
       Gesamtumsetzung durch den Benutzer abnehmen lassen.
-- [ ] Feature-Dokumentation und Roadmap nach dem tatsächlichen
+- [x] Feature-Dokumentation und Roadmap nach dem tatsächlichen
       Implementierungsstand aktualisieren.
 
 **Abnahme:** Technische Prüfungen sind erfolgreich und die manuelle

@@ -88,6 +88,11 @@ Die Seite:
 - darf für ihre Höhe vertikal gescrollt werden und
 - wird auf großen Fenstern nicht unnötig vergrößert.
 
+Für die Bildschirmdarstellung wird die Seite höchstens in ihrer festgelegten
+Grundgröße und bei unterstützter Fensterbreite mindestens mit `84 %`
+dargestellt. Die Skalierung verändert keine Spaltenbreiten oder Umbrüche des
+Dokuments.
+
 Eigene Zoom-Schaltflächen gehören zunächst nicht zum Umfang.
 
 ## Dokumentkopf
@@ -176,8 +181,11 @@ gekürzt noch mit Auslassungspunkten abgeschnitten. Text bricht nach unten um;
 sehr lange Wörter dürfen erforderlichenfalls innerhalb des Wortes umbrechen.
 Ohne Bemerkung bleibt die Zelle leer.
 
-Die endgültige Spaltenbreite und zulässige Zeilenhöhe werden am visuellen
-A4-Prototyp mit neun Mitarbeiterspalten festgelegt.
+Die Bemerkungsspalte verwendet `18 %` der Tabellenbreite. Datum und
+Rufbereitschaft verwenden jeweils `8 %`; die verbleibende Breite wird
+gleichmäßig auf die Mitarbeiterspalten verteilt. Tageszeilen bleiben durch
+kleine Innenabstände kompakt und wachsen nur, wenn vollständig darzustellender
+Inhalt dies erfordert.
 
 ## Abschlusszeilen
 
@@ -223,9 +231,12 @@ einen sichtbaren Fokus und einen eindeutig erkennbaren Auswahlzustand.
 
 ## Passung und Überlauf
 
-Das Dokument darf gleichmäßig verkleinert werden, solange alle Inhalte gut
-lesbar bleiben. Mindestschriftgröße, Mindestskalierung, Bemerkungsbreite und
-zulässige Zeilenhöhe werden am sichtbaren A4-Prototyp festgelegt.
+Das Dokument darf gleichmäßig bis auf den bestätigten Bildschirmmaßstab von
+`84 %` verkleinert werden. Die Tabellenhauptschrift verwendet in der
+Dokumentgrundgröße `9 px`, die untergeordnete Zeitspanne `8 px`. Ein Inhalt,
+der einen Namen über mehr als zwei Kopfzeilen oder das Dokument horizontal
+beziehungsweise vertikal über die A4-Fläche hinaus wachsen lässt, gilt als
+nicht passend.
 
 Passt der vollständige Inhalt selbst an dieser Lesbarkeitsgrenze nicht auf eine
 Seite, erscheint dauerhaft:
