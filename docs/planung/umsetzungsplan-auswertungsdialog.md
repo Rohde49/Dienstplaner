@@ -1,5 +1,12 @@
 # Umsetzungsplan Auswertungsdialog
 
+## Status
+
+Der Auswertungsdialog ist umgesetzt sowie fachlich, gestalterisch und technisch
+abgenommen. Alle zwölf Kennzahlen, ihre Berechnungsgrundlagen, die Darstellung
+des ungespeicherten Entwurfs und die unveränderte Rückkehr zur Planungsseite
+wurden bestätigt. Dieser Plan bleibt als abgeschlossene Prüfliste erhalten.
+
 ## Ziel und Umfang
 
 Der Button „Auswertung“ in der Planungsseite öffnet einen mittig angeordneten,
@@ -31,14 +38,19 @@ neuen Werte vor. Auch bei einem währenddessen anderweitig aktualisierten
 Entwurf bleibt der geöffnete Dialog an dessen aktuellem Stand. Ein
 ungespeicherter Entwurf wird als solcher gekennzeichnet.
 
-## Bereits vorhandene Grundlage
+## Umgesetzter Stand
 
-- Der Button ist als deaktivierter Platzhalter vorhanden.
+- Der Button ist bei einem geöffneten Monatsplan verfügbar und öffnet die
+  Auswertung des aktuellen Planentwurfs.
 - Der gemeinsame Dialograhmen bietet Overlay, leichte Unschärfe, Fokusführung
-  und Schließen per Tastatur; seine Größe kann für die Tabelle angepasst werden.
+  und Schließen per Tastatur. Seine Größe ist auf die vollständige Tabelle
+  abgestimmt.
 - `calculateMonthlyPlanEvaluation` liefert bereits alle genannten Zeitwerte,
-  Tageszähler und die kalendarische Arbeitstagszahl. Die Planungsseite berechnet
-  daraus schon sichtbare Kennzahlen des aktuellen Entwurfs.
+  Tageszähler und die kalendarische Arbeitstagszahl. Der Dialog stellt diese
+  gemeinsame Berechnung ohne eigene fachliche Formeln dar.
+- Die Tabelle zeigt ausschließlich Erzieher in Planreihenfolge und genau die
+  festgelegten zwölf Kennzahlen. Einzelne neutrale Abschnittslinien gliedern
+  die drei fachlichen Bereiche.
 
 ## Arbeitspakete
 
@@ -89,9 +101,7 @@ getrennt festgehalten.
 ## Verbindliche Anzeigeentscheidungen
 
 - **Mitarbeiter – entschieden:** Nur Mitarbeiter mit der im Monatsplan
-  gespeicherten Snapshot-Rolle `Erzieher` werden gezeigt. Die bestehende
-  Feature-Dokumentation fordert noch alle Mitarbeiter und muss vor der
-  Umsetzung an diese Entscheidung angepasst werden.
+  gespeicherten Snapshot-Rolle `Erzieher` werden gezeigt.
 - **Zeilenumfang – entschieden:** Der Dialog zeigt genau die zwölf oben
   aufgeführten Zeilen. Bisher dokumentierte zusätzliche Kennzahlen wie
   Nachtarbeit, Nachtzuschlag und Arbeitszeit mit Nachtbereitschaft entfallen
@@ -100,6 +110,5 @@ getrennt festgehalten.
   Arbeitstagszahl des Monats. Sie ist für alle Mitarbeiter gleich und bildet
   die Grundlage der Soll-Arbeitszeit.
 
-Die bestehende Feature-Dokumentation beschreibt derzeit noch einen größeren
-Auswertungskreis und Kennzahlenumfang. Dieser Widerspruch wird in Arbeitspaket
-1 vor der Codeänderung behoben.
+Die [Feature-Dokumentation](../features/auswertung.md) wurde vor der Umsetzung
+an diese Entscheidungen angepasst und beschreibt den abgenommenen Stand.

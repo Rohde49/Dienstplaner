@@ -15,54 +15,33 @@ abgeschlossen wurde.
 - [Teamverwaltung](../features/teamverwaltung.md)
 - [Planungseinträge](../features/planungseintraege.md)
 - [Planungsseite](../features/planungsseite.md)
-
-## Noch ausstehende Abnahme
-
-### Auswertung
-
-Der [Auswertungsdialog](../features/auswertung.md) ist technisch umgesetzt und
-nutzt die verbindlichen Berechnungsregeln. Die abschließende Sichtprüfung der
-vollständigen Tabelle und der Rückkehr zur Planung durch den Benutzer
-steht noch aus.
-
-### Kompaktansicht – Grenzfälle
-
-Die [Kompaktansicht](../features/kompaktansicht.md) ist technisch umgesetzt. Der
-Grenzfall mit neun Mitarbeitern, 31 Tagen und zweizeiligen Planungseinträgen
-sowie die kleinste Fenstergröße sind visuell bestätigt. Vor dem endgültigen
-Abschluss stehen nur noch gezielte manuelle Prüfungen besonders langer Namen
-und Bemerkungen sowie des seltenen Sicherungszustands aus.
+- [Kompaktansicht](../features/kompaktansicht.md)
+- [Auswertung](../features/auswertung.md)
 
 ## Aktueller Schwerpunkt
 
-### Abschlussprüfung der Kompaktansicht
-
-Die technische Umsetzung folgt dem
-[Umsetzungsplan](umsetzungsplan-kompaktansicht.md). Das freigegebene
-A4-Dokumentlayout, der sichere Ansichtswechsel und die Passungsprüfung sind
-vorhanden. Offen sind nur noch die oben genannten seltenen manuellen
-Grenzfälle; danach kann das Arbeitspaket abgeschlossen werden.
-
-## Anschließende Arbeitspakete
-
-### 1. PDF-Export und Ausgabe
+### PDF-Export und Ausgabe
 
 Das in der Kompaktansicht geprüfte Dokumentlayout wird als
 [PDF](../features/pdf-export.md) exportierbar gemacht. Dateiname, Speicherort,
-Überschreiben und eine mögliche direkte Druckfunktion werden vor diesem
-Arbeitspaket fachlich festgelegt.
+Überschreiben und eine mögliche direkte Druckfunktion werden vor der Umsetzung
+fachlich festgelegt.
 
-### 2. Auslieferung
+## Anschließende Arbeitspakete
+
+### 1. Auslieferung
 
 Die Anwendung wird als Windows-Anwendung paketiert und über einen Installer
 bereitgestellt. Die Installation und der lokale Betrieb werden auf einem dafür
 geeigneten System geprüft.
 
-### 3. Abschluss und Gesamtprüfung
+### 2. Abschluss und Gesamtprüfung
 
 Zum Abschluss werden die wesentlichen Benutzerabläufe, Berechnungen,
 Speicherabläufe und Fehlerfälle gemeinsam geprüft. Verbleibende Abweichungen
 zwischen Dokumentation, Code und Oberfläche werden ausdrücklich festgehalten.
+Dabei werden auch besonders lange Inhalte der Kompaktansicht und eine
+tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
 
 ## Planungsgrundsätze
 

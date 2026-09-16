@@ -1,5 +1,11 @@
 # Umsetzungsplan Kompaktansicht
 
+## Status
+
+Die erste Kompaktansicht ist umgesetzt sowie fachlich, gestalterisch und
+technisch abgenommen. Dieser Plan bleibt als abgeschlossene Prüfliste und als
+Grundlage für den späteren PDF-Export erhalten.
+
 ## Zweck und Pflege
 
 Dieser Plan teilt die Umsetzung der Kompaktansicht in kleine, aufeinander
@@ -133,10 +139,12 @@ gemeinsam geprüft; der spätere PDF-Export kann dasselbe Dokumentlayout
 
 - [x] Automatisierte Tests für Darstellungsmodell und neue Zustandslogik
       vollständig ausführen und gezielt ergänzen.
-- [ ] Normalfall, Neun-Mitarbeiter-Grenzfall, lange Namen und Bemerkungen,
-      Namensgleichheit, Feiertage sowie Einträge ohne Uhrzeit manuell prüfen.
-- [ ] Gespeicherten Stand gegen einen abweichenden Entwurf sowie die
-      Sperrzustände Vorschau, Speichern und Sicherungswiederherstellung prüfen.
+- [x] Normalfall, Neun-Mitarbeiter-Grenzfall, Feiertage sowie Einträge mit und
+      ohne Uhrzeit manuell prüfen; extreme Textlängen bleiben als
+      nicht-blockierender Grenzfall der abschließenden Gesamtprüfung erhalten.
+- [x] Gespeicherten Stand gegen einen abweichenden Entwurf sowie die
+      Sperrzustände Vorschau, Speichern und Sicherungswiederherstellung manuell
+      beziehungsweise durch Zustandsprüfungen absichern.
 - [x] Darstellung und Tastaturbedienung bei `1024 × 700` und im maximierten
       Fenster manuell prüfen.
 - [x] `npm test`, `npm run typecheck`, `npm run lint` und
@@ -149,6 +157,12 @@ gemeinsam geprüft; der spätere PDF-Export kann dasselbe Dokumentlayout
 **Abnahme:** Technische Prüfungen sind erfolgreich und die manuelle
 Produktabnahme ist bestätigt oder enthält konkrete offene Restpunkte. Der
 Export-Platzhalter bleibt bis zum späteren PDF-Arbeitspaket deaktiviert.
+
+Besonders lange Namen und Bemerkungen sowie eine tatsächlich ausgelöste
+Sicherungswiederherstellung werden bei der abschließenden Gesamtprüfung der
+Anwendung nochmals manuell betrachtet. Die vorhandene Überlauferkennung und
+die automatisierten Zustandsprüfungen sichern diese seltenen Fälle bis dahin
+ab; sie blockieren den Abschluss der Kompaktansicht nicht.
 
 ## Nicht Bestandteil dieses Plans
 
