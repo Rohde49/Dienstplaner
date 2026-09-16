@@ -4,6 +4,7 @@ import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
 import {
   beginPlannerSave,
   beginPlannerTeamLoad,
+  canUseCompactPlannerView,
   completePlannerSave,
   completePlannerTeamLoad,
   createInitialPlannerPageState,
@@ -17,6 +18,7 @@ import {
   replacePlannerDraft,
   returnToPlannerPreview,
   selectPlannerPeriod,
+  setPlannerViewMode,
 } from '../../../src/renderer/features/planner/plannerState';
 import type { Employee } from '../../../src/shared/schemas';
 
@@ -44,6 +46,7 @@ describe('Planungsseitenzustand', () => {
 
     expect(state.period).toEqual({ year: 2026, month: 9 });
     expect(state.load).toEqual({ status: 'loading', errorMessage: null });
+    expect(state.viewMode).toBe('plan');
     expect(state.document).toMatchObject({
       kind: 'preview',
       baseline: null,
@@ -237,6 +240,60 @@ describe('Planungsseitenzustand', () => {
     expect(hasUnsavedPlannerChanges(cleanState)).toBe(false);
     expect(hasUnsavedPlannerChanges(changedState)).toBe(true);
     expect(hasUnsavedPlannerChanges(recoveredState)).toBe(true);
+  });
+
+  it('wechselt nur bei einem regulär gespeicherten Plan in die Kompaktansicht', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+      employees: readyState.team,
+    });
+    const regularState = openPlannerPlan(readyState, plan, false);
+    const recoveredState = openPlannerPlan(readyState, plan, true);
+
+    expect(canUseCompactPlannerView(readyState)).toBe(false);
+    expect(setPlannerViewMode(readyState, 'compact')).toBe(readyState);
+    expect(canUseCompactPlannerView(recoveredState)).toBe(false);
+    expect(setPlannerViewMode(recoveredState, 'compact')).toBe(recoveredState);
+
+    const compactState = setPlannerViewMode(regularState, 'compact');
+
+    expect(compactState.viewMode).toBe('compact');
+    expect(compactState.document).toBe(regularState.document);
+    expect(() => beginPlannerSave(compactState)).toThrow(
+      'Die Kompaktansicht kann nicht gespeichert werden.',
+    );
+    expect(setPlannerViewMode(compactState, 'plan')).toMatchObject({
+      viewMode: 'plan',
+    });
+  });
+
+  it('sperrt die Kompaktansicht während des Speicherns und setzt neue Dokumente auf Plan zurück', () => {
+    const readyState = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 8, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+    const plan = createMonthlyPlan({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+      employees: readyState.team,
+    });
+    const regularState = openPlannerPlan(readyState, plan, false);
+    const savingState = beginPlannerSave(regularState);
+    const compactState = setPlannerViewMode(regularState, 'compact');
+
+    expect(canUseCompactPlannerView(savingState)).toBe(false);
+    expect(
+      selectPlannerPeriod(compactState, { year: 2026, month: 10 }).viewMode,
+    ).toBe('plan');
+    expect(openPlannerPlan(compactState, plan, false).viewMode).toBe('plan');
+    expect(returnToPlannerPreview(compactState).viewMode).toBe('plan');
   });
 
   it('bewahrt den Entwurf bei Fehlern und übernimmt nur den gespeicherten Rückgabestand', () => {

@@ -1,0 +1,207 @@
+import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
+import type { CompactPlanDay, CompactPlanModel } from './compactPlanModel';
+
+export const A4_DOCUMENT_WIDTH = 794;
+export const A4_DOCUMENT_HEIGHT = 1123;
+
+type CompactPlanDocumentProps = {
+  model: CompactPlanModel;
+};
+
+function getDayBackground(day: CompactPlanDay): string {
+  if (day.isHoliday) {
+    return 'bg-red-50';
+  }
+
+  return day.isWeekend ? 'bg-slate-100' : 'bg-white';
+}
+
+/** Stellt das gemeinsame, interaktionsfreie A4-Dokumentlayout dar. */
+export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
+  const footerRows = [
+    {
+      label: 'Ist',
+      getValue: (employee: CompactPlanModel['employees'][number]) =>
+        employee.actualWorkingTime,
+    },
+    {
+      label: 'Soll',
+      getValue: (employee: CompactPlanModel['employees'][number]) =>
+        employee.targetWorkingTime,
+    },
+    {
+      label: 'h/Woche',
+      getValue: (employee: CompactPlanModel['employees'][number]) =>
+        employee.weeklyWorkingTime,
+    },
+  ] as const;
+
+  return (
+    <article
+      aria-label={`Dienstplan ${model.periodLabel}`}
+      className="bg-white px-11 py-8 text-slate-950"
+      style={{
+        width: A4_DOCUMENT_WIDTH,
+        minHeight: A4_DOCUMENT_HEIGHT,
+      }}
+    >
+      <header className="mb-4 border-b border-slate-300 pb-3 text-center">
+        <h1 className="text-[22px] leading-7 font-bold tracking-tight break-words">
+          {model.title}
+        </h1>
+        <p className="mt-1 text-[14px] leading-5 font-semibold">
+          {model.periodLabel}
+        </p>
+        <p className="mt-0.5 text-[10px] leading-4 text-slate-600">
+          Stand: {model.savedDateLabel}
+        </p>
+      </header>
+
+      <table className="w-full table-fixed border-collapse text-[9px] leading-[1.15]">
+        <caption className="sr-only">
+          Gespeicherter Dienstplan für {model.periodLabel}
+        </caption>
+        <colgroup>
+          <col className="w-[8%]" />
+          {model.employees.map((employee) => (
+            <col key={employee.id} />
+          ))}
+          <col className="w-[8%]" />
+          <col className="w-[18%]" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th
+              scope="col"
+              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+            >
+              Datum
+            </th>
+            {model.employees.map((employee) => (
+              <th
+                key={employee.id}
+                scope="col"
+                title={employee.fullName}
+                className={`border px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].plannerHeaderClass}`}
+              >
+                <span className="[display:-webkit-box] overflow-hidden [overflow-wrap:anywhere] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                  {employee.displayName}
+                </span>
+              </th>
+            ))}
+            <th
+              scope="col"
+              abbr="Rufbereitschaft"
+              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+            >
+              RB
+            </th>
+            <th
+              scope="col"
+              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+            >
+              Bemerkung
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {model.days.map((day) => {
+            const dayBackground = getDayBackground(day);
+
+            return (
+              <tr key={day.date} className={dayBackground}>
+                <th
+                  scope="row"
+                  className={`border border-slate-300 px-1 py-[3px] text-center font-semibold whitespace-nowrap ${
+                    day.isHoliday ? 'text-red-800' : 'text-slate-900'
+                  }`}
+                >
+                  {day.dateLabel}
+                </th>
+                {model.employees.map((employee) => {
+                  const entry = day.entries[employee.id];
+
+                  return (
+                    <td
+                      key={employee.id}
+                      aria-label={`${day.fullDateLabel}, ${employee.fullName}: ${
+                        entry
+                          ? `${entry.code}${entry.timeRange ? `, ${entry.timeRange}` : ''}`
+                          : 'Kein Eintrag'
+                      }`}
+                      className="border border-slate-300 px-0.5 py-[2px] text-center align-middle"
+                    >
+                      {entry ? (
+                        <span className="block">
+                          <span className="block font-semibold break-words">
+                            {entry.code}
+                          </span>
+                          {entry.timeRange ? (
+                            <span className="mt-px block text-[8px] whitespace-nowrap text-slate-600 tabular-nums">
+                              {entry.timeRange}
+                            </span>
+                          ) : null}
+                        </span>
+                      ) : null}
+                    </td>
+                  );
+                })}
+                <td
+                  aria-label={`${day.fullDateLabel}, Rufbereitschaft: ${day.onCallEmployeeName ?? 'Keine Rufbereitschaft'}`}
+                  className="border border-slate-300 px-0.5 py-[2px] text-center break-words"
+                >
+                  {day.onCallEmployeeName}
+                </td>
+                <td className="border border-slate-300 px-1 py-[2px] align-middle [overflow-wrap:anywhere] whitespace-pre-wrap">
+                  {day.note}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          {footerRows.map((footerRow) => (
+            <tr key={footerRow.label} className="bg-slate-100 font-semibold">
+              <th
+                scope="row"
+                className="border border-slate-400 px-1 py-1 text-center"
+              >
+                {footerRow.label}
+              </th>
+              {model.employees.map((employee) => (
+                <td
+                  key={employee.id}
+                  className="border border-slate-400 px-0.5 py-1 text-center tabular-nums"
+                >
+                  {footerRow.getValue(employee)}
+                </td>
+              ))}
+              <td className="border border-slate-400" />
+              <td className="border border-slate-400" />
+            </tr>
+          ))}
+        </tfoot>
+      </table>
+
+      {model.holidays.length > 0 ? (
+        <section aria-label="Feiertage" className="mt-3 text-[9px] leading-4">
+          <h2 className="sr-only">Feiertage</h2>
+          <ul className="grid grid-cols-2 gap-x-6">
+            {model.holidays.map((holiday) => (
+              <li key={holiday.date} className="break-words">
+                {holiday.label}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <footer className="mt-8 grid grid-cols-[1fr_2fr] gap-10 text-[10px]">
+        <div className="border-t border-slate-600 pt-1">Datum</div>
+        <div className="border-t border-slate-600 pt-1">
+          Freigabe / Unterschrift
+        </div>
+      </footer>
+    </article>
+  );
+}

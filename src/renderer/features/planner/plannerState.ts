@@ -66,12 +66,15 @@ export type PlannerSaveState =
   | { status: 'saving'; errorMessage: null }
   | { status: 'error'; errorMessage: string };
 
+export type PlannerViewMode = 'plan' | 'compact';
+
 export type PlannerPageState = {
   period: PlannerPeriod;
   team: readonly Employee[];
   document: PlannerDocumentState;
   load: PlannerLoadState;
   save: PlannerSaveState;
+  viewMode: PlannerViewMode;
 };
 
 function assertValidPeriod(period: PlannerPeriod): void {
@@ -146,6 +149,7 @@ export function createInitialPlannerPageState(now: Date): PlannerPageState {
     document: createPreviewDocument(period, []),
     load: { status: 'loading', errorMessage: null },
     save: { status: 'idle', errorMessage: null },
+    viewMode: 'plan',
   };
 }
 
@@ -198,6 +202,7 @@ export function selectPlannerPeriod(
     period,
     document: createPreviewDocument(period, state.team),
     save: { status: 'idle', errorMessage: null },
+    viewMode: 'plan',
   };
 }
 
@@ -220,6 +225,7 @@ export function openPlannerPlan(
       recoveredFromBackup,
     },
     save: { status: 'idle', errorMessage: null },
+    viewMode: 'plan',
   };
 }
 
@@ -258,10 +264,35 @@ export function hasUnsavedPlannerChanges(state: PlannerPageState): boolean {
   );
 }
 
+/** Die Kompaktansicht ist nur für einen bestätigten gespeicherten Plan verfügbar. */
+export function canUseCompactPlannerView(state: PlannerPageState): boolean {
+  return (
+    state.document.kind === 'plan' &&
+    !state.document.recoveredFromBackup &&
+    state.save.status !== 'saving'
+  );
+}
+
+/** Wechselt die reine Darstellung, ohne Ausgangsstand oder Entwurf zu verändern. */
+export function setPlannerViewMode(
+  state: PlannerPageState,
+  viewMode: PlannerViewMode,
+): PlannerPageState {
+  if (viewMode === 'compact' && !canUseCompactPlannerView(state)) {
+    return state;
+  }
+
+  return { ...state, viewMode };
+}
+
 /** Markiert den laufenden Speichervorgang, ohne den Entwurf zu verändern. */
 export function beginPlannerSave(state: PlannerPageState): PlannerPageState {
   if (state.document.kind !== 'plan') {
     throw new Error('Eine Vorschau kann nicht gespeichert werden.');
+  }
+
+  if (state.viewMode === 'compact') {
+    throw new Error('Die Kompaktansicht kann nicht gespeichert werden.');
   }
 
   return {
@@ -297,6 +328,7 @@ export function completePlannerSave(
       recoveredFromBackup: false,
     },
     save: { status: 'idle', errorMessage: null },
+    viewMode: 'plan',
   };
 }
 
@@ -338,6 +370,7 @@ export function returnToPlannerPreview(
     ...state,
     document: createPreviewDocument(state.period, state.team),
     save: { status: 'idle', errorMessage: null },
+    viewMode: 'plan',
   };
 }
 

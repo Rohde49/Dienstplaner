@@ -31,6 +31,7 @@ import {
   PLANNER_MONTHS,
   beginPlannerTeamLoad,
   beginPlannerSave,
+  canUseCompactPlannerView,
   completePlannerTeamLoad,
   completePlannerSave,
   createInitialPlannerPageState,
@@ -44,6 +45,7 @@ import {
   replacePlannerDraft,
   returnToPlannerPreview,
   selectPlannerPeriod,
+  setPlannerViewMode,
 } from './plannerState';
 import { CreateMonthlyPlanDialog } from './CreateMonthlyPlanDialog';
 import { LoadMonthlyPlanDialog } from './LoadMonthlyPlanDialog';
@@ -52,6 +54,7 @@ import { EditPlanTitleDialog } from './EditPlanTitleDialog';
 import { setDraftPlanTitle } from './plannerDraft';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { EvaluationDialog } from './EvaluationDialog';
+import { CompactPlanPreview } from './CompactPlanPreview';
 
 export type PlannerProtectionHandler = (action: () => void) => void;
 
@@ -132,11 +135,16 @@ export function PlannerPage({
     state.document.kind === 'preview' ? state.document.preview : null;
   const activePlan =
     state.document.kind === 'plan' ? state.document.draft : null;
-  const toolbarTitle = activePlan
-    ? activePlan.title
+  const savedPlan =
+    state.document.kind === 'plan' ? state.document.baseline : null;
+  const isCompactView = state.viewMode === 'compact' && savedPlan !== null;
+  const displayedPlan = isCompactView ? savedPlan : activePlan;
+  const toolbarTitle = displayedPlan
+    ? displayedPlan.title
     : `${PLANNER_MONTHS[state.period.month - 1]} ${state.period.year}`;
   const hasUnsavedChanges = hasUnsavedPlannerChanges(state);
   const isSaving = state.save.status === 'saving';
+  const canUseCompactView = canUseCompactPlannerView(state);
   const currentPlanId =
     state.document.kind === 'plan' ? state.document.baseline.id : null;
   const canDeleteCurrentPlan =
@@ -429,7 +437,7 @@ export function PlannerPage({
                 {activePlan ? (
                   <EditPlanTitleDialog
                     plan={activePlan}
-                    disabled={isSaving}
+                    disabled={isSaving || isCompactView}
                     onApply={(title) =>
                       setState((currentState) =>
                         replacePlannerDraft(
@@ -446,7 +454,7 @@ export function PlannerPage({
                 {activePlan ? (
                   <Button
                     variant={hasUnsavedChanges ? 'primary' : 'secondary'}
-                    disabled={!hasUnsavedChanges || isSaving}
+                    disabled={!hasUnsavedChanges || isSaving || isCompactView}
                     onClick={() => void savePlan(activePlan)}
                   >
                     {isSaving ? (
@@ -468,7 +476,7 @@ export function PlannerPage({
                 ) : null}
                 <EvaluationDialog
                   plan={activePlan}
-                  disabled={isSaving}
+                  disabled={isSaving || isCompactView}
                   status={
                     state.document.kind === 'plan' &&
                     state.document.recoveredFromBackup
@@ -520,20 +528,50 @@ export function PlannerPage({
                 <div className="flex flex-wrap items-center gap-2">
                   <div
                     role="group"
-                    aria-label="Ansicht, Kompaktansicht in Vorbereitung"
+                    aria-label="Ansicht"
                     className="border-app-border bg-app-surface-muted inline-flex h-9 items-center rounded-md border p-1 text-sm"
                   >
-                    <span
-                      aria-current="true"
-                      className="bg-app-surface text-app-text rounded-sm px-3 py-1 font-medium shadow-sm"
-                    >
-                      Plan
-                    </span>
                     <button
                       type="button"
-                      disabled
-                      title="Kompaktansicht noch nicht verfügbar"
-                      className="text-app-text-disabled cursor-not-allowed px-3 py-1"
+                      aria-pressed={!isCompactView}
+                      className={`rounded-sm px-3 py-1 font-medium ${
+                        isCompactView
+                          ? 'text-app-muted hover:bg-app-surface-hover'
+                          : 'bg-app-surface text-app-text shadow-sm'
+                      }`}
+                      onClick={() =>
+                        setState((currentState) =>
+                          setPlannerViewMode(currentState, 'plan'),
+                        )
+                      }
+                    >
+                      Plan
+                    </button>
+                    <button
+                      type="button"
+                      aria-pressed={isCompactView}
+                      disabled={!canUseCompactView}
+                      title={
+                        canUseCompactView
+                          ? undefined
+                          : state.document.kind === 'preview'
+                            ? 'Öffne zuerst einen gespeicherten Monatsplan.'
+                            : state.document.recoveredFromBackup
+                              ? 'Speichere den wiederhergestellten Plan zuerst.'
+                              : 'Der Dienstplan wird gerade gespeichert.'
+                      }
+                      className={`rounded-sm px-3 py-1 font-medium ${
+                        isCompactView
+                          ? 'bg-app-surface text-app-text shadow-sm'
+                          : canUseCompactView
+                            ? 'text-app-muted hover:bg-app-surface-hover'
+                            : 'text-app-text-disabled cursor-not-allowed'
+                      }`}
+                      onClick={() =>
+                        setState((currentState) =>
+                          setPlannerViewMode(currentState, 'compact'),
+                        )
+                      }
                     >
                       Kompakt
                     </button>
@@ -582,6 +620,7 @@ export function PlannerPage({
               {activePlan ? (
                 <Button
                   variant="secondary"
+                  disabled={isCompactView}
                   onClick={() => void savePlan(activePlan)}
                 >
                   Erneut versuchen
@@ -641,10 +680,20 @@ export function PlannerPage({
           </Card>
         ) : null}
 
-        {activePlan ||
-        (state.load.status === 'ready' &&
-          preview &&
-          preview.employees.length > 0) ? (
+        {isCompactView && savedPlan ? (
+          <div className="space-y-3">
+            {hasUnsavedChanges ? (
+              <Alert title="Gespeicherter Stand" variant="info">
+                Diese Ansicht zeigt den zuletzt gespeicherten Stand.
+                Ungespeicherte Änderungen sind nicht enthalten.
+              </Alert>
+            ) : null}
+            <CompactPlanPreview plan={savedPlan} />
+          </div>
+        ) : activePlan ||
+          (state.load.status === 'ready' &&
+            preview &&
+            preview.employees.length > 0) ? (
           <PlanningTable
             document={state.document}
             onDraftChange={
