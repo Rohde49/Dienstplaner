@@ -219,13 +219,16 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                 ? 'border-t-app-border-strong border-t-2'
                 : '';
               const isLastRow = rowIndex === ROWS.length - 1;
+              const nextRowStartsSection =
+                ROWS[rowIndex + 1]?.sectionStart ?? false;
+              const showBottomBorder = !isLastRow && !nextRowStartsSection;
 
               return (
                 <tr key={row.label} className="group">
                   <th
                     scope="row"
                     className={`border-app-border border-r px-3 py-2 font-medium transition-colors ${
-                      isLastRow ? '' : 'border-b'
+                      showBottomBorder ? 'border-b' : ''
                     } ${sectionClasses} ${
                       row.summary
                         ? 'bg-blue-50/60 group-hover:bg-blue-50'
@@ -244,7 +247,7 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                         key={employee.id}
                         className={`border-app-border px-2 py-2 text-center tabular-nums transition-colors ${
                           employeeIndex < educators.length - 1 ? 'border-r' : ''
-                        } ${isLastRow ? '' : 'border-b'} ${sectionClasses} ${
+                        } ${showBottomBorder ? 'border-b' : ''} ${sectionClasses} ${
                           row.highlightDifference
                             ? getDifferenceClasses(
                                 employeeEvaluation.workingDifferenceMinutes,

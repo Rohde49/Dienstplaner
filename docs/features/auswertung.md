@@ -98,8 +98,10 @@ bereits dauerhaft gespeichert wurde.
 - Ein exakter Ausgleich wird ohne Vorzeichen angezeigt.
 - Die im Monatsplan gespeicherte Mitarbeiterfarbe kennzeichnet den jeweiligen
   Tabellenkopf wie in der Planungstabelle.
-- Dezente Abschnittstrenner gliedern Dienst- und Freitage, Zeitwerte sowie den
-  Soll-Ist-Bereich. Der Soll-Ist-Bereich ist zurückhaltend hervorgehoben.
+- Je eine einzelne, dezente Abschnittslinie gliedert Dienst- und Freitage,
+  Zeitwerte sowie den Soll-Ist-Bereich. An diesen Grenzen wird keine normale
+  Zeilenlinie zusätzlich dargestellt. Der Soll-Ist-Bereich ist zurückhaltend
+  hervorgehoben.
 - Eine dezente Hervorhebung der Tabellenzeile unterstützt den Vergleich beim
   Bewegen der Maus, ohne die dauerhaft sichtbaren Mitarbeiterfarben zu
   überlagern.
