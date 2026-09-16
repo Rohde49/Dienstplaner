@@ -146,6 +146,8 @@ Mitarbeiterangaben erscheinen dort nicht.
 Eine einzelne neutrale Linie trennt die Mitarbeiterköpfe von den
 Kalendertagen. An den Übergängen zwischen Tabellenkopf, Tagesbereich und
 Abschlussblock werden keine verschiedenfarbigen Linien übereinandergelegt.
+Der äußere Tabellenrahmen verwendet durchgehend das stärkere neutrale Graublau
+von Kopf und Abschlussblock; das innere Raster der Kalendertage bleibt heller.
 
 ### Planungseintrag
 

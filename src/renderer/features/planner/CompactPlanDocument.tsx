@@ -105,7 +105,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
             </th>
           </tr>
         </thead>
-        <tbody className="[&>tr:first-child>*]:border-t-0 [&>tr:last-child>*]:border-b-0">
+        <tbody className="[&>tr:first-child>*]:border-t-0 [&>tr:last-child>*]:border-b-0 [&>tr>:first-child]:border-l-slate-400 [&>tr>:last-child]:border-r-slate-400">
           {model.days.map((day) => {
             const dayBackground = getDayBackground(day);
 
