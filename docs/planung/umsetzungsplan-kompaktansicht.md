@@ -96,7 +96,7 @@ und kann vor weiterer Technik fachlich und gestalterisch abgenommen werden.
       vollständig umbrechende Bemerkungen abbilden.
 - [x] Eine getrennte Bildschirmkomponente für graue Arbeitsfläche, Seitenrand,
       Schatten und proportionale Skalierung anlegen.
-- [ ] Einen normalen Monatsplan mit sechs bis sieben Mitarbeitern sowie den
+- [x] Einen normalen Monatsplan mit sechs bis sieben Mitarbeitern sowie den
       Grenzfall mit neun Mitarbeitern und 31 Tagen sichtbar prüfen.
 - [x] Konkrete Schriftgrößen, Bemerkungsbreite, Zeilenhöhe und
       Mindestskalierung gemeinsam visuell abnehmen.
@@ -137,7 +137,7 @@ gemeinsam geprüft; der spätere PDF-Export kann dasselbe Dokumentlayout
       Namensgleichheit, Feiertage sowie Einträge ohne Uhrzeit manuell prüfen.
 - [ ] Gespeicherten Stand gegen einen abweichenden Entwurf sowie die
       Sperrzustände Vorschau, Speichern und Sicherungswiederherstellung prüfen.
-- [ ] Darstellung und Tastaturbedienung bei `1024 × 700` und im maximierten
+- [x] Darstellung und Tastaturbedienung bei `1024 × 700` und im maximierten
       Fenster manuell prüfen.
 - [x] `npm test`, `npm run typecheck`, `npm run lint` und
       `npm run format:check` erfolgreich ausführen.

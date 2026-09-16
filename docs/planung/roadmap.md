@@ -27,10 +27,11 @@ steht noch aus.
 
 ### Kompaktansicht – Grenzfälle
 
-Die [Kompaktansicht](../features/kompaktansicht.md) ist technisch umgesetzt und
-für einen realen Monatsplan visuell bestätigt. Vor dem endgültigen Abschluss
-stehen noch die gezielte manuelle Sichtprüfung des Neun-Mitarbeiter-Grenzfalls,
-besonders langer Inhalte und der kleinsten Fenstergröße aus.
+Die [Kompaktansicht](../features/kompaktansicht.md) ist technisch umgesetzt. Der
+Grenzfall mit neun Mitarbeitern, 31 Tagen und zweizeiligen Planungseinträgen
+sowie die kleinste Fenstergröße sind visuell bestätigt. Vor dem endgültigen
+Abschluss stehen nur noch gezielte manuelle Prüfungen besonders langer Namen
+und Bemerkungen sowie des seltenen Sicherungszustands aus.
 
 ## Aktueller Schwerpunkt
 
@@ -39,8 +40,8 @@ besonders langer Inhalte und der kleinsten Fenstergröße aus.
 Die technische Umsetzung folgt dem
 [Umsetzungsplan](umsetzungsplan-kompaktansicht.md). Das freigegebene
 A4-Dokumentlayout, der sichere Ansichtswechsel und die Passungsprüfung sind
-vorhanden. Offen sind nur noch die oben genannten manuellen Grenzfälle; danach
-kann das Arbeitspaket abgeschlossen werden.
+vorhanden. Offen sind nur noch die oben genannten seltenen manuellen
+Grenzfälle; danach kann das Arbeitspaket abgeschlossen werden.
 
 ## Anschließende Arbeitspakete
 

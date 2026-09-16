@@ -97,11 +97,10 @@ Eigene Zoom-Schaltflächen gehören zunächst nicht zum Umfang.
 
 ## Dokumentkopf
 
-Über der Tabelle stehen:
-
-1. der Plantitel als größte Überschrift,
-2. der ausgeschriebene Monat mit Jahr, beispielsweise `September 2026`, und
-3. das Speicherdatum als `Stand: DD.MM.YYYY` ohne Uhrzeit.
+Über der Tabelle stehen der Plantitel als größte Überschrift und darunter eine
+gemeinsame kompakte Zeile aus ausgeschriebenem Monat mit Jahr sowie dem
+Speicherdatum, beispielsweise
+`September 2026 · Stand: 16.09.2026`. Eine Uhrzeit wird nicht angezeigt.
 
 Die technische Plan-ID sowie Bezeichnungen wie `Kompaktansicht` oder
 `Druckvorschau` erscheinen nicht im Dokument.
@@ -205,8 +204,9 @@ weitere Kennzahlen wie SN/F-Dienste oder freie Tage erscheinen nicht.
 
 ## Freigabebereich
 
-Unter Tabelle und Feiertagslegende stehen zwei kompakte beschriftete Linien
-nebeneinander:
+Unter Tabelle und Feiertagslegende stehen zwei kompakte Formularzeilen
+nebeneinander. Die jeweilige Beschriftung steht links direkt in derselben Zeile
+wie die anschließende Linie:
 
 - `Datum` und
 - `Freigabe / Unterschrift`.

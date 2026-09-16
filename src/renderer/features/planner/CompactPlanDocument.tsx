@@ -37,21 +37,21 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
   return (
     <article
       aria-label={`Dienstplan ${model.periodLabel}`}
-      className="bg-white px-11 py-8 text-slate-950"
+      className="bg-white px-11 py-5 text-slate-950"
       style={{
         width: A4_DOCUMENT_WIDTH,
         minHeight: A4_DOCUMENT_HEIGHT,
       }}
     >
-      <header className="mb-4 border-b border-slate-300 pb-3 text-center">
-        <h1 className="text-[22px] leading-7 font-bold tracking-tight break-words">
+      <header className="mb-2 border-b border-slate-300 pb-2 text-center">
+        <h1 className="text-[18px] leading-[22px] font-bold tracking-tight break-words">
           {model.title}
         </h1>
-        <p className="mt-1 text-[14px] leading-5 font-semibold">
-          {model.periodLabel}
-        </p>
-        <p className="mt-0.5 text-[10px] leading-4 text-slate-600">
-          Stand: {model.savedDateLabel}
+        <p className="mt-1 text-[11px] leading-4">
+          <span className="font-semibold">{model.periodLabel}</span>
+          <span className="text-slate-600">
+            {' · '}Stand: {model.savedDateLabel}
+          </span>
         </p>
       </header>
 
@@ -198,9 +198,13 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
       ) : null}
 
       <footer className="mt-8 grid grid-cols-[1fr_2fr] gap-10 text-[10px]">
-        <div className="border-t border-slate-600 pt-1">Datum</div>
-        <div className="border-t border-slate-600 pt-1">
-          Freigabe / Unterschrift
+        <div className="flex items-center gap-2">
+          <span className="shrink-0">Datum</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-slate-600" />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="shrink-0">Freigabe / Unterschrift</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-slate-600" />
         </div>
       </footer>
     </article>
