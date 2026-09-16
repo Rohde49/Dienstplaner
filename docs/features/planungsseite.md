@@ -377,6 +377,14 @@ werden ungespeicherte Änderungen durch dieselbe Entscheidung geschützt:
 - Änderungen verwerfen oder
 - Abbrechen.
 
+Der Schutzdialog kennzeichnet den ungespeicherten Zustand mit dem vorhandenen
+Warnfarbton, ohne den gesamten Dialog einzufärben. „Speichern und fortfahren“
+bleibt die blaue Hauptaktion, „Änderungen verwerfen“ ist als roter destruktiver
+Button erkennbar und „Abbrechen“ bleibt neutral. Die Aktionen zum Speichern und
+Verwerfen stehen gemeinsam rechts; „Abbrechen“ ist räumlich davon getrennt und
+erhält beim Öffnen den Tastaturfokus. Bedeutung und Entscheidung bleiben durch
+Symbol und Beschriftung auch ohne Farberkennung verständlich.
+
 Erst ein erfolgreiches Speichern setzt die beabsichtigte Aktion fort. Das bloße
 Öffnen des Ladedialogs verwirft noch nichts; der Schutz greift erst bei der
 Auswahl eines anderen Plans.

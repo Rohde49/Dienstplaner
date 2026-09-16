@@ -1,4 +1,5 @@
-import { Save } from 'lucide-react';
+import { Save, TriangleAlert } from 'lucide-react';
+import { useRef } from 'react';
 
 import {
   Alert,
@@ -28,6 +29,8 @@ export function UnsavedChangesDialog({
   onDiscard,
   onCancel,
 }: UnsavedChangesDialogProps) {
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+
   return (
     <AlertDialogRoot
       open={open}
@@ -39,7 +42,16 @@ export function UnsavedChangesDialog({
     >
       <AlertDialogContent
         title="Ungespeicherte Änderungen"
-        description="Speichere oder verwirf den aktuellen Entwurf, bevor du fortfährst."
+        description="Deine Änderungen am aktuellen Dienstplan sind noch nicht gespeichert. Wie möchtest du fortfahren?"
+        headerIcon={
+          <span className="bg-app-warning-subtle text-app-warning flex size-10 items-center justify-center rounded-lg">
+            <TriangleAlert aria-hidden="true" size={20} />
+          </span>
+        }
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          cancelButtonRef.current?.focus();
+        }}
       >
         {errorMessage ? (
           <div className="px-6 pt-5">
@@ -49,42 +61,49 @@ export function UnsavedChangesDialog({
           </div>
         ) : null}
 
-        <div className="border-app-border bg-app-surface-muted flex flex-wrap justify-end gap-2 border-t px-6 py-4">
+        <div className="border-app-border bg-app-surface-muted flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4">
           <AlertDialogCancel asChild>
-            <Button variant="secondary" disabled={isSaving} onClick={onCancel}>
+            <Button
+              ref={cancelButtonRef}
+              variant="secondary"
+              disabled={isSaving}
+              onClick={onCancel}
+            >
               Abbrechen
             </Button>
           </AlertDialogCancel>
 
-          <Button variant="ghost" disabled={isSaving} onClick={onDiscard}>
-            Änderungen verwerfen
-          </Button>
-
-          <AlertDialogAction asChild>
-            <Button
-              disabled={isSaving}
-              onClick={(event) => {
-                event.preventDefault();
-                onSaveAndContinue();
-              }}
-            >
-              {isSaving ? (
-                <>
-                  <Spinner
-                    size="sm"
-                    label="Dienstplan wird gespeichert"
-                    className="text-app-on-primary"
-                  />
-                  Wird gespeichert …
-                </>
-              ) : (
-                <>
-                  <Save aria-hidden="true" size={17} />
-                  Speichern und fortfahren
-                </>
-              )}
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button variant="danger" disabled={isSaving} onClick={onDiscard}>
+              Änderungen verwerfen
             </Button>
-          </AlertDialogAction>
+
+            <AlertDialogAction asChild>
+              <Button
+                disabled={isSaving}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onSaveAndContinue();
+                }}
+              >
+                {isSaving ? (
+                  <>
+                    <Spinner
+                      size="sm"
+                      label="Dienstplan wird gespeichert"
+                      className="text-app-on-primary"
+                    />
+                    Wird gespeichert …
+                  </>
+                ) : (
+                  <>
+                    <Save aria-hidden="true" size={17} />
+                    Speichern und fortfahren
+                  </>
+                )}
+              </Button>
+            </AlertDialogAction>
+          </div>
         </div>
       </AlertDialogContent>
     </AlertDialogRoot>

@@ -1,5 +1,5 @@
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 export const AlertDialogRoot = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
@@ -12,12 +12,14 @@ type AlertDialogContentProps = Omit<
 > & {
   title: string;
   description: string;
+  headerIcon?: ReactNode;
 };
 
 /** Zeigt den einheitlich gestalteten Inhalt eines Bestätigungsdialogs an. */
 export function AlertDialogContent({
   title,
   description,
+  headerIcon,
   children,
   className,
   ...props
@@ -36,13 +38,19 @@ export function AlertDialogContent({
         {...props}
       >
         <div className="border-app-border border-b px-6 py-5">
-          <AlertDialogPrimitive.Title className="text-app-text text-lg font-semibold">
-            {title}
-          </AlertDialogPrimitive.Title>
+          <div className="flex items-start gap-3">
+            {headerIcon ? <div className="shrink-0">{headerIcon}</div> : null}
 
-          <AlertDialogPrimitive.Description className="text-app-muted mt-1 text-sm leading-6">
-            {description}
-          </AlertDialogPrimitive.Description>
+            <div className="min-w-0">
+              <AlertDialogPrimitive.Title className="text-app-text text-lg font-semibold">
+                {title}
+              </AlertDialogPrimitive.Title>
+
+              <AlertDialogPrimitive.Description className="text-app-muted mt-1 text-sm leading-6">
+                {description}
+              </AlertDialogPrimitive.Description>
+            </div>
+          </div>
         </div>
 
         {children}
