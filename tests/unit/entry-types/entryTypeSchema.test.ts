@@ -168,6 +168,46 @@ describe('Berechnungsarten', () => {
 
     expect(result.success).toBe(false);
   });
+
+  it('akzeptiert freie Tage ohne Uhrzeiten und ausschließlich mit Nullwerten', () => {
+    expect(
+      entryTypeInputSchema.parse({
+        ...createFixedEntryTypeInput(),
+        code: 'WF',
+        calculationType: 'freeDay',
+        startTime: null,
+        endTime: null,
+        timeValues: zeroTimeValues,
+      }),
+    ).toMatchObject({
+      code: 'WF',
+      calculationType: 'freeDay',
+      startTime: null,
+      endTime: null,
+      timeValues: zeroTimeValues,
+    });
+  });
+
+  it('lehnt bei freien Tagen feste Zeitwerte ab', () => {
+    expect(
+      entryTypeInputSchema.safeParse({
+        ...createFixedEntryTypeInput(),
+        calculationType: 'freeDay',
+        startTime: null,
+        endTime: null,
+      }).success,
+    ).toBe(false);
+  });
+
+  it('lehnt bei freien Tagen feste Uhrzeiten ab', () => {
+    expect(
+      entryTypeInputSchema.safeParse({
+        ...createFixedEntryTypeInput(),
+        calculationType: 'freeDay',
+        timeValues: zeroTimeValues,
+      }).success,
+    ).toBe(false);
+  });
 });
 
 describe('Eintragsartendatei', () => {

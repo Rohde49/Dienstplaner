@@ -136,8 +136,7 @@ function focusFirstInvalidField(errors: EntryTypeFormErrors): void {
 /** Erstellt die leeren oder bereits vorhandenen Formularwerte. */
 function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
   if (entryType) {
-    const usesWeeklyWorkingTime =
-      entryType.calculationType === 'weeklyWorkingTime';
+    const usesFixedTimeValues = entryType.calculationType === 'fixed';
 
     return {
       code: entryType.code,
@@ -145,20 +144,20 @@ function createInitialFormState(entryType?: EntryType): EntryTypeFormState {
       calculationType: entryType.calculationType,
       startTime: entryType.startTime ?? '',
       endTime: entryType.endTime ?? '',
-      attendanceDuration: usesWeeklyWorkingTime
-        ? ''
-        : formatDuration(entryType.timeValues.attendanceMinutes),
-      workingWithoutNightReadinessDuration: usesWeeklyWorkingTime
-        ? ''
-        : formatDuration(
+      attendanceDuration: usesFixedTimeValues
+        ? formatDuration(entryType.timeValues.attendanceMinutes)
+        : '',
+      workingWithoutNightReadinessDuration: usesFixedTimeValues
+        ? formatDuration(
             entryType.timeValues.workingWithoutNightReadinessMinutes,
-          ),
-      nightReadinessDuration: usesWeeklyWorkingTime
-        ? ''
-        : formatDuration(entryType.timeValues.nightReadinessMinutes),
-      nightWorkDuration: usesWeeklyWorkingTime
-        ? ''
-        : formatDuration(entryType.timeValues.nightWorkMinutes),
+          )
+        : '',
+      nightReadinessDuration: usesFixedTimeValues
+        ? formatDuration(entryType.timeValues.nightReadinessMinutes)
+        : '',
+      nightWorkDuration: usesFixedTimeValues
+        ? formatDuration(entryType.timeValues.nightWorkMinutes)
+        : '',
       active: entryType.active,
     };
   }
@@ -218,11 +217,10 @@ export function EntryTypeDialog({
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const usesWeeklyWorkingTime =
-    formState.calculationType === 'weeklyWorkingTime';
-  const calculatedWorkingDuration = usesWeeklyWorkingTime
-    ? ''
-    : calculateWorkingDuration(formState);
+  const usesFixedTimeValues = formState.calculationType === 'fixed';
+  const calculatedWorkingDuration = usesFixedTimeValues
+    ? calculateWorkingDuration(formState)
+    : '';
 
   function resetForm(): void {
     setFormState(createInitialFormState(entryType));
@@ -253,12 +251,12 @@ export function EntryTypeDialog({
     }));
   }
 
-  /** Leert abhängige Werte, sobald die Wochenarbeitszeit gewählt wird. */
+  /** Leert abhängige Werte, sobald keine festen Zeitwerte verwendet werden. */
   function updateCalculationType(calculationType: CalculationType): void {
     setFormState((currentState) => ({
       ...currentState,
       calculationType,
-      ...(calculationType === 'weeklyWorkingTime'
+      ...(calculationType !== 'fixed'
         ? {
             startTime: '',
             endTime: '',
@@ -337,7 +335,7 @@ export function EntryTypeDialog({
       nightWorkMinutes: 0,
     };
 
-    if (!usesWeeklyWorkingTime) {
+    if (usesFixedTimeValues) {
       for (const definition of durationFields) {
         const parsedValue = parseDurationInput(formState[definition.field]);
 
@@ -380,8 +378,8 @@ export function EntryTypeDialog({
       code: formState.code,
       name: formState.name,
       calculationType: formState.calculationType,
-      startTime: usesWeeklyWorkingTime ? null : startTime,
-      endTime: usesWeeklyWorkingTime ? null : endTime,
+      startTime: usesFixedTimeValues ? startTime : null,
+      endTime: usesFixedTimeValues ? endTime : null,
       timeValues,
       active: formState.active,
     });
@@ -518,6 +516,16 @@ export function EntryTypeDialog({
                           deaktiviert.
                         </dd>
                       </div>
+
+                      <div>
+                        <dt className="text-app-text inline font-medium">
+                          Freier Tag:
+                        </dt>{' '}
+                        <dd className="inline">
+                          Der Eintrag wird als freier Tag gezählt. Uhrzeiten und
+                          Zeitwerte bleiben leer beziehungsweise bei 0:00.
+                        </dd>
+                      </div>
                     </dl>
 
                     <p className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
@@ -560,7 +568,7 @@ export function EntryTypeDialog({
                     id="entry-type-start-time"
                     inputMode="decimal"
                     placeholder="HH:MM"
-                    disabled={usesWeeklyWorkingTime}
+                    disabled={!usesFixedTimeValues}
                     value={formState.startTime}
                     aria-invalid={Boolean(formErrors.startTime)}
                     onBlur={() => normalizeClockField('startTime')}
@@ -579,7 +587,7 @@ export function EntryTypeDialog({
                     id="entry-type-end-time"
                     inputMode="decimal"
                     placeholder="HH:MM"
-                    disabled={usesWeeklyWorkingTime}
+                    disabled={!usesFixedTimeValues}
                     value={formState.endTime}
                     aria-invalid={Boolean(formErrors.endTime)}
                     onBlur={() => normalizeClockField('endTime')}
@@ -675,8 +683,8 @@ export function EntryTypeDialog({
                     id={`entry-type-${primaryDurationField.field}`}
                     inputMode="decimal"
                     placeholder="H:MM"
-                    disabled={usesWeeklyWorkingTime}
-                    required={!usesWeeklyWorkingTime}
+                    disabled={!usesFixedTimeValues}
+                    required={usesFixedTimeValues}
                     value={formState[primaryDurationField.field]}
                     aria-invalid={Boolean(
                       formErrors[primaryDurationField.field],
@@ -706,8 +714,8 @@ export function EntryTypeDialog({
                       id={`entry-type-${definition.field}`}
                       inputMode="decimal"
                       placeholder="H:MM"
-                      disabled={usesWeeklyWorkingTime}
-                      required={!usesWeeklyWorkingTime}
+                      disabled={!usesFixedTimeValues}
+                      required={usesFixedTimeValues}
                       value={formState[definition.field]}
                       aria-invalid={Boolean(formErrors[definition.field])}
                       onBlur={() => normalizeDurationField(definition.field)}
@@ -728,7 +736,7 @@ export function EntryTypeDialog({
                     id="entry-type-workingDuration"
                     inputMode="decimal"
                     placeholder="H:MM"
-                    disabled={usesWeeklyWorkingTime}
+                    disabled={!usesFixedTimeValues}
                     readOnly
                     value={calculatedWorkingDuration}
                     aria-invalid={Boolean(formErrors.workingDuration)}

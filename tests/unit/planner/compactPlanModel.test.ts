@@ -55,6 +55,7 @@ function addEntry(
     sourceEntryTypeId: '20000000-0000-4000-8000-000000000001',
     code: 'D',
     name: 'Dienst',
+    isFreeDay: false,
     startTime: null,
     endTime: null,
     timeValues: { ...EMPTY_TIME_VALUES },

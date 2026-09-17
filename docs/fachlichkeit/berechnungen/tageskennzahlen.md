@@ -51,11 +51,13 @@ einzelne Kalendertag genau einmal durch einen SN/F-Dienst abgedeckt ist.
 ## Freie Tage
 
 Ein Kalendertag zählt für einen Mitarbeiter nur dann als freier Tag, wenn sein
-Planungseintrag das gespeicherte Kürzel `/` besitzt.
+Planungseintrag die gespeicherte Freier-Tag-Kennzeichnung besitzt. Diese
+Kennzeichnung entsteht beim Einplanen aus der Berechnungsart `Freier Tag`.
 
 - Jeder passende Eintrag erhöht den Zähler um `1`.
 - Eine leere Planungszelle bedeutet „noch ungeplant“ und zählt nicht als frei.
-- Andere oder erweiterte Kürzel werden nicht als Frei-Eintrag erkannt.
+- Das Kürzel ist für die Zählung unerheblich. Beispielsweise können `/`, `WF`
+  und weitere selbst angelegte Kürzel als freie Tage verwendet werden.
 - Maßgeblich ist der Snapshot des gesetzten Planungseintrags. Eine spätere
   Änderung der Eintragsart verändert die bestehende Zählung nicht.
 
@@ -78,10 +80,10 @@ bleiben leere Zellen ungeplant und werden nicht als freie Tage gezählt.
 
 Freie Samstage und freie Sonntage sind Teilmengen der freien Tage:
 
-- Ein Frei-Eintrag `/` an einem Samstag erhöht sowohl `freie Tage` als auch
-  `freie Samstage` um jeweils `1`.
-- Ein Frei-Eintrag `/` an einem Sonntag erhöht sowohl `freie Tage` als auch
-  `freie Sonntage` um jeweils `1`.
+- Ein als frei gekennzeichneter Eintrag an einem Samstag erhöht sowohl `freie
+Tage` als auch `freie Samstage` um jeweils `1`.
+- Ein als frei gekennzeichneter Eintrag an einem Sonntag erhöht sowohl `freie
+Tage` als auch `freie Sonntage` um jeweils `1`.
 - Maßgeblich ist der tatsächliche Wochentag des Plantages.
 - Ein zusätzlicher Feiertagsstatus verändert die Einordnung nicht.
 - Eine leere Planungszelle erhöht auch am Wochenende keinen Zähler.
@@ -117,7 +119,7 @@ Rufbereitschaft und normaler Planungseintrag sind unabhängige Angaben.
 
 - Eine Rufbereitschaft darf gemeinsam mit jedem zulässigen Planungseintrag
   desselben Mitarbeiters und Tages bestehen.
-- Das gilt im Prototyp auch für einen Frei-Eintrag `/`.
+- Das gilt auch für einen als frei gekennzeichneten Planungseintrag.
 - Der Planungseintrag beeinflusst die Dienst- und Frei-Kennzahlen; die
   Rufbereitschaft beeinflusst unabhängig davon den Rufbereitschaftszähler.
 - Aus der Kombination werden keine zusätzlichen Zeitwerte abgeleitet.

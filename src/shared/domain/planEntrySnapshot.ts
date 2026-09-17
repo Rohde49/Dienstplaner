@@ -19,6 +19,16 @@ function createSnapshotTimeValues(
   entryType: EntryType,
   planEmployee: PlanEmployee,
 ): TimeValues {
+  if (entryType.calculationType === 'freeDay') {
+    return {
+      attendanceMinutes: 0,
+      workingMinutes: 0,
+      workingWithoutNightReadinessMinutes: 0,
+      nightReadinessMinutes: 0,
+      nightWorkMinutes: 0,
+    };
+  }
+
   if (entryType.calculationType === 'weeklyWorkingTime') {
     const dailyWorkingMinutes = planEmployee.weeklyWorkingMinutes / 5;
 
@@ -59,8 +69,7 @@ export function createPlanEntrySnapshot({
     );
   }
 
-  const usesWeeklyWorkingTime =
-    entryType.calculationType === 'weeklyWorkingTime';
+  const usesFixedTimeValues = entryType.calculationType === 'fixed';
 
   return planEntrySchema.parse({
     id,
@@ -68,8 +77,9 @@ export function createPlanEntrySnapshot({
     sourceEntryTypeId: entryType.id,
     code: entryType.code,
     name: entryType.name,
-    startTime: usesWeeklyWorkingTime ? null : entryType.startTime,
-    endTime: usesWeeklyWorkingTime ? null : entryType.endTime,
+    isFreeDay: entryType.calculationType === 'freeDay',
+    startTime: usesFixedTimeValues ? entryType.startTime : null,
+    endTime: usesFixedTimeValues ? entryType.endTime : null,
     timeValues: createSnapshotTimeValues(entryType, planEmployee),
   });
 }

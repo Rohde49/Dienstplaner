@@ -37,7 +37,7 @@ verändern.
 | --------------------------------- | -------------------------------------------------------------- |
 | Kürzel                            | Kurze sichtbare Kennzeichnung im Dienstplan                    |
 | Bezeichnung                       | Verständlicher Name der Eintragsart                            |
-| Berechnungsart                    | Bestimmt die Zeitwerte eines späteren Planungseintrags         |
+| Berechnungsart                    | Bestimmt Zeitwerte und die mögliche Freier-Tag-Wirkung         |
 | Start- und Endzeit                | Optionale Uhrzeiten für Beginn und Ende                        |
 | Anwesenheitszeit                  | Hinterlegte Anwesenheitsdauer                                  |
 | Reine Arbeitszeit                 | Arbeitszeit ohne Nachtbereitschaft                             |
@@ -50,9 +50,10 @@ Jede Eintragsart besitzt eine eigene UUID. Sie bleibt beim Bearbeiten erhalten.
 Kürzel und Bezeichnung dienen der Anzeige und müssen nicht eindeutig sein.
 Erstellungs- und Änderungszeitpunkte verwaltet die Anwendung.
 
-Eine allgemeine Kategorie wie Dienst, Abwesenheit oder Frei gehört nicht zum
-Modell. Die Berechnungsart wird ausdrücklich ausgewählt und nicht aus dem Kürzel
-oder der Bezeichnung abgeleitet.
+Eine allgemeine Kategorie wie Dienst oder Abwesenheit gehört nicht zum Modell.
+Die fachliche Wirkung als freier Tag ist dagegen Bestandteil der ausdrücklich
+gewählten Berechnungsart und wird nicht aus dem Kürzel oder der Bezeichnung
+abgeleitet.
 
 ## Übersicht
 
@@ -67,7 +68,8 @@ Mindestens folgende Informationen sind sichtbar:
 
 Bei der Berechnungsart `Wochenarbeitszeit` wird anstelle eines festen Wertes die
 Formel `Wochenarbeitszeit ÷ 5` angezeigt. Fehlen Start- und Endzeit, wird dies
-ausdrücklich als „Keine Uhrzeit“ dargestellt.
+ausdrücklich als „Keine Uhrzeit“ dargestellt. Bei `Freier Tag` wird die reine
+Arbeitszeit mit `0:00` angezeigt.
 
 Zusätzlich zeigt die Seite die Gesamtzahl aller Eintragsarten und die Anzahl der
 aktiven Eintragsarten. Ein leerer Datenbestand und ein Ladefehler werden als
@@ -84,10 +86,10 @@ Beim Bearbeiten können Kürzel, Bezeichnung, Berechnungsart, Uhrzeiten, Zeitwer
 und Status geändert werden. Die UUID und der Erstellungszeitpunkt bleiben
 erhalten; der Änderungszeitpunkt wird durch die Anwendung aktualisiert.
 
-Wird von `Feste Zeitwerte` zu `Wochenarbeitszeit` gewechselt, werden vorhandene
-Uhrzeiten und eingegebene Zeitwerte geleert. Sie werden nicht im Hintergrund
-beibehalten. Bei einem späteren Wechsel zurück müssen feste Werte erneut
-eingegeben werden.
+Wird von `Feste Zeitwerte` zu `Wochenarbeitszeit` oder `Freier Tag` gewechselt,
+werden vorhandene Uhrzeiten und eingegebene Zeitwerte geleert. Sie werden nicht
+im Hintergrund beibehalten. Bei einem späteren Wechsel zurück müssen feste
+Werte erneut eingegeben werden.
 
 Schlägt das Anlegen oder Bearbeiten fehl, wird der Fehler im geöffneten Dialog
 angezeigt. Der zuletzt dauerhaft gespeicherte Stand bleibt maßgeblich.
@@ -125,6 +127,18 @@ gespeicherten Wochenarbeitszeit des betroffenen Planmitarbeiters bestimmt.
 Uhrzeiten, Anwesenheitszeit, Nachtbereitschaft und Nachtarbeit bleiben dabei
 leer beziehungsweise bei `0` Minuten.
 
+### Freier Tag
+
+Diese Berechnungsart kennzeichnet den später gesetzten Planungseintrag als
+freien Tag. Das Kürzel kann frei gewählt werden, beispielsweise `/` oder `WF`.
+Uhrzeiten und feste Zeitwerte sind deaktiviert; gespeichert werden leere
+Uhrzeiten und ausschließlich Nullwerte.
+
+Beim Einplanen wird die Freier-Tag-Wirkung in den Snapshot übernommen. Sie zählt
+damit in der Monatsauswertung als freier Tag und – abhängig vom Kalendertag –
+zusätzlich als freier Samstag oder freier Sonntag. Eine spätere Änderung der
+Eintragsart verändert bereits gesetzte Planungseinträge nicht.
+
 Die vollständigen und zentral gepflegten Regeln stehen unter
 [Berechnungen von Planungseinträgen](../fachlichkeit/berechnungen/planungseintraege.md).
 
@@ -147,7 +161,8 @@ Die vollständigen und zentral gepflegten Regeln stehen unter
 - Zulässig sind Uhrzeiten von `00:00` bis `23:59`.
 - Ein Ende am Folgetag ist möglich; deshalb muss die Endzeit nicht nach der
   Startzeit liegen.
-- Bei der Berechnungsart `Wochenarbeitszeit` sind keine Uhrzeiten zulässig.
+- Bei den Berechnungsarten `Wochenarbeitszeit` und `Freier Tag` sind keine
+  Uhrzeiten zulässig.
 
 ### Zeitwerte
 
@@ -157,7 +172,7 @@ Die vollständigen und zentral gepflegten Regeln stehen unter
 - Die Werte sind nichtnegative Dauern in ganzen Minuten und dürfen mehr als 24
   Stunden umfassen.
 - Ein Zeitwert von `0:00` ist zulässig.
-- Bei `Wochenarbeitszeit` sind keine festen Zeitwerte zulässig.
+- Bei `Wochenarbeitszeit` und `Freier Tag` sind keine festen Zeitwerte zulässig.
 
 Allgemeine Regeln für Zeitdauern und Uhrzeiten stehen unter
 [Zeitbasis und Rundung](../fachlichkeit/berechnungen/zeitbasis-und-rundung.md).
@@ -198,6 +213,7 @@ folgende Werte neu aus der aktiven Eintragsart übernommen oder bestimmt:
 
 - Herkunfts-ID der Eintragsart,
 - Kürzel und Bezeichnung,
+- Freier-Tag-Kennzeichnung,
 - optionale Start- und Endzeit sowie
 - alle berechnungsrelevanten Zeitwerte.
 
@@ -218,4 +234,4 @@ Nicht zu dieser Verwaltung gehören:
 - eine automatische Ableitung von Zeitwerten aus Start- und Endzeit,
 - eine automatische fachliche Plausibilisierung aller Zeitwerte,
 - eine Ableitung der Berechnungsart aus Kürzel oder Bezeichnung und
-- eine allgemeine fachliche Kategorie der Eintragsart.
+- eine allgemeine fachliche Kategorie für Dienste oder Abwesenheiten.

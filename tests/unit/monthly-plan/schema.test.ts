@@ -37,6 +37,7 @@ function createPlanEntry(overrides: Record<string, unknown> = {}) {
     sourceEntryTypeId,
     code: 'SN',
     name: 'Spät-Nacht-Dienst',
+    isFreeDay: false,
     startTime: '14:00',
     endTime: '08:00',
     timeValues: {
@@ -306,7 +307,49 @@ describe('Planungseintrag-Snapshots', () => {
     );
   });
 
-  it('enthält weder eine Eintragskategorie noch eine Berechnungsart', () => {
+  it('behandelt ältere Planungseinträge ohne Kennzeichnung nicht als freien Tag', () => {
+    const legacyEntry = createPlanEntry();
+    Reflect.deleteProperty(legacyEntry, 'isFreeDay');
+
+    expect(planEntrySchema.parse(legacyEntry).isFreeDay).toBe(false);
+  });
+
+  it('akzeptiert freie Tage ausschließlich ohne Uhrzeiten und Zeitwerte', () => {
+    expect(
+      planEntrySchema.safeParse(
+        createPlanEntry({
+          code: 'WF',
+          isFreeDay: true,
+          startTime: null,
+          endTime: null,
+          timeValues: zeroTimeValues,
+        }),
+      ).success,
+    ).toBe(true);
+
+    expect(
+      planEntrySchema.safeParse(
+        createPlanEntry({ isFreeDay: true, startTime: null, endTime: null }),
+      ).success,
+    ).toBe(false);
+
+    expect(
+      planEntrySchema.safeParse(
+        createPlanEntry({
+          isFreeDay: true,
+          startTime: null,
+          endTime: null,
+          timeValues: {
+            ...zeroTimeValues,
+            workingMinutes: 1,
+            workingWithoutNightReadinessMinutes: 1,
+          },
+        }),
+      ).success,
+    ).toBe(false);
+  });
+
+  it('enthält keine Eintragskategorie oder Berechnungsart', () => {
     expect(
       planEntrySchema.safeParse(createPlanEntry({ calculationType: 'fixed' }))
         .success,

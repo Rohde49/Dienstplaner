@@ -167,6 +167,7 @@ und enthält:
 - die planinterne Zuordnung zum Mitarbeiter,
 - die Herkunfts-ID der verwendeten Eintragsart,
 - Kürzel und Bezeichnung,
+- die Freier-Tag-Kennzeichnung,
 - optionale Start- und Endzeit sowie
 - die konkreten Zeitwerte.
 
@@ -175,9 +176,15 @@ bewussten Wechsel der Eintragsart wird der fachliche Inhalt des vorhandenen
 Snapshots vollständig ersetzt; seine eigene UUID bleibt erhalten. Das
 Entfernen eines Planungseintrags entfernt den Snapshot aus der Planungszelle.
 
-Die Berechnungsart muss im Planungseintrag nicht erneut gespeichert werden. Die
-konkreten Zeitwerte sind beim Setzen bereits vollständig bestimmt und werden
-später nicht aus aktuellen Stammdaten neu berechnet.
+Die Berechnungsart muss im Planungseintrag nicht vollständig gespeichert werden.
+Die konkreten Zeitwerte sind beim Setzen bereits bestimmt. Ihre fachliche
+Freier-Tag-Wirkung wird als eigene Kennzeichnung übernommen, weil sie für die
+spätere Auswertung benötigt wird. Planungseinträge werden nicht aus aktuellen
+Stammdaten neu berechnet.
+
+Ältere Test-Snapshots ohne diese Kennzeichnung werden aus Gründen der
+Lesbarkeit als `nicht frei` behandelt. Ein vorhandenes Kürzel `/` wird dabei
+nicht automatisch fachlich umgedeutet.
 
 Ein über Mitternacht reichender Dienst bleibt vollständig dem Plantag seiner
 Planungszelle zugeordnet.

@@ -93,6 +93,7 @@ const planEntryObjectSchema = z
     sourceEntryTypeId: uuidSchema,
     code: entryCodeSchema,
     name: requiredNameSchema('Die Bezeichnung'),
+    isFreeDay: z.boolean().default(false),
     startTime: clockTimeSchema,
     endTime: clockTimeSchema,
     timeValues: timeValuesSchema,
@@ -107,6 +108,19 @@ export const planEntrySchema = planEntryObjectSchema.superRefine(
         code: 'custom',
         path: [entry.startTime === null ? 'startTime' : 'endTime'],
         message: 'Start- und Endzeit müssen gemeinsam angegeben werden.',
+      });
+    }
+
+    if (
+      entry.isFreeDay &&
+      (entry.startTime !== null ||
+        Object.values(entry.timeValues).some((minutes) => minutes !== 0))
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['isFreeDay'],
+        message:
+          'Ein freier Tag darf keine Uhrzeiten oder anrechenbaren Zeitwerte enthalten.',
       });
     }
   },

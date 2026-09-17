@@ -162,7 +162,7 @@ function calculateEvaluation({
           );
         }
 
-        if (entry.code === '/') {
+        if (entry.isFreeDay) {
           freeDayCount += 1;
 
           if (calendarDay.isSaturday) {

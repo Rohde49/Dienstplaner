@@ -322,6 +322,57 @@ describe('Monatsplan-Repository', () => {
     });
   });
 
+  it('speichert die Freier-Tag-Wirkung unabhängig vom Kürzel im Snapshot', async () => {
+    const entryType = createEntryType({
+      code: 'WF',
+      name: 'Wunschfrei',
+      calculationType: 'freeDay',
+      startTime: null,
+      endTime: null,
+      timeValues: {
+        attendanceMinutes: 0,
+        workingMinutes: 0,
+        workingWithoutNightReadinessMinutes: 0,
+        nightReadinessMinutes: 0,
+        nightWorkMinutes: 0,
+      },
+    });
+    const { directory, repository } = await createTestRepository(undefined, [
+      entryType,
+    ]);
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const planWithFreeDay = setPlanEntry({
+      plan,
+      planDayId: plan.days[0].id,
+      planEmployeeId: plan.employees[0].id,
+      entryType,
+    });
+
+    await repository.save(planWithFreeDay);
+
+    const restartedRepository = new MonthlyPlansRepository({
+      dataDirectoryPath: directory,
+      loadEmployees: async () => [],
+      loadEntryTypes: async () => [],
+    });
+    const loadedPlan = (await restartedRepository.get(plan.id)).plan;
+
+    expect(loadedPlan?.days[0].entries[0]).toMatchObject({
+      code: 'WF',
+      isFreeDay: true,
+      startTime: null,
+      endTime: null,
+    });
+    expect(
+      loadedPlan &&
+        calculateMonthlyPlanEvaluation(loadedPlan).employees[0].freeDayCount,
+    ).toBe(1);
+  });
+
   it('lehnt manipulierte Werte eines neuen Planungseintrags ab', async () => {
     const entryType = createEntryType();
     const { repository } = await createTestRepository(undefined, [entryType]);

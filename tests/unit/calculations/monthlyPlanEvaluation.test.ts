@@ -70,6 +70,7 @@ function addEntry(
     sourceEntryTypeId: `20000000-0000-4000-8000-${String(sequence).padStart(12, '0')}`,
     code: 'D',
     name: 'Dienst',
+    isFreeDay: false,
     startTime: null,
     endTime: null,
     timeValues: { ...EMPTY_TIME_VALUES },
@@ -121,16 +122,25 @@ describe('Monatsauswertung', () => {
     );
   });
 
-  it('wertet exakte Dienst- und Frei-Kürzel tagesbezogen aus', () => {
+  it('wertet Dienstkürzel und freie Kennzeichnungen tagesbezogen aus', () => {
     const plan = createPlan(2026, 3);
     const employeeId = plan.employees[0].id;
 
     addEntry(plan, '2026-03-02', employeeId, 1, { code: 'SN/F' });
     addEntry(plan, '2026-03-03', employeeId, 2, { code: 'SN' });
     addEntry(plan, '2026-03-04', employeeId, 3, { code: 'F' });
-    addEntry(plan, '2026-03-07', employeeId, 4, { code: '/' });
-    addEntry(plan, '2026-03-08', employeeId, 5, { code: '/' });
-    addEntry(plan, '2026-03-09', employeeId, 6, { code: '/' });
+    addEntry(plan, '2026-03-07', employeeId, 4, {
+      code: '/',
+      isFreeDay: true,
+    });
+    addEntry(plan, '2026-03-08', employeeId, 5, {
+      code: 'WF',
+      isFreeDay: true,
+    });
+    addEntry(plan, '2026-03-09', employeeId, 6, {
+      code: 'Wunschfrei',
+      isFreeDay: true,
+    });
 
     const result = getEmployeeEvaluation(
       calculateMonthlyPlanEvaluation(plan),
@@ -167,7 +177,7 @@ describe('Monatsauswertung', () => {
     expect(result.totalEducatorSnfServiceCount).toBe(3);
   });
 
-  it('erkennt abweichende Kürzel nicht durch nachträgliches Normalisieren', () => {
+  it('leitet freie Tage nicht aus dem Kürzel ab', () => {
     const plan = createPlan(2026, 3);
     const employeeId = plan.employees[0].id;
     const entries = [
@@ -199,7 +209,10 @@ describe('Monatsauswertung', () => {
 
     addEntry(plan, '2026-03-02', employeeId, 1, { code: ' SN/F ' });
     addEntry(plan, '2026-03-03', employeeId, 2, { code: ' SN ' });
-    addEntry(plan, '2026-03-07', employeeId, 3, { code: ' / ' });
+    addEntry(plan, '2026-03-07', employeeId, 3, {
+      code: ' / ',
+      isFreeDay: true,
+    });
 
     const result = getEmployeeEvaluation(
       calculateMonthlyPlanEvaluation(plan),
@@ -247,7 +260,10 @@ describe('Monatsauswertung', () => {
     }
 
     day.onCallEmployeeId = employeeId;
-    addEntry(plan, day.date, employeeId, 1, { code: '/' });
+    addEntry(plan, day.date, employeeId, 1, {
+      code: '/',
+      isFreeDay: true,
+    });
 
     const result = getEmployeeEvaluation(
       calculateMonthlyPlanEvaluation(plan),

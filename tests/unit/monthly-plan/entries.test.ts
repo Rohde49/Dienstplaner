@@ -84,6 +84,7 @@ describe('Planungseintrag-Snapshots', () => {
       sourceEntryTypeId: '20000000-0000-4000-8000-000000000001',
       code: 'SN',
       name: 'Spät-Nacht-Dienst',
+      isFreeDay: false,
       startTime: '14:00',
       endTime: '08:00',
       timeValues: {
@@ -173,6 +174,43 @@ describe('Planungseintrag-Snapshots', () => {
       workingWithoutNightReadinessMinutes: 0,
       nightReadinessMinutes: 0,
       nightWorkMinutes: 0,
+    });
+  });
+
+  it('kennzeichnet beliebige Frei-Kürzel als freien Tag und übernimmt keine Zeitwerte', () => {
+    const plan = createPlan();
+    const snapshot = createPlanEntrySnapshot({
+      id: '30000000-0000-4000-8000-000000000001',
+      entryType: createEntryType({
+        code: 'WF',
+        name: 'Wunschfrei',
+        calculationType: 'freeDay',
+        startTime: null,
+        endTime: null,
+        timeValues: {
+          attendanceMinutes: 0,
+          workingMinutes: 0,
+          workingWithoutNightReadinessMinutes: 0,
+          nightReadinessMinutes: 0,
+          nightWorkMinutes: 0,
+        },
+      }),
+      planEmployee: plan.employees[0],
+    });
+
+    expect(snapshot).toMatchObject({
+      code: 'WF',
+      name: 'Wunschfrei',
+      isFreeDay: true,
+      startTime: null,
+      endTime: null,
+      timeValues: {
+        attendanceMinutes: 0,
+        workingMinutes: 0,
+        workingWithoutNightReadinessMinutes: 0,
+        nightReadinessMinutes: 0,
+        nightWorkMinutes: 0,
+      },
     });
   });
 

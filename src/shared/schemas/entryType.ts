@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-export const CALCULATION_TYPES = ['fixed', 'weeklyWorkingTime'] as const;
+export const CALCULATION_TYPES = [
+  'fixed',
+  'weeklyWorkingTime',
+  'freeDay',
+] as const;
 
 export const calculationTypeSchema = z.enum(CALCULATION_TYPES);
 export const entryTypeIdSchema = z.string().uuid();
@@ -116,16 +120,20 @@ function validateEntryTypeRelations(
     });
   }
 
-  if (value.calculationType !== 'weeklyWorkingTime') {
+  if (value.calculationType === 'fixed') {
     return;
   }
+
+  const calculationTypeLabel =
+    value.calculationType === 'freeDay'
+      ? 'Bei einem freien Tag'
+      : 'Bei der Berechnung aus der Wochenarbeitszeit';
 
   if (value.startTime !== null || value.endTime !== null) {
     context.addIssue({
       code: 'custom',
       path: ['calculationType'],
-      message:
-        'Bei der Berechnung aus der Wochenarbeitszeit sind keine Uhrzeiten zulässig.',
+      message: `${calculationTypeLabel} sind keine Uhrzeiten zulässig.`,
     });
   }
 
@@ -133,8 +141,7 @@ function validateEntryTypeRelations(
     context.addIssue({
       code: 'custom',
       path: ['calculationType'],
-      message:
-        'Bei der Berechnung aus der Wochenarbeitszeit werden keine festen Zeitwerte gespeichert.',
+      message: `${calculationTypeLabel} werden keine festen Zeitwerte gespeichert.`,
     });
   }
 }

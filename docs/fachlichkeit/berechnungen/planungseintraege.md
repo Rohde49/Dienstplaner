@@ -12,8 +12,8 @@ Snapshots werden im [fachlichen Datenmodell](../datenmodell.md) beschrieben.
   gleichzusetzen.
 
 Jede Eintragsart besitzt ausdrücklich eine der Berechnungsarten `Feste
-Zeitwerte` oder `Wochenarbeitszeit`. Die Berechnungsart wird nicht aus Kürzel
-oder Bezeichnung abgeleitet.
+Zeitwerte`, `Wochenarbeitszeit` oder `Freier Tag`. Die Berechnungsart wird nicht
+aus Kürzel oder Bezeichnung abgeleitet.
 
 ## Feste Zeitwerte
 
@@ -70,6 +70,21 @@ Wochenarbeitszeit ist keine Rundung oder Resteverteilung erforderlich.
 Beispiel: Bei `39:00` Stunden Wochenarbeitszeit betragen die reine Arbeitszeit
 und die Arbeitszeit mit Nachtbereitschaft jeweils `7:48` Stunden.
 
+## Freier Tag
+
+Diese Berechnungsart kennzeichnet einen Planungseintrag fachlich als freien Tag.
+Das frei vergebene Kürzel ist dafür unerheblich; dadurch können beispielsweise
+`/` und `WF` dieselbe Zählwirkung besitzen.
+
+Beginn und Ende bleiben leer. Anwesenheitszeit, reine Arbeitszeit, Arbeitszeit
+mit Nachtbereitschaft, Nachtbereitschaft und Nachtarbeit betragen jeweils `0`
+Minuten. Beim Wechsel zu dieser Berechnungsart werden zuvor eingegebene
+Uhrzeiten und Zeitwerte verworfen.
+
+Beim Einplanen wird die Freier-Tag-Eigenschaft zusätzlich zu den konkreten
+Nullwerten in den Snapshot übernommen. Sie bleibt dadurch auch dann erhalten,
+wenn die zugrunde liegende Eintragsart später geändert oder gelöscht wird.
+
 ## Zeitpunkt und Bestand der Berechnung
 
 Die konkreten Werte werden bestimmt, wenn eine Eintragsart für einen
@@ -86,10 +101,12 @@ Snapshot des Planungseintrags.
 - Für die Berechnungsart `Wochenarbeitszeit` bleibt die im Monatsplan
   gespeicherte Wochenarbeitszeit maßgeblich. Änderungen an den aktuellen
   Mitarbeiter-Stammdaten wirken nicht rückwirkend.
+- Für die Berechnungsart `Freier Tag` bleibt die im Planungseintrag gespeicherte
+  Freier-Tag-Kennzeichnung maßgeblich.
 
 ## Rollenbezug
 
-Die beiden Berechnungsarten können für jeden Mitarbeiter eines Monatsplans
+Die drei Berechnungsarten können für jeden Mitarbeiter eines Monatsplans
 verwendet werden. Die Mitarbeiterrolle verändert ihre Berechnungsformeln
 nicht. Rollenbeschränkungen gelten nur dort, wo sie ausdrücklich fachlich
 festgelegt sind, beispielsweise bei der Rufbereitschaft.
