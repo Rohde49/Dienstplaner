@@ -1,6 +1,6 @@
 const MAX_SAFE_MINUTES = BigInt(Number.MAX_SAFE_INTEGER);
-const DURATION_PATTERN = /^(\d+):([0-5]\d)$/;
-const CLOCK_TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const SEPARATED_TIME_PATTERN = /^(\d+)[.:,](\d{2})$/;
+const DIGITS_PATTERN = /^\d+$/;
 
 export type ParsedDuration = {
   minutes: number;
@@ -17,15 +17,42 @@ function assertSafeInteger(minutes: number, allowNegative: boolean): void {
   }
 }
 
-/** Liest eine nichtnegative Zeitdauer im verbindlichen Format H:MM. */
-export function parseDuration(value: string): number | null {
-  const match = DURATION_PATTERN.exec(value.trim());
+function parseTimeParts(
+  value: string,
+): { hours: string; minutes: string } | null {
+  const normalized = value.trim();
+  const separatedMatch = SEPARATED_TIME_PATTERN.exec(normalized);
 
-  if (!match) {
+  if (separatedMatch) {
+    return {
+      hours: separatedMatch[1],
+      minutes: separatedMatch[2],
+    };
+  }
+
+  if (!DIGITS_PATTERN.test(normalized)) {
     return null;
   }
 
-  const minutes = BigInt(match[1]) * 60n + BigInt(match[2]);
+  if (normalized.length <= 2) {
+    return { hours: normalized, minutes: '00' };
+  }
+
+  return {
+    hours: normalized.slice(0, -2),
+    minutes: normalized.slice(-2),
+  };
+}
+
+/** Liest eine nichtnegative Zeitdauer in der flexiblen Formulareingabe. */
+export function parseDuration(value: string): number | null {
+  const parts = parseTimeParts(value);
+
+  if (!parts || Number(parts.minutes) > 59) {
+    return null;
+  }
+
+  const minutes = BigInt(parts.hours) * 60n + BigInt(parts.minutes);
 
   return minutes <= MAX_SAFE_MINUTES ? Number(minutes) : null;
 }
@@ -65,11 +92,42 @@ export function formatTimeDifference(minutes: number): string {
   return `${sign}${formatDuration(Math.abs(minutes))}`;
 }
 
-/** Prüft und normalisiert eine Uhrzeit im verbindlichen Format HH:MM. */
+/** Prüft und normalisiert eine flexible Uhrzeiteingabe. */
 export function normalizeClockTime(value: string): string | null {
   const normalized = value.trim();
+  const separatedMatch = SEPARATED_TIME_PATTERN.exec(normalized);
+  let hoursText: string;
+  let minutesText: string;
 
-  return CLOCK_TIME_PATTERN.test(normalized) ? normalized : null;
+  if (separatedMatch) {
+    hoursText = separatedMatch[1];
+    minutesText = separatedMatch[2];
+  } else if (DIGITS_PATTERN.test(normalized)) {
+    if (normalized.length <= 2) {
+      const hours = Number(normalized);
+
+      if (hours > 23) {
+        return null;
+      }
+
+      hoursText = normalized;
+      minutesText = '00';
+    } else if (normalized.length <= 4) {
+      hoursText = normalized.slice(0, -2);
+      minutesText = normalized.slice(-2);
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+
+  const hours = Number(hoursText);
+  const minutes = Number(minutesText);
+
+  return hours <= 23 && minutes <= 59
+    ? `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    : null;
 }
 
 /** Rundet eine nichtnegative berechnete Dauer ab 0,5 aufwärts. */

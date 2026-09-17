@@ -1,4 +1,5 @@
 import {
+  calculateAttendanceMinutes,
   calculateWorkingMinutes,
   entryTypeSchema,
   planEmployeeSchema,
@@ -22,6 +23,7 @@ function createSnapshotTimeValues(
   if (entryType.calculationType === 'freeDay') {
     return {
       attendanceMinutes: 0,
+      pauseMinutes: 0,
       workingMinutes: 0,
       workingWithoutNightReadinessMinutes: 0,
       nightReadinessMinutes: 0,
@@ -33,7 +35,8 @@ function createSnapshotTimeValues(
     const dailyWorkingMinutes = planEmployee.weeklyWorkingMinutes / 5;
 
     return {
-      attendanceMinutes: 0,
+      attendanceMinutes: dailyWorkingMinutes,
+      pauseMinutes: 0,
       workingMinutes: dailyWorkingMinutes,
       workingWithoutNightReadinessMinutes: dailyWorkingMinutes,
       nightReadinessMinutes: 0,
@@ -41,12 +44,18 @@ function createSnapshotTimeValues(
     };
   }
 
+  const workingMinutes = calculateWorkingMinutes(
+    entryType.timeValues.workingWithoutNightReadinessMinutes,
+    entryType.timeValues.nightReadinessMinutes,
+  );
+
   return {
-    attendanceMinutes: entryType.timeValues.attendanceMinutes,
-    workingMinutes: calculateWorkingMinutes(
-      entryType.timeValues.workingWithoutNightReadinessMinutes,
-      entryType.timeValues.nightReadinessMinutes,
+    attendanceMinutes: calculateAttendanceMinutes(
+      workingMinutes,
+      entryType.timeValues.pauseMinutes,
     ),
+    pauseMinutes: entryType.timeValues.pauseMinutes,
+    workingMinutes,
     workingWithoutNightReadinessMinutes:
       entryType.timeValues.workingWithoutNightReadinessMinutes,
     nightReadinessMinutes: entryType.timeValues.nightReadinessMinutes,

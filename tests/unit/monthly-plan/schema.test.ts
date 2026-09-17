@@ -20,6 +20,7 @@ const sourceEntryTypeId = '50000000-0000-4000-8000-000000000001';
 
 const zeroTimeValues = {
   attendanceMinutes: 0,
+  pauseMinutes: 0,
   workingMinutes: 0,
   workingWithoutNightReadinessMinutes: 0,
   nightReadinessMinutes: 0,
@@ -42,6 +43,7 @@ function createPlanEntry(overrides: Record<string, unknown> = {}) {
     endTime: '08:00',
     timeValues: {
       attendanceMinutes: 1_080,
+      pauseMinutes: 480,
       workingMinutes: 600,
       workingWithoutNightReadinessMinutes: 480,
       nightReadinessMinutes: 120,
@@ -156,12 +158,12 @@ describe('Monatsplan-Grundstruktur', () => {
   it('prüft die versionierte Dateihülle des Monatsplans', () => {
     const plan = createValidPlan();
 
-    expect(monthlyPlanFileSchema.parse({ schemaVersion: 2, plan })).toEqual({
-      schemaVersion: 2,
+    expect(monthlyPlanFileSchema.parse({ schemaVersion: 3, plan })).toEqual({
+      schemaVersion: 3,
       plan,
     });
     expect(
-      monthlyPlanFileSchema.safeParse({ schemaVersion: 1, plan }).success,
+      monthlyPlanFileSchema.safeParse({ schemaVersion: 2, plan }).success,
     ).toBe(false);
   });
 });
@@ -393,6 +395,7 @@ describe('Planungseintrag-Snapshots', () => {
     const plan = createValidPlan();
     const maximumTimeValues = {
       ...zeroTimeValues,
+      attendanceMinutes: Number.MAX_SAFE_INTEGER,
       workingMinutes: Number.MAX_SAFE_INTEGER,
       workingWithoutNightReadinessMinutes: Number.MAX_SAFE_INTEGER,
     };
@@ -414,6 +417,7 @@ describe('Planungseintrag-Snapshots', () => {
     const plan = createValidPlan();
     const maximumTimeValues = {
       ...zeroTimeValues,
+      attendanceMinutes: Number.MAX_SAFE_INTEGER,
       workingMinutes: Number.MAX_SAFE_INTEGER,
       workingWithoutNightReadinessMinutes: Number.MAX_SAFE_INTEGER,
     };

@@ -5,7 +5,7 @@ import { monthlyPlanSchema } from './monthlyPlan';
 /** Prüft die technische Dateihülle eines gespeicherten Monatsplans. */
 export const monthlyPlanFileSchema = z
   .object({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     plan: monthlyPlanSchema,
   })
   .strict();

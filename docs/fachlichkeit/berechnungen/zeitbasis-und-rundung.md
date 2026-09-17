@@ -26,19 +26,27 @@ Zeitdauern und Uhrzeiten sind unterschiedliche Angaben.
 ### Zeitdauer
 
 - Eine Zeitdauer kann mehr als 24 Stunden umfassen.
-- Das Eingabeformat ist `H:MM`. Der Stundenanteil besteht aus mindestens einer
-  Ziffer, der Minutenanteil aus genau zwei Ziffern von `00` bis `59`.
+- Formulare akzeptieren getrennte Eingaben mit Doppelpunkt, Punkt oder Komma
+  sowie reine Ziffernfolgen. Bei mindestens drei Ziffern bilden die letzten
+  beiden Ziffern den Minutenanteil; ein- und zweistellige Eingaben stehen für
+  volle Stunden.
+- Der Minutenanteil muss zwischen `00` und `59` liegen.
 - Bei der Ausgabe wird der Stundenanteil mit mindestens zwei Stellen
   dargestellt.
-- Gültige Beispiele sind `5:30`, `39:00` und `120:15`. Bei der Ausgabe wird
-  `5:30` als `05:30` dargestellt.
+- Gültige Beispiele sind `8`, `530`, `030`, `5:30`, `5.30`, `5,30` und
+  `12015`. Bei der Ausgabe werden sie beispielsweise als `08:00`, `05:30`,
+  `00:30` oder `120:15` dargestellt.
 - Fachliche Obergrenzen werden bei Bedarf für das jeweilige Eingabefeld
   festgelegt. Das Format selbst begrenzt eine Dauer nicht auf 24 Stunden.
 
 ### Uhrzeit
 
 - Beginn und Ende eines Dienstes sind Uhrzeiten innerhalb eines Kalendertages.
-- Das Format ist `HH:MM`; zulässig sind Werte von `00:00` bis `23:59`.
+- Formulare akzeptieren beispielsweise `8`, `20`, `530`, `1430`, `030`,
+  `5:30`, `5.30` oder `5,30` und vereinheitlichen diese Eingaben als `HH:MM`.
+- Zulässig sind Werte von `00:00` bis `23:59`. Eine zweistellige Zahl über
+  `23`, beispielsweise `30`, ist bewusst ungültig, weil sie nicht eindeutig
+  als Stunde oder Minute verstanden werden kann.
 - Beginn und Ende sind optionale Informations- und Darstellungsangaben. Sobald
   eine Uhrzeit angegeben wird, muss auch die andere angegeben werden.
 - Ein Dienst darf über Mitternacht hinausgehen, beispielsweise von `22:00` bis
@@ -46,8 +54,9 @@ Zeitdauern und Uhrzeiten sind unterschiedliche Angaben.
 - Der Planungseintrag bleibt trotzdem genau einem Kalendertag zugeordnet. Er
   wird nicht auf mehrere Tage aufgeteilt.
 - Aus Beginn und Ende werden keine Zeitdauern automatisch abgeleitet.
-  Anwesenheitszeit, reine Arbeitszeit, Nachtbereitschaft und Nachtarbeit werden
-  unabhängig davon festgelegt.
+  Reine Arbeitszeit, Nachtbereitschaft, Pause und Nachtarbeit werden unabhängig
+  davon festgelegt. Arbeitszeit mit Nachtbereitschaft und Anwesenheitszeit
+  werden aus diesen Zeitwerten berechnet.
 
 Eine automatische Ableitung aus Uhrzeiten setzt zusätzliche Fachregeln zu
 Pausen, Nachtzeiträumen und Diensten über Mitternacht voraus und ist daher

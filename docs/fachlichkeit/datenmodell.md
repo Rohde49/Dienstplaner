@@ -192,20 +192,22 @@ Planungszelle zugeordnet.
 ## Zeitwerte (`TimeValues`)
 
 Zeitwerte sind ein Wertobjekt und keine eigene Entität. Sie besitzen daher
-keine UUID. Die Struktur enthält genau fünf ausdrücklich benannte Werte:
+keine UUID. Die Struktur enthält genau sechs ausdrücklich benannte Werte:
 
 | Technischer Name                      | Fachliche Bedeutung               |
 | ------------------------------------- | --------------------------------- |
 | `attendanceMinutes`                   | Anwesenheitszeit                  |
+| `pauseMinutes`                        | Pause                             |
 | `workingMinutes`                      | Arbeitszeit mit Nachtbereitschaft |
 | `workingWithoutNightReadinessMinutes` | Reine Arbeitszeit                 |
 | `nightReadinessMinutes`               | Nachtbereitschaft                 |
 | `nightWorkMinutes`                    | Nachtarbeit                       |
 
 Die Werte werden weder in eine allgemeine Zahl zusammengefasst noch als frei
-benannte Liste gespeichert. Die verbindliche Beziehung zwischen reiner
-Arbeitszeit, Nachtbereitschaft und Arbeitszeit mit Nachtbereitschaft steht in
-den [Berechnungen von Planungseinträgen](./berechnungen/planungseintraege.md).
+benannte Liste gespeichert. Die verbindlichen Beziehungen zwischen reiner
+Arbeitszeit, Nachtbereitschaft, Pause, Arbeitszeit mit Nachtbereitschaft und
+Anwesenheitszeit stehen in den
+[Berechnungen von Planungseinträgen](./berechnungen/planungseintraege.md).
 
 ## Snapshot-Lebenszyklus
 

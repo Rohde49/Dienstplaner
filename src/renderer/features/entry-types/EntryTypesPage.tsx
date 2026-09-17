@@ -1,5 +1,6 @@
 import { ClipboardList, Clock3, ListPlus, Pencil } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import type { EntryType } from '../../../shared/schemas';
 import { formatDuration } from '../../../shared/calculations';
@@ -21,6 +22,12 @@ function getErrorMessage(error: unknown): string {
   return error instanceof Error
     ? error.message
     : 'Die Planungseinträge konnten nicht geladen werden.';
+}
+
+function getStatusErrorMessage(error: unknown): string {
+  return error instanceof Error
+    ? error.message
+    : 'Der Status konnte nicht gespeichert werden.';
 }
 
 function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
@@ -66,6 +73,9 @@ export function EntryTypesPage() {
   const [entryTypes, setEntryTypes] = useState<EntryType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [statusUpdatingIds, setStatusUpdatingIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const loadEntryTypes = useCallback(async (): Promise<void> => {
     setIsLoading(true);
@@ -84,6 +94,41 @@ export function EntryTypesPage() {
   useEffect(() => {
     void loadEntryTypes();
   }, [loadEntryTypes]);
+
+  async function toggleEntryTypeStatus(entryType: EntryType): Promise<void> {
+    setStatusUpdatingIds((currentIds) => new Set(currentIds).add(entryType.id));
+
+    try {
+      const updatedEntryType = await window.dienstplaner.entryTypes.update(
+        entryType.id,
+        {
+          code: entryType.code,
+          name: entryType.name,
+          calculationType: entryType.calculationType,
+          startTime: entryType.startTime,
+          endTime: entryType.endTime,
+          timeValues: entryType.timeValues,
+          active: !entryType.active,
+        },
+      );
+
+      setEntryTypes((currentEntryTypes) =>
+        currentEntryTypes.map((currentEntryType) =>
+          currentEntryType.id === updatedEntryType.id
+            ? updatedEntryType
+            : currentEntryType,
+        ),
+      );
+    } catch (error) {
+      toast.error(getStatusErrorMessage(error));
+    } finally {
+      setStatusUpdatingIds((currentIds) => {
+        const nextIds = new Set(currentIds);
+        nextIds.delete(entryType.id);
+        return nextIds;
+      });
+    }
+  }
 
   return (
     <>
@@ -170,76 +215,106 @@ export function EntryTypesPage() {
                 </thead>
 
                 <tbody className="divide-app-border divide-y">
-                  {entryTypes.map((entryType) => (
-                    <tr
-                      key={entryType.id}
-                      className="hover:bg-app-surface-muted"
-                    >
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <Badge variant="primary" className="shrink-0">
-                            {entryType.code}
-                          </Badge>
-                          <span className="text-app-text text-sm font-medium">
-                            {entryType.name}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <EntryTypeClockTimes entryType={entryType} />
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge variant="neutral">
-                          {CALCULATION_TYPE_LABELS[entryType.calculationType]}
-                        </Badge>
-                      </td>
-                      <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
-                        {formatPureWorkingTime(entryType)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge
-                          variant={entryType.active ? 'success' : 'neutral'}
-                        >
-                          {entryType.active ? 'Aktiv' : 'Inaktiv'}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex justify-end gap-1">
-                          <EntryTypeDialog
-                            entryType={entryType}
-                            trigger={
-                              <IconButton
-                                label={`${entryType.code} – ${entryType.name} bearbeiten`}
-                              >
-                                <Pencil aria-hidden="true" size={17} />
-                              </IconButton>
-                            }
-                            onSaved={(updatedEntryType) =>
-                              setEntryTypes((currentEntryTypes) =>
-                                currentEntryTypes.map((currentEntryType) =>
-                                  currentEntryType.id === updatedEntryType.id
-                                    ? updatedEntryType
-                                    : currentEntryType,
-                                ),
-                              )
-                            }
-                          />
+                  {entryTypes.map((entryType) => {
+                    const isStatusUpdating = statusUpdatingIds.has(
+                      entryType.id,
+                    );
 
-                          <DeleteEntryTypeDialog
-                            entryType={entryType}
-                            onDeleted={(deletedEntryTypeId) =>
-                              setEntryTypes((currentEntryTypes) =>
-                                currentEntryTypes.filter(
-                                  (currentEntryType) =>
-                                    currentEntryType.id !== deletedEntryTypeId,
-                                ),
-                              )
+                    return (
+                      <tr
+                        key={entryType.id}
+                        className="hover:bg-app-surface-muted"
+                        aria-busy={isStatusUpdating}
+                      >
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <Badge variant="primary" className="shrink-0">
+                              {entryType.code}
+                            </Badge>
+                            <span className="text-app-text text-sm font-medium">
+                              {entryType.name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <EntryTypeClockTimes entryType={entryType} />
+                        </td>
+                        <td className="px-4 py-3">
+                          <Badge variant="neutral">
+                            {CALCULATION_TYPE_LABELS[entryType.calculationType]}
+                          </Badge>
+                        </td>
+                        <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
+                          {formatPureWorkingTime(entryType)}
+                        </td>
+                        <td className="px-4 py-3">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            role="switch"
+                            aria-checked={entryType.active}
+                            aria-label={`${entryType.code} ${entryType.active ? 'deaktivieren' : 'aktivieren'}`}
+                            disabled={isStatusUpdating}
+                            className={
+                              entryType.active
+                                ? 'border-app-success-border bg-app-success-subtle text-app-success hover:bg-app-success-subtle'
+                                : 'bg-app-surface-muted text-app-muted'
                             }
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            onClick={() =>
+                              void toggleEntryTypeStatus(entryType)
+                            }
+                          >
+                            {isStatusUpdating ? (
+                              <Spinner
+                                size="sm"
+                                label="Status wird gespeichert"
+                                className="text-current"
+                              />
+                            ) : null}
+                            {entryType.active ? 'Aktiv' : 'Inaktiv'}
+                          </Button>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="flex justify-end gap-1">
+                            <EntryTypeDialog
+                              entryType={entryType}
+                              trigger={
+                                <IconButton
+                                  label={`${entryType.code} – ${entryType.name} bearbeiten`}
+                                  disabled={isStatusUpdating}
+                                >
+                                  <Pencil aria-hidden="true" size={17} />
+                                </IconButton>
+                              }
+                              onSaved={(updatedEntryType) =>
+                                setEntryTypes((currentEntryTypes) =>
+                                  currentEntryTypes.map((currentEntryType) =>
+                                    currentEntryType.id === updatedEntryType.id
+                                      ? updatedEntryType
+                                      : currentEntryType,
+                                  ),
+                                )
+                              }
+                            />
+
+                            <DeleteEntryTypeDialog
+                              entryType={entryType}
+                              disabled={isStatusUpdating}
+                              onDeleted={(deletedEntryTypeId) =>
+                                setEntryTypes((currentEntryTypes) =>
+                                  currentEntryTypes.filter(
+                                    (currentEntryType) =>
+                                      currentEntryType.id !==
+                                      deletedEntryTypeId,
+                                  ),
+                                )
+                              }
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  calculateAttendanceMinutes,
   calculateWorkingMinutes,
   entryTypeInputSchema,
   entryTypesFileSchema,
@@ -10,6 +11,7 @@ import {
 
 const zeroTimeValues = {
   attendanceMinutes: 0,
+  pauseMinutes: 0,
   workingMinutes: 0,
   workingWithoutNightReadinessMinutes: 0,
   nightReadinessMinutes: 0,
@@ -25,6 +27,7 @@ function createFixedEntryTypeInput() {
     endTime: '08:00',
     timeValues: {
       attendanceMinutes: 1_080,
+      pauseMinutes: 480,
       workingMinutes: 600,
       workingWithoutNightReadinessMinutes: 480,
       nightReadinessMinutes: 120,
@@ -44,6 +47,10 @@ const validStoredEntryType = {
 describe('Zeitwerte einer Eintragsart', () => {
   it('berechnet die Arbeitszeit mit NB aus beiden Bestandteilen', () => {
     expect(calculateWorkingMinutes(480, 120)).toBe(600);
+  });
+
+  it('berechnet die Anwesenheitszeit aus Arbeitszeit mit NB und Pause', () => {
+    expect(calculateAttendanceMinutes(600, 480)).toBe(1_080);
   });
 
   it('akzeptiert die berechnete Arbeitszeit aus reiner Arbeitszeit und Nachtbereitschaft', () => {
@@ -66,6 +73,26 @@ describe('Zeitwerte einer Eintragsart', () => {
             path: ['workingMinutes'],
             message:
               'Die Arbeitszeit (mit NB) muss der Summe aus reiner Arbeitszeit und Nachtbereitschaft entsprechen.',
+          }),
+        ]),
+      );
+    }
+  });
+
+  it('lehnt eine widersprüchlich gespeicherte Anwesenheitszeit ab', () => {
+    const result = timeValuesSchema.safeParse({
+      ...createFixedEntryTypeInput().timeValues,
+      attendanceMinutes: 1_079,
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: ['attendanceMinutes'],
+            message:
+              'Die Anwesenheitszeit muss der Summe aus Arbeitszeit (mit NB) und Pause entsprechen.',
           }),
         ]),
       );
@@ -211,9 +238,9 @@ describe('Berechnungsarten', () => {
 });
 
 describe('Eintragsartendatei', () => {
-  it('verwendet Schema-Version 2', () => {
+  it('verwendet Schema-Version 3', () => {
     const file: EntryTypesFile = {
-      schemaVersion: 2,
+      schemaVersion: 3,
       updatedAt: '2026-09-11T10:00:00.000Z',
       entryTypes: [],
     };
@@ -224,7 +251,7 @@ describe('Eintragsartendatei', () => {
   it('lehnt die vorherige Schema-Version ab', () => {
     expect(
       entryTypesFileSchema.safeParse({
-        schemaVersion: 1,
+        schemaVersion: 2,
         updatedAt: '2026-09-11T10:00:00.000Z',
         entryTypes: [],
       }).success,
@@ -234,7 +261,7 @@ describe('Eintragsartendatei', () => {
   it('lehnt doppelte Eintragsarten-IDs ab', () => {
     expect(
       entryTypesFileSchema.safeParse({
-        schemaVersion: 2,
+        schemaVersion: 3,
         updatedAt: validStoredEntryType.updatedAt,
         entryTypes: [
           validStoredEntryType,

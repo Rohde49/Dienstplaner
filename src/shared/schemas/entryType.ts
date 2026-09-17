@@ -28,6 +28,7 @@ const minuteValueSchema = z
 const timeValuesObjectSchema = z
   .object({
     attendanceMinutes: minuteValueSchema,
+    pauseMinutes: minuteValueSchema,
     workingMinutes: minuteValueSchema,
     workingWithoutNightReadinessMinutes: minuteValueSchema,
     nightReadinessMinutes: minuteValueSchema,
@@ -41,6 +42,14 @@ export function calculateWorkingMinutes(
   nightReadinessMinutes: number,
 ): number {
   return workingWithoutNightReadinessMinutes + nightReadinessMinutes;
+}
+
+/** Addiert Arbeitszeit einschließlich Nachtbereitschaft und Pause zur Anwesenheitszeit. */
+export function calculateAttendanceMinutes(
+  workingMinutes: number,
+  pauseMinutes: number,
+): number {
+  return workingMinutes + pauseMinutes;
 }
 
 /** Prüft die verbindliche Ableitung der Arbeitszeit einschließlich Nachtbereitschaft. */
@@ -67,6 +76,30 @@ export const timeValuesSchema = timeValuesObjectSchema.superRefine(
         path: ['workingMinutes'],
         message:
           'Die Arbeitszeit (mit NB) muss der Summe aus reiner Arbeitszeit und Nachtbereitschaft entsprechen.',
+      });
+    }
+
+    const attendanceMinutes = calculateAttendanceMinutes(
+      workingMinutes,
+      value.pauseMinutes,
+    );
+
+    if (!Number.isSafeInteger(attendanceMinutes)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['attendanceMinutes'],
+        message:
+          'Die Summe aus Arbeitszeit und Pause ist zu groß, um zuverlässig gespeichert zu werden.',
+      });
+      return;
+    }
+
+    if (value.attendanceMinutes !== attendanceMinutes) {
+      context.addIssue({
+        code: 'custom',
+        path: ['attendanceMinutes'],
+        message:
+          'Die Anwesenheitszeit muss der Summe aus Arbeitszeit (mit NB) und Pause entsprechen.',
       });
     }
   },
@@ -163,7 +196,7 @@ export const entryTypeInputSchema = entryTypeObjectSchema
 /** Prüft den vollständigen Aufbau der lokalen Eintragsartendatei. */
 export const entryTypesFileSchema = z
   .object({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     updatedAt: z.string().datetime(),
     entryTypes: z.array(entryTypeSchema),
   })

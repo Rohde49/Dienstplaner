@@ -12,7 +12,13 @@ import {
 describe('Zeitdauern', () => {
   it.each([
     ['0:00', 0],
+    ['8', 480],
+    ['530', 330],
+    ['030', 30],
     ['5:30', 330],
+    ['5.30', 330],
+    ['5,30', 330],
+    ['12015', 7_215],
     ['39:00', 2_340],
     ['120:15', 7_215],
     ['150119987579016:31', Number.MAX_SAFE_INTEGER],
@@ -22,13 +28,10 @@ describe('Zeitdauern', () => {
 
   it.each([
     '',
-    '5',
     '5:3',
     '05:60',
     '-1:00',
     '+1:00',
-    '1.00',
-    '1,00',
     '1:00:00',
     '150119987579016:32',
   ])('lehnt die ungültige Dauer %j ab', (input) => {
@@ -61,18 +64,27 @@ describe('Zeitdauern', () => {
 });
 
 describe('Uhrzeiten', () => {
-  it.each(['00:00', '08:05', '23:59'])(
-    'akzeptiert die Uhrzeit %s',
-    (clockTime) => {
-      expect(normalizeClockTime(clockTime)).toBe(clockTime);
-    },
-  );
+  it.each([
+    ['00:00', '00:00'],
+    ['08:05', '08:05'],
+    ['23:59', '23:59'],
+    ['8', '08:00'],
+    ['20', '20:00'],
+    ['530', '05:30'],
+    ['1430', '14:30'],
+    ['030', '00:30'],
+    ['5:30', '05:30'],
+    ['5.30', '05:30'],
+    ['5,30', '05:30'],
+  ])('normalisiert %s als %s', (clockTime, expected) => {
+    expect(normalizeClockTime(clockTime)).toBe(expected);
+  });
 
   it('entfernt äußere Leerzeichen', () => {
     expect(normalizeClockTime(' 08:05 ')).toBe('08:05');
   });
 
-  it.each(['', '8:05', '24:00', '12:60', '-1:00', '08.05', '08,05', '0805'])(
+  it.each(['', '30', '5:3', '24:00', '12:60', '-1:00', '2400', '12345'])(
     'lehnt die ungültige Uhrzeit %j ab',
     (clockTime) => {
       expect(normalizeClockTime(clockTime)).toBeNull();

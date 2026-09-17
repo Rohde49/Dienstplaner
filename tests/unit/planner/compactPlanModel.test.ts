@@ -13,6 +13,7 @@ import type {
 
 const EMPTY_TIME_VALUES = {
   attendanceMinutes: 0,
+  pauseMinutes: 0,
   workingMinutes: 0,
   workingWithoutNightReadinessMinutes: 0,
   nightReadinessMinutes: 0,
@@ -95,6 +96,7 @@ describe('Kompaktansichtsmodell', () => {
       endTime: '09:00',
       timeValues: {
         ...EMPTY_TIME_VALUES,
+        attendanceMinutes: 210,
         workingMinutes: 210,
         workingWithoutNightReadinessMinutes: 210,
       },

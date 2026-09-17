@@ -10,6 +10,10 @@ Snapshots werden im [fachlichen Datenmodell](../datenmodell.md) beschrieben.
 - **Arbeitszeit (mit NB)** ist die Summe aus reiner Arbeitszeit und vollständiger
   Nachtbereitschaft. Sie ist nicht mit der monatlichen Ist-Arbeitszeit
   gleichzusetzen.
+- **Pause** gehört zur Anwesenheitszeit, wird aber nicht als Arbeitszeit
+  angerechnet.
+- **Anwesenheitszeit** ist die Summe aus Arbeitszeit mit Nachtbereitschaft und
+  Pause.
 
 Jede Eintragsart besitzt ausdrücklich eine der Berechnungsarten `Feste
 Zeitwerte`, `Wochenarbeitszeit` oder `Freier Tag`. Die Berechnungsart wird nicht
@@ -22,27 +26,33 @@ Eintragsart übernommen:
 
 - Kürzel und Bezeichnung,
 - optionale Start- und Endzeit,
-- Anwesenheitszeit,
 - reine Arbeitszeit,
-- Nachtbereitschaft und
+- Nachtbereitschaft,
+- Pause und
 - Nachtarbeit.
 
 Die Arbeitszeit mit Nachtbereitschaft wird abgeleitet:
 
 `Arbeitszeit (mit NB) = reine Arbeitszeit + Nachtbereitschaft`
 
+Die Anwesenheitszeit wird ebenfalls abgeleitet:
+
+`Anwesenheitszeit = Arbeitszeit (mit NB) + Pause`
+
 - Arbeitszeit mit Nachtbereitschaft ist kein unabhängig pflegbarer Wert.
 - Ein davon abweichender gespeicherter Wert ist ungültig und wird nicht
   stillschweigend korrigiert.
-- Anwesenheitszeit und Nachtarbeit werden durch diese Formel nicht verändert.
+- Ein davon abweichender gespeicherter Wert für die Anwesenheitszeit ist
+  ebenfalls ungültig und wird nicht stillschweigend korrigiert.
+- Nachtarbeit bleibt ein eigenständiger Wert.
 
-Zwischen den übrigen Zeitwerten bestehen im Prototyp keine zusätzlichen
+Zwischen den übrigen Zeitwerten bestehen keine zusätzlichen
 Größenbeziehungen:
 
-- Arbeitszeit mit Nachtbereitschaft muss nicht kleiner oder gleich der
-  Anwesenheitszeit sein.
+- Durch die nichtnegative Pause ist die Anwesenheitszeit immer mindestens so
+  groß wie die Arbeitszeit mit Nachtbereitschaft.
 - Nachtarbeit muss nicht kleiner oder gleich der reinen Arbeitszeit sein.
-- Die Werte werden weder automatisch gekürzt noch gegenseitig abgeleitet.
+- Nachtarbeit wird weder automatisch gekürzt noch aus den Uhrzeiten abgeleitet.
 
 Diese Begrenzung ist bewusst. Zusätzliche Plausibilitätsregeln dürfen erst
 eingeführt werden, wenn sie fachlich festgelegt wurden.
@@ -60,7 +70,8 @@ Der konkrete Planungseintrag erhält:
 | -------------------- | ----------: |
 | Reine Arbeitszeit    |   Tageswert |
 | Arbeitszeit (mit NB) |   Tageswert |
-| Anwesenheitszeit     | `0` Minuten |
+| Anwesenheitszeit     |   Tageswert |
+| Pause                | `0` Minuten |
 | Nachtbereitschaft    | `0` Minuten |
 | Nachtarbeit          | `0` Minuten |
 
@@ -76,10 +87,10 @@ Diese Berechnungsart kennzeichnet einen Planungseintrag fachlich als freien Tag.
 Das frei vergebene Kürzel ist dafür unerheblich; dadurch können beispielsweise
 `/` und `WF` dieselbe Zählwirkung besitzen.
 
-Beginn und Ende bleiben leer. Anwesenheitszeit, reine Arbeitszeit, Arbeitszeit
-mit Nachtbereitschaft, Nachtbereitschaft und Nachtarbeit betragen jeweils `0`
-Minuten. Beim Wechsel zu dieser Berechnungsart werden zuvor eingegebene
-Uhrzeiten und Zeitwerte verworfen.
+Beginn und Ende bleiben leer. Anwesenheitszeit, Pause, reine Arbeitszeit,
+Arbeitszeit mit Nachtbereitschaft, Nachtbereitschaft und Nachtarbeit betragen
+jeweils `0` Minuten. Beim Wechsel zu dieser Berechnungsart werden zuvor
+eingegebene Uhrzeiten und Zeitwerte verworfen.
 
 Beim Einplanen wird die Freier-Tag-Eigenschaft zusätzlich zu den konkreten
 Nullwerten in den Snapshot übernommen. Sie bleibt dadurch auch dann erhalten,

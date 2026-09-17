@@ -213,7 +213,7 @@ export class MonthlyPlansRepository {
         });
       } while ((await this.getWithoutQueue(plan.id)).plan !== null);
 
-      await this.createStore(plan.id).write({ schemaVersion: 2, plan });
+      await this.createStore(plan.id).write({ schemaVersion: 3, plan });
       return plan;
     });
   }
@@ -322,7 +322,7 @@ export class MonthlyPlansRepository {
       });
 
       await this.createStore(savedPlan.id).write({
-        schemaVersion: 2,
+        schemaVersion: 3,
         plan: savedPlan,
       });
 

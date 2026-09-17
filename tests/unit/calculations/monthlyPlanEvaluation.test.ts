@@ -18,6 +18,7 @@ import {
 
 const EMPTY_TIME_VALUES: TimeValues = {
   attendanceMinutes: 0,
+  pauseMinutes: 0,
   workingMinutes: 0,
   workingWithoutNightReadinessMinutes: 0,
   nightReadinessMinutes: 0,
@@ -291,6 +292,7 @@ describe('Monatsauswertung', () => {
         code: 'SN',
         timeValues: {
           attendanceMinutes: 600,
+          pauseMinutes: 90,
           workingMinutes: 510,
           workingWithoutNightReadinessMinutes: 480,
           nightReadinessMinutes: 30,
@@ -386,6 +388,7 @@ describe('Monatsauswertung', () => {
     addEntry(plan, '2026-03-02', employeeId, 1, {
       timeValues: {
         ...EMPTY_TIME_VALUES,
+        attendanceMinutes: 1,
         workingMinutes: 1,
         nightReadinessMinutes: 1,
         nightWorkMinutes: 1,
@@ -394,6 +397,7 @@ describe('Monatsauswertung', () => {
     addEntry(plan, '2026-03-03', employeeId, 2, {
       timeValues: {
         ...EMPTY_TIME_VALUES,
+        attendanceMinutes: 1,
         workingMinutes: 1,
         nightReadinessMinutes: 1,
         nightWorkMinutes: 2,
@@ -420,6 +424,7 @@ describe('Monatsauswertung', () => {
     addEntry(plan, '2026-03-02', employeeId, 1, {
       timeValues: {
         ...EMPTY_TIME_VALUES,
+        attendanceMinutes: Number.MAX_SAFE_INTEGER,
         workingMinutes: Number.MAX_SAFE_INTEGER,
         nightReadinessMinutes: Number.MAX_SAFE_INTEGER,
         nightWorkMinutes,
@@ -442,6 +447,7 @@ describe('Monatsauswertung', () => {
     addEntry(plan, '2026-02-02', employeeId, 1, {
       timeValues: {
         attendanceMinutes: 9_121,
+        pauseMinutes: 0,
         workingMinutes: 9_121,
         workingWithoutNightReadinessMinutes: 9_000,
         nightReadinessMinutes: 121,

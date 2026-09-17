@@ -16,6 +16,7 @@ import {
 
 type DeleteEntryTypeDialogProps = {
   entryType: EntryType;
+  disabled?: boolean;
   onDeleted: (entryTypeId: string) => void;
 };
 
@@ -28,6 +29,7 @@ function getErrorMessage(error: unknown): string {
 /** Fragt vor dem endgültigen Löschen einer Eintragsart nach Bestätigung. */
 export function DeleteEntryTypeDialog({
   entryType,
+  disabled = false,
   onDeleted,
 }: DeleteEntryTypeDialogProps) {
   const [open, setOpen] = useState(false);
@@ -66,6 +68,7 @@ export function DeleteEntryTypeDialog({
       <AlertDialogTrigger asChild>
         <IconButton
           label={`${entryTypeLabel} löschen`}
+          disabled={disabled}
           className="text-app-danger hover:bg-app-danger-subtle hover:text-app-danger-hover"
         >
           <Trash2 aria-hidden="true" size={17} />

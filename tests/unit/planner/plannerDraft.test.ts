@@ -48,6 +48,7 @@ function createEntryType(overrides: Partial<EntryType> = {}): EntryType {
     endTime: '14:00',
     timeValues: {
       attendanceMinutes: 480,
+      pauseMinutes: 0,
       workingMinutes: 480,
       workingWithoutNightReadinessMinutes: 480,
       nightReadinessMinutes: 0,
@@ -99,6 +100,7 @@ describe('Planentwurf', () => {
         endTime: null,
         timeValues: {
           attendanceMinutes: 0,
+          pauseMinutes: 0,
           workingMinutes: 0,
           workingWithoutNightReadinessMinutes: 0,
           nightReadinessMinutes: 0,

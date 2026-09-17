@@ -44,6 +44,7 @@ function createEntryType(overrides: Partial<EntryType> = {}): EntryType {
     endTime: '08:00',
     timeValues: {
       attendanceMinutes: 1_080,
+      pauseMinutes: 480,
       workingMinutes: 600,
       workingWithoutNightReadinessMinutes: 480,
       nightReadinessMinutes: 120,
@@ -331,6 +332,7 @@ describe('Monatsplan-Repository', () => {
       endTime: null,
       timeValues: {
         attendanceMinutes: 0,
+        pauseMinutes: 0,
         workingMinutes: 0,
         workingWithoutNightReadinessMinutes: 0,
         nightReadinessMinutes: 0,
@@ -424,6 +426,7 @@ describe('Monatsplan-Repository', () => {
       endTime: '16:00',
       timeValues: {
         attendanceMinutes: 480,
+        pauseMinutes: 30,
         workingMinutes: 450,
         workingWithoutNightReadinessMinutes: 450,
         nightReadinessMinutes: 0,
@@ -546,7 +549,7 @@ describe('Monatsplan-Repository', () => {
     };
     await writeFile(
       filePath,
-      `${JSON.stringify({ schemaVersion: 2, plan: foreignPlan }, null, 2)}\n`,
+      `${JSON.stringify({ schemaVersion: 3, plan: foreignPlan }, null, 2)}\n`,
       'utf8',
     );
 
@@ -568,7 +571,7 @@ describe('Monatsplan-Repository', () => {
     });
     const filePath = path.join(directory, 'plans', `${plan.id}.json`);
     const foreignFile = JSON.stringify({
-      schemaVersion: 2,
+      schemaVersion: 3,
       plan: {
         ...plan,
         id: '90000000-0000-4000-8000-000000000001',

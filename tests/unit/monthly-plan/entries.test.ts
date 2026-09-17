@@ -42,6 +42,7 @@ function createEntryType(overrides: Partial<EntryType> = {}): EntryType {
     endTime: '08:00',
     timeValues: {
       attendanceMinutes: 1_080,
+      pauseMinutes: 480,
       workingMinutes: 600,
       workingWithoutNightReadinessMinutes: 480,
       nightReadinessMinutes: 120,
@@ -89,6 +90,7 @@ describe('Planungseintrag-Snapshots', () => {
       endTime: '08:00',
       timeValues: {
         attendanceMinutes: 1_080,
+        pauseMinutes: 480,
         workingMinutes: 600,
         workingWithoutNightReadinessMinutes: 480,
         nightReadinessMinutes: 120,
@@ -119,6 +121,7 @@ describe('Planungseintrag-Snapshots', () => {
           endTime: null,
           timeValues: {
             attendanceMinutes: 0,
+            pauseMinutes: 0,
             workingMinutes: 0,
             workingWithoutNightReadinessMinutes: 0,
             nightReadinessMinutes: 0,
@@ -131,7 +134,8 @@ describe('Planungseintrag-Snapshots', () => {
       expect(snapshot.startTime).toBeNull();
       expect(snapshot.endTime).toBeNull();
       expect(snapshot.timeValues).toEqual({
-        attendanceMinutes: 0,
+        attendanceMinutes: 468,
+        pauseMinutes: 0,
         workingMinutes: 468,
         workingWithoutNightReadinessMinutes: 468,
         nightReadinessMinutes: 0,
@@ -159,6 +163,7 @@ describe('Planungseintrag-Snapshots', () => {
         endTime: null,
         timeValues: {
           attendanceMinutes: 0,
+          pauseMinutes: 0,
           workingMinutes: 0,
           workingWithoutNightReadinessMinutes: 0,
           nightReadinessMinutes: 0,
@@ -170,6 +175,7 @@ describe('Planungseintrag-Snapshots', () => {
 
     expect(snapshot.timeValues).toEqual({
       attendanceMinutes: 0,
+      pauseMinutes: 0,
       workingMinutes: 0,
       workingWithoutNightReadinessMinutes: 0,
       nightReadinessMinutes: 0,
@@ -189,6 +195,7 @@ describe('Planungseintrag-Snapshots', () => {
         endTime: null,
         timeValues: {
           attendanceMinutes: 0,
+          pauseMinutes: 0,
           workingMinutes: 0,
           workingWithoutNightReadinessMinutes: 0,
           nightReadinessMinutes: 0,
@@ -206,6 +213,7 @@ describe('Planungseintrag-Snapshots', () => {
       endTime: null,
       timeValues: {
         attendanceMinutes: 0,
+        pauseMinutes: 0,
         workingMinutes: 0,
         workingWithoutNightReadinessMinutes: 0,
         nightReadinessMinutes: 0,
@@ -308,6 +316,7 @@ describe('Planungszellen ändern', () => {
         endTime: null,
         timeValues: {
           attendanceMinutes: 0,
+          pauseMinutes: 0,
           workingMinutes: 0,
           workingWithoutNightReadinessMinutes: 0,
           nightReadinessMinutes: 0,
@@ -326,6 +335,7 @@ describe('Planungszellen ändern', () => {
       endTime: null,
       timeValues: {
         attendanceMinutes: 0,
+        pauseMinutes: 0,
         workingMinutes: 0,
         workingWithoutNightReadinessMinutes: 0,
         nightReadinessMinutes: 0,
@@ -356,6 +366,7 @@ describe('Planungszellen ändern', () => {
         endTime: null,
         timeValues: {
           attendanceMinutes: 0,
+          pauseMinutes: 0,
           workingMinutes: 0,
           workingWithoutNightReadinessMinutes: 0,
           nightReadinessMinutes: 0,

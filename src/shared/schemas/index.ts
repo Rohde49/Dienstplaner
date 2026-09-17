@@ -19,6 +19,7 @@ export type {
 
 export {
   CALCULATION_TYPES,
+  calculateAttendanceMinutes,
   calculateWorkingMinutes,
   calculationTypeSchema,
   entryCodeSchema,

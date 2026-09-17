@@ -170,6 +170,7 @@ export const monthlyPlanInputSchema = monthlyPlanObjectSchema.pick({
 
 const timeValueKeys = [
   'attendanceMinutes',
+  'pauseMinutes',
   'workingMinutes',
   'workingWithoutNightReadinessMinutes',
   'nightReadinessMinutes',
