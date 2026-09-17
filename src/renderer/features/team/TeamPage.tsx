@@ -55,6 +55,7 @@ export function TeamPage() {
         description="Mitarbeiter-Stammdaten verwalten"
         actions={
           <EmployeeDialog
+            usedColorKeys={employees.map((employee) => employee.colorKey)}
             trigger={
               <Button>
                 <UserPlus aria-hidden="true" size={17} />
@@ -172,6 +173,14 @@ export function TeamPage() {
                           <div className="flex justify-end gap-1">
                             <EmployeeDialog
                               employee={employee}
+                              usedColorKeys={employees
+                                .filter(
+                                  (currentEmployee) =>
+                                    currentEmployee.id !== employee.id,
+                                )
+                                .map(
+                                  (currentEmployee) => currentEmployee.colorKey,
+                                )}
                               trigger={
                                 <IconButton
                                   label={`${employee.firstName} ${employee.lastName} bearbeiten`}

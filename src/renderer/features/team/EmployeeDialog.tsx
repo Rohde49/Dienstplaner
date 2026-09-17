@@ -23,9 +23,11 @@ import {
   Spinner,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_OPTIONS } from '../../styles/employeeColors';
+import { getFirstAvailableEmployeeColorKey } from './employeeColorSelection';
 
 type EmployeeDialogProps = {
   employee?: Employee;
+  usedColorKeys: readonly EmployeeColorKey[];
   trigger: ReactNode;
   onSaved: (employee: Employee) => void;
 };
@@ -42,7 +44,10 @@ type EmployeeFormState = {
 type EmployeeFormErrors = Partial<Record<keyof EmployeeFormState, string>>;
 
 /** Erstellt die leeren oder bereits vorhandenen Werte für das Formular. */
-function createInitialFormState(employee?: Employee): EmployeeFormState {
+function createInitialFormState(
+  employee: Employee | undefined,
+  usedColorKeys: readonly EmployeeColorKey[],
+): EmployeeFormState {
   if (employee) {
     return {
       firstName: employee.firstName,
@@ -59,7 +64,7 @@ function createInitialFormState(employee?: Employee): EmployeeFormState {
     lastName: '',
     role: '',
     weeklyWorkingHours: '',
-    colorKey: 'blue',
+    colorKey: getFirstAvailableEmployeeColorKey(usedColorKeys),
     active: true,
   };
 }
@@ -104,19 +109,21 @@ function getErrorMessage(error: unknown): string {
 /** Zeigt das Formular zum Anlegen oder Bearbeiten eines Mitarbeiters an. */
 export function EmployeeDialog({
   employee,
+  usedColorKeys,
   trigger,
   onSaved,
 }: EmployeeDialogProps) {
   const [open, setOpen] = useState(false);
   const [formState, setFormState] = useState<EmployeeFormState>(() =>
-    createInitialFormState(employee),
+    createInitialFormState(employee, usedColorKeys),
   );
   const [formErrors, setFormErrors] = useState<EmployeeFormErrors>({});
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const usedColorKeySet = new Set(usedColorKeys);
 
   function resetForm(): void {
-    setFormState(createInitialFormState(employee));
+    setFormState(createInitialFormState(employee, usedColorKeys));
     setFormErrors({});
     setSubmissionError(null);
   }
@@ -352,18 +359,23 @@ export function EmployeeDialog({
               </FormField>
             </div>
 
-            <fieldset>
+            <fieldset aria-describedby="employee-color-hint">
               <legend className="text-app-text text-sm font-medium">
                 Farbe
               </legend>
 
-              <p className="text-app-muted mt-1 text-xs">
-                Die Namen bleiben unabhängig von der Farbe sichtbar.
+              <p
+                id="employee-color-hint"
+                className="text-app-muted mt-1 text-xs"
+              >
+                Die Namen bleiben unabhängig von der Farbe sichtbar. Verwendete
+                Farben können erneut ausgewählt werden.
               </p>
 
               <div className="mt-3 grid grid-cols-3 gap-2">
                 {EMPLOYEE_COLOR_OPTIONS.map((option) => {
                   const selected = formState.colorKey === option.key;
+                  const alreadyUsed = usedColorKeySet.has(option.key);
 
                   return (
                     <label
@@ -388,7 +400,13 @@ export function EmployeeDialog({
                         className={`size-4 rounded-full ${option.selectionDotClass} peer-focus-visible:ring-app-primary peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2`}
                       />
 
-                      <span>{option.label}</span>
+                      <span className="min-w-0 flex-1">{option.label}</span>
+
+                      {alreadyUsed ? (
+                        <span className="text-app-text-disabled text-[10px] leading-none">
+                          Verwendet
+                        </span>
+                      ) : null}
                     </label>
                   );
                 })}

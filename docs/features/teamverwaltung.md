@@ -51,17 +51,19 @@ zulässig.
 Zulässig sind:
 
 - Blau,
+- Türkis,
 - Grün,
-- Rot,
-- Orange,
 - Gelb,
-- Lila,
-- Rosa und
-- Türkis.
+- Orange,
+- Rot,
+- Rosa,
+- Lila und
+- Braun.
 
 Jedem Mitarbeiter wird genau eine Farbe zugeordnet. Die Farbe unterstützt die
 visuelle Orientierung, ersetzt aber niemals die sichtbare namentliche
-Kennzeichnung.
+Kennzeichnung. Bereits verwendete Farben werden in der Auswahl gekennzeichnet,
+bleiben aber weiterhin auswählbar.
 
 ## Übersicht
 
@@ -82,7 +84,10 @@ ein erneuter Ladeversuch angeboten.
 ## Mitarbeiter anlegen
 
 Beim Anlegen werden alle erforderlichen Stammdaten erfasst. Ein neuer
-Mitarbeiter ist standardmäßig aktiv und erhält standardmäßig die Farbe Blau.
+Mitarbeiter ist standardmäßig aktiv. Die Anwendung wählt die erste noch nicht
+verwendete Farbe der festgelegten Palette vor. Sind alle Farben bereits
+vergeben, wird wieder Blau vorausgewählt. Die Vorauswahl kann vor dem Speichern
+geändert werden.
 
 Nach erfolgreichem Speichern erscheint der Mitarbeiter unmittelbar in der
 Übersicht. Die Anwendung erzeugt seine UUID sowie die Zeitstempel. Kann der

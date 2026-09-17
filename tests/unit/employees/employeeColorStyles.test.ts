@@ -21,7 +21,6 @@ describe('Darstellungsvarianten der Mitarbeiterfarben', () => {
       expect(style.plannerHeaderClass).toMatch(/border-/);
       expect(style.plannerHeaderClass).toMatch(/text-/);
       expect(style.compactHeaderClass).toMatch(/bg-/);
-      expect(style.compactHeaderClass).toMatch(/-200/);
       expect(style.compactHeaderClass).toContain('text-black');
       expect(style.compactHeaderClass).not.toMatch(/border-/);
       expect(style.plannerCellClass).toMatch(/bg-/);

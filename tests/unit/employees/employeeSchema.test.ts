@@ -36,9 +36,9 @@ describe('Mitarbeiterschema', () => {
   );
 
   it('lehnt unbekannte Farbschlüssel ab', () => {
-    expect(employeeColorKeySchema.safeParse('brown').success).toBe(false);
+    expect(employeeColorKeySchema.safeParse('black').success).toBe(false);
     expect(
-      employeeInputSchema.safeParse({ ...validInput, colorKey: 'brown' })
+      employeeInputSchema.safeParse({ ...validInput, colorKey: 'black' })
         .success,
     ).toBe(false);
   });

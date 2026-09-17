@@ -3,13 +3,14 @@ import { z } from 'zod';
 /** Enthält alle Farben, die einem Mitarbeiter zugeordnet werden können. */
 export const EMPLOYEE_COLOR_KEYS = [
   'blue',
-  'green',
-  'red',
-  'orange',
-  'yellow',
-  'purple',
-  'pink',
   'teal',
+  'green',
+  'yellow',
+  'orange',
+  'red',
+  'pink',
+  'purple',
+  'brown',
 ] as const;
 
 export const employeeColorKeySchema = z.enum(EMPLOYEE_COLOR_KEYS);
