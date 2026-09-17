@@ -217,6 +217,8 @@ export function PlannerPage({
   );
   const totalSnfServiceCount =
     displayedEvaluation?.totalEducatorSnfServiceCount ?? 0;
+  const isSnfTargetExceeded =
+    getTargetCountStatus(totalSnfServiceCount, calendarDayCount) === 'above';
 
   useEffect(() => {
     if (!isCompactView) {
@@ -526,28 +528,39 @@ export function PlannerPage({
                 <span className="border-app-border bg-app-surface-muted text-app-muted flex size-10 shrink-0 items-center justify-center rounded-md border">
                   <CalendarDays aria-hidden="true" size={19} />
                 </span>
-                <Badge
-                  className="max-w-full min-w-0"
-                  variant={
-                    activePlan
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <Badge
+                    className="max-w-full min-w-0"
+                    variant={
+                      activePlan
+                        ? state.document.kind === 'plan' &&
+                          state.document.recoveredFromBackup
+                          ? 'warning'
+                          : hasUnsavedChanges
+                            ? 'warning'
+                            : 'success'
+                        : 'warning'
+                    }
+                  >
+                    {activePlan
                       ? state.document.kind === 'plan' &&
                         state.document.recoveredFromBackup
-                        ? 'warning'
+                        ? 'Aus Sicherung geladen · Speichern erforderlich'
                         : hasUnsavedChanges
-                          ? 'warning'
-                          : 'success'
-                      : 'warning'
-                  }
-                >
-                  {activePlan
-                    ? state.document.kind === 'plan' &&
-                      state.document.recoveredFromBackup
-                      ? 'Aus Sicherung geladen · Speichern erforderlich'
-                      : hasUnsavedChanges
-                        ? 'Ungespeicherte Änderungen'
-                        : 'Gespeichert'
-                    : 'Vorschau · nicht angelegt'}
-                </Badge>
+                          ? 'Ungespeicherte Änderungen'
+                          : 'Gespeichert'
+                      : 'Vorschau · nicht angelegt'}
+                  </Badge>
+                  {isSnfTargetExceeded ? (
+                    <Badge
+                      className="max-w-full min-w-0 whitespace-nowrap"
+                      variant="danger"
+                    >
+                      SN/F-Ziel überschritten · {totalSnfServiceCount} /{' '}
+                      {calendarDayCount}
+                    </Badge>
+                  ) : null}
+                </div>
               </div>
 
               <div className="col-span-2 row-start-2 flex w-full min-w-0 items-center justify-center gap-2 min-[1280px]:col-span-1 min-[1280px]:col-start-2 min-[1280px]:row-start-1">

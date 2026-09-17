@@ -52,7 +52,10 @@ freien Tage. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
 Kalendertagen abzüglich Arbeitstagen. „Anzahl SN/F“ wird mit den Kalendertagen
 als Zielwert verglichen. Der Zahlenwert liegt auf einer kompakten Statusfläche
 mit abgestimmter gelber, grüner oder roter Schrift-, Hintergrund- und
-Konturfarbe. Der Ansichtsumschalter „Plan / Kompakt“
+Konturfarbe. Überschreitet die Summe den Zielwert, erscheint zusätzlich neben
+dem Speicherstatus der dauerhafte rote Hinweis „SN/F-Ziel überschritten“ mit
+Ist- und Zielwert. Er ist nicht schließbar und verschwindet automatisch, sobald
+die Summe den Zielwert nicht mehr überschreitet. Der Ansichtsumschalter „Plan / Kompakt“
 steht daneben und hebt die aktive Ansicht mit der zurückhaltenden Primärfläche
 hervor. Nur in der aktiven Kompaktansicht erscheint rechts davon die
 Exportaktion. Die
