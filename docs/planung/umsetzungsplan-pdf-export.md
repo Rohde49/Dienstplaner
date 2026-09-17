@@ -3,10 +3,10 @@
 ## Status
 
 Die fachliche, gestalterische und technische
-[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Die Arbeitspakete 1
-bis 3 sind umgesetzt und technisch geprüft. Der vollständige Exportablauf ist
-in der Kompaktansicht verfügbar. Es folgen die Erzeugung und gemeinsame
-Sichtprüfung der tatsächlichen PDF-Dateien in Arbeitspaket 4.
+[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Alle Arbeitspakete
+sind umgesetzt sowie technisch und visuell geprüft. Der PDF-Export ist in der
+Kompaktansicht verfügbar und wurde mit einem repräsentativen Plan sowie dem
+Grenzfall mit neun Mitarbeitern und 31 Tagen abgenommen.
 
 ## Ziel und Abgrenzung
 
@@ -38,7 +38,7 @@ Verbindlich bleiben:
 - [x] Die Kompaktansicht misst A4-Passung und meldet Überlauf.
 - [x] Baseline, Entwurf und Sicherungswiederherstellung sind getrennte
       Zustände.
-- [x] Die Planungswerkzeugleiste enthält den noch deaktivierten
+- [x] Die Planungswerkzeugleiste bot vor der Umsetzung einen klar abgegrenzten
       Export-Platzhalter.
 - [x] Eine PDF-spezifische IPC-/Preload-Schnittstelle ist vorhanden.
 - [x] Druckdarstellung, nativer Speicherdialog und Dateierzeugung sind
@@ -116,24 +116,39 @@ dokumentierten Ablauf.
 **Ziel:** Nicht nur die Anwendung, sondern die tatsächlich erzeugte Datei ist
 technisch und visuell bestätigt.
 
-- [ ] Einen Normalfall mit sechs bis sieben Mitarbeitern als PDF erzeugen.
-- [ ] Den Grenzfall mit neun Mitarbeitern und 31 Tagen als PDF erzeugen.
-- [ ] Beide Dateien auf genau eine A4-Seite im Hochformat und die erwarteten
+- [x] Einen repräsentativen Plan unterhalb des Grenzfalls mit acht Mitarbeitern
+      und 31 Tagen als PDF erzeugen. Dieser anspruchsvollere Prüffall wurde als
+      ausreichender Ersatz für den ursprünglich vorgesehenen Normalfall mit
+      sechs bis sieben Mitarbeitern bestätigt.
+- [x] Den Grenzfall mit neun Mitarbeitern und 31 Tagen als PDF erzeugen.
+- [x] Beide Dateien auf genau eine A4-Seite im Hochformat und die erwarteten
       Textinhalte prüfen.
-- [ ] Beide Dateien in Bilder rendern und auf vollständige Inhalte, Farben,
+- [x] Beide Dateien in Bilder rendern und auf vollständige Inhalte, Farben,
       Linien, Schriftgrößen, Umbrüche und Seitenränder prüfen.
-- [ ] Gespeicherten Stand gegenüber einem abweichenden Entwurf, Dialogabbruch,
+- [x] Gespeicherten Stand gegenüber einem abweichenden Entwurf, Dialogabbruch,
       Überschreiben, Überlauf und Fehlerzustand prüfen.
-- [ ] Die Dateien in einem üblichen Windows-PDF-Programm durch den Benutzer
+- [x] Die Dateien in einem üblichen Windows-PDF-Programm durch den Benutzer
       abnehmen lassen.
-- [ ] `npm test`, `npm run typecheck`, `npm run lint` und
+- [x] `npm test`, `npm run typecheck`, `npm run lint` und
       `npm run format:check` erfolgreich ausführen.
-- [ ] Feature-Dokumentation und Roadmap nach dem tatsächlichen Stand
+- [x] Feature-Dokumentation und Roadmap nach dem tatsächlichen Stand
       aktualisieren.
 
 **Abnahme:** Normal- und Grenzfall stimmen mit der Kompaktansicht überein,
 bleiben vollständig lesbar und sind technisch sowie durch den Benutzer
 abgenommen.
+
+## Abschlussnachweis
+
+Am 17. September 2026 wurden ein Oktoberplan mit acht Mitarbeitern und 31
+Tagen sowie ein Dezemberplan mit neun Mitarbeitern und 31 Tagen tatsächlich
+exportiert. Beide Dateien bestehen aus genau einer ungedrehten A4-Seite im
+Hochformat. Die extrahierten Inhalte enthalten jeweils alle 31 Kalendertage,
+die Abschlusszeilen `Ist`, `Soll` und `h/Woche`, die Feiertagslegende und den
+Freigabebereich. In den gerenderten Seiten waren keine App-Bedienelemente,
+abgeschnittenen Inhalte, Überlagerungen oder unlesbaren Zeichen erkennbar. Die
+Darstellung und der Bedienablauf wurden zusätzlich durch den Benutzer in einem
+Windows-PDF-Programm bestätigt.
 
 ## Empfohlene Commit-Grenzen
 

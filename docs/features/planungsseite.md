@@ -48,9 +48,9 @@ Aktionen deaktiviert. In der Kompaktansicht sind beide Aktionen ebenfalls
 deaktiviert, weil dort ausschließlich der gespeicherte Ausgangsstand sichtbar
 ist. Ausgeklappt ergänzt eine flache, durch Linien
 getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender- und
-Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“ und der weiterhin
-deaktivierte Platzhalter „Export“ stehen daneben. Die Werkzeugleiste startet
-eingeklappt und besitzt mittig am unteren
+Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“ steht daneben. Nur in der
+aktiven Kompaktansicht erscheint rechts davon die Exportaktion. Die
+Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
 Rand eine schmale, ohne Schatten direkt an die Kartenkante angeschlossene
 Pfeil-Lasche zum Ein- und Ausklappen. Sie erhält einen
 zugänglichen Namen und einen sichtbaren Tastaturfokus, benötigt aber keine
@@ -62,8 +62,9 @@ unabhängig vom Leistenstatus sichtbar.
 regulär gespeicherten, geöffneten Monatsplan zwischen der bearbeitbaren
 Planungstabelle und der schreibgeschützten
 [Kompaktansicht](./kompaktansicht.md). Der Wechsel verändert oder verwirft den
-Entwurf nicht. „Export“ führt noch keine Aktion aus und kennzeichnet die Stelle
-des späteren [PDF-Exports](./pdf-export.md).
+Entwurf nicht. „Export“ speichert über das eigenständige
+[PDF-Export-Feature](./pdf-export.md) ausschließlich den gespeicherten
+Ausgangsstand als lokale Datei.
 
 Zwischen `1024` und `1279` Pixel Fensterbreite soll die Hauptnavigation als
 schmale Symbolleiste erscheinen. Die Bezeichnungen bleiben über zugängliche
@@ -440,12 +441,13 @@ ist nicht vorgesehen.
 Nicht zur Planungsseite gehören:
 
 - die ausführliche Auswertungstabelle,
-- Drucken und PDF-Export sowie
+- eine direkte Druckfunktion und die fachlichen Regeln der PDF-Dateierzeugung
+  sowie
 - das nachträgliche Ergänzen, Entfernen oder Umsortieren der im Plan
   eingefrorenen Mitarbeiter.
 
 Das A4-Dokumentlayout, seine gespeicherte Datengrundlage und die
 Darstellungsregeln der integrierten Kompaktansicht werden ausschließlich im
-zugehörigen Feature-Dokument festgelegt. Die Werkzeugleiste zeigt weiterhin
-den erkennbar deaktivierten Platzhalter „Export“; Dateierzeugung und
-Druckaktionen gehören zum späteren PDF- beziehungsweise Ausgabefeature.
+zugehörigen Feature-Dokument festgelegt. Die Planungsseite stellt die
+Exportaktion nur in der Kompaktansicht bereit; Dateierzeugung, Dateiauswahl und
+Rückmeldungen werden im PDF-Export-Feature festgelegt.

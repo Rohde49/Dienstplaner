@@ -1,9 +1,13 @@
 # PDF-Export
 
-Der PDF-Export soll den gespeicherten Stand eines geöffneten Monatsplans als
-verlässliche lokale Datei ausgeben. Er verwendet dasselbe A4-Dokumentlayout wie
+Der PDF-Export gibt den gespeicherten Stand eines geöffneten Monatsplans als
+verlässliche lokale Datei aus. Er verwendet dasselbe A4-Dokumentlayout wie
 die [Kompaktansicht](./kompaktansicht.md), ergänzt dieses aber um Dateierzeugung,
 Speicherablauf und Rückmeldungen.
+
+Die erste einseitige Umsetzung ist abgeschlossen und technisch sowie visuell
+abgenommen. Eine direkte Druckfunktion und eine mehrseitige Ausgabe bleiben
+außerhalb dieses Stands.
 
 ## Zweck und Umfang
 
@@ -138,6 +142,13 @@ angezeigte Bildschirmvorschau allein belegen noch keine korrekte PDF-Datei.
 Mindestens ein Normalfall mit sechs bis sieben Mitarbeitern und der Grenzfall
 mit neun Mitarbeitern und 31 Tagen werden als PDF erzeugt, technisch auf eine
 A4-Seite geprüft, in Bilder gerendert und gemeinsam visuell abgenommen.
+
+Für die Abschlussprüfung am 17. September 2026 wurde anstelle des vorgesehenen
+Normalfalls ein anspruchsvollerer Plan mit acht Mitarbeitern und 31 Tagen
+verwendet und als ausreichender repräsentativer Fall bestätigt. Zusätzlich
+wurde der Grenzfall mit neun Mitarbeitern und 31 Tagen geprüft. Beide Dateien
+bestanden die technische Seiten- und Inhaltsprüfung, die Kontrolle der
+gerenderten Seiten und die Sichtprüfung in einem Windows-PDF-Programm.
 
 ## Abgrenzung
 

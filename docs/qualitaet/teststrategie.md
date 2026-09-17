@@ -110,9 +110,12 @@ gerenderten A4-Prototyp verbindlich abgenommen. Für den bestätigten Stand gilt
 ein kleinster Bildschirmmaßstab von `84 %`; tatsächlicher horizontaler oder
 vertikaler Dokumentüberlauf wird unabhängig davon erkannt und gemeldet.
 
-Der spätere PDF-Export muss zusätzlich das erzeugte PDF selbst rendern und
-gegen das gemeinsame Dokumentlayout prüfen. Eine korrekte Kompaktansicht allein
-belegt noch keine korrekte PDF-Datei.
+Der PDF-Export rendert für die Abnahme zusätzlich die tatsächlich erzeugte PDF
+und prüft sie gegen das gemeinsame Dokumentlayout. Eine korrekte
+Kompaktansicht allein belegt noch keine korrekte PDF-Datei. Für die erste
+Abschlussprüfung wurden ein repräsentativer Plan mit acht Mitarbeitern und 31
+Tagen sowie der Grenzfall mit neun Mitarbeitern und 31 Tagen als jeweils
+einseitige A4-PDF technisch und visuell bestätigt.
 
 ## Risikoprioritäten
 

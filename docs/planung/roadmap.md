@@ -17,26 +17,19 @@ abgeschlossen wurde.
 - [Planungsseite](../features/planungsseite.md)
 - [Kompaktansicht](../features/kompaktansicht.md)
 - [Auswertung](../features/auswertung.md)
+- [PDF-Export](../features/pdf-export.md)
 
 ## Aktueller Schwerpunkt
 
-### PDF-Export und Ausgabe
-
-Das in der Kompaktansicht geprüfte Dokumentlayout wird als
-[PDF](../features/pdf-export.md) exportierbar gemacht. Fachlichkeit,
-Bedienablauf, Dateiauswahl, technische Grundrichtung und Prüfung sind
-abgestimmt. Die Umsetzung folgt dem
-[Umsetzungsplan PDF-Export](umsetzungsplan-pdf-export.md).
-
-## Anschließende Arbeitspakete
-
-### 1. Auslieferung
+### Auslieferung
 
 Die Anwendung wird als Windows-Anwendung paketiert und über einen Installer
 bereitgestellt. Die Installation und der lokale Betrieb werden auf einem dafür
 geeigneten System geprüft.
 
-### 2. Abschluss und Gesamtprüfung
+## Anschließende Arbeitspakete
+
+### Abschluss und Gesamtprüfung
 
 Zum Abschluss werden die wesentlichen Benutzerabläufe, Berechnungen,
 Speicherabläufe und Fehlerfälle gemeinsam geprüft. Verbleibende Abweichungen

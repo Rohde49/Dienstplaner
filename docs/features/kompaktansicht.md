@@ -4,7 +4,7 @@ Die Kompaktansicht zeigt den gespeicherten Stand eines geöffneten Monatsplans
 als ruhige, schreibgeschützte A4-Dokumentvorschau. Sie macht die tägliche
 Besetzung über den gesamten Monat schneller erfassbar als die bearbeitbare
 Planungstabelle und bildet zugleich das verbindliche Dokumentlayout für den
-späteren PDF-Export.
+PDF-Export.
 
 ## Zweck und Umfang
 
@@ -15,11 +15,11 @@ Die Kompaktansicht:
 - bietet keine Bearbeitungsfunktionen und keine Auswertung,
 - erzeugt weder eine zweite Planversion noch eigene Ergebnisdaten,
 - verwendet die gemeinsamen Kalender-, Zeit- und Berechnungsregeln und
-- stellt exakt das A4-Dokumentlayout dar, das später auch der PDF-Export nutzt.
+- stellt exakt das A4-Dokumentlayout dar, das auch der PDF-Export nutzt.
 
-Die Kompaktansicht erzeugt selbst noch keine Datei. Dateierzeugung,
-Speicherdialog und weitere Exportabläufe bleiben Aufgabe des eigenständigen
-[PDF-Exports](./pdf-export.md).
+Die reine Dokumentvorschau erzeugt selbst keine Datei. Die in der
+Kompaktansicht verfügbare Exportaktion übergibt Dateierzeugung, Speicherdialog
+und Rückmeldungen an den eigenständigen [PDF-Export](./pdf-export.md).
 
 ## Datengrundlage
 
@@ -78,7 +78,7 @@ funktionieren.
 Die Bildschirmansicht zeigt eine weiße A4-Seite zentriert auf einer neutralen
 grauen Arbeitsfläche. Ein dünner Rand und ein dezenter Schatten grenzen das
 Dokument auf dem Bildschirm ab. Diese Orientierungselemente erscheinen nicht
-in der späteren PDF.
+in der exportierten PDF.
 
 Die Seite:
 
@@ -254,7 +254,7 @@ Seite, erscheint dauerhaft:
 > Der Dienstplan passt mit den aktuellen Inhalten nicht lesbar auf eine
 > A4-Seite.
 
-In diesem Zustand wird eine spätere PDF-Ausgabe verhindert. Inhalte werden
+In diesem Zustand wird die PDF-Ausgabe verhindert. Inhalte werden
 weder verborgen noch abgeschnitten, und die erste Umsetzung erzeugt nicht
 unbemerkt eine weitere Seite.
 
@@ -269,7 +269,7 @@ Nicht zur ersten Umsetzung der Kompaktansicht gehören:
 
 - das Bearbeiten oder Speichern des Planentwurfs,
 - die ausführliche Auswertung,
-- das Erzeugen oder Speichern einer PDF-Datei,
+- die technische PDF-Dateierzeugung innerhalb der Dokumentdarstellung,
 - ein nativer Druckvorgang,
 - eigene Zoomfunktionen und
 - eine mehrseitige Dokumentaufteilung.
