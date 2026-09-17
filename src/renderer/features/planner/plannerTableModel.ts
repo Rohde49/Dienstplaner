@@ -30,6 +30,7 @@ export type PlannerTableModel = {
   period: PlannerPeriod;
   employees: readonly PlannerTableEmployee[];
   days: readonly PlannerTableDay[];
+  targetFreeDayCount: number;
   isEditable: boolean;
 };
 
@@ -65,6 +66,7 @@ export function createPlannerTableModel(
         calendarDay,
         planDay: null,
       })),
+      targetFreeDayCount: evaluation.targetFreeDayCount,
       isEditable: false,
     };
   }
@@ -92,6 +94,7 @@ export function createPlannerTableModel(
       calendarDay,
       planDay: planDaysByDate.get(calendarDay.date) ?? null,
     })),
+    targetFreeDayCount: evaluation.targetFreeDayCount,
     isEditable: true,
   };
 }

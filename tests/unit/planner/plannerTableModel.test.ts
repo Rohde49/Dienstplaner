@@ -44,6 +44,7 @@ describe('Planungstabellenmodell', () => {
 
     expect(model.isEditable).toBe(false);
     expect(model.days).toHaveLength(30);
+    expect(model.targetFreeDayCount).toBe(8);
     expect(model.days.every((day) => day.planDay === null)).toBe(true);
     expect(model.employees).toHaveLength(1);
     expect(model.employees[0].evaluation).toMatchObject({
@@ -76,6 +77,7 @@ describe('Planungstabellenmodell', () => {
     const model = createPlannerTableModel(loadedState.document);
 
     expect(model.isEditable).toBe(true);
+    expect(model.targetFreeDayCount).toBe(8);
     expect(model.employees[0].firstName).toBe('Eva');
     expect(model.employees[0].evaluation.targetWorkingMinutes).toBe(10_296);
     expect(model.days[0].planDay?.id).toBe(plan.days[0].id);

@@ -28,8 +28,11 @@ export interface EmployeeMonthlyEvaluation {
 
 export interface MonthlyPlanEvaluation {
   workingDayCount: number;
+  targetFreeDayCount: number;
   employees: EmployeeMonthlyEvaluation[];
 }
+
+export type FreeDayTargetStatus = 'below' | 'met' | 'above';
 
 type EvaluationInput = {
   year: number;
@@ -71,6 +74,26 @@ function calculateSafeDifference(
   return result;
 }
 
+/** Berechnet den monatsweiten Zielwert freier Tage aus Kalender- und Arbeitstagen. */
+export function calculateTargetFreeDayCount(
+  calendarDayCount: number,
+  workingDayCount: number,
+): number {
+  return calendarDayCount - workingDayCount;
+}
+
+/** Ordnet die Zahl eingetragener freier Tage zum monatlichen Zielwert ein. */
+export function getFreeDayTargetStatus(
+  freeDayCount: number,
+  targetFreeDayCount: number,
+): FreeDayTargetStatus {
+  if (freeDayCount < targetFreeDayCount) {
+    return 'below';
+  }
+
+  return freeDayCount > targetFreeDayCount ? 'above' : 'met';
+}
+
 /** Rundet einen ganzzahligen Anteil ohne Genauigkeitsverlust durch große Gleitkommazahlen. */
 function calculateRoundedFraction(
   totalMinutes: number,
@@ -93,6 +116,10 @@ function calculateEvaluation({
     calendarDays.map((calendarDay) => [calendarDay.date, calendarDay]),
   );
   const workingDayCount = countWorkingDays(year, month);
+  const targetFreeDayCount = calculateTargetFreeDayCount(
+    calendarDays.length,
+    workingDayCount,
+  );
 
   const employees = inputEmployees.map(
     (planEmployee): EmployeeMonthlyEvaluation => {
@@ -216,7 +243,7 @@ function calculateEvaluation({
     },
   );
 
-  return { workingDayCount, employees };
+  return { workingDayCount, targetFreeDayCount, employees };
 }
 
 /** Berechnet sämtliche festgelegten Monatskennzahlen aus den gespeicherten Snapshots. */

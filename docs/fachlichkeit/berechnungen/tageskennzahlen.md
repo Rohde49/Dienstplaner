@@ -45,6 +45,21 @@ Planungseintrag das gespeicherte Kürzel `/` besitzt.
 - Maßgeblich ist der Snapshot des gesetzten Planungseintrags. Eine spätere
   Änderung der Eintragsart verändert die bestehende Zählung nicht.
 
+Der monatliche Zielwert für freie Tage ergibt sich unabhängig vom Mitarbeiter
+aus der Differenz zwischen allen Kalendertagen und den kalendarischen
+Arbeitstagen des Monats:
+
+`Ziel freie Tage = Kalendertage − Arbeitstage`
+
+Die Zahl der eingetragenen freien Tage wird mit diesem Zielwert verglichen:
+
+- Unterhalb des Zielwerts erhält die Kennzahl einen gelben Warnstatus.
+- Beim exakten Zielwert erhält sie einen grünen Status.
+- Oberhalb des Zielwerts erhält sie einen roten Status.
+
+Der Zielwert und die Statusanzeige verändern die Zählregel nicht. Insbesondere
+bleiben leere Zellen ungeplant und werden nicht als freie Tage gezählt.
+
 ## Freie Samstage und Sonntage
 
 Freie Samstage und freie Sonntage sind Teilmengen der freien Tage:

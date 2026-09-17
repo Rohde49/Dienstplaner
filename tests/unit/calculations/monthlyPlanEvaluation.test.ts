@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   calculateMonthlyPlanEvaluation,
+  calculateTargetFreeDayCount,
+  getFreeDayTargetStatus,
   type MonthlyPlanEvaluation,
 } from '../../../src/shared/calculations';
 import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
@@ -98,6 +100,16 @@ function getEmployeeEvaluation(
 }
 
 describe('Monatsauswertung', () => {
+  it('berechnet das Ziel freier Tage aus Kalender- und Arbeitstagen', () => {
+    expect(calculateTargetFreeDayCount(31, 22)).toBe(9);
+  });
+
+  it('ordnet freie Tage relativ zum Monatsziel ein', () => {
+    expect(getFreeDayTargetStatus(8, 9)).toBe('below');
+    expect(getFreeDayTargetStatus(9, 9)).toBe('met');
+    expect(getFreeDayTargetStatus(10, 9)).toBe('above');
+  });
+
   it('wertet exakte Dienst- und Frei-Kürzel tagesbezogen aus', () => {
     const plan = createPlan(2026, 3);
     const employeeId = plan.employees[0].id;
@@ -390,6 +402,7 @@ describe('Monatsauswertung', () => {
     const result = calculateMonthlyPlanEvaluation(plan);
 
     expect(result.workingDayCount).toBe(20);
+    expect(result.targetFreeDayCount).toBe(8);
     expect(getEmployeeEvaluation(result, employeeId)).toEqual({
       planEmployeeId: employeeId,
       snfServiceCount: 0,

@@ -5,6 +5,7 @@ import {
   calculateMonthlyPlanEvaluation,
   formatDuration,
   formatTimeDifference,
+  getFreeDayTargetStatus,
   type EmployeeMonthlyEvaluation,
   type MonthlyPlanEvaluation,
 } from '../../../shared/calculations';
@@ -31,7 +32,7 @@ type EvaluationRow = {
   label: string;
   sectionStart?: boolean;
   summary?: boolean;
-  highlightDifference?: boolean;
+  highlight?: 'free-days' | 'difference';
   format: (
     employee: EmployeeMonthlyEvaluation,
     workingDayCount: number,
@@ -49,6 +50,7 @@ const ROWS: readonly EvaluationRow[] = [
   },
   {
     label: 'Anzahl freier Tage',
+    highlight: 'free-days',
     format: (employee) => String(employee.freeDayCount),
   },
   {
@@ -96,7 +98,7 @@ const ROWS: readonly EvaluationRow[] = [
   {
     label: 'Differenz Soll/Ist',
     summary: true,
-    highlightDifference: true,
+    highlight: 'difference',
     format: (employee) =>
       formatTimeDifference(employee.workingDifferenceMinutes),
   },
@@ -110,6 +112,18 @@ function getDifferenceClasses(minutes: number): string {
   return minutes > 0
     ? 'bg-green-50 font-semibold text-green-800 group-hover:bg-green-100'
     : 'bg-app-surface-muted font-semibold group-hover:bg-app-surface-hover';
+}
+
+function getFreeDayClasses(actual: number, target: number): string {
+  const status = getFreeDayTargetStatus(actual, target);
+
+  if (status === 'below') {
+    return 'bg-amber-50 font-semibold text-amber-800 group-hover:bg-amber-100';
+  }
+
+  return status === 'above'
+    ? 'bg-red-50 font-semibold text-red-800 group-hover:bg-red-100'
+    : 'bg-green-50 font-semibold text-green-800 group-hover:bg-green-100';
 }
 
 /** Verdichtet den aktuellen Planentwurf zu einer ausschließlich lesbaren Tabelle. */
@@ -248,13 +262,18 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                         className={`border-app-border px-2 py-2 text-center tabular-nums transition-colors ${
                           employeeIndex < educators.length - 1 ? 'border-r' : ''
                         } ${showBottomBorder ? 'border-b' : ''} ${sectionClasses} ${
-                          row.highlightDifference
+                          row.highlight === 'difference'
                             ? getDifferenceClasses(
                                 employeeEvaluation.workingDifferenceMinutes,
                               )
-                            : row.summary
-                              ? 'bg-blue-50/40 font-medium group-hover:bg-blue-50'
-                              : 'bg-app-surface group-hover:bg-app-surface-hover'
+                            : row.highlight === 'free-days'
+                              ? getFreeDayClasses(
+                                  employeeEvaluation.freeDayCount,
+                                  evaluation.targetFreeDayCount,
+                                )
+                              : row.summary
+                                ? 'bg-blue-50/40 font-medium group-hover:bg-blue-50'
+                                : 'bg-app-surface group-hover:bg-app-surface-hover'
                         }`}
                       >
                         {row.format(

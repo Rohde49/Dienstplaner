@@ -95,6 +95,9 @@ bereits dauerhaft gespeichert wurde.
 - Positive und negative Soll-/Ist-Abweichungen bleiben auch ohne Farberkennung
   anhand ihres Vorzeichens verständlich. Negative Werte werden zusätzlich rot,
   positive Werte grün und ausgeglichene Werte neutral dargestellt.
+- Die Anzahl freier Tage wird mit dem monatsweiten Ziel aus Kalendertagen
+  abzüglich Arbeitstagen verglichen. Ein noch nicht erreichtes Ziel erscheint
+  gelb, ein exakt erreichtes Ziel grün und eine Überschreitung rot.
 - Ein exakter Ausgleich wird ohne Vorzeichen angezeigt.
 - Die im Monatsplan gespeicherte Mitarbeiterfarbe kennzeichnet den jeweiligen
   Tabellenkopf wie in der Planungstabelle.

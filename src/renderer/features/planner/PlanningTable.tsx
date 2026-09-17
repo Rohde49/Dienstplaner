@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import {
   formatDuration,
   formatTimeDifference,
+  getFreeDayTargetStatus,
 } from '../../../shared/calculations';
 import type { MonthlyPlan, PlanEntry } from '../../../shared/schemas';
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
@@ -52,6 +53,16 @@ function getDifferenceClasses(minutes: number): string {
   }
 
   return minutes > 0 ? 'text-green-800' : '';
+}
+
+function getFreeDayClasses(actual: number, target: number): string {
+  const status = getFreeDayTargetStatus(actual, target);
+
+  if (status === 'below') {
+    return 'text-amber-700';
+  }
+
+  return status === 'above' ? 'text-red-800' : 'text-green-800';
 }
 
 /** Stellt Vorschau und gespeicherten Plan als gemeinsame Monatsmatrix dar. */
@@ -115,9 +126,16 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                           showServiceCount ? 'border-l' : ''
                         } border-current/20 px-1 py-1.5`}
                       >
-                        <span className="block font-normal">Frei</span>
-                        <span className="block font-semibold">
-                          {employee.evaluation.freeDayCount}
+                        <span
+                          className={`block ${getFreeDayClasses(
+                            employee.evaluation.freeDayCount,
+                            model.targetFreeDayCount,
+                          )}`}
+                        >
+                          <span className="block font-normal">Frei</span>
+                          <span className="block font-semibold">
+                            {employee.evaluation.freeDayCount}
+                          </span>
                         </span>
                       </span>
                       <span className="border-l border-current/20 px-1 py-1.5">

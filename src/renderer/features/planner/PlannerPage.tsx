@@ -14,7 +14,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { MonthlyPlan } from '../../../shared/schemas';
-import { countWorkingDays } from '../../../shared/calculations';
+import {
+  calculateTargetFreeDayCount,
+  countWorkingDays,
+} from '../../../shared/calculations';
 import { PageHeader, Toolbar, type AppPage } from '../../components/layout';
 import {
   Alert,
@@ -174,6 +177,16 @@ export function PlannerPage({
     state.load.status === 'ready' &&
     state.team.some((employee) => employee.active) &&
     !isPlannerBusy;
+  const calendarDayCount = activePlan
+    ? activePlan.days.length
+    : (preview?.calendarDays.length ?? 0);
+  const workingDayCount = activePlan
+    ? countWorkingDays(activePlan.year, activePlan.month)
+    : (preview?.workingDayCount ?? 0);
+  const targetFreeDayCount = calculateTargetFreeDayCount(
+    calendarDayCount,
+    workingDayCount,
+  );
 
   useEffect(() => {
     if (!isCompactView) {
@@ -577,7 +590,7 @@ export function PlannerPage({
               className="border-app-border mt-3 w-full border-t pt-3"
             >
               <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-                <dl className="divide-app-border grid max-w-2xl min-w-96 flex-1 grid-cols-3 divide-x">
+                <dl className="divide-app-border grid max-w-2xl min-w-96 flex-1 grid-cols-4 divide-x">
                   <div className="pr-4">
                     <dt className="text-app-muted text-xs">
                       {activePlan
@@ -593,17 +606,19 @@ export function PlannerPage({
                   <div className="px-4">
                     <dt className="text-app-muted text-xs">Kalendertage</dt>
                     <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
-                      {activePlan
-                        ? activePlan.days.length
-                        : (preview?.calendarDays.length ?? 0)}
+                      {calendarDayCount}
+                    </dd>
+                  </div>
+                  <div className="px-4">
+                    <dt className="text-app-muted text-xs">Arbeitstage</dt>
+                    <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
+                      {workingDayCount}
                     </dd>
                   </div>
                   <div className="pl-4">
-                    <dt className="text-app-muted text-xs">Arbeitstage</dt>
+                    <dt className="text-app-muted text-xs">Freie Tage</dt>
                     <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
-                      {activePlan
-                        ? countWorkingDays(activePlan.year, activePlan.month)
-                        : (preview?.workingDayCount ?? 0)}
+                      {targetFreeDayCount}
                     </dd>
                   </div>
                 </dl>

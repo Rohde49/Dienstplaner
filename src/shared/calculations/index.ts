@@ -23,9 +23,12 @@ export type { CalendarDay, IsoWeekday } from './calendar';
 export {
   calculateEmptyMonthlyPlanEvaluation,
   calculateMonthlyPlanEvaluation,
+  calculateTargetFreeDayCount,
+  getFreeDayTargetStatus,
 } from './monthlyPlanEvaluation';
 
 export type {
   EmployeeMonthlyEvaluation,
+  FreeDayTargetStatus,
   MonthlyPlanEvaluation,
 } from './monthlyPlanEvaluation';

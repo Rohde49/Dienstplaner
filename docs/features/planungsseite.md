@@ -47,8 +47,10 @@ Titelgruppe in eine eigene zentrierte Zeile wechseln. Ein zusätzlicher Text wie
 Aktionen deaktiviert. In der Kompaktansicht sind beide Aktionen ebenfalls
 deaktiviert, weil dort ausschließlich der gespeicherte Ausgangsstand sichtbar
 ist. Ausgeklappt ergänzt eine flache, durch Linien
-getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender- und
-Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“ steht daneben. Nur in der
+getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender-, Arbeits- und
+freien Tagen. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
+Kalendertagen abzüglich Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“
+steht daneben. Nur in der
 aktiven Kompaktansicht erscheint rechts davon die Exportaktion. Die
 Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
 Rand eine schmale, ohne Schatten direkt an die Kartenkante angeschlossene
@@ -101,10 +103,10 @@ Planungseinträge, Rufbereitschaften und Bemerkungen können erst nach der
 Plananlage bearbeitet werden.
 
 Bei aktiven Mitarbeitern erscheinen Status und Zeitraum in der eingeklappten
-Werkzeugleiste. Die Anzahl der Kalender- und Arbeitstage sowie der aktiven
-Mitarbeiter steht in ihrem ausklappbaren Detailbereich. Die Mitarbeiternamen
-stehen in den Tabellenköpfen; eine zusätzliche Namensliste und ein allgemeiner
-Informationskasten zur Vorschau sind nicht erforderlich.
+Werkzeugleiste. Die Anzahl der Kalender-, Arbeits- und freien Tage sowie der
+aktiven Mitarbeiter steht in ihrem ausklappbaren Detailbereich. Die
+Mitarbeiternamen stehen in den Tabellenköpfen; eine zusätzliche Namensliste und
+ein allgemeiner Informationskasten zur Vorschau sind nicht erforderlich.
 
 Sind keine aktiven Mitarbeiter vorhanden, bleibt die Zeitraumsauswahl
 verfügbar. Anstelle der Monatstabelle erscheint ein verständlicher Leerzustand
@@ -356,6 +358,11 @@ Im Mitarbeiterkopf erscheinen:
 Beschriftung und Wert der Differenz werden bei negativen Werten rot und bei
 positiven Werten grün angezeigt. Ein ausgeglichener Wert bleibt neutral. Das
 Vorzeichen der Zahl macht die Richtung auch ohne Farbe erkennbar.
+
+Beschriftung und Wert der freien Tage werden mit dem monatsweiten Zielwert
+verglichen. Unterhalb des Ziels erscheinen sie gelb, beim exakten Ziel grün und
+oberhalb des Ziels rot. Den zugehörigen Zielwert zeigt die ausgeklappte
+Werkzeugleiste als „Freie Tage“ neben Kalender- und Arbeitstagen.
 
 Unterhalb der Kalendertage zeigt die Tabelle für alle Rollen die Ist- und
 Soll-Arbeitszeit. Die beiden Zeilen tragen die kurzen Beschriftungen „Ist“ und
