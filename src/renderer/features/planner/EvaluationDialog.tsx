@@ -6,7 +6,7 @@ import {
   calculateMonthlyPlanEvaluation,
   formatDuration,
   formatTimeDifference,
-  getFreeDayTargetStatus,
+  getTargetCountStatus,
   type EmployeeMonthlyEvaluation,
   type MonthlyPlanEvaluation,
 } from '../../../shared/calculations';
@@ -118,15 +118,15 @@ function getDifferenceClasses(minutes: number): string {
 }
 
 function getFreeDayClasses(actual: number, target: number): string {
-  const status = getFreeDayTargetStatus(actual, target);
+  const status = getTargetCountStatus(actual, target);
 
   if (status === 'below') {
-    return 'bg-amber-50 font-semibold text-amber-800 group-hover:bg-amber-100';
+    return 'bg-app-signal-warning-subtle text-app-signal-warning group-hover:bg-app-signal-warning-hover font-semibold';
   }
 
   return status === 'above'
-    ? 'bg-red-50 font-semibold text-red-800 group-hover:bg-red-100'
-    : 'bg-green-50 font-semibold text-green-800 group-hover:bg-green-100';
+    ? 'bg-app-signal-danger-subtle text-app-signal-danger group-hover:bg-app-signal-danger-hover font-semibold'
+    : 'bg-app-signal-success-subtle text-app-signal-success group-hover:bg-app-signal-success-hover font-semibold';
 }
 
 function getRowHighlightClasses(

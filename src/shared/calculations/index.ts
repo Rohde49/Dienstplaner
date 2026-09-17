@@ -25,11 +25,11 @@ export {
   calculateEmptyMonthlyPlanEvaluation,
   calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,
-  getFreeDayTargetStatus,
+  getTargetCountStatus,
 } from './monthlyPlanEvaluation';
 
 export type {
   EmployeeMonthlyEvaluation,
-  FreeDayTargetStatus,
   MonthlyPlanEvaluation,
+  TargetCountStatus,
 } from './monthlyPlanEvaluation';

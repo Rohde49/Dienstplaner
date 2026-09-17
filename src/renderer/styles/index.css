@@ -39,6 +39,17 @@
   --color-app-danger-border: #fecaca;
   --color-app-on-danger: #ffffff;
 
+  /* Zielwert-Ampeln bleiben unabhängig von allgemeinen Warnzuständen anpassbar. */
+  --color-app-signal-warning: #a16207;
+  --color-app-signal-warning-subtle: #fefce8;
+  --color-app-signal-warning-hover: #fef9c3;
+  --color-app-signal-success: #166534;
+  --color-app-signal-success-subtle: #f0fdf4;
+  --color-app-signal-success-hover: #dcfce7;
+  --color-app-signal-danger: #991b1b;
+  --color-app-signal-danger-subtle: #fef2f2;
+  --color-app-signal-danger-hover: #fee2e2;
+
   --color-app-overlay: #020617;
 }
 

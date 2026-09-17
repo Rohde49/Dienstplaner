@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import {
   formatDuration,
   formatTimeDifference,
-  getFreeDayTargetStatus,
+  getTargetCountStatus,
 } from '../../../shared/calculations';
 import type { MonthlyPlan, PlanEntry } from '../../../shared/schemas';
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
@@ -56,13 +56,15 @@ function getDifferenceClasses(minutes: number): string {
 }
 
 function getFreeDayClasses(actual: number, target: number): string {
-  const status = getFreeDayTargetStatus(actual, target);
+  const status = getTargetCountStatus(actual, target);
 
   if (status === 'below') {
-    return 'text-amber-700';
+    return 'text-app-signal-warning';
   }
 
-  return status === 'above' ? 'text-red-800' : 'text-green-800';
+  return status === 'above'
+    ? 'text-app-signal-danger'
+    : 'text-app-signal-success';
 }
 
 /** Stellt Vorschau und gespeicherten Plan als gemeinsame Monatsmatrix dar. */

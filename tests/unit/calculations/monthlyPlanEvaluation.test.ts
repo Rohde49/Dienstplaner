@@ -4,7 +4,7 @@ import {
   TARGET_FREE_WEEKEND_DAY_COUNT,
   calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,
-  getFreeDayTargetStatus,
+  getTargetCountStatus,
   type MonthlyPlanEvaluation,
 } from '../../../src/shared/calculations';
 import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
@@ -106,19 +106,17 @@ describe('Monatsauswertung', () => {
   });
 
   it('ordnet freie Tage relativ zum Monatsziel ein', () => {
-    expect(getFreeDayTargetStatus(8, 9)).toBe('below');
-    expect(getFreeDayTargetStatus(9, 9)).toBe('met');
-    expect(getFreeDayTargetStatus(10, 9)).toBe('above');
+    expect(getTargetCountStatus(8, 9)).toBe('below');
+    expect(getTargetCountStatus(9, 9)).toBe('met');
+    expect(getTargetCountStatus(10, 9)).toBe('above');
   });
 
   it('ordnet freie Wochenendtage relativ zum festen Zielwert zwei ein', () => {
-    expect(getFreeDayTargetStatus(1, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
+    expect(getTargetCountStatus(1, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
       'below',
     );
-    expect(getFreeDayTargetStatus(2, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
-      'met',
-    );
-    expect(getFreeDayTargetStatus(3, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
+    expect(getTargetCountStatus(2, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe('met');
+    expect(getTargetCountStatus(3, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
       'above',
     );
   });
@@ -145,6 +143,28 @@ describe('Monatsauswertung', () => {
       freeSaturdayCount: 1,
       freeSundayCount: 1,
     });
+  });
+
+  it('summiert vorhandene SN/F-Zähler ausschließlich für Erzieher', () => {
+    const plan = createPlan(2026, 3, [
+      createEmployee('10000000-0000-4000-8000-000000000001'),
+      createEmployee('10000000-0000-4000-8000-000000000002'),
+      createEmployee('10000000-0000-4000-8000-000000000003', {
+        role: 'Praktikant',
+      }),
+    ]);
+
+    addEntry(plan, '2026-03-02', plan.employees[0].id, 1, { code: 'SN/F' });
+    addEntry(plan, '2026-03-03', plan.employees[0].id, 2, { code: 'SN' });
+    addEntry(plan, '2026-03-02', plan.employees[1].id, 3, { code: 'SN' });
+    addEntry(plan, '2026-03-02', plan.employees[2].id, 4, { code: 'SN/F' });
+
+    const result = calculateMonthlyPlanEvaluation(plan);
+
+    expect(
+      result.employees.map((employee) => employee.snfServiceCount),
+    ).toEqual([2, 1, 1]);
+    expect(result.totalEducatorSnfServiceCount).toBe(3);
   });
 
   it('erkennt abweichende Kürzel nicht durch nachträgliches Normalisieren', () => {
@@ -265,6 +285,7 @@ describe('Monatsauswertung', () => {
 
     const result = calculateMonthlyPlanEvaluation(plan);
 
+    expect(result.totalEducatorSnfServiceCount).toBe(1);
     expect(
       result.employees.map(({ planEmployeeId }) => planEmployeeId),
     ).toEqual(plan.employees.map(({ id }) => id));

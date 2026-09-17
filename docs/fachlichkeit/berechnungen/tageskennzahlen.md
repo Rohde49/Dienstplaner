@@ -34,6 +34,20 @@ Spät-Nacht-Früh-Dienst nicht zuverlässig semantisch erkennen. Eine spätere
 Erweiterung benötigt dafür ausdrücklich festgelegte Kategorien und Regeln für
 kalendertagübergreifende Dienstfolgen.
 
+Für die zusammengefasste Kennzahl in der Werkzeugleiste werden die bereits
+berechneten SN/F-Zähler aller Mitarbeiter mit der Snapshot-Rolle `Erzieher`
+addiert. Andere Rollen fließen nicht in diese Summe ein. Es findet keine zweite
+Auswertung der Planungseinträge statt.
+
+Zielwert der Summe ist die Anzahl der Kalendertage des Monats:
+
+- Unterhalb des Zielwerts erscheint die Summe gelb.
+- Beim exakten Zielwert erscheint sie grün.
+- Oberhalb des Zielwerts erscheint sie rot.
+
+Die Summe bewertet nur die Gesamtzahl der Dienste. Sie prüft nicht, ob jeder
+einzelne Kalendertag genau einmal durch einen SN/F-Dienst abgedeckt ist.
+
 ## Freie Tage
 
 Ein Kalendertag zählt für einen Mitarbeiter nur dann als freier Tag, wenn sein

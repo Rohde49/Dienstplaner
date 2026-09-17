@@ -15,8 +15,11 @@ import { toast } from 'sonner';
 
 import type { MonthlyPlan } from '../../../shared/schemas';
 import {
+  calculateEmptyMonthlyPlanEvaluation,
+  calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,
   countWorkingDays,
+  getTargetCountStatus,
 } from '../../../shared/calculations';
 import { PageHeader, Toolbar, type AppPage } from '../../components/layout';
 import {
@@ -80,6 +83,18 @@ function getErrorMessage(error: unknown): string {
   return error instanceof Error
     ? error.message
     : 'Die Vorschau konnte nicht geladen werden.';
+}
+
+function getTargetCountTextClass(actual: number, target: number): string {
+  const status = getTargetCountStatus(actual, target);
+
+  if (status === 'below') {
+    return 'text-app-signal-warning';
+  }
+
+  return status === 'above'
+    ? 'text-app-signal-danger'
+    : 'text-app-signal-success';
 }
 
 /** Zeigt die Monatsauswahl und den noch nicht gespeicherten Vorschauzustand. */
@@ -187,6 +202,21 @@ export function PlannerPage({
     calendarDayCount,
     workingDayCount,
   );
+  const displayedEvaluation = useMemo(
+    () =>
+      displayedPlan
+        ? calculateMonthlyPlanEvaluation(displayedPlan)
+        : preview
+          ? calculateEmptyMonthlyPlanEvaluation(
+              preview.period.year,
+              preview.period.month,
+              preview.employees,
+            )
+          : null,
+    [displayedPlan, preview],
+  );
+  const totalSnfServiceCount =
+    displayedEvaluation?.totalEducatorSnfServiceCount ?? 0;
 
   useEffect(() => {
     if (!isCompactView) {
@@ -592,15 +622,14 @@ export function PlannerPage({
               <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
                 <dl className="divide-app-border grid max-w-2xl min-w-96 flex-1 grid-cols-4 divide-x">
                   <div className="pr-4">
-                    <dt className="text-app-muted text-xs">
-                      {activePlan
-                        ? 'Mitarbeiter im Plan'
-                        : 'Aktive Mitarbeiter'}
-                    </dt>
-                    <dd className="text-app-text mt-0.5 text-lg font-semibold tabular-nums">
-                      {activePlan
-                        ? activePlan.employees.length
-                        : (preview?.employees.length ?? 0)}
+                    <dt className="text-app-muted text-xs">Anzahl SN/F</dt>
+                    <dd
+                      className={`mt-0.5 text-lg font-semibold tabular-nums ${getTargetCountTextClass(
+                        totalSnfServiceCount,
+                        calendarDayCount,
+                      )}`}
+                    >
+                      {totalSnfServiceCount}
                     </dd>
                   </div>
                   <div className="px-4">

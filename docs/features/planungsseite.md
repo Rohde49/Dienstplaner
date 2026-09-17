@@ -46,10 +46,12 @@ Titelgruppe in eine eigene zentrierte Zeile wechseln. Ein zusätzlicher Text wie
 „Speichern“ und „Auswertung“ rechts bereit. Ohne geöffneten Plan bleiben diese
 Aktionen deaktiviert. In der Kompaktansicht sind beide Aktionen ebenfalls
 deaktiviert, weil dort ausschließlich der gespeicherte Ausgangsstand sichtbar
-ist. Ausgeklappt ergänzt eine flache, durch Linien
-getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender-, Arbeits- und
-freien Tagen. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
-Kalendertagen abzüglich Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“
+ist. Ausgeklappt ergänzt eine flache, durch Linien getrennte Kennzahlenzeile die
+zusammengefasste Anzahl SN/F der Erzieher sowie die Kalender-, Arbeits- und
+freien Tage. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
+Kalendertagen abzüglich Arbeitstagen. „Anzahl SN/F“ wird mit den Kalendertagen
+als Zielwert verglichen und gelb, grün oder rot dargestellt. Der
+Ansichtsumschalter „Plan / Kompakt“
 steht daneben und hebt die aktive Ansicht mit der zurückhaltenden Primärfläche
 hervor. Nur in der aktiven Kompaktansicht erscheint rechts davon die
 Exportaktion. Die
@@ -104,10 +106,11 @@ Planungseinträge, Rufbereitschaften und Bemerkungen können erst nach der
 Plananlage bearbeitet werden.
 
 Bei aktiven Mitarbeitern erscheinen Status und Zeitraum in der eingeklappten
-Werkzeugleiste. Die Anzahl der Kalender-, Arbeits- und freien Tage sowie der
-aktiven Mitarbeiter steht in ihrem ausklappbaren Detailbereich. Die
-Mitarbeiternamen stehen in den Tabellenköpfen; eine zusätzliche Namensliste und
-ein allgemeiner Informationskasten zur Vorschau sind nicht erforderlich.
+Werkzeugleiste. Die Anzahl der Kalender-, Arbeits- und freien Tage sowie die
+zusammengefasste Anzahl SN/F der Erzieher stehen in ihrem ausklappbaren
+Detailbereich. Die Mitarbeiternamen stehen in den Tabellenköpfen; eine
+zusätzliche Namensliste und ein allgemeiner Informationskasten zur Vorschau
+sind nicht erforderlich.
 
 Sind keine aktiven Mitarbeiter vorhanden, bleibt die Zeitraumsauswahl
 verfügbar. Anstelle der Monatstabelle erscheint ein verständlicher Leerzustand

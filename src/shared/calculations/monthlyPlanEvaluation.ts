@@ -29,10 +29,11 @@ export interface EmployeeMonthlyEvaluation {
 export interface MonthlyPlanEvaluation {
   workingDayCount: number;
   targetFreeDayCount: number;
+  totalEducatorSnfServiceCount: number;
   employees: EmployeeMonthlyEvaluation[];
 }
 
-export type FreeDayTargetStatus = 'below' | 'met' | 'above';
+export type TargetCountStatus = 'below' | 'met' | 'above';
 
 export const TARGET_FREE_WEEKEND_DAY_COUNT = 2;
 
@@ -84,16 +85,16 @@ export function calculateTargetFreeDayCount(
   return calendarDayCount - workingDayCount;
 }
 
-/** Ordnet die Zahl eingetragener freier Tage zum monatlichen Zielwert ein. */
-export function getFreeDayTargetStatus(
-  freeDayCount: number,
-  targetFreeDayCount: number,
-): FreeDayTargetStatus {
-  if (freeDayCount < targetFreeDayCount) {
+/** Ordnet einen gezählten Ist-Wert relativ zu seinem Zielwert ein. */
+export function getTargetCountStatus(
+  actualCount: number,
+  targetCount: number,
+): TargetCountStatus {
+  if (actualCount < targetCount) {
     return 'below';
   }
 
-  return freeDayCount > targetFreeDayCount ? 'above' : 'met';
+  return actualCount > targetCount ? 'above' : 'met';
 }
 
 /** Rundet einen ganzzahligen Anteil ohne Genauigkeitsverlust durch große Gleitkommazahlen. */
@@ -244,8 +245,25 @@ function calculateEvaluation({
       };
     },
   );
+  const educatorIds = new Set(
+    inputEmployees
+      .filter((employee) => employee.role === 'Erzieher')
+      .map((employee) => employee.id),
+  );
+  const totalEducatorSnfServiceCount = employees.reduce(
+    (total, employee) =>
+      educatorIds.has(employee.planEmployeeId)
+        ? total + employee.snfServiceCount
+        : total,
+    0,
+  );
 
-  return { workingDayCount, targetFreeDayCount, employees };
+  return {
+    workingDayCount,
+    targetFreeDayCount,
+    totalEducatorSnfServiceCount,
+    employees,
+  };
 }
 
 /** Berechnet sämtliche festgelegten Monatskennzahlen aus den gespeicherten Snapshots. */
