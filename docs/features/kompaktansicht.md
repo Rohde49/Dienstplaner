@@ -119,11 +119,13 @@ Reihenfolge:
 
 Die Datumsspalte zeigt Wochentag und Datum einzeilig im Format `Mo 01.09.`.
 
-Samstage und Sonntage erhalten über die gesamte Zeile eine dezente graue
+Samstage und Sonntage erhalten über die gesamte Zeile eine klar erkennbare
+hellgraue
 Hintergrundfläche. Der sichtbare Wochentag macht die Bedeutung unabhängig von
 der Farbe erkennbar.
 
-Feiertage haben Vorrang vor Wochenenden. Ihre Zeile erhält eine dezente rote
+Feiertage haben Vorrang vor Wochenenden. Ihre Zeile erhält eine klar erkennbare
+hellrote
 Hintergrundfläche und das Datum zusätzlich einen Stern, beispielsweise
 `Fr 03.10.*`. Die vollständigen Feiertagsnamen stehen unterhalb der Tabelle in
 einer kompakten Legende, beispielsweise
@@ -138,16 +140,18 @@ denselben Nachnamen, ergänzt die Ansicht zur Unterscheidung den ersten
 Buchstaben des Vornamens, beispielsweise `E. Müller` und `M. Müller`.
 
 Lange Nachnamen dürfen auf höchstens zwei Zeilen umbrechen. Der Kopf trägt eine
-dezente Fläche in der gespeicherten Mitarbeiterfarbe und eine kontrastreiche
-dunkle Schrift. Die angrenzenden Tabellenlinien bleiben unabhängig von der
-Mitarbeiterfarbe im einheitlichen neutralen Graublau. Rolle und weitere
-Mitarbeiterangaben erscheinen dort nicht.
+kräftige helle Fläche in der gespeicherten Mitarbeiterfarbe und schwarze
+Schrift. Die angrenzenden Tabellenlinien bleiben unabhängig von der
+Mitarbeiterfarbe einheitlich schwarz. Rolle und weitere Mitarbeiterangaben
+erscheinen dort nicht.
 
-Eine einzelne neutrale Linie trennt die Mitarbeiterköpfe von den
+Eine einzelne schwarze Linie trennt die Mitarbeiterköpfe von den
 Kalendertagen. An den Übergängen zwischen Tabellenkopf, Tagesbereich und
 Abschlussblock werden keine verschiedenfarbigen Linien übereinandergelegt.
-Der äußere Tabellenrahmen verwendet durchgehend das stärkere neutrale Graublau
-von Kopf und Abschlussblock; das innere Raster der Kalendertage bleibt heller.
+Der äußere Tabellenrahmen und alle vertikalen Spaltentrenner sind zwei Pixel
+stark. Das horizontale Raster der Kalendertage bleibt mit einem Pixel ruhiger.
+Dadurch sind insbesondere die Mitarbeiterspalten über die gesamte Tabelle
+eindeutig abzugrenzen.
 
 ### Planungseintrag
 
@@ -165,7 +169,8 @@ Platzgründen entfallen. Für die kompakte Uhrzeitdarstellung gelten:
 - ein Gedankenstrich ohne Leerzeichen zwischen Beginn und Ende.
 
 Beispiele sind `5:30–9`, `12–22:30` und `6–14`. Besitzt ein Eintrag keine
-Zeitspanne, zeigt die Zelle ausschließlich sein Kürzel.
+Zeitspanne, zeigt die Zelle ausschließlich sein Kürzel. Kürzel und Zeitspanne
+werden für einen eindeutigen Bildschirm- und Druckkontrast schwarz dargestellt.
 
 Eine vollständig unbelegte Mitarbeiterzelle bleibt sichtbar leer. Sie enthält
 weder Gedankenstrich noch Schraffur oder einen anderen sichtbaren Platzhalter.
@@ -222,7 +227,7 @@ wie die anschließende Linie:
 - `Freigabe / Unterschrift`.
 
 Der Bereich ist Bestandteil des gemeinsamen Dokumentlayouts und erscheint
-später unverändert in der PDF.
+unverändert in der PDF.
 
 ## Interaktion und Barrierearmut
 

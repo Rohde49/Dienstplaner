@@ -55,7 +55,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
         </p>
       </header>
 
-      <table className="w-full table-fixed border-collapse text-[9px] leading-[1.15]">
+      <table className="w-full table-fixed border-collapse text-[9px] leading-[1.15] [&_tfoot_tr:last-child>*]:border-b-2 [&_thead_tr:first-child>*]:border-t-2 [&_tr>*]:border-r-2 [&_tr>:first-child]:border-l-2">
         <caption className="sr-only">
           Gespeicherter Dienstplan für {model.periodLabel}
         </caption>
