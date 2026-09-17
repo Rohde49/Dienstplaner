@@ -151,14 +151,25 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
           className={`border-app-border border-t ${isExpanded ? 'p-4' : 'p-3'}`}
         >
           <div
-            className={`text-app-muted flex items-center gap-2 text-xs ${
-              isExpanded ? 'justify-start' : 'justify-center'
+            className={`text-app-muted flex gap-2 ${
+              isExpanded
+                ? 'items-center justify-start'
+                : 'items-center justify-center'
             }`}
           >
-            <HardDrive aria-hidden="true" size={15} />
-            <span className={isExpanded ? '' : 'hidden'}>
-              Lokale Desktop-Anwendung
+            <span className="border-app-primary-border bg-app-primary-subtle text-app-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-md border">
+              <HardDrive aria-hidden="true" size={14} />
             </span>
+            {isExpanded ? (
+              <div className="min-w-0">
+                <p className="text-xs leading-4">Lokale Desktop-Anwendung</p>
+                <p className="text-app-text-disabled mt-0.5 text-[10px] leading-3 font-normal tracking-wide italic">
+                  Made by Rohde
+                </p>
+              </div>
+            ) : (
+              <span className="sr-only">Lokale Desktop-Anwendung</span>
+            )}
           </div>
         </div>
       </aside>

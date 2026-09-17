@@ -76,7 +76,10 @@ bleiben.
 
 Die Navigationsleiste bleibt beim Scrollen langer Seiten innerhalb der
 Fensterhöhe stehen. Ihre unteren Bedienelemente und der Fußbereich bleiben
-dadurch erreichbar.
+dabei erreichbar. Der Fußbereich kennzeichnet die lokale Desktop-Anwendung und
+ergänzt in der ausgeklappten Navigation darunter zurückhaltend den Hinweis
+„Made by Rohde“. In der eingeklappten Navigation bleibt die lokale Ausführung
+über das Symbol und einen zugänglichen Namen erkennbar.
 
 ## Typografie und Dichte
 
