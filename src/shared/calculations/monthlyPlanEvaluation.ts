@@ -34,6 +34,8 @@ export interface MonthlyPlanEvaluation {
 
 export type FreeDayTargetStatus = 'below' | 'met' | 'above';
 
+export const TARGET_FREE_WEEKEND_DAY_COUNT = 2;
+
 type EvaluationInput = {
   year: number;
   month: number;

@@ -2,6 +2,7 @@ import { BarChart3, Users } from 'lucide-react';
 import { useMemo } from 'react';
 
 import {
+  TARGET_FREE_WEEKEND_DAY_COUNT,
   calculateMonthlyPlanEvaluation,
   formatDuration,
   formatTimeDifference,
@@ -32,7 +33,7 @@ type EvaluationRow = {
   label: string;
   sectionStart?: boolean;
   summary?: boolean;
-  highlight?: 'free-days' | 'difference';
+  highlight?: 'free-days' | 'free-saturdays' | 'free-sundays' | 'difference';
   format: (
     employee: EmployeeMonthlyEvaluation,
     workingDayCount: number,
@@ -55,10 +56,12 @@ const ROWS: readonly EvaluationRow[] = [
   },
   {
     label: 'Anzahl freier Samstage',
+    highlight: 'free-saturdays',
     format: (employee) => String(employee.freeSaturdayCount),
   },
   {
     label: 'Anzahl freier Sonntage',
+    highlight: 'free-sundays',
     format: (employee) => String(employee.freeSundayCount),
   },
   {
@@ -124,6 +127,39 @@ function getFreeDayClasses(actual: number, target: number): string {
   return status === 'above'
     ? 'bg-red-50 font-semibold text-red-800 group-hover:bg-red-100'
     : 'bg-green-50 font-semibold text-green-800 group-hover:bg-green-100';
+}
+
+function getRowHighlightClasses(
+  row: EvaluationRow,
+  employee: EmployeeMonthlyEvaluation,
+  evaluation: MonthlyPlanEvaluation,
+): string | null {
+  if (row.highlight === 'difference') {
+    return getDifferenceClasses(employee.workingDifferenceMinutes);
+  }
+
+  if (row.highlight === 'free-days') {
+    return getFreeDayClasses(
+      employee.freeDayCount,
+      evaluation.targetFreeDayCount,
+    );
+  }
+
+  if (row.highlight === 'free-saturdays') {
+    return getFreeDayClasses(
+      employee.freeSaturdayCount,
+      TARGET_FREE_WEEKEND_DAY_COUNT,
+    );
+  }
+
+  if (row.highlight === 'free-sundays') {
+    return getFreeDayClasses(
+      employee.freeSundayCount,
+      TARGET_FREE_WEEKEND_DAY_COUNT,
+    );
+  }
+
+  return null;
 }
 
 /** Verdichtet den aktuellen Planentwurf zu einer ausschließlich lesbaren Tabelle. */
@@ -255,6 +291,11 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                     const employeeEvaluation = evaluationsById.get(
                       employee.id,
                     )!;
+                    const highlightClasses = getRowHighlightClasses(
+                      row,
+                      employeeEvaluation,
+                      evaluation,
+                    );
 
                     return (
                       <td
@@ -262,18 +303,11 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                         className={`border-app-border px-2 py-2 text-center tabular-nums transition-colors ${
                           employeeIndex < educators.length - 1 ? 'border-r' : ''
                         } ${showBottomBorder ? 'border-b' : ''} ${sectionClasses} ${
-                          row.highlight === 'difference'
-                            ? getDifferenceClasses(
-                                employeeEvaluation.workingDifferenceMinutes,
-                              )
-                            : row.highlight === 'free-days'
-                              ? getFreeDayClasses(
-                                  employeeEvaluation.freeDayCount,
-                                  evaluation.targetFreeDayCount,
-                                )
-                              : row.summary
-                                ? 'bg-blue-50/40 font-medium group-hover:bg-blue-50'
-                                : 'bg-app-surface group-hover:bg-app-surface-hover'
+                          highlightClasses
+                            ? highlightClasses
+                            : row.summary
+                              ? 'bg-blue-50/40 font-medium group-hover:bg-blue-50'
+                              : 'bg-app-surface group-hover:bg-app-surface-hover'
                         }`}
                       >
                         {row.format(

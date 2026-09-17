@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  TARGET_FREE_WEEKEND_DAY_COUNT,
   calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,
   getFreeDayTargetStatus,
@@ -108,6 +109,18 @@ describe('Monatsauswertung', () => {
     expect(getFreeDayTargetStatus(8, 9)).toBe('below');
     expect(getFreeDayTargetStatus(9, 9)).toBe('met');
     expect(getFreeDayTargetStatus(10, 9)).toBe('above');
+  });
+
+  it('ordnet freie Wochenendtage relativ zum festen Zielwert zwei ein', () => {
+    expect(getFreeDayTargetStatus(1, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
+      'below',
+    );
+    expect(getFreeDayTargetStatus(2, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
+      'met',
+    );
+    expect(getFreeDayTargetStatus(3, TARGET_FREE_WEEKEND_DAY_COUNT)).toBe(
+      'above',
+    );
   });
 
   it('wertet exakte Dienst- und Frei-Kürzel tagesbezogen aus', () => {

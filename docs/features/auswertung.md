@@ -98,6 +98,9 @@ bereits dauerhaft gespeichert wurde.
 - Die Anzahl freier Tage wird mit dem monatsweiten Ziel aus Kalendertagen
   abzüglich Arbeitstagen verglichen. Ein noch nicht erreichtes Ziel erscheint
   gelb, ein exakt erreichtes Ziel grün und eine Überschreitung rot.
+- Die Anzahl freier Samstage und die Anzahl freier Sonntage werden jeweils mit
+  dem festen Zielwert `2` verglichen und nach derselben Ampellogik dargestellt.
+  Der feste Zielwert erhält keine zusätzliche Anzeige in der Werkzeugleiste.
 - Ein exakter Ausgleich wird ohne Vorzeichen angezeigt.
 - Die im Monatsplan gespeicherte Mitarbeiterfarbe kennzeichnet den jeweiligen
   Tabellenkopf wie in der Planungstabelle.

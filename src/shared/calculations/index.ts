@@ -21,6 +21,7 @@ export {
 export type { CalendarDay, IsoWeekday } from './calendar';
 
 export {
+  TARGET_FREE_WEEKEND_DAY_COUNT,
   calculateEmptyMonthlyPlanEvaluation,
   calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,

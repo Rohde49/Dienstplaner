@@ -72,6 +72,14 @@ Freie Samstage und freie Sonntage sind Teilmengen der freien Tage:
 - Ein zusätzlicher Feiertagsstatus verändert die Einordnung nicht.
 - Eine leere Planungszelle erhöht auch am Wochenende keinen Zähler.
 
+Für freie Samstage und freie Sonntage gilt jeweils unabhängig vom Monat und
+vom Mitarbeiter der feste Zielwert `2`. Beide Kennzahlen erhalten getrennt
+voneinander einen Status:
+
+- Unterhalb von `2` ist der Status gelb.
+- Bei exakt `2` ist der Status grün.
+- Oberhalb von `2` ist der Status rot.
+
 ## Rufbereitschaft
 
 Eine Rufbereitschaft darf ausschließlich einem Mitarbeiter zugeordnet werden,
