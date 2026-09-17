@@ -50,8 +50,9 @@ ist. Ausgeklappt ergänzt eine flache, durch Linien
 getrennte Kennzahlenzeile die Angaben zu Mitarbeitern, Kalender-, Arbeits- und
 freien Tagen. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
 Kalendertagen abzüglich Arbeitstagen. Der Ansichtsumschalter „Plan / Kompakt“
-steht daneben. Nur in der
-aktiven Kompaktansicht erscheint rechts davon die Exportaktion. Die
+steht daneben und hebt die aktive Ansicht mit der zurückhaltenden Primärfläche
+hervor. Nur in der aktiven Kompaktansicht erscheint rechts davon die
+Exportaktion. Die
 Werkzeugleiste startet eingeklappt und besitzt mittig am unteren
 Rand eine schmale, ohne Schatten direkt an die Kartenkante angeschlossene
 Pfeil-Lasche zum Ein- und Ausklappen. Sie erhält einen

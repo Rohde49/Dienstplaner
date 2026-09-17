@@ -632,10 +632,10 @@ export function PlannerPage({
                       type="button"
                       aria-pressed={!isCompactView}
                       disabled={isPdfExporting}
-                      className={`rounded-sm px-3 py-1 font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
+                      className={`rounded-sm px-3 py-1 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                         isCompactView
                           ? 'text-app-muted hover:bg-app-surface-hover'
-                          : 'bg-app-surface text-app-text shadow-sm'
+                          : 'bg-app-primary-selected text-app-primary-foreground shadow-sm'
                       }`}
                       onClick={() =>
                         setState((currentState) =>
@@ -660,9 +660,9 @@ export function PlannerPage({
                                 ? 'Speichere den wiederhergestellten Plan zuerst.'
                                 : 'Der Dienstplan wird gerade gespeichert.'
                       }
-                      className={`rounded-sm px-3 py-1 font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
+                      className={`rounded-sm px-3 py-1 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                         isCompactView
-                          ? 'bg-app-surface text-app-text shadow-sm'
+                          ? 'bg-app-primary-selected text-app-primary-foreground shadow-sm'
                           : canUseCompactView
                             ? 'text-app-muted hover:bg-app-surface-hover'
                             : 'text-app-text-disabled cursor-not-allowed'
