@@ -4,7 +4,16 @@ import {
   A4_DOCUMENT_HEIGHT,
   A4_DOCUMENT_WIDTH,
   calculateCompactPlanLayoutMetrics,
+  getCompactPlanFitStatus,
 } from '../../../src/renderer/features/planner/compactPlanLayout';
+
+describe('Kompaktansichts-Passungsstatus', () => {
+  it('unterscheidet laufende Messung, passende Inhalte und Überlauf', () => {
+    expect(getCompactPlanFitStatus(false, false)).toBe('measuring');
+    expect(getCompactPlanFitStatus(true, false)).toBe('fits');
+    expect(getCompactPlanFitStatus(true, true)).toBe('overflow');
+  });
+});
 
 describe('Kompaktansichtslayout', () => {
   it('vergrößert die A4-Seite auf großen Flächen nicht über die Originalgröße', () => {

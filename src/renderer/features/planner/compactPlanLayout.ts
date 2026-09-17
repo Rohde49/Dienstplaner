@@ -2,11 +2,25 @@ export const A4_DOCUMENT_WIDTH = 794;
 export const A4_DOCUMENT_HEIGHT = 1123;
 export const MIN_READABLE_COMPACT_PLAN_SCALE = 0.84;
 
+export type CompactPlanFitStatus = 'measuring' | 'fits' | 'overflow';
+
 export type CompactPlanLayoutMetrics = {
   scale: number;
   renderedHeight: number;
   doesOverflow: boolean;
 };
+
+/** Übersetzt die laufende DOM-Messung in einen stabilen Exportstatus. */
+export function getCompactPlanFitStatus(
+  hasCurrentMeasurement: boolean,
+  doesOverflow: boolean,
+): CompactPlanFitStatus {
+  if (!hasCurrentMeasurement) {
+    return 'measuring';
+  }
+
+  return doesOverflow ? 'overflow' : 'fits';
+}
 
 /** Bewertet Bildschirmmaßstab und tatsächlichen Inhalt gegen die bestätigte A4-Seite. */
 export function calculateCompactPlanLayoutMetrics(

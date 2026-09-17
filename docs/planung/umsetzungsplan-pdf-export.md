@@ -3,10 +3,10 @@
 ## Status
 
 Die fachliche, gestalterische und technische
-[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Arbeitspaket 1 ist
-umgesetzt und technisch geprüft. Die neue Preload-API bleibt bis zur
-PDF-Erzeugung in Arbeitspaket 2 ohne registrierten Main-Process-Handler und ist
-weiterhin nicht über die Oberfläche aufrufbar.
+[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Die Arbeitspakete 1
+bis 3 sind umgesetzt und technisch geprüft. Der vollständige Exportablauf ist
+in der Kompaktansicht verfügbar. Es folgen die Erzeugung und gemeinsame
+Sichtprüfung der tatsächlichen PDF-Dateien in Arbeitspaket 4.
 
 ## Ziel und Abgrenzung
 
@@ -41,7 +41,7 @@ Verbindlich bleiben:
 - [x] Die Planungswerkzeugleiste enthält den noch deaktivierten
       Export-Platzhalter.
 - [x] Eine PDF-spezifische IPC-/Preload-Schnittstelle ist vorhanden.
-- [ ] Druckdarstellung, nativer Speicherdialog und Dateierzeugung sind
+- [x] Druckdarstellung, nativer Speicherdialog und Dateierzeugung sind
       umgesetzt.
 
 ## Arbeitspaket 1: Exportvertrag und Dateiauswahl
@@ -69,18 +69,18 @@ keinen Zielpfad oder allgemeinen Dateisystemzugriff.
 **Ziel:** Das vorhandene Dokument wird unverändert als exakte, isolierte
 Druckseite bereitgestellt.
 
-- [ ] Eine nur im Druck sichtbare Instanz von `CompactPlanDocument` aus dem
+- [x] Eine nur im Druck sichtbare Instanz von `CompactPlanDocument` aus dem
       gespeicherten Ausgangsstand rendern.
-- [ ] App-Oberfläche, Arbeitsfläche, Schatten, Warnungen und Bedienelemente für
+- [x] App-Oberfläche, Arbeitsfläche, Schatten, Warnungen und Bedienelemente für
       die Druckausgabe vollständig ausblenden.
-- [ ] A4-Hochformat, randlose Dokumentfläche und Hintergrundfarben über
+- [x] A4-Hochformat, randlose Dokumentfläche und Hintergrundfarben über
       eindeutige Druckregeln festlegen.
-- [ ] Die Passungsmessung als Status `wird geprüft`, `passt` oder `Überlauf`
+- [x] Die Passungsmessung als Status `wird geprüft`, `passt` oder `Überlauf`
       an die Planungsseite melden, ohne eine zweite Berechnungsregel
       einzuführen.
-- [ ] `printToPDF` ausschließlich mit den bestätigten A4-Optionen aufrufen und
+- [x] `printToPDF` ausschließlich mit den bestätigten A4-Optionen aufrufen und
       die erzeugten Bytes erst danach an den gewählten Zielpfad schreiben.
-- [ ] Druckoptionen, Dateischreiben und technische Fehler automatisiert
+- [x] Druckoptionen, Dateischreiben und technische Fehler automatisiert
       prüfen.
 
 **Abnahme:** Die technische Ausgabe enthält ausschließlich das gemeinsame
@@ -91,21 +91,21 @@ A4-Dokument und erzeugt für passende Inhalte genau eine PDF-Seite.
 **Ziel:** Der vollständig abgesicherte Export wird mit den bestätigten
 Zuständen und Texten bedienbar.
 
-- [ ] Den bisherigen Platzhalter in der Planansicht entfernen und die
+- [x] Den bisherigen Platzhalter in der Planansicht entfernen und die
       Exportaktion ausschließlich bei aktiver Kompaktansicht anzeigen.
-- [ ] Die Aktion bis zum Abschluss der Passungsmessung sowie bei Überlauf und
+- [x] Die Aktion bis zum Abschluss der Passungsmessung sowie bei Überlauf und
       laufendem Export deaktivieren und verständlich beschriften.
-- [ ] Bei ungespeicherten Änderungen den bestätigten Dialog
+- [x] Bei ungespeicherten Änderungen den bestätigten Dialog
       `Gespeicherten Stand exportieren?` anzeigen.
-- [ ] Ohne ungespeicherte Änderungen unmittelbar den nativen Speicherdialog
+- [x] Ohne ungespeicherte Änderungen unmittelbar den nativen Speicherdialog
       öffnen.
-- [ ] Während der Erzeugung `PDF wird erstellt …` anzeigen und Ansichts- sowie
+- [x] Während der Erzeugung `PDF wird erstellt …` anzeigen und Ansichts- sowie
       planwechselnde Aktionen sperren.
-- [ ] Abbruch still behandeln, Erfolg kurz bestätigen und Fehler dauerhaft
+- [x] Abbruch still behandeln, Erfolg kurz bestätigen und Fehler dauerhaft
       oberhalb der Kompaktansicht mit erneuter Exportmöglichkeit anzeigen.
-- [ ] Sicherstellen, dass Export, Abbruch und Fehler weder Baseline noch
+- [x] Sicherstellen, dass Export, Abbruch und Fehler weder Baseline noch
       Entwurf verändern.
-- [ ] Zustands- und Interaktionslogik gezielt automatisiert prüfen.
+- [x] Zustands- und Interaktionslogik gezielt automatisiert prüfen.
 
 **Abnahme:** Der Export ist nur in der Kompaktansicht verfügbar und folgt in
 allen bestätigten Plan-, Entwurfs-, Passungs- und Fehlerzuständen dem

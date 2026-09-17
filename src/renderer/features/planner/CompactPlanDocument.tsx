@@ -37,7 +37,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
   return (
     <article
       aria-label={`Dienstplan ${model.periodLabel}`}
-      className="bg-white px-11 py-5 text-slate-950"
+      className="compact-plan-document bg-white px-11 py-5 text-slate-950"
       style={{
         width: A4_DOCUMENT_WIDTH,
         minHeight: A4_DOCUMENT_HEIGHT,

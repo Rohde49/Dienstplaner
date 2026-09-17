@@ -88,6 +88,43 @@
   );
 }
 
+.pdf-export-root {
+  display: none;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    min-width: 0;
+    min-height: 297mm;
+    margin: 0;
+    background: #ffffff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  body > :not(.pdf-export-root) {
+    display: none !important;
+  }
+
+  body > .pdf-export-root {
+    display: block !important;
+    width: 210mm;
+    min-height: 297mm;
+  }
+
+  .pdf-export-root .compact-plan-document {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { registerEntryTypeIpcHandlers } from './main/ipc/registerEntryTypeIpcHandlers';
 import { registerEmployeeIpcHandlers } from './main/ipc/registerEmployeeIpcHandlers';
 import { registerMonthlyPlanIpcHandlers } from './main/ipc/registerMonthlyPlanIpcHandlers';
+import { registerPdfExportIpcHandlers } from './main/ipc/registerPdfExportIpcHandlers';
 import { APP_IPC_CHANNELS } from './shared/ipc';
 
 if (started) {
@@ -68,6 +69,7 @@ app.whenReady().then(() => {
   registerEmployeeIpcHandlers();
   registerEntryTypeIpcHandlers();
   registerMonthlyPlanIpcHandlers();
+  registerPdfExportIpcHandlers();
   createWindow();
 });
 

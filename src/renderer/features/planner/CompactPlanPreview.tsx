@@ -3,34 +3,63 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MonthlyPlan } from '../../../shared/schemas';
 import { Alert } from '../../components/ui';
 import { CompactPlanDocument } from './CompactPlanDocument';
+import { CompactPlanPrintDocument } from './CompactPlanPrintDocument';
 import { createCompactPlanModel } from './compactPlanModel';
 import {
   A4_DOCUMENT_HEIGHT,
   A4_DOCUMENT_WIDTH,
   calculateCompactPlanLayoutMetrics,
+  getCompactPlanFitStatus,
+  type CompactPlanFitStatus,
 } from './compactPlanLayout';
 
 type CompactPlanPreviewProps = {
   plan: MonthlyPlan;
+  onFitStatusChange?: (status: CompactPlanFitStatus) => void;
 };
 
 /** Skaliert das feste A4-Dokument ausschließlich für die Bildschirmdarstellung. */
-export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
+export function CompactPlanPreview({
+  plan,
+  onFitStatusChange,
+}: CompactPlanPreviewProps) {
   const model = useMemo(() => createCompactPlanModel(plan), [plan]);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const documentRef = useRef<HTMLDivElement>(null);
   const [availableWidth, setAvailableWidth] = useState(A4_DOCUMENT_WIDTH);
-  const [contentSize, setContentSize] = useState({
+  const [measurement, setMeasurement] = useState<{
+    model: typeof model | null;
+    width: number;
+    height: number;
+    violatesContentLimits: boolean;
+  }>({
+    model: null,
     width: A4_DOCUMENT_WIDTH,
     height: A4_DOCUMENT_HEIGHT,
     violatesContentLimits: false,
   });
+  const hasCurrentMeasurement = measurement.model === model;
+  const contentSize = hasCurrentMeasurement
+    ? measurement
+    : {
+        width: A4_DOCUMENT_WIDTH,
+        height: A4_DOCUMENT_HEIGHT,
+        violatesContentLimits: false,
+      };
   const layout = calculateCompactPlanLayoutMetrics(
     availableWidth,
     contentSize.width,
     contentSize.height,
     contentSize.violatesContentLimits,
   );
+  const fitStatus = getCompactPlanFitStatus(
+    hasCurrentMeasurement,
+    layout.doesOverflow,
+  );
+
+  useLayoutEffect(() => {
+    onFitStatusChange?.(fitStatus);
+  }, [fitStatus, onFitStatusChange]);
 
   useLayoutEffect(() => {
     const workspace = workspaceRef.current;
@@ -44,7 +73,8 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
       const width = Math.max(1, workspace.clientWidth - 48);
 
       setAvailableWidth(width);
-      setContentSize({
+      setMeasurement({
+        model,
         width: documentElement.scrollWidth,
         height: documentElement.scrollHeight,
         violatesContentLimits: Array.from(
@@ -73,39 +103,43 @@ export function CompactPlanPreview({ plan }: CompactPlanPreviewProps) {
   }, [model]);
 
   return (
-    <div className="space-y-3">
-      {layout.doesOverflow ? (
-        <Alert title="A4-Seite überschritten" variant="warning">
-          Der Dienstplan passt mit den aktuellen Inhalten nicht lesbar auf eine
-          A4-Seite.
-        </Alert>
-      ) : null}
+    <>
+      <CompactPlanPrintDocument model={model} />
 
-      <div
-        ref={workspaceRef}
-        className="border-app-border min-h-96 overflow-auto rounded-lg border bg-slate-200 p-6"
-      >
+      <div className="space-y-3">
+        {fitStatus === 'overflow' ? (
+          <Alert title="A4-Seite überschritten" variant="warning">
+            Der Dienstplan passt mit den aktuellen Inhalten nicht lesbar auf
+            eine A4-Seite.
+          </Alert>
+        ) : null}
+
         <div
-          className="relative mx-auto"
-          style={{
-            width: A4_DOCUMENT_WIDTH * layout.scale,
-            height: layout.renderedHeight,
-          }}
+          ref={workspaceRef}
+          className="border-app-border min-h-96 overflow-auto rounded-lg border bg-slate-200 p-6"
         >
           <div
-            ref={documentRef}
-            className="absolute top-0 left-0 shadow-lg ring-1 ring-slate-300"
+            className="relative mx-auto"
             style={{
-              width: A4_DOCUMENT_WIDTH,
-              minHeight: A4_DOCUMENT_HEIGHT,
-              transform: `scale(${layout.scale})`,
-              transformOrigin: 'top left',
+              width: A4_DOCUMENT_WIDTH * layout.scale,
+              height: layout.renderedHeight,
             }}
           >
-            <CompactPlanDocument model={model} />
+            <div
+              ref={documentRef}
+              className="absolute top-0 left-0 shadow-lg ring-1 ring-slate-300"
+              style={{
+                width: A4_DOCUMENT_WIDTH,
+                minHeight: A4_DOCUMENT_HEIGHT,
+                transform: `scale(${layout.scale})`,
+                transformOrigin: 'top left',
+              }}
+            >
+              <CompactPlanDocument model={model} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

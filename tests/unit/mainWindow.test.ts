@@ -89,6 +89,9 @@ vi.mock('../../src/main/ipc/registerEntryTypeIpcHandlers', () => ({
 vi.mock('../../src/main/ipc/registerMonthlyPlanIpcHandlers', () => ({
   registerMonthlyPlanIpcHandlers: vi.fn(),
 }));
+vi.mock('../../src/main/ipc/registerPdfExportIpcHandlers', () => ({
+  registerPdfExportIpcHandlers: vi.fn(),
+}));
 
 describe('Electron-Hauptfenster', () => {
   beforeEach(() => {

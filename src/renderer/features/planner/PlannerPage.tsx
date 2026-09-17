@@ -55,6 +55,16 @@ import { setDraftPlanTitle } from './plannerDraft';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { EvaluationDialog } from './EvaluationDialog';
 import { CompactPlanPreview } from './CompactPlanPreview';
+import type { CompactPlanFitStatus } from './compactPlanLayout';
+import {
+  getPdfExportActionTitle,
+  getPdfExportErrorMessage,
+  isPdfExportActionDisabled,
+  isPdfExportActionVisible,
+  needsSavedPlanExportConfirmation,
+  type PlannerPdfExportStatus,
+} from './plannerPdfExport';
+import { SavedPlanExportDialog } from './SavedPlanExportDialog';
 
 export type PlannerProtectionHandler = (action: () => void) => void;
 
@@ -79,7 +89,17 @@ export function PlannerPage({
   );
   const [protectionDialogOpen, setProtectionDialogOpen] = useState(false);
   const [toolbarExpanded, setToolbarExpanded] = useState(false);
+  const [pdfFitStatus, setPdfFitStatus] =
+    useState<CompactPlanFitStatus>('measuring');
+  const [pdfExportStatus, setPdfExportStatus] =
+    useState<PlannerPdfExportStatus>('idle');
+  const [pdfExportErrorMessage, setPdfExportErrorMessage] = useState<
+    string | null
+  >(null);
+  const [savedPlanExportDialogOpen, setSavedPlanExportDialogOpen] =
+    useState(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
+  const isPdfExporting = pdfExportStatus === 'exporting';
   const referenceYear = useMemo(() => new Date().getFullYear(), []);
   const yearOptions = useMemo(
     () => getPlannerYearOptions(referenceYear, state.period.year),
@@ -105,7 +125,7 @@ export function PlannerPage({
 
   const requestProtectedAction = useCallback<PlannerProtectionHandler>(
     (action) => {
-      if (state.save.status === 'saving') {
+      if (state.save.status === 'saving' || isPdfExporting) {
         return;
       }
 
@@ -117,7 +137,7 @@ export function PlannerPage({
 
       action();
     },
-    [state],
+    [isPdfExporting, state],
   );
 
   useEffect(() => {
@@ -144,15 +164,30 @@ export function PlannerPage({
     : `${PLANNER_MONTHS[state.period.month - 1]} ${state.period.year}`;
   const hasUnsavedChanges = hasUnsavedPlannerChanges(state);
   const isSaving = state.save.status === 'saving';
+  const isPlannerBusy = isSaving || isPdfExporting;
   const canUseCompactView = canUseCompactPlannerView(state);
   const currentPlanId =
     state.document.kind === 'plan' ? state.document.baseline.id : null;
   const canDeleteCurrentPlan =
-    state.document.kind !== 'plan' || (!hasUnsavedChanges && !isSaving);
+    state.document.kind !== 'plan' || (!hasUnsavedChanges && !isPlannerBusy);
   const canCreatePlan =
     state.load.status === 'ready' &&
     state.team.some((employee) => employee.active) &&
-    !isSaving;
+    !isPlannerBusy;
+
+  useEffect(() => {
+    if (!isCompactView) {
+      setPdfFitStatus('measuring');
+      setPdfExportErrorMessage(null);
+      setSavedPlanExportDialogOpen(false);
+    }
+  }, [isCompactView]);
+
+  useEffect(() => {
+    setPdfFitStatus('measuring');
+    setPdfExportErrorMessage(null);
+    setSavedPlanExportDialogOpen(false);
+  }, [savedPlan?.id, savedPlan?.updatedAt]);
 
   const savePlan = useCallback(async (draft: MonthlyPlan): Promise<boolean> => {
     setState(beginPlannerSave);
@@ -174,6 +209,49 @@ export function PlannerPage({
       return false;
     }
   }, []);
+
+  const exportSavedPlan = useCallback(async (): Promise<void> => {
+    if (
+      !savedPlan ||
+      pdfFitStatus !== 'fits' ||
+      pdfExportStatus === 'exporting'
+    ) {
+      return;
+    }
+
+    setPdfExportErrorMessage(null);
+    setPdfExportStatus('exporting');
+
+    try {
+      const result = await window.dienstplaner.pdfExport.export({
+        year: savedPlan.year,
+        month: savedPlan.month,
+        title: savedPlan.title,
+      });
+
+      if (result.status === 'saved') {
+        toast.success('PDF wurde gespeichert.');
+      }
+    } catch (error) {
+      setPdfExportErrorMessage(getPdfExportErrorMessage(error));
+    } finally {
+      setPdfExportStatus('idle');
+    }
+  }, [pdfExportStatus, pdfFitStatus, savedPlan]);
+
+  function requestPdfExport(): void {
+    if (needsSavedPlanExportConfirmation(hasUnsavedChanges)) {
+      setSavedPlanExportDialogOpen(true);
+      return;
+    }
+
+    void exportSavedPlan();
+  }
+
+  function confirmSavedPlanExport(): void {
+    setSavedPlanExportDialogOpen(false);
+    void exportSavedPlan();
+  }
 
   function changeMonth(monthOffset: -1 | 1): void {
     const period = getAdjacentPlannerPeriod(
@@ -240,7 +318,7 @@ export function PlannerPage({
               <IconButton
                 label="Vorheriger Monat"
                 variant="secondary"
-                disabled={!previousPeriod || isSaving}
+                disabled={!previousPeriod || isPlannerBusy}
                 onClick={() => changeMonth(-1)}
               >
                 <ChevronLeft aria-hidden="true" size={17} />
@@ -258,7 +336,7 @@ export function PlannerPage({
                     id="planner-month"
                     className="appearance-none pr-9"
                     value={state.period.month}
-                    disabled={isSaving}
+                    disabled={isPlannerBusy}
                     onChange={(event) => {
                       const month = Number(event.target.value);
                       requestProtectedAction(() =>
@@ -297,7 +375,7 @@ export function PlannerPage({
                     id="planner-year"
                     className="appearance-none pr-9 tabular-nums"
                     value={state.period.year}
-                    disabled={isSaving}
+                    disabled={isPlannerBusy}
                     onChange={(event) => {
                       const year = Number(event.target.value);
                       requestProtectedAction(() =>
@@ -327,7 +405,7 @@ export function PlannerPage({
               <IconButton
                 label="Nächster Monat"
                 variant="secondary"
-                disabled={!nextPeriod || isSaving}
+                disabled={!nextPeriod || isPlannerBusy}
                 onClick={() => changeMonth(1)}
               >
                 <ChevronRight aria-hidden="true" size={17} />
@@ -339,7 +417,7 @@ export function PlannerPage({
                 currentPlanId={currentPlanId}
                 canDeleteCurrentPlan={canDeleteCurrentPlan}
                 trigger={
-                  <Button variant="secondary" disabled={isSaving}>
+                  <Button variant="secondary" disabled={isPlannerBusy}>
                     <FolderOpen aria-hidden="true" size={17} />
                     Laden
                   </Button>
@@ -370,13 +448,15 @@ export function PlannerPage({
                     title={
                       canCreatePlan
                         ? undefined
-                        : isSaving
-                          ? 'Der Dienstplan wird gerade gespeichert.'
-                          : state.load.status === 'loading'
-                            ? 'Die Mitarbeiterdaten werden noch geladen.'
-                            : state.load.status === 'error'
-                              ? 'Die Mitarbeiterdaten konnten nicht geladen werden.'
-                              : 'Für einen neuen Dienstplan ist mindestens ein aktiver Mitarbeiter erforderlich.'
+                        : isPdfExporting
+                          ? 'Die PDF wird gerade erstellt.'
+                          : isSaving
+                            ? 'Der Dienstplan wird gerade gespeichert.'
+                            : state.load.status === 'loading'
+                              ? 'Die Mitarbeiterdaten werden noch geladen.'
+                              : state.load.status === 'error'
+                                ? 'Die Mitarbeiterdaten konnten nicht geladen werden.'
+                                : 'Für einen neuen Dienstplan ist mindestens ein aktiver Mitarbeiter erforderlich.'
                     }
                   >
                     <CalendarPlus aria-hidden="true" size={17} />
@@ -437,7 +517,7 @@ export function PlannerPage({
                 {activePlan ? (
                   <EditPlanTitleDialog
                     plan={activePlan}
-                    disabled={isSaving || isCompactView}
+                    disabled={isPlannerBusy || isCompactView}
                     onApply={(title) =>
                       setState((currentState) =>
                         replacePlannerDraft(
@@ -454,7 +534,9 @@ export function PlannerPage({
                 {activePlan ? (
                   <Button
                     variant={hasUnsavedChanges ? 'primary' : 'secondary'}
-                    disabled={!hasUnsavedChanges || isSaving || isCompactView}
+                    disabled={
+                      !hasUnsavedChanges || isPlannerBusy || isCompactView
+                    }
                     onClick={() => void savePlan(activePlan)}
                   >
                     {isSaving ? (
@@ -476,7 +558,7 @@ export function PlannerPage({
                 ) : null}
                 <EvaluationDialog
                   plan={activePlan}
-                  disabled={isSaving || isCompactView}
+                  disabled={isPlannerBusy || isCompactView}
                   status={
                     state.document.kind === 'plan' &&
                     state.document.recoveredFromBackup
@@ -534,7 +616,8 @@ export function PlannerPage({
                     <button
                       type="button"
                       aria-pressed={!isCompactView}
-                      className={`rounded-sm px-3 py-1 font-medium ${
+                      disabled={isPdfExporting}
+                      className={`rounded-sm px-3 py-1 font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
                         isCompactView
                           ? 'text-app-muted hover:bg-app-surface-hover'
                           : 'bg-app-surface text-app-text shadow-sm'
@@ -550,17 +633,19 @@ export function PlannerPage({
                     <button
                       type="button"
                       aria-pressed={isCompactView}
-                      disabled={!canUseCompactView}
+                      disabled={!canUseCompactView || isPdfExporting}
                       title={
-                        canUseCompactView
-                          ? undefined
-                          : state.document.kind === 'preview'
-                            ? 'Öffne zuerst einen gespeicherten Monatsplan.'
-                            : state.document.recoveredFromBackup
-                              ? 'Speichere den wiederhergestellten Plan zuerst.'
-                              : 'Der Dienstplan wird gerade gespeichert.'
+                        isPdfExporting
+                          ? 'Die PDF wird gerade erstellt.'
+                          : canUseCompactView
+                            ? undefined
+                            : state.document.kind === 'preview'
+                              ? 'Öffne zuerst einen gespeicherten Monatsplan.'
+                              : state.document.recoveredFromBackup
+                                ? 'Speichere den wiederhergestellten Plan zuerst.'
+                                : 'Der Dienstplan wird gerade gespeichert.'
                       }
-                      className={`rounded-sm px-3 py-1 font-medium ${
+                      className={`rounded-sm px-3 py-1 font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
                         isCompactView
                           ? 'bg-app-surface text-app-text shadow-sm'
                           : canUseCompactView
@@ -576,14 +661,40 @@ export function PlannerPage({
                       Kompakt
                     </button>
                   </div>
-                  <Button
-                    variant="secondary"
-                    disabled
-                    title="Export noch nicht verfügbar"
-                  >
-                    <Download aria-hidden="true" size={17} />
-                    Export
-                  </Button>
+                  {isPdfExportActionVisible(isCompactView) ? (
+                    <Button
+                      variant="secondary"
+                      aria-label={getPdfExportActionTitle(
+                        pdfFitStatus,
+                        pdfExportStatus,
+                      )}
+                      disabled={isPdfExportActionDisabled(
+                        pdfFitStatus,
+                        pdfExportStatus,
+                      )}
+                      title={getPdfExportActionTitle(
+                        pdfFitStatus,
+                        pdfExportStatus,
+                      )}
+                      onClick={requestPdfExport}
+                    >
+                      {isPdfExporting ? (
+                        <>
+                          <Spinner
+                            size="sm"
+                            label="PDF wird erstellt"
+                            className="text-app-text"
+                          />
+                          PDF wird erstellt …
+                        </>
+                      ) : (
+                        <>
+                          <Download aria-hidden="true" size={17} />
+                          Export
+                        </>
+                      )}
+                    </Button>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -682,13 +793,24 @@ export function PlannerPage({
 
         {isCompactView && savedPlan ? (
           <div className="space-y-3">
+            {pdfExportErrorMessage ? (
+              <Alert
+                title="PDF konnte nicht gespeichert werden."
+                variant="danger"
+              >
+                {pdfExportErrorMessage}
+              </Alert>
+            ) : null}
             {hasUnsavedChanges ? (
               <Alert title="Gespeicherter Stand" variant="info">
                 Diese Ansicht zeigt den zuletzt gespeicherten Stand.
                 Ungespeicherte Änderungen sind nicht enthalten.
               </Alert>
             ) : null}
-            <CompactPlanPreview plan={savedPlan} />
+            <CompactPlanPreview
+              plan={savedPlan}
+              onFitStatusChange={setPdfFitStatus}
+            />
           </div>
         ) : activePlan ||
           (state.load.status === 'ready' &&
@@ -697,7 +819,7 @@ export function PlannerPage({
           <PlanningTable
             document={state.document}
             onDraftChange={
-              isSaving
+              isPlannerBusy
                 ? undefined
                 : (draft) =>
                     setState((currentState) =>
@@ -715,6 +837,12 @@ export function PlannerPage({
         onSaveAndContinue={() => void saveAndContinue()}
         onDiscard={discardAndContinue}
         onCancel={cancelPendingAction}
+      />
+
+      <SavedPlanExportDialog
+        open={savedPlanExportDialogOpen}
+        onOpenChange={setSavedPlanExportDialogOpen}
+        onConfirm={confirmSavedPlanExport}
       />
     </>
   );
