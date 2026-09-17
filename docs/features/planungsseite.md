@@ -50,8 +50,9 @@ ist. Ausgeklappt ergänzt eine flache, durch Linien getrennte Kennzahlenzeile di
 zusammengefasste Anzahl SN/F der Erzieher sowie die Kalender-, Arbeits- und
 freien Tage. „Freie Tage“ bezeichnet dabei den monatsweiten Zielwert aus
 Kalendertagen abzüglich Arbeitstagen. „Anzahl SN/F“ wird mit den Kalendertagen
-als Zielwert verglichen und gelb, grün oder rot dargestellt. Der
-Ansichtsumschalter „Plan / Kompakt“
+als Zielwert verglichen. Der Zahlenwert liegt auf einer kompakten Statusfläche
+mit abgestimmter gelber, grüner oder roter Schrift-, Hintergrund- und
+Konturfarbe. Der Ansichtsumschalter „Plan / Kompakt“
 steht daneben und hebt die aktive Ansicht mit der zurückhaltenden Primärfläche
 hervor. Nur in der aktiven Kompaktansicht erscheint rechts davon die
 Exportaktion. Die

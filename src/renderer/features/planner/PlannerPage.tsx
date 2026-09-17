@@ -85,16 +85,16 @@ function getErrorMessage(error: unknown): string {
     : 'Die Vorschau konnte nicht geladen werden.';
 }
 
-function getTargetCountTextClass(actual: number, target: number): string {
+function getTargetCountBadgeClass(actual: number, target: number): string {
   const status = getTargetCountStatus(actual, target);
 
   if (status === 'below') {
-    return 'text-app-signal-warning';
+    return 'border-app-signal-warning-border bg-app-signal-warning-subtle text-app-signal-warning';
   }
 
   return status === 'above'
-    ? 'text-app-signal-danger'
-    : 'text-app-signal-success';
+    ? 'border-app-signal-danger-border bg-app-signal-danger-subtle text-app-signal-danger'
+    : 'border-app-signal-success-border bg-app-signal-success-subtle text-app-signal-success';
 }
 
 /** Zeigt die Monatsauswahl und den noch nicht gespeicherten Vorschauzustand. */
@@ -623,13 +623,15 @@ export function PlannerPage({
                 <dl className="divide-app-border grid max-w-2xl min-w-96 flex-1 grid-cols-4 divide-x">
                   <div className="pr-4">
                     <dt className="text-app-muted text-xs">Anzahl SN/F</dt>
-                    <dd
-                      className={`mt-0.5 text-lg font-semibold tabular-nums ${getTargetCountTextClass(
-                        totalSnfServiceCount,
-                        calendarDayCount,
-                      )}`}
-                    >
-                      {totalSnfServiceCount}
+                    <dd className="mt-0.5">
+                      <span
+                        className={`inline-flex min-w-10 items-center justify-center rounded-md border px-2 py-0.5 text-lg leading-6 font-semibold tabular-nums ${getTargetCountBadgeClass(
+                          totalSnfServiceCount,
+                          calendarDayCount,
+                        )}`}
+                      >
+                        {totalSnfServiceCount}
+                      </span>
                     </dd>
                   </div>
                   <div className="px-4">
