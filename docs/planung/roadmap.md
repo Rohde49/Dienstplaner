@@ -23,9 +23,10 @@ abgeschlossen wurde.
 ### PDF-Export und Ausgabe
 
 Das in der Kompaktansicht geprüfte Dokumentlayout wird als
-[PDF](../features/pdf-export.md) exportierbar gemacht. Dateiname, Speicherort,
-Überschreiben und eine mögliche direkte Druckfunktion werden vor der Umsetzung
-fachlich festgelegt.
+[PDF](../features/pdf-export.md) exportierbar gemacht. Fachlichkeit,
+Bedienablauf, Dateiauswahl, technische Grundrichtung und Prüfung sind
+abgestimmt. Die Umsetzung folgt dem
+[Umsetzungsplan PDF-Export](umsetzungsplan-pdf-export.md).
 
 ## Anschließende Arbeitspakete
 

@@ -74,22 +74,51 @@ Arbeitspaket festgelegt.
 
 ## Bedien- und Fehlerverhalten
 
-- Eine funktionsfähige Exportaktion wird erst angeboten, wenn Dateierzeugung
-  und Speicherablauf vollständig umgesetzt sind. Bis dahin bleibt `Export` in
-  der Planungswerkzeugleiste als nicht verfügbar gekennzeichneter Platzhalter
-  deaktiviert.
-- Der Export ist nur für einen regulär gespeicherten, geöffneten Monatsplan
-  verfügbar.
-- Während der Erzeugung wird ein eindeutiger Beschäftigtzustand angezeigt und
-  ein Mehrfachauslösen verhindert.
-- Ein erfolgreicher Export wird knapp bestätigt.
-- Ein abgebrochener Dateidialog gilt nicht als Fehler und erzeugt keine falsche
-  Erfolgsmeldung.
-- Ein fehlgeschlagener Export lässt den Monatsplan unverändert und erklärt die
-  Ursache soweit möglich verständlich.
+- Die Exportaktion steht in der ausgeklappten Planungswerkzeugleiste rechts
+  neben `Plan | Kompakt` und wird ausschließlich in der aktiven
+  Kompaktansicht angezeigt.
+- Im Normalzustand lautet ihre sichtbare Beschriftung `Export`; zugänglicher
+  Name und Tooltip lauten `Dienstplan als PDF exportieren`.
+- Vor dem Export muss die Passungsprüfung abgeschlossen sein. Während der
+  Messung und bei A4-Überlauf bleibt die Aktion deaktiviert. Bei Überlauf
+  erklärt der vorhandene dauerhafte Hinweis der Kompaktansicht die Ursache.
+- Bestehen ungespeicherte Entwurfsänderungen, fragt ein Dialog
+  `Gespeicherten Stand exportieren?`. Er erklärt, dass ausschließlich der
+  zuletzt gespeicherte Stand exportiert wird und der Entwurf erhalten bleibt.
+- Ohne ungespeicherte Änderungen öffnet die Exportaktion direkt den nativen
+  Speicherdialog.
+- Nach Auswahl des Zielpfads zeigt die Aktion einen Spinner und
+  `PDF wird erstellt …`. Export, Ansichtswechsel und planwechselnde Aktionen
+  bleiben bis zum Abschluss deaktiviert.
+- Ein erfolgreicher Export wird kurz mit `PDF wurde gespeichert.` bestätigt.
+- Der Abbruch des Bestätigungs- oder Speicherdialogs gilt nicht als Fehler und
+  erzeugt keine Meldung.
+- Ein fehlgeschlagener Export lässt Monatsplan und Entwurf unverändert. Ein
+  dauerhafter Hinweis oberhalb der Kompaktansicht nennt den Fehler verständlich
+  und die Exportaktion wird für einen erneuten Versuch freigegeben.
 - Ein Plan, der die festgelegte A4-Passung überschreitet, erhält denselben
   dauerhaften Hinweis wie in der Kompaktansicht und kann nicht exportiert
   werden.
+
+## Dateiname und Speicherort
+
+Der native Speicherdialog schlägt den Dateinamen
+`YYYY-MM - Plantitel.pdf` vor, beispielsweise
+`2026-09 - Dienstplan der Regelgruppe.pdf`. Unzulässige Windows-Zeichen werden
+im Vorschlag durch einen Bindestrich ersetzt. Ein überlanger Vorschlag wird
+sinnvoll gekürzt und die Endung `.pdf` sichergestellt. Der Benutzer kann den
+Namen im Dialog ändern.
+
+Beim ersten Export einer App-Sitzung beginnt der Dialog im persönlichen
+Windows-Ordner `Dokumente`. Nach einem erfolgreichen Export wird dessen Ordner
+für weitere Exporte derselben Sitzung verwendet. Nach einem App-Neustart gilt
+wieder `Dokumente`; eine dauerhafte Exportordner-Einstellung ist nicht
+Bestandteil der ersten Umsetzung.
+
+Beim Auswählen einer vorhandenen Datei übernimmt der native Windows-Dialog die
+Überschreibbestätigung. Ein Abbruch lässt die vorhandene Datei unverändert. Die
+Anwendung zeigt keinen zweiten eigenen Überschreibdialog und erzeugt keine
+automatischen Namensvarianten.
 
 ## Qualitätsanforderungen
 
@@ -106,14 +135,9 @@ Die Prüfung muss neben dem erfolgreichen Erzeugen auch das tatsächlich
 gerenderte Dokument kontrollieren. Typprüfung, Build oder eine korrekt
 angezeigte Bildschirmvorschau allein belegen noch keine korrekte PDF-Datei.
 
-## Noch festzulegen
-
-Vor der späteren Exportumsetzung sind noch zu entscheiden:
-
-- Dateiname,
-- vorausgewählter Speicherort,
-- Verhalten bei einer bereits vorhandenen Datei und
-- ob zusätzlich eine direkte Druckfunktion benötigt wird.
+Mindestens ein Normalfall mit sechs bis sieben Mitarbeitern und der Grenzfall
+mit neun Mitarbeitern und 31 Tagen werden als PDF erzeugt, technisch auf eine
+A4-Seite geprüft, in Bilder gerendert und gemeinsam visuell abgenommen.
 
 ## Abgrenzung
 
@@ -123,4 +147,4 @@ Der PDF-Export:
 - exportiert keine bearbeitbare Monatsplandatei,
 - synchronisiert keine Daten mit externen Diensten,
 - definiert keine zweite unabhängige Dokumentdarstellung und
-- umfasst zunächst weder direkte Druckfunktion noch mehrseitige Ausgabe.
+- umfasst weder eine direkte Druckfunktion noch eine mehrseitige Ausgabe.

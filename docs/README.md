@@ -66,6 +66,9 @@ den jeweils zuständigen Dokumenten festgehalten.
 ### Planung
 
 - [Umsetzungsplan Kompaktansicht](./planung/umsetzungsplan-kompaktansicht.md)
+- [Umsetzungsplan Auswertungsdialog](./planung/umsetzungsplan-auswertungsdialog.md)
+- [Abstimmung PDF-Export](./planung/abstimmung-pdf-export.md)
+- [Umsetzungsplan PDF-Export](./planung/umsetzungsplan-pdf-export.md)
 
 ## Pflegegrundsätze
 
