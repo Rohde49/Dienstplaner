@@ -8,10 +8,10 @@ type CompactPlanDocumentProps = {
 
 function getDayBackground(day: CompactPlanDay): string {
   if (day.isHoliday) {
-    return 'bg-red-50';
+    return 'bg-red-100';
   }
 
-  return day.isWeekend ? 'bg-slate-100' : 'bg-white';
+  return day.isWeekend ? 'bg-slate-200' : 'bg-white';
 }
 
 /** Stellt das gemeinsame, interaktionsfreie A4-Dokumentlayout dar. */
@@ -43,13 +43,13 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
         minHeight: A4_DOCUMENT_HEIGHT,
       }}
     >
-      <header className="mb-2 border-b border-slate-300 pb-2 text-center">
+      <header className="mb-2 border-b border-black pb-2 text-center">
         <h1 className="text-[18px] leading-[22px] font-bold tracking-tight break-words">
           {model.title}
         </h1>
         <p className="mt-1 text-[11px] leading-4">
           <span className="font-semibold">{model.periodLabel}</span>
-          <span className="text-slate-600">
+          <span className="text-slate-700">
             {' · '}Stand: {model.savedDateLabel}
           </span>
         </p>
@@ -71,7 +71,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
           <tr>
             <th
               scope="col"
-              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+              className="border border-black bg-slate-200 px-1 py-1.5 text-center font-semibold"
             >
               Datum
             </th>
@@ -80,7 +80,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                 key={employee.id}
                 scope="col"
                 title={employee.fullName}
-                className={`border border-slate-400 px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].compactHeaderClass}`}
+                className={`border border-black px-1 py-1.5 text-center font-semibold ${EMPLOYEE_COLOR_STYLES[employee.colorKey].compactHeaderClass}`}
               >
                 <span
                   data-compact-employee-name
@@ -93,19 +93,19 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
             <th
               scope="col"
               abbr="Rufbereitschaft"
-              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+              className="border border-black bg-slate-200 px-1 py-1.5 text-center font-semibold"
             >
               RB
             </th>
             <th
               scope="col"
-              className="border border-slate-400 bg-slate-100 px-1 py-1.5 text-center font-semibold"
+              className="border border-black bg-slate-200 px-1 py-1.5 text-center font-semibold"
             >
               Bemerkung
             </th>
           </tr>
         </thead>
-        <tbody className="[&>tr:first-child>*]:border-t-0 [&>tr:last-child>*]:border-b-0 [&>tr>:first-child]:border-l-slate-400 [&>tr>:last-child]:border-r-slate-400">
+        <tbody className="[&>tr:first-child>*]:border-t-0 [&>tr:last-child>*]:border-b-0 [&>tr>:first-child]:border-l-black [&>tr>:last-child]:border-r-black">
           {model.days.map((day) => {
             const dayBackground = getDayBackground(day);
 
@@ -113,7 +113,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
               <tr key={day.date} className={dayBackground}>
                 <th
                   scope="row"
-                  className={`border border-slate-300 px-1 py-[3px] text-center font-semibold whitespace-nowrap ${
+                  className={`border border-black px-1 py-[3px] text-center font-semibold whitespace-nowrap ${
                     day.isHoliday ? 'text-red-800' : 'text-slate-900'
                   }`}
                 >
@@ -130,7 +130,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                           ? `${entry.code}${entry.timeRange ? `, ${entry.timeRange}` : ''}`
                           : 'Kein Eintrag'
                       }`}
-                      className="border border-slate-300 px-0.5 py-[2px] text-center align-middle"
+                      className="border border-black px-0.5 py-[2px] text-center align-middle"
                     >
                       {entry ? (
                         <span className="block">
@@ -138,7 +138,7 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                             {entry.code}
                           </span>
                           {entry.timeRange ? (
-                            <span className="mt-px block text-[8px] whitespace-nowrap text-slate-600 tabular-nums">
+                            <span className="mt-px block text-[8px] whitespace-nowrap text-black tabular-nums">
                               {entry.timeRange}
                             </span>
                           ) : null}
@@ -149,11 +149,11 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                 })}
                 <td
                   aria-label={`${day.fullDateLabel}, Rufbereitschaft: ${day.onCallEmployeeName ?? 'Keine Rufbereitschaft'}`}
-                  className="border border-slate-300 px-0.5 py-[2px] text-center break-words"
+                  className="border border-black px-0.5 py-[2px] text-center break-words"
                 >
                   {day.onCallEmployeeName}
                 </td>
-                <td className="border border-slate-300 px-1 py-[2px] align-middle [overflow-wrap:anywhere] whitespace-pre-wrap">
+                <td className="border border-black px-1 py-[2px] align-middle [overflow-wrap:anywhere] whitespace-pre-wrap">
                   {day.note}
                 </td>
               </tr>
@@ -164,28 +164,28 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
           {footerRows.map((footerRow) => (
             <tr
               key={footerRow.label}
-              className={`bg-slate-100 font-semibold ${
+              className={`bg-slate-200 font-semibold ${
                 footerRow.label === 'Ist'
-                  ? '[&>*]:border-t-2 [&>*]:border-t-slate-400'
+                  ? '[&>*]:border-t-2 [&>*]:border-t-black'
                   : ''
               }`}
             >
               <th
                 scope="row"
-                className="border border-slate-400 px-1 py-1 text-center"
+                className="border border-black px-1 py-1 text-center"
               >
                 {footerRow.label}
               </th>
               {model.employees.map((employee) => (
                 <td
                   key={employee.id}
-                  className="border border-slate-400 px-0.5 py-1 text-center tabular-nums"
+                  className="border border-black px-0.5 py-1 text-center tabular-nums"
                 >
                   {footerRow.getValue(employee)}
                 </td>
               ))}
-              <td className="border border-slate-400" />
-              <td className="border border-slate-400" />
+              <td className="border border-black" />
+              <td className="border border-black" />
             </tr>
           ))}
         </tfoot>
@@ -207,11 +207,11 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
       <footer className="mt-8 grid grid-cols-[1fr_2fr] gap-10 text-[10px]">
         <div className="flex items-center gap-2">
           <span className="shrink-0">Datum</span>
-          <span aria-hidden="true" className="h-px flex-1 bg-slate-600" />
+          <span aria-hidden="true" className="h-px flex-1 bg-black" />
         </div>
         <div className="flex items-center gap-2">
           <span className="shrink-0">Freigabe / Unterschrift</span>
-          <span aria-hidden="true" className="h-px flex-1 bg-slate-600" />
+          <span aria-hidden="true" className="h-px flex-1 bg-black" />
         </div>
       </footer>
     </article>
