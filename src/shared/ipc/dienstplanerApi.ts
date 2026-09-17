@@ -7,6 +7,8 @@ import type {
   MonthlyPlanInput,
   MonthlyPlanLoadResult,
   MonthlyPlanSummary,
+  PdfExportRequest,
+  PdfExportResult,
 } from '../schemas';
 
 /** Beschreibt die verfügbaren Funktionen der Mitarbeiterverwaltung. */
@@ -34,6 +36,11 @@ export type MonthlyPlansApi = {
   remove: (id: string) => Promise<void>;
 };
 
+/** Beschreibt ausschließlich den bestätigten lokalen PDF-Export. */
+export type PdfExportApi = {
+  export: (request: PdfExportRequest) => Promise<PdfExportResult>;
+};
+
 /** Beschreibt den begrenzten Lebenszykluszugriff der Oberfläche. */
 export type AppApi = {
   onCloseRequested: (listener: () => void) => () => void;
@@ -46,4 +53,5 @@ export type DienstplanerApi = {
   employees: EmployeesApi;
   entryTypes: EntryTypesApi;
   monthlyPlans: MonthlyPlansApi;
+  pdfExport: PdfExportApi;
 };

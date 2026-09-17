@@ -3,8 +3,10 @@
 ## Status
 
 Die fachliche, gestalterische und technische
-[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Die Umsetzung hat
-noch nicht begonnen.
+[Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Arbeitspaket 1 ist
+umgesetzt und technisch geprüft. Die neue Preload-API bleibt bis zur
+PDF-Erzeugung in Arbeitspaket 2 ohne registrierten Main-Process-Handler und ist
+weiterhin nicht über die Oberfläche aufrufbar.
 
 ## Ziel und Abgrenzung
 
@@ -38,7 +40,7 @@ Verbindlich bleiben:
       Zustände.
 - [x] Die Planungswerkzeugleiste enthält den noch deaktivierten
       Export-Platzhalter.
-- [ ] Eine PDF-spezifische IPC-/Preload-Schnittstelle ist vorhanden.
+- [x] Eine PDF-spezifische IPC-/Preload-Schnittstelle ist vorhanden.
 - [ ] Druckdarstellung, nativer Speicherdialog und Dateierzeugung sind
       umgesetzt.
 
@@ -47,15 +49,15 @@ Verbindlich bleiben:
 **Ziel:** Der privilegierte Export besitzt einen kleinen, validierten Vertrag
 und einen unabhängig prüfbaren Speicherablauf.
 
-- [ ] Exportanfrage und Ergebnis als eng begrenzte gemeinsame Typen
+- [x] Exportanfrage und Ergebnis als eng begrenzte gemeinsame Typen
       beziehungsweise Schemas festlegen.
-- [ ] Dateinamen `YYYY-MM - Plantitel.pdf` erzeugen, unzulässige Zeichen
+- [x] Dateinamen `YYYY-MM - Plantitel.pdf` erzeugen, unzulässige Zeichen
       ersetzen, Überlänge begrenzen und `.pdf` sicherstellen.
-- [ ] Einen eigenen IPC-Kanal sowie typsichere Preload-API ergänzen.
-- [ ] Im Main Process den nativen Speicherdialog mit `Dokumente` als erstem
+- [x] Einen eigenen IPC-Kanal sowie typsichere Preload-API ergänzen.
+- [x] Im Main Process den nativen Speicherdialog mit `Dokumente` als erstem
       Startordner und dem letzten erfolgreichen Sitzungsordner danach anbinden.
-- [ ] Natürliche Abbruch- und Überschreibabläufe des nativen Dialogs bewahren.
-- [ ] Dateinamens-, Validierungs-, Dialog- und Abbruchlogik automatisiert
+- [x] Natürliche Abbruch- und Überschreibabläufe des nativen Dialogs bewahren.
+- [x] Dateinamens-, Validierungs-, Dialog- und Abbruchlogik automatisiert
       testen.
 
 **Abnahme:** Der Main Process erhält intern entweder einen bestätigten Zielpfad

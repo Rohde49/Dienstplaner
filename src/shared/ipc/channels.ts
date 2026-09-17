@@ -23,6 +23,11 @@ export const MONTHLY_PLAN_IPC_CHANNELS = {
   remove: 'monthly-plans:remove',
 } as const;
 
+/** Enthält den einzelnen, eng begrenzten Kanal für die lokale PDF-Ausgabe. */
+export const PDF_EXPORT_IPC_CHANNELS = {
+  export: 'pdf-export:export',
+} as const;
+
 /** Enthält die Kanäle für den geschützten Abschluss des Hauptfensters. */
 export const APP_IPC_CHANNELS = {
   closeRequested: 'app:close-requested',

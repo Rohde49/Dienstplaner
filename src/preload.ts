@@ -5,6 +5,7 @@ import {
   EMPLOYEE_IPC_CHANNELS,
   ENTRY_TYPE_IPC_CHANNELS,
   MONTHLY_PLAN_IPC_CHANNELS,
+  PDF_EXPORT_IPC_CHANNELS,
   type DienstplanerApi,
 } from './shared/ipc';
 
@@ -45,6 +46,10 @@ const dienstplanerApi: DienstplanerApi = {
       ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.create, input),
     save: (plan) => ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.save, plan),
     remove: (id) => ipcRenderer.invoke(MONTHLY_PLAN_IPC_CHANNELS.remove, id),
+  },
+  pdfExport: {
+    export: (request) =>
+      ipcRenderer.invoke(PDF_EXPORT_IPC_CHANNELS.export, request),
   },
 };
 

@@ -60,3 +60,6 @@ export type {
   MonthlyPlanLoadResult,
   MonthlyPlanSummary,
 } from './monthlyPlanStorage';
+
+export { pdfExportRequestSchema, pdfExportResultSchema } from './pdfExport';
+export type { PdfExportRequest, PdfExportResult } from './pdfExport';
