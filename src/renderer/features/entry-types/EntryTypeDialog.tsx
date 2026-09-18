@@ -640,59 +640,42 @@ export function EntryTypeDialog({
                       <InfoPopover
                         title="Bedeutung der Zeitwerte"
                         triggerLabel="Bedeutung der Zeitwerte anzeigen"
+                        side="right"
+                        align="center"
                       >
-                        <dl className="space-y-2.5">
-                          <div>
-                            <dt className="text-app-text inline font-medium">
-                              Anwesenheitszeit:
-                            </dt>{' '}
-                            <dd className="inline">
-                              Gesamter Zeitraum aus reiner Arbeitszeit,
-                              Nachtbereitschaft und Pausen.
-                            </dd>
-                          </div>
+                        <p>
+                          Vier Werte werden eingegeben; Arbeitszeit mit
+                          Nachtbereitschaft und Anwesenheitszeit berechnet die
+                          Anwendung automatisch.
+                        </p>
 
-                          <div>
-                            <dt className="text-app-text inline font-medium">
-                              Arbeitszeit (mit NB):
-                            </dt>{' '}
-                            <dd className="inline">
-                              Summe aus reiner Arbeitszeit und
-                              Nachtbereitschaft.
-                            </dd>
-                          </div>
-
+                        <dl className="mt-3 space-y-1.5 text-xs leading-5">
                           <div>
                             <dt className="text-app-text inline font-medium">
                               Reine Arbeitszeit:
                             </dt>{' '}
                             <dd className="inline">
-                              Tatsächlich geleistete aktive Arbeitszeit. Die
-                              Nachtarbeit ist darin als gesondert ausgewiesener
-                              Anteil enthalten.
+                              Tatsächlich geleistete aktive Arbeitszeit.
                             </dd>
                           </div>
-
                           <div>
                             <dt className="text-app-text inline font-medium">
                               Pause:
                             </dt>{' '}
                             <dd className="inline">
-                              Unterbrechung, die zur Anwesenheitszeit gehört,
-                              aber nicht als Arbeitszeit zählt.
+                              Gehört zur Anwesenheit, zählt aber nicht als
+                              Arbeitszeit.
                             </dd>
                           </div>
-
                           <div>
                             <dt className="text-app-text inline font-medium">
                               Nachtarbeit:
                             </dt>{' '}
                             <dd className="inline">
-                              Anteil der reinen Arbeitszeit, der zwischen 21:00
-                              und 06:00 Uhr geleistet wird.
+                              Anteil der reinen Arbeitszeit zwischen 21:00 und
+                              06:00 Uhr.
                             </dd>
                           </div>
-
                           <div>
                             <dt className="text-app-text inline font-medium">
                               Nachtbereitschaft:
@@ -704,26 +687,32 @@ export function EntryTypeDialog({
                         </dl>
 
                         <p className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
-                          Eingaben wie 8, 530, 5:30 oder 5,30 werden beim
-                          Verlassen des Feldes automatisch vereinheitlicht.
+                          Ohne Nachtanteil werden Nachtarbeit und
+                          Nachtbereitschaft mit 0:00 angegeben. Eingaben wie 8,
+                          530, 5:30 oder 5,30 werden automatisch
+                          vereinheitlicht.
                         </p>
 
-                        <p className="mt-2 text-xs leading-5">
-                          Die Arbeitszeit (mit NB) wird automatisch aus reiner
-                          Arbeitszeit und Nachtbereitschaft berechnet. Die
-                          Anwesenheitszeit ergibt sich anschließend aus
-                          Arbeitszeit (mit NB) und Pause.
-                        </p>
+                        <div className="border-app-border mt-3 border-t pt-3 text-xs leading-5">
+                          <p className="text-app-text font-medium">
+                            Automatische Berechnung
+                          </p>
+                          <p className="mt-1">
+                            Arbeitszeit (mit NB) = Reine Arbeitszeit +
+                            Nachtbereitschaft
+                          </p>
+                          <p>Anwesenheitszeit = Arbeitszeit (mit NB) + Pause</p>
+                        </div>
                       </InfoPopover>
                     </span>
                   </legend>
 
-                  <div className="border-app-primary-border bg-app-primary-subtle rounded-md border p-4">
-                    <p className="text-app-text mb-3 text-xs font-semibold tracking-wide uppercase">
-                      Arbeitszeit
+                  <div className="pb-3">
+                    <p className="text-app-text mb-2 text-sm font-semibold">
+                      Allgemeine Zeitwerte
                     </p>
 
-                    <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-3">
+                    <div className="grid grid-cols-2 gap-4">
                       <FormField
                         htmlFor="entry-type-workingWithoutNightReadinessDuration"
                         label="Reine Arbeitszeit"
@@ -731,6 +720,7 @@ export function EntryTypeDialog({
                       >
                         <Input
                           id="entry-type-workingWithoutNightReadinessDuration"
+                          className="border-app-primary-border"
                           inputMode="decimal"
                           placeholder="H:MM"
                           required
@@ -752,9 +742,55 @@ export function EntryTypeDialog({
                         />
                       </FormField>
 
-                      <span className="text-app-muted pt-8 text-sm font-semibold">
-                        +
-                      </span>
+                      <FormField
+                        htmlFor="entry-type-pauseDuration"
+                        label="Pause"
+                        error={formErrors.pauseDuration}
+                      >
+                        <Input
+                          id="entry-type-pauseDuration"
+                          className="border-app-primary-border"
+                          inputMode="decimal"
+                          placeholder="H:MM"
+                          required
+                          value={formState.pauseDuration}
+                          aria-invalid={Boolean(formErrors.pauseDuration)}
+                          onBlur={() => normalizeDurationField('pauseDuration')}
+                          onChange={(event) =>
+                            updateField('pauseDuration', event.target.value)
+                          }
+                        />
+                      </FormField>
+                    </div>
+                  </div>
+
+                  <div className="border-app-border border-t py-3">
+                    <p className="text-app-text mb-2 text-sm font-semibold">
+                      Nachtwerte
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        htmlFor="entry-type-nightWorkDuration"
+                        label="Nachtarbeit"
+                        error={formErrors.nightWorkDuration}
+                      >
+                        <Input
+                          id="entry-type-nightWorkDuration"
+                          className="border-app-primary-border"
+                          inputMode="decimal"
+                          placeholder="H:MM"
+                          required
+                          value={formState.nightWorkDuration}
+                          aria-invalid={Boolean(formErrors.nightWorkDuration)}
+                          onBlur={() =>
+                            normalizeDurationField('nightWorkDuration')
+                          }
+                          onChange={(event) =>
+                            updateField('nightWorkDuration', event.target.value)
+                          }
+                        />
+                      </FormField>
 
                       <FormField
                         htmlFor="entry-type-nightReadinessDuration"
@@ -763,6 +799,7 @@ export function EntryTypeDialog({
                       >
                         <Input
                           id="entry-type-nightReadinessDuration"
+                          className="border-app-primary-border"
                           inputMode="decimal"
                           placeholder="H:MM"
                           required
@@ -781,111 +818,45 @@ export function EntryTypeDialog({
                           }
                         />
                       </FormField>
+                    </div>
+                  </div>
 
-                      <span className="text-app-muted pt-8 text-sm font-semibold">
-                        =
-                      </span>
+                  <div className="border-app-border border-t pt-3">
+                    <p className="text-app-text mb-2 text-sm font-semibold">
+                      Berechnete Werte
+                    </p>
 
+                    <div className="grid grid-cols-2 gap-4">
                       <FormField
                         htmlFor="entry-type-workingDuration"
                         label="Arbeitszeit (mit NB)"
                         error={formErrors.workingDuration}
                       >
-                        <Input
+                        <output
                           id="entry-type-workingDuration"
-                          inputMode="decimal"
-                          placeholder="H:MM"
-                          readOnly
-                          value={calculatedWorkingDuration}
+                          className="border-app-border bg-app-surface-disabled text-app-muted flex h-9 w-full items-center rounded-md border px-3 text-sm tabular-nums"
+                          aria-live="polite"
                           aria-invalid={Boolean(formErrors.workingDuration)}
-                        />
+                        >
+                          {calculatedWorkingDuration || 'H:MM'}
+                        </output>
                       </FormField>
-                    </div>
-                  </div>
-
-                  <div className="border-app-border mt-4 rounded-md border p-4">
-                    <p className="text-app-text mb-3 text-xs font-semibold tracking-wide uppercase">
-                      Anwesenheitszeit
-                    </p>
-
-                    <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-3">
-                      <FormField
-                        htmlFor="entry-type-workingDuration-attendance"
-                        label="Arbeitszeit (mit NB)"
-                      >
-                        <Input
-                          id="entry-type-workingDuration-attendance"
-                          readOnly
-                          value={calculatedWorkingDuration}
-                          placeholder="H:MM"
-                        />
-                      </FormField>
-
-                      <span className="text-app-muted pt-8 text-sm font-semibold">
-                        +
-                      </span>
-
-                      <FormField
-                        htmlFor="entry-type-pauseDuration"
-                        label="Pause"
-                        error={formErrors.pauseDuration}
-                      >
-                        <Input
-                          id="entry-type-pauseDuration"
-                          inputMode="decimal"
-                          placeholder="H:MM"
-                          required
-                          value={formState.pauseDuration}
-                          aria-invalid={Boolean(formErrors.pauseDuration)}
-                          onBlur={() => normalizeDurationField('pauseDuration')}
-                          onChange={(event) =>
-                            updateField('pauseDuration', event.target.value)
-                          }
-                        />
-                      </FormField>
-
-                      <span className="text-app-muted pt-8 text-sm font-semibold">
-                        =
-                      </span>
 
                       <FormField
                         htmlFor="entry-type-attendanceDuration"
                         label="Anwesenheitszeit"
                         error={formErrors.attendanceDuration}
                       >
-                        <Input
+                        <output
                           id="entry-type-attendanceDuration"
-                          placeholder="H:MM"
-                          readOnly
-                          value={calculatedAttendanceDuration}
+                          className="border-app-border bg-app-surface-disabled text-app-muted flex h-9 w-full items-center rounded-md border px-3 text-sm tabular-nums"
+                          aria-live="polite"
                           aria-invalid={Boolean(formErrors.attendanceDuration)}
-                        />
+                        >
+                          {calculatedAttendanceDuration || 'H:MM'}
+                        </output>
                       </FormField>
                     </div>
-                  </div>
-
-                  <div className="mt-4 max-w-64">
-                    <FormField
-                      htmlFor="entry-type-nightWorkDuration"
-                      label="Nachtarbeit"
-                      error={formErrors.nightWorkDuration}
-                      hint="Gesondert ausgewiesener Anteil der reinen Arbeitszeit"
-                    >
-                      <Input
-                        id="entry-type-nightWorkDuration"
-                        inputMode="decimal"
-                        placeholder="H:MM"
-                        required
-                        value={formState.nightWorkDuration}
-                        aria-invalid={Boolean(formErrors.nightWorkDuration)}
-                        onBlur={() =>
-                          normalizeDurationField('nightWorkDuration')
-                        }
-                        onChange={(event) =>
-                          updateField('nightWorkDuration', event.target.value)
-                        }
-                      />
-                    </FormField>
                   </div>
                 </fieldset>
               </>

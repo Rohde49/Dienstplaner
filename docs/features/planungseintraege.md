@@ -118,6 +118,11 @@ Arbeitszeit mit Nachtbereitschaft und Anwesenheitszeit sind nicht separat
 automatisch angezeigt. Nachtarbeit bleibt ein eigenständiger Zeitwert und die
 Zeitwerte werden nicht aus den Uhrzeiten abgeleitet.
 
+Der Dialog gruppiert reine Arbeitszeit und Pause als allgemeine Zeitwerte sowie
+Nachtarbeit und Nachtbereitschaft als Nachtwerte. Die beiden berechneten Werte
+stehen davon visuell getrennt in einem schreibgeschützten Ergebnisbereich. Die
+zugehörigen Formeln sind im Informations-Popup erläutert.
+
 ### Wochenarbeitszeit
 
 Bei dieser Berechnungsart werden in der Eintragsart keine festen Uhrzeiten oder

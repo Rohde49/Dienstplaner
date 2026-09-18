@@ -8,6 +8,8 @@ type InfoPopoverProps = {
   title: string;
   children: ReactNode;
   triggerLabel?: string;
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  align?: 'start' | 'center' | 'end';
 };
 
 /** Zeigt zusätzliche Erklärungen kompakt an einem Begriff oder Bereich an. */
@@ -15,6 +17,8 @@ export function InfoPopover({
   title,
   children,
   triggerLabel = 'Weitere Informationen anzeigen',
+  side = 'bottom',
+  align = 'start',
 }: InfoPopoverProps) {
   const titleId = useId();
 
@@ -33,16 +37,17 @@ export function InfoPopover({
         <PopoverPrimitive.Content
           role="dialog"
           aria-labelledby={titleId}
-          align="start"
+          align={align}
+          side={side}
           sideOffset={8}
           collisionPadding={16}
-          className="border-app-border bg-app-surface z-[60] w-[min(28rem,calc(100vw-2rem))] rounded-lg border p-4 pr-11 shadow-md"
+          className="border-app-border bg-app-surface z-[60] w-[min(24rem,calc(100vw-2rem))] rounded-lg border p-4 pr-11 shadow-md"
         >
           <h3 id={titleId} className="text-app-text text-sm font-semibold">
             {title}
           </h3>
 
-          <div className="text-app-muted mt-3 text-sm leading-6">
+          <div className="text-app-muted mt-3 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 text-sm leading-6">
             {children}
           </div>
 
