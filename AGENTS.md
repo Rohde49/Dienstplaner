@@ -50,7 +50,6 @@ Dienstplaner ist eine lokale Windows-Desktop-Anwendung zur Erstellung und Verwal
 - Die bestehende Trennung zwischen Main Process, Preload, Renderer und gemeinsam genutztem Code beibehalten.
 - Wichtige fachliche Regeln nicht ausschließlich in der Benutzeroberfläche absichern.
 - Die Benutzeroberfläche visuell und funktional konsistent halten.
-- Informationen nicht ausschließlich über Farbe vermitteln.
 - Sichtbare Fokuszustände und grundlegende Tastaturbedienbarkeit erhalten.
 
 ## Verifikation
