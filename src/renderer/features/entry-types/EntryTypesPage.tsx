@@ -205,7 +205,7 @@ export function EntryTypesPage() {
                     <th className="text-app-muted px-4 py-3 text-xs font-semibold">
                       Reine Arbeitszeit
                     </th>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-4 py-3 text-center text-xs font-semibold">
                       Status
                     </th>
                     <th className="w-24 px-4 py-3 text-right">
@@ -247,19 +247,19 @@ export function EntryTypesPage() {
                         <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
                           {formatPureWorkingTime(entryType)}
                         </td>
-                        <td className="px-4 py-3">
-                          <Button
-                            size="sm"
-                            variant="secondary"
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            type="button"
                             role="switch"
                             aria-checked={entryType.active}
                             aria-label={`${entryType.code} ${entryType.active ? 'deaktivieren' : 'aktivieren'}`}
                             disabled={isStatusUpdating}
-                            className={
+                            className={[
+                              'focus-visible:outline-app-primary inline-flex h-7 min-w-20 items-center justify-center gap-2 rounded-full border px-3 text-xs font-semibold transition-[background-color,border-color,color,box-shadow,transform] focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-wait disabled:opacity-70',
                               entryType.active
-                                ? 'border-app-success-border bg-app-success-subtle text-app-success hover:bg-app-success-subtle'
-                                : 'bg-app-surface-muted text-app-muted'
-                            }
+                                ? 'border-app-success-border bg-app-success-subtle text-app-success hover:shadow-sm'
+                                : 'border-app-border bg-app-surface-muted text-app-muted hover:border-app-border-strong hover:bg-app-surface-hover hover:text-app-text',
+                            ].join(' ')}
                             onClick={() =>
                               void toggleEntryTypeStatus(entryType)
                             }
@@ -272,7 +272,7 @@ export function EntryTypesPage() {
                               />
                             ) : null}
                             {entryType.active ? 'Aktiv' : 'Inaktiv'}
-                          </Button>
+                          </button>
                         </td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex justify-end gap-1">
