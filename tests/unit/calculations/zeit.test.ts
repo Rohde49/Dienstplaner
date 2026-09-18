@@ -6,6 +6,7 @@ import {
   normalizeClockTime,
   parseDuration,
   parseDurationInput,
+  parseTimeDifferenceInput,
   roundNonNegativeMinutes,
 } from '../../../src/shared/calculations';
 
@@ -106,6 +107,32 @@ describe('Darstellung von Soll-/Ist-Differenzen', () => {
     'lehnt die ungültige Differenz %s ab',
     (minutes) => {
       expect(() => formatTimeDifference(minutes)).toThrow(RangeError);
+    },
+  );
+});
+
+describe('Eingabe manueller Zeitüberträge', () => {
+  it.each([
+    ['3:18', 198, '+03:18'],
+    ['+3:18', 198, '+03:18'],
+    ['-9:01', -541, '−09:01'],
+    ['−9:01', -541, '−09:01'],
+    ['0', 0, '00:00'],
+    ['125:15', 7_515, '+125:15'],
+  ])(
+    'normalisiert %s als vorzeichenbehafteten Übertrag',
+    (input, minutes, normalized) => {
+      expect(parseTimeDifferenceInput(input)).toEqual({
+        minutes,
+        normalized,
+      });
+    },
+  );
+
+  it.each(['', '+', '-', '3:7', '3:60', 'text'])(
+    'lehnt die ungültige Eingabe %j ab',
+    (input) => {
+      expect(parseTimeDifferenceInput(input)).toBeNull();
     },
   );
 });

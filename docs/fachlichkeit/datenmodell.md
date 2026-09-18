@@ -25,7 +25,9 @@ Formeln und Zählregeln stehen unter
 - Bestehende Monatspläne bleiben durch vollständige Snapshots unabhängig von
   späteren Änderungen der Stammdaten.
 - Monatliche Auswertungen werden aus dem Monatsplan berechnet und nicht als
-  eigener Auswertungsstand gespeichert.
+  eigener Auswertungsstand gespeichert. Ein manuell aus externer Quelle
+  übernommener Zeitübertrag bleibt davon getrennt und wird als Plandatum
+  gespeichert.
 - Planungseinträge besitzen keine allgemeine fachliche Kategorie. Ihre
   Berechnungsart wird ausdrücklich festgelegt und nicht aus Kürzel oder
   Bezeichnung abgeleitet.
@@ -41,7 +43,8 @@ Monatsplan ── enthält ──> Plantag ── enthält ──> Planungseintr
     │                       │                         ▲
     │                       └─ Rufbereitschaft        │
     │                          verweist auf           │
-    └─ enthält Planmitarbeiter                        │
+    ├─ enthält Planmitarbeiter                        │
+    └─ enthält manuellen Zeitübertrag                 │
                                                       │
 Eintragsart ── Snapshot beim Setzen ──────────────────┘
 ```
@@ -104,6 +107,7 @@ Der Monatsplan ist die Wurzel des Aggregats. Er besitzt:
 - Monat und Jahr,
 - einen vom Benutzer vergebenen Titel,
 - einen eingefrorenen Mitarbeiterstand und
+- einen optionalen manuellen Zeitübertrag mit Bezugsmonat und
 - sämtliche Plantage des gewählten Monats.
 
 Die UUID identifiziert den Plan unabhängig von Zeitraum und Titel. Dadurch
@@ -139,6 +143,20 @@ Der Aktivierungsstatus des Stammdatensatzes gehört nicht zum Snapshot. Laden,
 Bearbeiten und Auswerten eines Monatsplans verwenden ausschließlich den
 Planmitarbeiter und lesen die aktuellen Stammdaten nicht erneut als Grundlage
 ein.
+
+### Manueller Zeitübertrag (`WorkingTimeCarryover`)
+
+Der optionale Zeitübertrag hält extern ermittelte Über- oder Minusstunden für
+Erzieher des Monatsplans fest. Er enthält einen optionalen Bezugsmonat und je
+betroffenem Planmitarbeiter höchstens einen vorzeichenbehafteten Minutenwert.
+
+- Ohne gespeicherten Mitarbeiterwert darf der Bezugsmonat leer bleiben.
+- Sobald ein Wert gespeichert wird, ist ein Bezugsmonat erforderlich.
+- Jeder Wert verweist auf einen Planmitarbeiter desselben Monatsplans mit der
+  Snapshot-Rolle `Erzieher`.
+- Positive, negative und ausgeglichene Werte sind zulässig.
+- Der Übertrag stammt aus einer externen Quelle, wird nicht berechnet und
+  beeinflusst weder Soll, Ist noch Differenz.
 
 ### Plantag (`PlanDay`)
 
@@ -238,6 +256,9 @@ Ein gültiger Monatsplan erfüllt mindestens folgende Beziehungen:
 - Pro Mitarbeiter und Plantag existiert höchstens ein Planungseintrag.
 - Eine Rufbereitschaft verweist ausschließlich auf einen Planmitarbeiter mit
   der Snapshot-Rolle `Erzieher`.
+- Manuelle Zeitüberträge verweisen ausschließlich und höchstens einmal auf
+  Planmitarbeiter mit der Snapshot-Rolle `Erzieher`; gespeicherte Werte setzen
+  einen Bezugsmonat voraus.
 - Jeder gespeicherte Satz von Zeitwerten erfüllt die verbindlichen
   Berechnungsbeziehungen.
 - Die Herkunft eines Snapshots muss syntaktisch identifizierbar sein; die
@@ -253,6 +274,7 @@ nicht teilweise ausgewertet.
 
 - Identität, Zeitraum und Titel,
 - Mitarbeiter-Snapshots einschließlich Rolle, Wochenarbeitszeit und Position,
+- optionaler Bezugsmonat und manuelle Zeitüberträge der Erzieher,
 - Plantage mit Bemerkung und optionaler Rufbereitschaft,
 - Planungseintrag-Snapshots mit ihren konkreten Zeitwerten.
 

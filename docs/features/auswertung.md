@@ -11,6 +11,7 @@ Die Auswertung soll:
 - die im Monatsplan gespeicherten Erzieher berücksichtigen,
 - Tageszähler und zeitbezogene Monatswerte übersichtlich zusammenführen,
 - Soll, Ist und Abweichung verständlich gegenüberstellen,
+- einen extern ermittelten Zeitübertrag je Erzieher manuell festhalten,
 - auf dem aktuell betrachteten Monatsplanstand beruhen und
 - keine eigene, abweichende Berechnungslogik enthalten.
 
@@ -27,14 +28,17 @@ verwendet:
 - die gespeicherten Mitarbeiter-Snapshots,
 - die vollständigen Kalendertage,
 - die Planungseintrag-Snapshots und
-- die Rufbereitschaften.
+- die Rufbereitschaften sowie
+- den optional gespeicherten manuellen Zeitübertrag.
 
 Aktuelle Mitarbeiter- oder Eintragsarten-Stammdaten werden nicht nachgeladen,
 um bestehende Pläne neu zu interpretieren. Dadurch bleibt die Auswertung auch
 nach späteren Änderungen oder Löschungen von Stammdaten stabil.
 
-Die Ergebnisse werden bei Bedarf neu berechnet und nicht als eigener
-Auswertungsstand gespeichert.
+Die berechneten Ergebnisse werden bei Bedarf neu bestimmt und nicht als eigener
+Auswertungsstand gespeichert. Nur der ausdrücklich manuell eingegebene
+Zeitübertrag wird als Bestandteil des Monatsplans gespeichert. Er stammt aus
+einer externen Quelle und wird nicht von der Anwendung berechnet.
 
 ## Auswertungskreis
 
@@ -62,17 +66,37 @@ zeilenweise:
 10. Ist-Arbeitszeit
 11. Soll-Arbeitszeit
 12. Differenz Soll/Ist
+13. manueller Zeitübertrag mit Bezugsmonat
 
 „Anzahl Arbeitstage“ ist die kalendarische Arbeitstagszahl des vollständigen
 Monats. Sie ist für alle Mitarbeiter gleich und bildet die Grundlage der
 Soll-Arbeitszeit. Andere berechnete Kennzahlen bleiben in den Fachfunktionen
 verfügbar, erscheinen aber nicht in diesem Dialog.
 
-Die Auswertung zeigt ausschließlich Ergebnisse. Die dafür geltenden Formeln,
-Rundungszeitpunkte und Zählregeln stehen unter
+Die ersten zwölf Zeilen zeigen berechnete Ergebnisse. Die dafür geltenden
+Formeln, Rundungszeitpunkte und Zählregeln stehen unter
 [Tagesbezogene Kennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),
 [Zeitbezogene Monatskennzahlen](../fachlichkeit/berechnungen/monatskennzahlen.md)
 und [Soll-Ist-Auswertung](../fachlichkeit/berechnungen/soll-ist-auswertung.md).
+Der Zeitübertrag ist davon unabhängig und verändert keine berechnete Kennzahl.
+
+## Manueller Zeitübertrag
+
+Unterhalb der Soll-/Ist-Differenz kann ein Bezugsmonat aus Januar bis Dezember
+ausgewählt werden. Die Auswahl beginnt leer und wird nicht automatisch aus dem
+Planmonat abgeleitet. Erst nach der Monatsauswahl können die Werte der Erzieher
+eingegeben werden.
+
+Jedes Feld akzeptiert positive, negative und ausgeglichene Zeitdauern. Ein
+fehlendes Vorzeichen wird als positiver Wert verstanden. Beispielsweise wird
+`3:18` zu `+03:18` und `-9:01` zu `−09:01` vereinheitlicht. Ein Nullwert wird
+als `00:00` dargestellt; leere Felder bleiben ohne gespeicherten Wert. Die
+Zeitdauern dürfen mehr als 24 Stunden umfassen.
+
+Monat und gültige Werte gehören zum bearbeitbaren Monatsplanentwurf. Sie werden
+erst über die reguläre Speicherfunktion dauerhaft übernommen. Der Übertrag
+wird nicht zur Soll-/Ist-Differenz addiert und fließt in keine andere
+Berechnung ein.
 
 ## Verhalten bei Entwurfsänderungen
 
@@ -82,6 +106,10 @@ sie aus dem aktuellen Entwurf berechnet und reagiert unmittelbar auf:
 - gesetzte, ersetzte oder entfernte Planungseinträge,
 - geänderte Rufbereitschaften und
 - andere auswertungsrelevante Änderungen des Plans.
+
+Auch eine Änderung am Bezugsmonat oder an einem Zeitübertrag kennzeichnet den
+Monatsplan als ungespeicherten Entwurf. Sie verändert die berechneten
+Auswertungswerte nicht.
 
 Ein ungespeicherter Entwurf muss dabei eindeutig als solcher erkennbar bleiben.
 Die Anzeige einer Auswertung bestätigt nicht, dass der zugrunde liegende Plan
@@ -95,6 +123,8 @@ bereits dauerhaft gespeichert wurde.
 - Positive und negative Soll-/Ist-Abweichungen bleiben auch ohne Farberkennung
   anhand ihres Vorzeichens verständlich. Negative Werte werden zusätzlich rot,
   positive Werte grün und ausgeglichene Werte neutral dargestellt.
+- Dieselbe Ampellogik gilt für gültige manuelle Zeitüberträge. Leere Felder und
+  Nullwerte bleiben neutral. Das Vorzeichen bleibt zusätzlich sichtbar.
 - Die Anzahl freier Tage wird mit dem monatsweiten Ziel aus Kalendertagen
   abzüglich Arbeitstagen verglichen. Ein noch nicht erreichtes Ziel erscheint
   gelb, ein exakt erreichtes Ziel grün und eine Überschreitung rot.
@@ -119,17 +149,18 @@ bereits dauerhaft gespeichert wurde.
 - Der Dialog richtet seine Breite am Tabelleninhalt aus und bleibt so kompakt
   wie möglich. Die Kennzahlenspalte und die Mitarbeiterspalten verwenden nur
   die benötigte Breite; Namen dürfen innerhalb ihrer Spalte umbrechen.
-- Alle zwölf Kennzahlen und alle Erzieher-Spalten sind beim Öffnen vollständig
-  ohne Bildlauf sichtbar.
+- Alle zwölf Kennzahlen, die Übertragszeile und alle Erzieher-Spalten sind beim
+  Öffnen vollständig ohne Bildlauf sichtbar.
 
 „Auswertung“ in der Werkzeugleiste der Planungsseite öffnet den zentralen
 Dialog für den aktuell geöffneten Monatsplan. Ohne geöffneten Plan bleibt die
 Aktion deaktiviert. Sie ist außerdem in der Kompaktansicht deaktiviert, weil
 dort der gespeicherte Ausgangsstand sichtbar ist, während die Auswertung den
 aktuellen Entwurf verwendet. Ein leicht unscharfer Hintergrund und die modale
-Bedienung halten die Planungsseite währenddessen unverändert. Nach dem Schließen
-bleiben Entwurf, Zeitraum, Scrollstand und Leistenstatus erhalten. Der Dialog
-ist mit Maus und Tastatur bedienbar.
+Bedienung sperren die Planungsseite währenddessen. Nach dem Schließen bleiben
+Zeitraum, Scrollstand und Leistenstatus erhalten; gültige Änderungen am
+manuellen Zeitübertrag bleiben im Entwurf bestehen. Der Dialog ist mit Maus und
+Tastatur bedienbar.
 
 ## Fehlerverhalten
 
@@ -141,7 +172,9 @@ ein verständlicher Fehler angezeigt.
 
 Die Auswertung:
 
-- verändert den Monatsplan nicht,
+- verändert durch ihre berechneten Werte den Monatsplan nicht,
+- speichert ausschließlich den ausdrücklich manuell gepflegten Zeitübertrag
+  als Plandaten,
 - speichert keine parallelen Ergebnisdaten,
 - ersetzt keine arbeitsrechtliche oder vertragliche Prüfung,
 - erfindet keine Bedeutung aus frei vergebenen Kürzeln und

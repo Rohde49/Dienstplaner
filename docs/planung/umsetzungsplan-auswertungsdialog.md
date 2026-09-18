@@ -2,18 +2,19 @@
 
 ## Status
 
-Der Auswertungsdialog ist umgesetzt sowie fachlich, gestalterisch und technisch
-abgenommen. Alle zwölf Kennzahlen, ihre Berechnungsgrundlagen, die Darstellung
-des ungespeicherten Entwurfs und die unveränderte Rückkehr zur Planungsseite
-wurden bestätigt. Dieser Plan bleibt als abgeschlossene Prüfliste erhalten.
+Der Auswertungsdialog ist mit zwölf berechneten Kennzahlen umgesetzt. Als
+bestätigte Erweiterung kommt darunter ein dauerhaft im Monatsplan gespeicherter
+manueller Zeitübertrag mit Bezugsmonat hinzu. Die berechneten Kennzahlen bleiben
+unverändert und der Übertrag fließt in keine Formel ein.
 
 ## Ziel und Umfang
 
 Der Button „Auswertung“ in der Planungsseite öffnet einen mittig angeordneten,
-ausreichend großen Dialog vor dem unveränderten Planungsstand. Der vorhandene
+ausreichend großen Dialog vor dem aktuellen Planungsstand. Der vorhandene
 Dialoghintergrund wird leicht unscharf; die Planungsseite ist währenddessen
-nicht bedienbar. Nach dem Schließen steht sie mit demselben Entwurf, Zeitraum,
-Scrollstand und Leistenstatus wieder zur Verfügung.
+nicht bedienbar. Nach dem Schließen stehen Zeitraum, Scrollstand und
+Leistenstatus weiterhin zur Verfügung; gültige Änderungen am manuellen
+Zeitübertrag bleiben im Planentwurf erhalten.
 
 Im Dialog stehen Mitarbeiter spaltenweise und Kennzahlen zeilenweise. Die
 gewünschte Reihenfolge lautet:
@@ -30,9 +31,11 @@ gewünschte Reihenfolge lautet:
 10. Ist-Arbeitszeit
 11. Soll-Arbeitszeit
 12. Differenz Soll/Ist
+13. Übertrag aus ausgewähltem Monat
 
-Die Anzeige verwendet die bestehende gemeinsame Monatsauswertung aus dem
-aktuellen Planentwurf und keine eigenen Formeln oder gespeicherten Ergebnisse.
+Die ersten zwölf Zeilen verwenden die bestehende gemeinsame Monatsauswertung
+aus dem aktuellen Planentwurf und keine eigenen Formeln oder gespeicherten
+Ergebnisse. Die dreizehnte Zeile ist ein ausdrücklich manueller Planwert.
 Nach jeder übernommenen Planänderung liegen beim nächsten Öffnen sofort die
 neuen Werte vor. Auch bei einem währenddessen anderweitig aktualisierten
 Entwurf bleibt der geöffnete Dialog an dessen aktuellem Stand. Ein
@@ -48,9 +51,9 @@ ungespeicherter Entwurf wird als solcher gekennzeichnet.
 - `calculateMonthlyPlanEvaluation` liefert bereits alle genannten Zeitwerte,
   Tageszähler und die kalendarische Arbeitstagszahl. Der Dialog stellt diese
   gemeinsame Berechnung ohne eigene fachliche Formeln dar.
-- Die Tabelle zeigt ausschließlich Erzieher in Planreihenfolge und genau die
-  festgelegten zwölf Kennzahlen. Einzelne neutrale Abschnittslinien gliedern
-  die drei fachlichen Bereiche.
+- Die Tabelle zeigt ausschließlich Erzieher in Planreihenfolge, die zwölf
+  festgelegten Kennzahlen und darunter den manuellen Zeitübertrag. Einzelne
+  neutrale Abschnittslinien gliedern die fachlichen Bereiche.
 
 ## Arbeitspakete
 
@@ -73,9 +76,9 @@ Dialog mit dem etablierten Dialogmuster umsetzen. Plantitel, Zeitraum und
 Entwurfsstatus zeigen den ausgewerteten Stand. Eine gut lesbare Tabelle führt
 die festgelegten Zeilen und die Mitarbeiter in Planreihenfolge auf. Seine
 Breite richtet sich am Tabelleninhalt aus; Kennzahl und Mitarbeiter erhalten
-nur die benötigte Spaltenbreite. Alle zwölf Zeilen und alle Mitarbeiterspalten
-bleiben auch bei der unterstützten Mindestgröße `1024 × 700` ohne Bildlauf
-sichtbar.
+nur die benötigte Spaltenbreite. Alle dreizehn Zeilen und alle
+Mitarbeiterspalten bleiben auch bei der unterstützten Mindestgröße `1024 × 700`
+ohne Bildlauf sichtbar.
 Zeitwerte erscheinen als Stunden und Minuten, die Soll-/Ist-Differenz mit
 Vorzeichen. Ein Plan ohne Mitarbeiter im festgelegten Auswertungskreis erhält
 einen verständlichen Leerzustand. Berechnungsfehler werden verständlich
@@ -94,21 +97,26 @@ Die vier Projektprüfungen (`npm test`, `npm run typecheck`, `npm run lint`,
 `npm run format:check`) ausführen; Dialoggröße, vollständige Tabelle, Fokus und Rückkehr
 zur Planung bei schmalem und breitem Fenster manuell prüfen.
 
-**Abnahme:** Kennzahlen entsprechen dem aktuellen Entwurf; Öffnen und
-Schließen verändern ihn nicht. Technische Prüfungen und visuelle Abnahme werden
-getrennt festgehalten.
+**Abnahme:** Kennzahlen entsprechen dem aktuellen Entwurf. Reines Öffnen und
+Schließen verändern ihn nicht; bestätigte Eingaben am manuellen Zeitübertrag
+bleiben dagegen im Entwurf erhalten. Technische Prüfungen und visuelle Abnahme
+werden getrennt festgehalten.
 
 ## Verbindliche Anzeigeentscheidungen
 
 - **Mitarbeiter – entschieden:** Nur Mitarbeiter mit der im Monatsplan
   gespeicherten Snapshot-Rolle `Erzieher` werden gezeigt.
 - **Zeilenumfang – entschieden:** Der Dialog zeigt genau die zwölf oben
-  aufgeführten Zeilen. Bisher dokumentierte zusätzliche Kennzahlen wie
-  Nachtarbeit, Nachtzuschlag und Arbeitszeit mit Nachtbereitschaft entfallen
-  aus dieser Dialogansicht. Die gemeinsame Berechnung bleibt bestehen.
+  aufgeführten berechneten Zeilen und als dreizehnte Zeile den manuellen
+  Zeitübertrag. Bisher dokumentierte zusätzliche Kennzahlen wie Nachtarbeit,
+  Nachtzuschlag und Arbeitszeit mit Nachtbereitschaft entfallen aus dieser
+  Dialogansicht. Die gemeinsame Berechnung bleibt bestehen.
 - **Anzahl Arbeitstage – entschieden:** Gezeigt wird die kalendarische
   Arbeitstagszahl des Monats. Sie ist für alle Mitarbeiter gleich und bildet
   die Grundlage der Soll-Arbeitszeit.
+- **Zeitübertrag – entschieden:** Die Monatsauswahl beginnt leer. Gültige
+  positive, negative und ausgeglichene Werte werden je Erzieher im Monatsplan
+  gespeichert, farblich signalisiert und nicht verrechnet.
 
 Die [Feature-Dokumentation](../features/auswertung.md) wurde vor der Umsetzung
 an diese Entscheidungen angepasst und beschreibt den abgenommenen Stand.

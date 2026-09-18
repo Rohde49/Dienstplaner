@@ -211,12 +211,24 @@ describe('Monatsplan-Repository', () => {
     const submittedPlan = structuredClone(plan);
     submittedPlan.title = 'Geänderter Titel';
     submittedPlan.days[0].note = 'Hinweis';
+    submittedPlan.workingTimeCarryover = {
+      month: 8,
+      entries: [
+        {
+          planEmployeeId: submittedPlan.employees[0].id,
+          minutes: -541,
+        },
+      ],
+    };
     submittedPlan.updatedAt = '2000-01-01T00:00:00.000Z';
 
     const savedPlan = await repository.save(submittedPlan);
 
     expect(savedPlan).toMatchObject({ title: 'Geänderter Titel' });
     expect(savedPlan.days[0].note).toBe('Hinweis');
+    expect(savedPlan.workingTimeCarryover).toEqual(
+      submittedPlan.workingTimeCarryover,
+    );
     expect(savedPlan.updatedAt).not.toBe(submittedPlan.updatedAt);
     const restartedRepository = new MonthlyPlansRepository({
       dataDirectoryPath: directory,

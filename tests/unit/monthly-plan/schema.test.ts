@@ -83,6 +83,10 @@ function createValidPlan(): MonthlyPlan {
         position: 2,
       },
     ],
+    workingTimeCarryover: {
+      month: null,
+      entries: [],
+    },
     days: createMonthCalendar(2026, 9).map((calendarDay, index): PlanDay => ({
       id: indexedUuid('30000000', index + 1),
       date: calendarDay.date,
@@ -110,6 +114,16 @@ describe('Monatsplan-Grundstruktur', () => {
 
     expect(monthlyPlanSchema.safeParse(firstPlan).success).toBe(true);
     expect(monthlyPlanSchema.safeParse(secondPlan).success).toBe(true);
+  });
+
+  it('ergänzt ältere Monatspläne kompatibel um einen leeren Zeitübertrag', () => {
+    const legacyPlan: Partial<MonthlyPlan> = createValidPlan();
+    delete legacyPlan.workingTimeCarryover;
+
+    expect(monthlyPlanSchema.parse(legacyPlan).workingTimeCarryover).toEqual({
+      month: null,
+      entries: [],
+    });
   });
 
   it.each([
@@ -165,6 +179,71 @@ describe('Monatsplan-Grundstruktur', () => {
     expect(
       monthlyPlanFileSchema.safeParse({ schemaVersion: 2, plan }).success,
     ).toBe(false);
+  });
+});
+
+describe('Manueller Zeitübertrag', () => {
+  it('akzeptiert positive, negative und ausgeglichene Werte für Erzieher', () => {
+    const plan = createValidPlan();
+    plan.workingTimeCarryover = {
+      month: 8,
+      entries: [{ planEmployeeId: educatorId, minutes: -541 }],
+    };
+
+    expect(monthlyPlanSchema.parse(plan).workingTimeCarryover).toEqual(
+      plan.workingTimeCarryover,
+    );
+
+    for (const minutes of [198, 0]) {
+      plan.workingTimeCarryover.entries[0].minutes = minutes;
+      expect(monthlyPlanSchema.safeParse(plan).success).toBe(true);
+    }
+  });
+
+  it('verlangt bei vorhandenen Werten einen Bezugsmonat', () => {
+    const plan = createValidPlan();
+    plan.workingTimeCarryover.entries.push({
+      planEmployeeId: educatorId,
+      minutes: 60,
+    });
+
+    expect(monthlyPlanSchema.safeParse(plan).success).toBe(false);
+  });
+
+  it('lehnt doppelte, unbekannte oder rollenfremde Zuordnungen ab', () => {
+    const duplicatePlan = createValidPlan();
+    duplicatePlan.workingTimeCarryover = {
+      month: 8,
+      entries: [
+        { planEmployeeId: educatorId, minutes: 60 },
+        { planEmployeeId: educatorId, minutes: -60 },
+      ],
+    };
+
+    const unknownEmployeePlan = createValidPlan();
+    unknownEmployeePlan.workingTimeCarryover = {
+      month: 8,
+      entries: [
+        {
+          planEmployeeId: '10000000-0000-4000-8000-000000000099',
+          minutes: 60,
+        },
+      ],
+    };
+
+    const serviceEmployeePlan = createValidPlan();
+    serviceEmployeePlan.workingTimeCarryover = {
+      month: 8,
+      entries: [{ planEmployeeId: kitchenStaffId, minutes: 60 }],
+    };
+
+    expect(monthlyPlanSchema.safeParse(duplicatePlan).success).toBe(false);
+    expect(monthlyPlanSchema.safeParse(unknownEmployeePlan).success).toBe(
+      false,
+    );
+    expect(monthlyPlanSchema.safeParse(serviceEmployeePlan).success).toBe(
+      false,
+    );
   });
 });
 

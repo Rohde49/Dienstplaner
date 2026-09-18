@@ -615,6 +615,11 @@ export function PlannerPage({
                 <EvaluationDialog
                   plan={activePlan}
                   disabled={isPlannerBusy || isCompactView}
+                  onPlanChange={(draft) =>
+                    setState((currentState) =>
+                      replacePlannerDraft(currentState, draft),
+                    )
+                  }
                   status={
                     state.document.kind === 'plan' &&
                     state.document.recoveredFromBackup

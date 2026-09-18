@@ -47,6 +47,8 @@ export {
   planDaySchema,
   planEmployeeSchema,
   planEntrySchema,
+  workingTimeCarryoverEntrySchema,
+  workingTimeCarryoverSchema,
 } from './monthlyPlan';
 
 export type {
@@ -55,6 +57,8 @@ export type {
   PlanDay,
   PlanEmployee,
   PlanEntry,
+  WorkingTimeCarryover,
+  WorkingTimeCarryoverEntry,
 } from './monthlyPlan';
 
 export { monthlyPlanFileSchema } from './monthlyPlanStorage';

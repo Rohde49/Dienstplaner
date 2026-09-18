@@ -55,6 +55,10 @@ export function createMonthlyPlan({
     createdAt: timestamp,
     updatedAt: timestamp,
     employees: planEmployees,
+    workingTimeCarryover: {
+      month: null,
+      entries: [],
+    },
     days: createMonthCalendar(year, month).map((calendarDay): PlanDay => ({
       id: randomUUID(),
       date: calendarDay.date,

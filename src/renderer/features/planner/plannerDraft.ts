@@ -87,3 +87,80 @@ export function setDraftPlanTitle(
 ): MonthlyPlan {
   return monthlyPlanSchema.parse({ ...plan, title });
 }
+
+/** Ändert den Bezugsmonat des manuell gepflegten Zeitübertrags. */
+export function setDraftWorkingTimeCarryoverMonth(
+  planValue: MonthlyPlan,
+  month: number | null,
+): MonthlyPlan {
+  const plan = monthlyPlanSchema.parse(planValue);
+
+  if (month === null && plan.workingTimeCarryover.entries.length > 0) {
+    throw new Error(
+      'Der Bezugsmonat kann nicht entfernt werden, solange Zeitüberträge eingetragen sind.',
+    );
+  }
+
+  return monthlyPlanSchema.parse({
+    ...plan,
+    workingTimeCarryover: {
+      ...plan.workingTimeCarryover,
+      month,
+    },
+  });
+}
+
+/** Setzt oder entfernt den manuellen Zeitübertrag eines Erziehers. */
+export function setDraftEmployeeWorkingTimeCarryover(
+  planValue: MonthlyPlan,
+  planEmployeeId: string,
+  minutes: number | null,
+): MonthlyPlan {
+  const plan = monthlyPlanSchema.parse(planValue);
+  const employee = plan.employees.find(
+    (candidate) => candidate.id === planEmployeeId,
+  );
+
+  if (!employee) {
+    throw new Error('Der Mitarbeiter gehört nicht zu diesem Monatsplan.');
+  }
+
+  if (employee.role !== 'Erzieher') {
+    throw new Error(
+      'Ein Zeitübertrag darf nur für Erzieher gespeichert werden.',
+    );
+  }
+
+  if (minutes !== null && plan.workingTimeCarryover.month === null) {
+    throw new Error(
+      'Vor dem Zeitübertrag muss ein Bezugsmonat ausgewählt werden.',
+    );
+  }
+
+  const entries = plan.workingTimeCarryover.entries.filter(
+    (entry) => entry.planEmployeeId !== planEmployeeId,
+  );
+
+  if (minutes !== null) {
+    entries.push({ planEmployeeId, minutes });
+    const positionsById = new Map(
+      plan.employees.map((planEmployee) => [
+        planEmployee.id,
+        planEmployee.position,
+      ]),
+    );
+    entries.sort(
+      (first, second) =>
+        positionsById.get(first.planEmployeeId)! -
+        positionsById.get(second.planEmployeeId)!,
+    );
+  }
+
+  return monthlyPlanSchema.parse({
+    ...plan,
+    workingTimeCarryover: {
+      ...plan.workingTimeCarryover,
+      entries,
+    },
+  });
+}

@@ -69,6 +69,34 @@ export function parseDurationInput(value: string): ParsedDuration | null {
       };
 }
 
+/** Liest und normalisiert einen positiven oder negativen Zeitübertrag. */
+export function parseTimeDifferenceInput(value: string): ParsedDuration | null {
+  const normalized = value.trim();
+
+  if (normalized.length === 0) {
+    return null;
+  }
+
+  const sign =
+    normalized.startsWith('-') || normalized.startsWith('−') ? -1 : 1;
+  const unsignedValue =
+    normalized.startsWith('+') || sign === -1
+      ? normalized.slice(1).trim()
+      : normalized;
+  const parsedDuration = parseDuration(unsignedValue);
+
+  if (parsedDuration === null) {
+    return null;
+  }
+
+  const minutes = parsedDuration === 0 ? 0 : sign * parsedDuration;
+
+  return {
+    minutes,
+    normalized: formatTimeDifference(minutes),
+  };
+}
+
 /** Formatiert eine nichtnegative, ganzzahlige Minutendauer als HH:MM. */
 export function formatDuration(minutes: number): string {
   assertSafeInteger(minutes, false);

@@ -4,6 +4,7 @@ export {
   normalizeClockTime,
   parseDuration,
   parseDurationInput,
+  parseTimeDifferenceInput,
   roundNonNegativeMinutes,
 } from './time';
 

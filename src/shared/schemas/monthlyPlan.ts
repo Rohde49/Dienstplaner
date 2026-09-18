@@ -133,6 +133,58 @@ const planNoteSchema = z
   .transform((note) => (note.length === 0 ? null : note))
   .nullable();
 
+const signedMinuteValueSchema = z
+  .number()
+  .int('Der Zeitübertrag muss minutengenau angegeben werden.')
+  .min(
+    Number.MIN_SAFE_INTEGER,
+    'Der Zeitübertrag ist zu klein, um zuverlässig gespeichert zu werden.',
+  )
+  .max(
+    Number.MAX_SAFE_INTEGER,
+    'Der Zeitübertrag ist zu groß, um zuverlässig gespeichert zu werden.',
+  );
+
+/** Prüft den manuellen Zeitübertrag eines Planmitarbeiters. */
+export const workingTimeCarryoverEntrySchema = z
+  .object({
+    planEmployeeId: uuidSchema,
+    minutes: signedMinuteValueSchema,
+  })
+  .strict();
+
+/** Prüft den manuell gepflegten Zeitübertrag eines Monatsplans. */
+export const workingTimeCarryoverSchema = z
+  .object({
+    month: z.number().int().min(1).max(12).nullable(),
+    entries: z.array(workingTimeCarryoverEntrySchema),
+  })
+  .strict()
+  .superRefine((carryover, context) => {
+    if (carryover.month === null && carryover.entries.length > 0) {
+      context.addIssue({
+        code: 'custom',
+        path: ['month'],
+        message:
+          'Für gespeicherte Zeitüberträge muss ein Bezugsmonat ausgewählt sein.',
+      });
+    }
+
+    const employeeIds = new Set<string>();
+    carryover.entries.forEach((entry, index) => {
+      if (employeeIds.has(entry.planEmployeeId)) {
+        context.addIssue({
+          code: 'custom',
+          path: ['entries', index, 'planEmployeeId'],
+          message:
+            'Pro Planmitarbeiter darf höchstens ein Zeitübertrag gespeichert werden.',
+        });
+      }
+
+      employeeIds.add(entry.planEmployeeId);
+    });
+  });
+
 /** Prüft einen Kalendertag samt seiner planlokalen Inhalte. */
 export const planDaySchema = z
   .object({
@@ -157,6 +209,10 @@ const monthlyPlanObjectSchema = z
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     employees: z.array(planEmployeeSchema),
+    workingTimeCarryover: workingTimeCarryoverSchema.default({
+      month: null,
+      entries: [],
+    }),
     days: z.array(planDaySchema),
   })
   .strict();
@@ -264,6 +320,35 @@ export const monthlyPlanSchema = monthlyPlanObjectSchema.superRefine(
       }
     }
 
+    plan.workingTimeCarryover.entries.forEach((entry, entryIndex) => {
+      const employee = employeesById.get(entry.planEmployeeId);
+
+      if (!employee) {
+        context.addIssue({
+          code: 'custom',
+          path: [
+            'workingTimeCarryover',
+            'entries',
+            entryIndex,
+            'planEmployeeId',
+          ],
+          message:
+            'Der Zeitübertrag muss auf einen Mitarbeiter desselben Monatsplans verweisen.',
+        });
+      } else if (employee.role !== 'Erzieher') {
+        context.addIssue({
+          code: 'custom',
+          path: [
+            'workingTimeCarryover',
+            'entries',
+            entryIndex,
+            'planEmployeeId',
+          ],
+          message: 'Ein Zeitübertrag darf nur für Erzieher gespeichert werden.',
+        });
+      }
+    });
+
     const dayIds = new Set<string>();
     const entryIds = new Set<string>();
     const summedTimeValuesByEmployee = new Map<
@@ -368,5 +453,9 @@ export const monthlyPlanSchema = monthlyPlanObjectSchema.superRefine(
 export type PlanEmployee = z.infer<typeof planEmployeeSchema>;
 export type PlanEntry = z.infer<typeof planEntrySchema>;
 export type PlanDay = z.infer<typeof planDaySchema>;
+export type WorkingTimeCarryoverEntry = z.infer<
+  typeof workingTimeCarryoverEntrySchema
+>;
+export type WorkingTimeCarryover = z.infer<typeof workingTimeCarryoverSchema>;
 export type MonthlyPlan = z.infer<typeof monthlyPlanSchema>;
 export type MonthlyPlanInput = z.infer<typeof monthlyPlanInputSchema>;

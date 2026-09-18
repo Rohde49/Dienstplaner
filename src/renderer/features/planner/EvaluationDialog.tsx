@@ -1,5 +1,5 @@
 import { BarChart3, Users } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   TARGET_FREE_WEEKEND_DAY_COUNT,
@@ -7,10 +7,11 @@ import {
   formatDuration,
   formatTimeDifference,
   getTargetCountStatus,
+  parseTimeDifferenceInput,
   type EmployeeMonthlyEvaluation,
   type MonthlyPlanEvaluation,
 } from '../../../shared/calculations';
-import type { MonthlyPlan } from '../../../shared/schemas';
+import type { MonthlyPlan, PlanEmployee } from '../../../shared/schemas';
 import {
   Alert,
   Badge,
@@ -19,14 +20,21 @@ import {
   DialogRoot,
   DialogTrigger,
   EmptyState,
+  Input,
+  Select,
 } from '../../components/ui';
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
+import {
+  setDraftEmployeeWorkingTimeCarryover,
+  setDraftWorkingTimeCarryoverMonth,
+} from './plannerDraft';
 import { PLANNER_MONTHS } from './plannerState';
 
 type EvaluationDialogProps = {
   plan: MonthlyPlan | null;
   disabled: boolean;
   status: 'saved' | 'draft' | 'recovered';
+  onPlanChange: (plan: MonthlyPlan) => void;
 };
 
 type EvaluationRow = {
@@ -162,8 +170,225 @@ function getRowHighlightClasses(
   return null;
 }
 
-/** Verdichtet den aktuellen Planentwurf zu einer ausschließlich lesbaren Tabelle. */
-function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
+function createCarryoverInputValues(
+  plan: MonthlyPlan,
+  educators: PlanEmployee[],
+): Record<string, string> {
+  const minutesByEmployeeId = new Map(
+    plan.workingTimeCarryover.entries.map((entry) => [
+      entry.planEmployeeId,
+      entry.minutes,
+    ]),
+  );
+
+  return Object.fromEntries(
+    educators.map((employee) => {
+      const minutes = minutesByEmployeeId.get(employee.id);
+      return [
+        employee.id,
+        minutes === undefined ? '' : formatTimeDifference(minutes),
+      ];
+    }),
+  );
+}
+
+function getCarryoverInputClasses(value: string, hasError: boolean): string {
+  if (hasError) {
+    return '!border-app-danger !bg-app-danger-subtle !text-app-danger';
+  }
+
+  if (value.trim().length === 0) {
+    return '';
+  }
+
+  const parsedValue = parseTimeDifferenceInput(value);
+
+  if (!parsedValue || parsedValue.minutes === 0) {
+    return '!border-app-border !bg-app-surface-muted !text-app-muted';
+  }
+
+  return parsedValue.minutes > 0
+    ? '!border-app-signal-success-border !bg-app-signal-success-subtle !text-app-signal-success'
+    : '!border-app-signal-danger-border !bg-app-signal-danger-subtle !text-app-signal-danger';
+}
+
+type WorkingTimeCarryoverRowProps = {
+  plan: MonthlyPlan;
+  educators: PlanEmployee[];
+  onPlanChange: (plan: MonthlyPlan) => void;
+};
+
+/** Pflegt den extern ermittelten Zeitübertrag ohne Einfluss auf Berechnungen. */
+function WorkingTimeCarryoverRow({
+  plan,
+  educators,
+  onPlanChange,
+}: WorkingTimeCarryoverRowProps) {
+  const [inputValues, setInputValues] = useState<Record<string, string>>(() =>
+    createCarryoverInputValues(plan, educators),
+  );
+  const [invalidEmployeeIds, setInvalidEmployeeIds] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const carryoverMonth = plan.workingTimeCarryover.month;
+  const hasStoredEntries = plan.workingTimeCarryover.entries.length > 0;
+
+  function updateInputValue(employeeId: string, value: string): void {
+    setInputValues((currentValues) => ({
+      ...currentValues,
+      [employeeId]: value,
+    }));
+    setInvalidEmployeeIds((currentIds) => {
+      if (!currentIds.has(employeeId)) {
+        return currentIds;
+      }
+
+      const nextIds = new Set(currentIds);
+      nextIds.delete(employeeId);
+      return nextIds;
+    });
+  }
+
+  function commitInputValue(employee: PlanEmployee): void {
+    const value = inputValues[employee.id] ?? '';
+
+    if (value.trim().length === 0) {
+      setInvalidEmployeeIds((currentIds) => {
+        const nextIds = new Set(currentIds);
+        nextIds.delete(employee.id);
+        return nextIds;
+      });
+      onPlanChange(
+        setDraftEmployeeWorkingTimeCarryover(plan, employee.id, null),
+      );
+      return;
+    }
+
+    const parsedValue = parseTimeDifferenceInput(value);
+
+    if (!parsedValue) {
+      setInvalidEmployeeIds((currentIds) =>
+        new Set(currentIds).add(employee.id),
+      );
+      return;
+    }
+
+    setInputValues((currentValues) => ({
+      ...currentValues,
+      [employee.id]: parsedValue.normalized,
+    }));
+    setInvalidEmployeeIds((currentIds) => {
+      const nextIds = new Set(currentIds);
+      nextIds.delete(employee.id);
+      return nextIds;
+    });
+    onPlanChange(
+      setDraftEmployeeWorkingTimeCarryover(
+        plan,
+        employee.id,
+        parsedValue.minutes,
+      ),
+    );
+  }
+
+  return (
+    <tr>
+      <th
+        scope="row"
+        className="border-t-app-border-strong border-app-border bg-app-surface-muted border-t-2 border-r px-3 py-2 text-left font-medium"
+      >
+        <span className="mb-1.5 block">Übertrag aus</span>
+        <Select
+          aria-label="Bezugsmonat des Zeitübertrags"
+          className="!h-8 px-2 text-xs"
+          value={carryoverMonth ?? ''}
+          onChange={(event) => {
+            onPlanChange(
+              setDraftWorkingTimeCarryoverMonth(
+                plan,
+                event.currentTarget.value === ''
+                  ? null
+                  : Number(event.currentTarget.value),
+              ),
+            );
+            event.currentTarget.blur();
+          }}
+        >
+          <option value="" disabled={hasStoredEntries}>
+            Monat wählen
+          </option>
+          {PLANNER_MONTHS.map((month, index) => (
+            <option key={month} value={index + 1}>
+              {month}
+            </option>
+          ))}
+        </Select>
+      </th>
+
+      {educators.map((employee, employeeIndex) => {
+        const hasError = invalidEmployeeIds.has(employee.id);
+        const errorId = `carryover-error-${employee.id}`;
+        const value = inputValues[employee.id] ?? '';
+
+        return (
+          <td
+            key={employee.id}
+            className={`border-t-app-border-strong bg-app-surface border-t-2 px-2 py-2 text-center ${
+              employeeIndex < educators.length - 1
+                ? 'border-app-border border-r'
+                : ''
+            }`}
+          >
+            <Input
+              aria-describedby={hasError ? errorId : undefined}
+              aria-invalid={hasError}
+              aria-label={`Zeitübertrag für ${employee.firstName} ${employee.lastName}`}
+              className={`!h-8 px-2 text-center text-xs font-semibold tabular-nums hover:shadow-sm ${getCarryoverInputClasses(
+                value,
+                hasError,
+              )}`}
+              disabled={carryoverMonth === null}
+              inputMode="text"
+              placeholder="±00:00"
+              title={
+                carryoverMonth === null
+                  ? 'Bitte zuerst einen Bezugsmonat auswählen.'
+                  : 'Positive oder negative Zeit im Format ±HH:MM'
+              }
+              value={value}
+              onBlur={() => commitInputValue(employee)}
+              onChange={(event) =>
+                updateInputValue(employee.id, event.currentTarget.value)
+              }
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.currentTarget.blur();
+                }
+              }}
+            />
+            {hasError ? (
+              <span
+                id={errorId}
+                className="text-app-danger mt-1 block text-[10px] leading-3"
+              >
+                Ungültige Zeit
+              </span>
+            ) : null}
+          </td>
+        );
+      })}
+    </tr>
+  );
+}
+
+/** Verdichtet den aktuellen Planentwurf und ergänzt den manuellen Zeitübertrag. */
+function EvaluationTable({
+  plan,
+  onPlanChange,
+}: {
+  plan: MonthlyPlan;
+  onPlanChange: (plan: MonthlyPlan) => void;
+}) {
   const result = useMemo<EvaluationResult>(() => {
     try {
       return { evaluation: calculateMonthlyPlanEvaluation(plan), error: null };
@@ -320,6 +545,11 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
                 </tr>
               );
             })}
+            <WorkingTimeCarryoverRow
+              plan={plan}
+              educators={educators}
+              onPlanChange={onPlanChange}
+            />
           </tbody>
         </table>
       </div>
@@ -327,11 +557,12 @@ function EvaluationTable({ plan }: { plan: MonthlyPlan }) {
   );
 }
 
-/** Öffnet die Auswertung modal über dem unveränderten Planungsstand. */
+/** Öffnet die Auswertung modal über dem aktuellen Planentwurf. */
 export function EvaluationDialog({
   plan,
   disabled,
   status,
+  onPlanChange,
 }: EvaluationDialogProps) {
   const period = plan ? `${PLANNER_MONTHS[plan.month - 1]} ${plan.year}` : '';
   const statusLabel =
@@ -359,6 +590,14 @@ export function EvaluationDialog({
             width: `min(calc(100vw - 3rem), ${dialogWidth}px)`,
             maxWidth: 'none',
           }}
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            (event.currentTarget as HTMLElement)
+              .querySelector<HTMLButtonElement>(
+                'button[aria-label="Dialog schließen"]',
+              )
+              ?.focus({ preventScroll: true });
+          }}
           title="Auswertung"
           description={`${plan.title} · ${period}`}
           headerAside={
@@ -367,7 +606,7 @@ export function EvaluationDialog({
             </Badge>
           }
         >
-          <EvaluationTable plan={plan} />
+          <EvaluationTable plan={plan} onPlanChange={onPlanChange} />
         </DialogContent>
       ) : null}
     </DialogRoot>

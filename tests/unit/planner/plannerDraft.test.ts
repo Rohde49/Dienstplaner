@@ -5,8 +5,10 @@ import {
   removeDraftPlanEntry,
   setDraftDayNote,
   setDraftOnCallEmployee,
+  setDraftEmployeeWorkingTimeCarryover,
   setDraftPlanEntry,
   setDraftPlanTitle,
+  setDraftWorkingTimeCarryoverMonth,
 } from '../../../src/renderer/features/planner/plannerDraft';
 import {
   completePlannerTeamLoad,
@@ -149,6 +151,44 @@ describe('Planentwurf', () => {
       setDraftDayNote(plan, plan.days[0].id, 'x'.repeat(61)),
     ).toThrow();
     expect(() => setDraftPlanTitle(plan, 'x'.repeat(201))).toThrow();
+  });
+
+  it('pflegt den manuellen Zeitübertrag ausschließlich für Erzieher', () => {
+    const plan = createPlan();
+    const educatorId = plan.employees[0].id;
+    const serviceEmployeeId = plan.employees[1].id;
+    const withMonth = setDraftWorkingTimeCarryoverMonth(plan, 8);
+    const withPositiveCarryover = setDraftEmployeeWorkingTimeCarryover(
+      withMonth,
+      educatorId,
+      198,
+    );
+    const withNegativeCarryover = setDraftEmployeeWorkingTimeCarryover(
+      withPositiveCarryover,
+      educatorId,
+      -541,
+    );
+
+    expect(withNegativeCarryover.workingTimeCarryover).toEqual({
+      month: 8,
+      entries: [{ planEmployeeId: educatorId, minutes: -541 }],
+    });
+    expect(
+      setDraftEmployeeWorkingTimeCarryover(
+        withNegativeCarryover,
+        educatorId,
+        null,
+      ).workingTimeCarryover.entries,
+    ).toEqual([]);
+    expect(() =>
+      setDraftEmployeeWorkingTimeCarryover(withMonth, serviceEmployeeId, 60),
+    ).toThrow('nur für Erzieher');
+    expect(() =>
+      setDraftEmployeeWorkingTimeCarryover(plan, educatorId, 60),
+    ).toThrow('Bezugsmonat');
+    expect(() =>
+      setDraftWorkingTimeCarryoverMonth(withNegativeCarryover, null),
+    ).toThrow('nicht entfernt');
   });
 
   it('ersetzt nur den Entwurf und bewahrt den gespeicherten Ausgangsstand', () => {
