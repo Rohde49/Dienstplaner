@@ -68,8 +68,9 @@ Mindestens folgende Informationen sind sichtbar:
 - reine Arbeitszeit und
 - Status.
 
-Bei der Berechnungsart `Wochenarbeitszeit` wird anstelle eines festen Wertes die
-Formel `Wochenarbeitszeit ÷ 5` angezeigt. Fehlen Start- und Endzeit, wird dies
+Bei der Berechnungsart `Wochenarbeitszeit` wird anstelle eines festen Wertes
+„Dynamisch“ angezeigt. Der konkrete Tageswert wird erst beim Einplanen aus der
+individuellen Wochenarbeitszeit bestimmt. Fehlen Start- und Endzeit, wird dies
 ausdrücklich als „Keine Uhrzeit“ dargestellt. Bei `Freier Tag` wird die reine
 Arbeitszeit mit `0:00` angezeigt.
 

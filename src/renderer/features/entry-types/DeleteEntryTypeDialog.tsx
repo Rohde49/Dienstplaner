@@ -69,7 +69,7 @@ export function DeleteEntryTypeDialog({
         <IconButton
           label={`${entryTypeLabel} löschen`}
           disabled={disabled}
-          className="text-app-danger hover:bg-app-danger-subtle hover:text-app-danger-hover"
+          className="border-app-danger-border bg-app-danger-subtle !text-app-danger hover:!bg-app-danger-border hover:!text-app-danger-hover !size-8 border"
         >
           <Trash2 aria-hidden="true" size={17} />
         </IconButton>

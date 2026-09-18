@@ -61,7 +61,7 @@ type DropTarget = {
 function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
   if (entryType.startTime === null || entryType.endTime === null) {
     return (
-      <span className="text-app-muted flex items-center gap-2 text-sm">
+      <span className="text-app-muted flex items-center justify-center gap-2 text-sm">
         <Clock3 aria-hidden="true" size={16} />
         Keine Uhrzeit
       </span>
@@ -69,7 +69,7 @@ function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
   }
 
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-start justify-center gap-2">
       <Clock3
         aria-hidden="true"
         className="text-app-muted mt-0.5 shrink-0"
@@ -92,7 +92,7 @@ function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
 
 function formatPureWorkingTime(entryType: EntryType): string {
   return entryType.calculationType === 'weeklyWorkingTime'
-    ? 'Wochenarbeitszeit ÷ 5'
+    ? 'Dynamisch'
     : formatDuration(entryType.timeValues.workingWithoutNightReadinessMinutes);
 }
 
@@ -376,25 +376,25 @@ export function EntryTypesPage() {
                 </colgroup>
                 <thead className="border-app-border bg-app-surface-muted border-b">
                   <tr>
-                    <th className="px-2 py-3">
+                    <th className="border-app-border/70 border-r px-2 py-3 text-center">
                       <span className="sr-only">Reihenfolge</span>
                     </th>
                     <th className="text-app-muted px-3 py-3 text-xs font-semibold">
                       Planungseintrag
                     </th>
-                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-center text-xs font-semibold">
                       Uhrzeiten
                     </th>
-                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-center text-xs font-semibold">
                       Berechnungsart
                     </th>
-                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-center text-xs font-semibold">
                       Reine Arbeitszeit
                     </th>
-                    <th className="text-app-muted px-3 py-3 text-center text-xs font-semibold">
+                    <th className="border-app-border/70 text-app-muted border-l px-3 py-3 text-center text-xs font-semibold">
                       Status
                     </th>
-                    <th className="text-app-muted px-3 py-3 text-right text-xs font-semibold">
+                    <th className="border-app-border/70 text-app-muted border-l px-3 py-3 text-center text-xs font-semibold">
                       Aktionen
                     </th>
                   </tr>
@@ -434,7 +434,9 @@ export function EntryTypesPage() {
                         }
                         onDrop={handleDrop}
                       >
-                        <td className={`px-2 py-2 ${dropIndicatorClass}`}>
+                        <td
+                          className={`border-app-border/70 border-r px-2 py-2 text-center ${dropIndicatorClass}`}
+                        >
                           <IconButton
                             label={`${entryType.code} – ${entryType.name} verschieben. Mit den Pfeiltasten nach oben oder unten bewegen.`}
                             className="!size-8 cursor-grab active:cursor-grabbing"
@@ -472,21 +474,25 @@ export function EntryTypesPage() {
                             </span>
                           </div>
                         </td>
-                        <td className={`px-3 py-3 ${dropIndicatorClass}`}>
+                        <td
+                          className={`px-3 py-3 text-center ${dropIndicatorClass}`}
+                        >
                           <EntryTypeClockTimes entryType={entryType} />
                         </td>
-                        <td className={`px-3 py-3 ${dropIndicatorClass}`}>
+                        <td
+                          className={`px-3 py-3 text-center ${dropIndicatorClass}`}
+                        >
                           <Badge variant="neutral">
                             {CALCULATION_TYPE_LABELS[entryType.calculationType]}
                           </Badge>
                         </td>
                         <td
-                          className={`text-app-muted px-3 py-3 text-sm tabular-nums ${dropIndicatorClass}`}
+                          className={`text-app-muted px-3 py-3 text-center text-sm tabular-nums ${dropIndicatorClass}`}
                         >
                           {formatPureWorkingTime(entryType)}
                         </td>
                         <td
-                          className={`px-3 py-3 text-center ${dropIndicatorClass}`}
+                          className={`border-app-border/70 border-l px-3 py-3 text-center ${dropIndicatorClass}`}
                         >
                           <button
                             type="button"
@@ -515,14 +521,15 @@ export function EntryTypesPage() {
                           </button>
                         </td>
                         <td
-                          className={`px-3 py-3 text-right ${dropIndicatorClass}`}
+                          className={`border-app-border/70 border-l px-3 py-3 text-center ${dropIndicatorClass}`}
                         >
-                          <div className="flex justify-end gap-1">
+                          <div className="flex justify-center gap-1">
                             <EntryTypeDialog
                               entryType={entryType}
                               trigger={
                                 <IconButton
                                   label={`${entryType.code} – ${entryType.name} bearbeiten`}
+                                  className="border-app-primary-border bg-app-primary-subtle !text-app-primary hover:!bg-app-primary-selected hover:!text-app-primary-hover !size-8 border"
                                   disabled={isStatusUpdating || isReordering}
                                 >
                                   <Pencil aria-hidden="true" size={17} />
