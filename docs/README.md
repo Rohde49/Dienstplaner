@@ -65,6 +65,7 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 ### Planung
 
+- [Umsetzungsplan proprietäre Lizenzierung](./planung/umsetzungsplan-proprietaere-lizenzierung.md)
 - [Umsetzungsplan Kompaktansicht](./planung/umsetzungsplan-kompaktansicht.md)
 - [Umsetzungsplan Auswertungsdialog](./planung/umsetzungsplan-auswertungsdialog.md)
 - [Abstimmung PDF-Export](./planung/abstimmung-pdf-export.md)

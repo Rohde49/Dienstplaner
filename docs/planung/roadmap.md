@@ -39,6 +39,18 @@ tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
 
 ## Spätere Erweiterungsmöglichkeiten
 
+### Proprietäre Lizenzierung und rechtliche Auslieferung
+
+Die Umstellung auf eine proprietäre Lizenz ist als zukünftiges Arbeitspaket
+vorgesehen und wird derzeit nicht umgesetzt. Der bereits erstellte
+[Umsetzungsplan](umsetzungsplan-proprietaere-lizenzierung.md) hält die
+erforderlichen Entscheidungen und technischen Schritte fest und bleibt bis zur
+späteren Wiederaufnahme unverändert erhalten.
+
+Vor einem kommerziellen oder breiten externen Vertrieb müssen insbesondere der
+Rechteinhaber und Nutzungsumfang festgelegt, die Fremdlizenzen vollständig
+geprüft sowie die Lizenztexte in Anwendung und Installer aufgenommen werden.
+
 ### Schulferientermine durch Benutzer aktualisieren
 
 Die feststehenden Brandenburger Schulferien werden zunächst zentral und offline
