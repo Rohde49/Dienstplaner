@@ -3,6 +3,7 @@ import type {
   EmployeeInput,
   EntryType,
   EntryTypeInput,
+  EntryTypeOrder,
   MonthlyPlan,
   MonthlyPlanInput,
   MonthlyPlanLoadResult,
@@ -24,6 +25,7 @@ export type EntryTypesApi = {
   list: () => Promise<EntryType[]>;
   create: (input: EntryTypeInput) => Promise<EntryType>;
   update: (id: string, input: EntryTypeInput) => Promise<EntryType>;
+  reorder: (orderedIds: EntryTypeOrder) => Promise<EntryType[]>;
   remove: (id: string) => Promise<void>;
 };
 

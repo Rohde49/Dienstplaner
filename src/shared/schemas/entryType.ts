@@ -9,6 +9,25 @@ export const CALCULATION_TYPES = [
 export const calculationTypeSchema = z.enum(CALCULATION_TYPES);
 export const entryTypeIdSchema = z.string().uuid();
 
+/** Prüft eine duplikatfreie Reihenfolge gültiger Eintragsarten-IDs. */
+export const entryTypeOrderSchema = z
+  .array(entryTypeIdSchema)
+  .superRefine((ids, context) => {
+    const knownIds = new Set<string>();
+
+    ids.forEach((id, index) => {
+      if (knownIds.has(id)) {
+        context.addIssue({
+          code: 'custom',
+          path: [index],
+          message: 'Jede Eintragsarten-ID darf nur einmal enthalten sein.',
+        });
+      }
+
+      knownIds.add(id);
+    });
+  });
+
 /** Entfernt äußere Leerzeichen und prüft ein frei vergebenes Kürzel. */
 export const entryCodeSchema = z
   .string()
@@ -222,4 +241,5 @@ export type CalculationType = z.infer<typeof calculationTypeSchema>;
 export type TimeValues = z.infer<typeof timeValuesSchema>;
 export type EntryType = z.infer<typeof entryTypeSchema>;
 export type EntryTypeInput = z.infer<typeof entryTypeInputSchema>;
+export type EntryTypeOrder = z.infer<typeof entryTypeOrderSchema>;
 export type EntryTypesFile = z.infer<typeof entryTypesFileSchema>;

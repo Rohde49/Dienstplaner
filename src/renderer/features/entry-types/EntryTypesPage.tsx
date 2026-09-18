@@ -1,5 +1,17 @@
-import { ClipboardList, Clock3, ListPlus, Pencil } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  ClipboardList,
+  Clock3,
+  GripVertical,
+  ListPlus,
+  Pencil,
+} from 'lucide-react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type DragEvent as ReactDragEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from 'react';
 import { toast } from 'sonner';
 
 import type { EntryType } from '../../../shared/schemas';
@@ -17,6 +29,11 @@ import {
 import { DeleteEntryTypeDialog } from './DeleteEntryTypeDialog';
 import { EntryTypeDialog } from './EntryTypeDialog';
 import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
+import {
+  moveEntryType,
+  swapEntryType,
+  type EntryTypeDropPosition,
+} from './entryTypeOrder';
 
 function getErrorMessage(error: unknown): string {
   return error instanceof Error
@@ -29,6 +46,17 @@ function getStatusErrorMessage(error: unknown): string {
     ? error.message
     : 'Der Status konnte nicht gespeichert werden.';
 }
+
+function getReorderErrorMessage(error: unknown): string {
+  return error instanceof Error
+    ? error.message
+    : 'Die Reihenfolge konnte nicht gespeichert werden.';
+}
+
+type DropTarget = {
+  entryTypeId: string;
+  position: EntryTypeDropPosition;
+};
 
 function EntryTypeClockTimes({ entryType }: { entryType: EntryType }) {
   if (entryType.startTime === null || entryType.endTime === null) {
@@ -76,6 +104,14 @@ export function EntryTypesPage() {
   const [statusUpdatingIds, setStatusUpdatingIds] = useState<Set<string>>(
     () => new Set(),
   );
+  const [draggedEntryTypeId, setDraggedEntryTypeId] = useState<string | null>(
+    null,
+  );
+  const [dropTarget, setDropTarget] = useState<DropTarget | null>(null);
+  const [reorderingEntryTypeId, setReorderingEntryTypeId] = useState<
+    string | null
+  >(null);
+  const [reorderAnnouncement, setReorderAnnouncement] = useState('');
 
   const loadEntryTypes = useCallback(async (): Promise<void> => {
     setIsLoading(true);
@@ -130,6 +166,135 @@ export function EntryTypesPage() {
     }
   }
 
+  async function saveEntryTypeOrder(
+    nextEntryTypes: EntryType[],
+    movedEntryTypeId: string,
+  ): Promise<void> {
+    if (
+      nextEntryTypes.every(
+        (entryType, index) => entryType.id === entryTypes[index]?.id,
+      )
+    ) {
+      return;
+    }
+
+    const previousEntryTypes = entryTypes;
+    setEntryTypes(nextEntryTypes);
+    setReorderingEntryTypeId(movedEntryTypeId);
+    setReorderAnnouncement('');
+
+    try {
+      const savedEntryTypes = await window.dienstplaner.entryTypes.reorder(
+        nextEntryTypes.map((entryType) => entryType.id),
+      );
+      const movedEntryType = savedEntryTypes.find(
+        (entryType) => entryType.id === movedEntryTypeId,
+      );
+      const movedEntryTypeIndex = savedEntryTypes.findIndex(
+        (entryType) => entryType.id === movedEntryTypeId,
+      );
+
+      setEntryTypes(savedEntryTypes);
+      setReorderAnnouncement(
+        movedEntryType
+          ? `${movedEntryType.code} – ${movedEntryType.name} wurde an Position ${movedEntryTypeIndex + 1} verschoben.`
+          : 'Die neue Reihenfolge wurde gespeichert.',
+      );
+    } catch (error) {
+      setEntryTypes(previousEntryTypes);
+      toast.error(getReorderErrorMessage(error));
+    } finally {
+      setReorderingEntryTypeId(null);
+    }
+  }
+
+  function handleDragStart(
+    event: ReactDragEvent<HTMLButtonElement>,
+    entryTypeId: string,
+  ): void {
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', entryTypeId);
+
+    const tableRow = event.currentTarget.closest('tr');
+    if (tableRow) {
+      event.dataTransfer.setDragImage(tableRow, 20, tableRow.clientHeight / 2);
+    }
+
+    setDraggedEntryTypeId(entryTypeId);
+    setDropTarget(null);
+    setReorderAnnouncement('');
+  }
+
+  function handleDragOver(
+    event: ReactDragEvent<HTMLTableRowElement>,
+    targetEntryTypeId: string,
+  ): void {
+    if (
+      draggedEntryTypeId === null ||
+      draggedEntryTypeId === targetEntryTypeId
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+
+    const rowBounds = event.currentTarget.getBoundingClientRect();
+    const position =
+      event.clientY < rowBounds.top + rowBounds.height / 2 ? 'before' : 'after';
+
+    setDropTarget((currentTarget) =>
+      currentTarget?.entryTypeId === targetEntryTypeId &&
+      currentTarget.position === position
+        ? currentTarget
+        : { entryTypeId: targetEntryTypeId, position },
+    );
+  }
+
+  function handleDrop(event: ReactDragEvent<HTMLTableRowElement>): void {
+    event.preventDefault();
+
+    const sourceId =
+      draggedEntryTypeId ?? event.dataTransfer.getData('text/plain');
+    const currentDropTarget = dropTarget;
+
+    setDraggedEntryTypeId(null);
+    setDropTarget(null);
+
+    if (!sourceId || currentDropTarget === null) {
+      return;
+    }
+
+    void saveEntryTypeOrder(
+      moveEntryType(
+        entryTypes,
+        sourceId,
+        currentDropTarget.entryTypeId,
+        currentDropTarget.position,
+      ),
+      sourceId,
+    );
+  }
+
+  function handleReorderKeyDown(
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    entryTypeId: string,
+  ): void {
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+      return;
+    }
+
+    event.preventDefault();
+    void saveEntryTypeOrder(
+      swapEntryType(entryTypes, entryTypeId, event.key === 'ArrowUp' ? -1 : 1),
+      entryTypeId,
+    );
+  }
+
+  const isReordering = reorderingEntryTypeId !== null;
+  const isReorderBlocked =
+    isReordering || statusUpdatingIds.size > 0 || entryTypes.length < 2;
+
   return (
     <>
       <PageHeader
@@ -162,7 +327,16 @@ export function EntryTypesPage() {
           <Badge variant="success">
             {entryTypes.filter((entryType) => entryType.active).length}
           </Badge>
+
+          <span className="text-app-muted ml-auto flex items-center gap-1.5 text-xs">
+            <GripVertical aria-hidden="true" size={15} />
+            Reihenfolge am Griff ziehen
+          </span>
         </Toolbar>
+
+        <p className="sr-only" aria-live="polite">
+          {reorderAnnouncement}
+        </p>
 
         <Card className="overflow-hidden">
           {isLoading ? (
@@ -190,26 +364,38 @@ export function EntryTypesPage() {
             />
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left">
+              <table className="w-full min-w-[960px] table-fixed border-collapse text-left">
+                <colgroup>
+                  <col className="w-14" />
+                  <col className="w-[27%]" />
+                  <col className="w-[17%]" />
+                  <col className="w-[19%]" />
+                  <col />
+                  <col className="w-28" />
+                  <col className="w-24" />
+                </colgroup>
                 <thead className="border-app-border bg-app-surface-muted border-b">
                   <tr>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
+                    <th className="px-2 py-3">
+                      <span className="sr-only">Reihenfolge</span>
+                    </th>
+                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
                       Planungseintrag
                     </th>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
                       Uhrzeiten
                     </th>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
                       Berechnungsart
                     </th>
-                    <th className="text-app-muted px-4 py-3 text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-xs font-semibold">
                       Reine Arbeitszeit
                     </th>
-                    <th className="text-app-muted px-4 py-3 text-center text-xs font-semibold">
+                    <th className="text-app-muted px-3 py-3 text-center text-xs font-semibold">
                       Status
                     </th>
-                    <th className="w-24 px-4 py-3 text-right">
-                      <span className="sr-only">Aktionen</span>
+                    <th className="text-app-muted px-3 py-3 text-right text-xs font-semibold">
+                      Aktionen
                     </th>
                   </tr>
                 </thead>
@@ -219,41 +405,95 @@ export function EntryTypesPage() {
                     const isStatusUpdating = statusUpdatingIds.has(
                       entryType.id,
                     );
+                    const dropPosition =
+                      dropTarget?.entryTypeId === entryType.id
+                        ? dropTarget.position
+                        : null;
+                    const dropIndicatorClass =
+                      dropPosition === 'before'
+                        ? 'border-t-2 border-t-app-primary'
+                        : dropPosition === 'after'
+                          ? 'border-b-2 border-b-app-primary'
+                          : '';
 
                     return (
                       <tr
                         key={entryType.id}
-                        className="hover:bg-app-surface-muted"
-                        aria-busy={isStatusUpdating}
+                        className={[
+                          'hover:bg-app-surface-muted transition-[background-color,opacity]',
+                          draggedEntryTypeId === entryType.id
+                            ? 'opacity-40'
+                            : '',
+                        ].join(' ')}
+                        aria-busy={
+                          isStatusUpdating ||
+                          reorderingEntryTypeId === entryType.id
+                        }
+                        onDragOver={(event) =>
+                          handleDragOver(event, entryType.id)
+                        }
+                        onDrop={handleDrop}
                       >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-3">
+                        <td className={`px-2 py-2 ${dropIndicatorClass}`}>
+                          <IconButton
+                            label={`${entryType.code} – ${entryType.name} verschieben. Mit den Pfeiltasten nach oben oder unten bewegen.`}
+                            className="!size-8 cursor-grab active:cursor-grabbing"
+                            disabled={isReorderBlocked}
+                            draggable={!isReorderBlocked}
+                            onDragStart={(event) =>
+                              handleDragStart(event, entryType.id)
+                            }
+                            onDragEnd={() => {
+                              setDraggedEntryTypeId(null);
+                              setDropTarget(null);
+                            }}
+                            onKeyDown={(event) =>
+                              handleReorderKeyDown(event, entryType.id)
+                            }
+                          >
+                            {reorderingEntryTypeId === entryType.id ? (
+                              <Spinner
+                                size="sm"
+                                label="Reihenfolge wird gespeichert"
+                                className="text-current"
+                              />
+                            ) : (
+                              <GripVertical aria-hidden="true" size={18} />
+                            )}
+                          </IconButton>
+                        </td>
+                        <td className={`px-3 py-3 ${dropIndicatorClass}`}>
+                          <div className="flex min-w-0 items-center gap-2.5">
                             <Badge variant="primary" className="shrink-0">
                               {entryType.code}
                             </Badge>
-                            <span className="text-app-text text-sm font-medium">
+                            <span className="text-app-text min-w-0 text-sm font-medium">
                               {entryType.name}
                             </span>
                           </div>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={`px-3 py-3 ${dropIndicatorClass}`}>
                           <EntryTypeClockTimes entryType={entryType} />
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={`px-3 py-3 ${dropIndicatorClass}`}>
                           <Badge variant="neutral">
                             {CALCULATION_TYPE_LABELS[entryType.calculationType]}
                           </Badge>
                         </td>
-                        <td className="text-app-muted px-4 py-3 text-sm tabular-nums">
+                        <td
+                          className={`text-app-muted px-3 py-3 text-sm tabular-nums ${dropIndicatorClass}`}
+                        >
                           {formatPureWorkingTime(entryType)}
                         </td>
-                        <td className="px-4 py-3 text-center">
+                        <td
+                          className={`px-3 py-3 text-center ${dropIndicatorClass}`}
+                        >
                           <button
                             type="button"
                             role="switch"
                             aria-checked={entryType.active}
                             aria-label={`${entryType.code} ${entryType.active ? 'deaktivieren' : 'aktivieren'}`}
-                            disabled={isStatusUpdating}
+                            disabled={isStatusUpdating || isReordering}
                             className={[
                               'focus-visible:outline-app-primary inline-flex h-7 min-w-20 items-center justify-center gap-2 rounded-full border px-3 text-xs font-semibold transition-[background-color,border-color,color,box-shadow,transform] focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-wait disabled:opacity-70',
                               entryType.active
@@ -274,14 +514,16 @@ export function EntryTypesPage() {
                             {entryType.active ? 'Aktiv' : 'Inaktiv'}
                           </button>
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td
+                          className={`px-3 py-3 text-right ${dropIndicatorClass}`}
+                        >
                           <div className="flex justify-end gap-1">
                             <EntryTypeDialog
                               entryType={entryType}
                               trigger={
                                 <IconButton
                                   label={`${entryType.code} – ${entryType.name} bearbeiten`}
-                                  disabled={isStatusUpdating}
+                                  disabled={isStatusUpdating || isReordering}
                                 >
                                   <Pencil aria-hidden="true" size={17} />
                                 </IconButton>
@@ -299,7 +541,7 @@ export function EntryTypesPage() {
 
                             <DeleteEntryTypeDialog
                               entryType={entryType}
-                              disabled={isStatusUpdating}
+                              disabled={isStatusUpdating || isReordering}
                               onDeleted={(deletedEntryTypeId) =>
                                 setEntryTypes((currentEntryTypes) =>
                                   currentEntryTypes.filter(

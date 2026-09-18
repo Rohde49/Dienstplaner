@@ -11,6 +11,7 @@ export const ENTRY_TYPE_IPC_CHANNELS = {
   list: 'entry-types:list',
   create: 'entry-types:create',
   update: 'entry-types:update',
+  reorder: 'entry-types:reorder',
   remove: 'entry-types:remove',
 } as const;
 

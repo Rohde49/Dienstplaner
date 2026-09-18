@@ -4,6 +4,7 @@ import {
   calculateAttendanceMinutes,
   calculateWorkingMinutes,
   entryTypeInputSchema,
+  entryTypeOrderSchema,
   entryTypesFileSchema,
   timeValuesSchema,
   type EntryTypesFile,
@@ -272,5 +273,26 @@ describe('Eintragsartendatei', () => {
         ],
       }).success,
     ).toBe(false);
+  });
+});
+
+describe('Reihenfolge der Eintragsarten', () => {
+  it('akzeptiert eine duplikatfreie Liste gültiger IDs', () => {
+    const ids = [
+      '5f3567d3-e035-4111-b69f-27783078c9d3',
+      'cc706d9c-126c-40b8-a139-d27444f175b8',
+    ];
+
+    expect(entryTypeOrderSchema.parse(ids)).toEqual(ids);
+  });
+
+  it('lehnt doppelte IDs ab', () => {
+    const id = '5f3567d3-e035-4111-b69f-27783078c9d3';
+
+    expect(entryTypeOrderSchema.safeParse([id, id]).success).toBe(false);
+  });
+
+  it('lehnt ungültige IDs ab', () => {
+    expect(entryTypeOrderSchema.safeParse(['keine-uuid']).success).toBe(false);
   });
 });

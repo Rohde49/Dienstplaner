@@ -5,6 +5,7 @@ import {
   createEntryType,
   deleteEntryType,
   listEntryTypes,
+  reorderEntryTypes,
   updateEntryType,
 } from '../storage/entryTypesRepository';
 
@@ -19,6 +20,11 @@ export function registerEntryTypeIpcHandlers(): void {
   ipcMain.handle(
     ENTRY_TYPE_IPC_CHANNELS.update,
     (_event, id: unknown, input: unknown) => updateEntryType(id, input),
+  );
+
+  ipcMain.handle(
+    ENTRY_TYPE_IPC_CHANNELS.reorder,
+    (_event, orderedIds: unknown) => reorderEntryTypes(orderedIds),
   );
 
   ipcMain.handle(ENTRY_TYPE_IPC_CHANNELS.remove, (_event, id: unknown) =>

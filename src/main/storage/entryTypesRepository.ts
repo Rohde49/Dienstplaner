@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import {
   entryTypeIdSchema,
   entryTypeInputSchema,
+  entryTypeOrderSchema,
   entryTypesFileSchema,
   type EntryType,
   type EntryTypesFile,
@@ -100,6 +101,45 @@ export function updateEntryType(
     });
 
     return updatedEntryType;
+  });
+}
+
+/** Speichert die vollständige Reihenfolge aller vorhandenen Eintragsarten. */
+export function reorderEntryTypes(orderedIds: unknown): Promise<EntryType[]> {
+  return runAccess(async () => {
+    const validatedIds = entryTypeOrderSchema.parse(orderedIds);
+    const file = await entryTypeStore.read();
+
+    if (validatedIds.length !== file.entryTypes.length) {
+      throw new Error(
+        'Die Reihenfolge muss alle Planungseinträge genau einmal enthalten.',
+      );
+    }
+
+    const entryTypesById = new Map(
+      file.entryTypes.map((entryType) => [entryType.id, entryType]),
+    );
+    const entryTypes = validatedIds.map((id) => {
+      const entryType = entryTypesById.get(id);
+
+      if (entryType === undefined) {
+        throw new Error(
+          'Die Reihenfolge enthält einen unbekannten Planungseintrag.',
+        );
+      }
+
+      return entryType;
+    });
+
+    const timestamp = new Date().toISOString();
+
+    await entryTypeStore.write({
+      ...file,
+      updatedAt: timestamp,
+      entryTypes,
+    });
+
+    return entryTypes;
   });
 }
 

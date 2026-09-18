@@ -25,6 +25,7 @@ export {
   entryCodeSchema,
   entryTypeIdSchema,
   entryTypeInputSchema,
+  entryTypeOrderSchema,
   entryTypeSchema,
   entryTypesFileSchema,
   timeValuesSchema,
@@ -34,6 +35,7 @@ export type {
   CalculationType,
   EntryType,
   EntryTypeInput,
+  EntryTypeOrder,
   EntryTypesFile,
   TimeValues,
 } from './entryType';

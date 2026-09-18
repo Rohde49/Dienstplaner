@@ -23,6 +23,7 @@ Die Verwaltung ermöglicht:
 - neue Eintragsarten anzulegen,
 - vorhandene Eintragsarten zu bearbeiten,
 - Eintragsarten zu aktivieren oder zu deaktivieren,
+- die sichtbare Reihenfolge der Eintragsarten festzulegen,
 - Eintragsarten nach ausdrücklicher Bestätigung dauerhaft zu löschen,
 - die Berechnungsart festzulegen und
 - die dafür benötigten Uhrzeiten und Zeitwerte zu pflegen.
@@ -76,6 +77,14 @@ Zusätzlich zeigt die Seite die Gesamtzahl aller Eintragsarten und die Anzahl de
 aktiven Eintragsarten. Ein leerer Datenbestand und ein Ladefehler werden als
 eigene Zustände dargestellt; nach einem Ladefehler ist ein erneuter Versuch
 möglich.
+
+Die Reihenfolge lässt sich über den Ziehgriff am linken Rand einer Tabellenzeile
+verändern. Während des Ziehens kennzeichnet eine Einfügelinie die Zielposition.
+Als Tastaturalternative verschieben die Pfeiltasten den Eintrag, wenn sein
+Ziehgriff fokussiert ist. Die neue Reihenfolge wird dauerhaft gespeichert und
+gilt ebenfalls für die Auswahl aktiver Eintragsarten im Monatsplan. Inaktive
+Eintragsarten behalten ihren Platz in der Gesamtreihenfolge; neue Eintragsarten
+werden am Ende ergänzt.
 
 ## Eintragsart anlegen und bearbeiten
 
