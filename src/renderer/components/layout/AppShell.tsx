@@ -163,8 +163,8 @@ export function AppShell({ activePage, children, onNavigate }: AppShellProps) {
             {isExpanded ? (
               <div className="min-w-0">
                 <p className="text-xs leading-4">Lokale Desktop-Anwendung</p>
-                <p className="text-app-text-disabled mt-0.5 text-[10px] leading-3 font-normal tracking-wide italic">
-                  Made by Rohde
+                <p className="text-app-text-disabled mt-0.5 text-[9px] leading-3 font-normal whitespace-nowrap italic">
+                  Designed &amp; Developed by Rohde · 2026
                 </p>
               </div>
             ) : (
