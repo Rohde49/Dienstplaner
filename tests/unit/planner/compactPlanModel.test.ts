@@ -104,6 +104,12 @@ describe('Kompaktansichtsmodell', () => {
 
     const model = createCompactPlanModel(plan);
     const holidayRow = model.days.find((day) => day.date === holiday.date)!;
+    const schoolHolidayStart = model.days.find(
+      (day) => day.date === '2026-10-19',
+    )!;
+    const schoolHolidayEnd = model.days.find(
+      (day) => day.date === '2026-10-30',
+    )!;
 
     expect(model).toMatchObject({
       title: 'Oktoberplan',
@@ -133,6 +139,16 @@ describe('Kompaktansichtsmodell', () => {
     expect(model.holidays).toContainEqual({
       date: '2026-10-03',
       label: '* 03.10. – Tag der Deutschen Einheit',
+    });
+    expect(schoolHolidayStart).toMatchObject({
+      isSchoolHoliday: true,
+      schoolHolidayNames: ['Herbstferien'],
+      schoolHolidayBoundaryLabel: 'Beginn Herbstferien',
+    });
+    expect(schoolHolidayEnd).toMatchObject({
+      isSchoolHoliday: true,
+      schoolHolidayNames: ['Herbstferien'],
+      schoolHolidayBoundaryLabel: 'Ende Herbstferien',
     });
   });
 

@@ -15,10 +15,12 @@ import { toast } from 'sonner';
 
 import type { MonthlyPlan } from '../../../shared/schemas';
 import {
+  BRANDENBURG_SCHOOL_HOLIDAY_COVERAGE,
   calculateEmptyMonthlyPlanEvaluation,
   calculateMonthlyPlanEvaluation,
   calculateTargetFreeDayCount,
   countWorkingDays,
+  getSchoolHolidayCoverageStatus,
   getTargetCountStatus,
 } from '../../../shared/calculations';
 import { PageHeader, Toolbar, type AppPage } from '../../components/layout';
@@ -95,6 +97,10 @@ function getTargetCountBadgeClass(actual: number, target: number): string {
   return status === 'above'
     ? 'border-app-signal-danger-border bg-app-signal-danger-subtle text-app-signal-danger'
     : 'border-app-signal-success-border bg-app-signal-success-subtle text-app-signal-success';
+}
+
+function formatIsoDateForDisplay(date: string): string {
+  return `${date.slice(8, 10)}.${date.slice(5, 7)}.${date.slice(0, 4)}`;
 }
 
 /** Zeigt die Monatsauswahl und den noch nicht gespeicherten Vorschauzustand. */
@@ -181,6 +187,13 @@ export function PlannerPage({
     ? displayedPlan.title
     : `${PLANNER_MONTHS[state.period.month - 1]} ${state.period.year}`;
   const hasUnsavedChanges = hasUnsavedPlannerChanges(state);
+  const schoolHolidayCoverageStatus = getSchoolHolidayCoverageStatus(
+    state.period.year,
+    state.period.month,
+  );
+  const schoolHolidayCoverageEnd = formatIsoDateForDisplay(
+    BRANDENBURG_SCHOOL_HOLIDAY_COVERAGE.endDate,
+  );
   const isSaving = state.save.status === 'saving';
   const isPlannerBusy = isSaving || isPdfExporting;
   const canUseCompactView = canUseCompactPlannerView(state);
@@ -787,6 +800,25 @@ export function PlannerPage({
             </button>
           </Toolbar>
         )}
+
+        {schoolHolidayCoverageStatus === 'expiring' ? (
+          <Alert title="Schulferiendaten bald aktualisieren" variant="warning">
+            Die feststehenden Brandenburger Schulferien sind nur bis zum{' '}
+            {schoolHolidayCoverageEnd} hinterlegt. Vor Planungen danach muss die
+            zentrale Terminliste aktualisiert werden.
+          </Alert>
+        ) : schoolHolidayCoverageStatus === 'partial' ? (
+          <Alert title="Schulferiendaten unvollständig" variant="warning">
+            Für diesen Monat sind Brandenburger Schulferien nur teilweise bis
+            zum {schoolHolidayCoverageEnd} hinterlegt. Markierungen können
+            fehlen.
+          </Alert>
+        ) : schoolHolidayCoverageStatus === 'unavailable' ? (
+          <Alert title="Keine Schulferiendaten hinterlegt" variant="danger">
+            Für diesen Zeitraum liegen keine zentral gepflegten Brandenburger
+            Schulferiendaten vor. Gelbe Ferienmarkierungen können fehlen.
+          </Alert>
+        ) : null}
 
         {state.save.status === 'error' ? (
           <Alert title="Speichern fehlgeschlagen" variant="danger">

@@ -384,6 +384,8 @@ export function OnCallCellPopover({
 type DayNoteCellPopoverProps = {
   date: string;
   note: string | null;
+  schoolHolidayNames: readonly string[];
+  schoolHolidayBoundaryLabel: string | null;
   onApply: (note: string) => void;
 };
 
@@ -391,6 +393,8 @@ type DayNoteCellPopoverProps = {
 export function DayNoteCellPopover({
   date,
   note,
+  schoolHolidayNames,
+  schoolHolidayBoundaryLabel,
   onApply,
 }: DayNoteCellPopoverProps) {
   const titleId = useId();
@@ -425,9 +429,22 @@ export function DayNoteCellPopover({
         <button
           type="button"
           className="hover:bg-app-primary-selected min-h-8 w-full rounded px-2 py-1 text-center [overflow-wrap:anywhere] whitespace-pre-wrap"
-          aria-label={`${date}, Bemerkung bearbeiten${note ? `, aktuell ${note}` : ''}`}
+          aria-label={`${date}${
+            schoolHolidayNames.length > 0
+              ? `, Schulferien Brandenburg, ${schoolHolidayNames.join(', ')}`
+              : ''
+          }, Bemerkung bearbeiten${note ? `, aktuell ${note}` : ''}`}
         >
-          {note ?? ''}
+          {schoolHolidayBoundaryLabel ? (
+            <span className="block font-semibold text-amber-900">
+              {schoolHolidayBoundaryLabel}
+            </span>
+          ) : null}
+          {note ? (
+            <span className={schoolHolidayBoundaryLabel ? 'mt-0.5 block' : ''}>
+              {note}
+            </span>
+          ) : null}
         </button>
       </PopoverPrimitive.Trigger>
 

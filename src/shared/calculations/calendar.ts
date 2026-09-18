@@ -1,3 +1,8 @@
+import {
+  getBrandenburgSchoolHolidays,
+  type BrandenburgSchoolHolidayDay,
+} from './brandenburgSchoolHolidays';
+
 export const MIN_CALENDAR_YEAR = 2000;
 export const MAX_CALENDAR_YEAR = 2100;
 
@@ -11,6 +16,8 @@ export interface CalendarDay {
   isWeekend: boolean;
   holidayNames: string[];
   isHoliday: boolean;
+  schoolHolidays: BrandenburgSchoolHolidayDay[];
+  isSchoolHoliday: boolean;
   isWorkingDay: boolean;
 }
 
@@ -194,6 +201,7 @@ export function createMonthCalendar(
     const isWeekend = isSaturday || isSunday;
     const holidayNames = getBrandenburgHolidayNames(date);
     const isHoliday = holidayNames.length > 0;
+    const schoolHolidays = getBrandenburgSchoolHolidays(date);
 
     return {
       date,
@@ -203,6 +211,8 @@ export function createMonthCalendar(
       isWeekend,
       holidayNames,
       isHoliday,
+      schoolHolidays,
+      isSchoolHoliday: schoolHolidays.length > 0,
       isWorkingDay: !isWeekend && !isHoliday,
     };
   });

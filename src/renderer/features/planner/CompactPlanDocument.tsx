@@ -153,8 +153,32 @@ export function CompactPlanDocument({ model }: CompactPlanDocumentProps) {
                 >
                   {day.onCallEmployeeName}
                 </td>
-                <td className="border border-black px-1 py-[2px] align-middle [overflow-wrap:anywhere] whitespace-pre-wrap">
-                  {day.note}
+                <td
+                  aria-label={`${day.fullDateLabel}, Bemerkung${
+                    day.schoolHolidayNames.length > 0
+                      ? `, Schulferien Brandenburg: ${day.schoolHolidayNames.join(', ')}`
+                      : ''
+                  }${day.note ? `, ${day.note}` : ', keine Bemerkung'}`}
+                  className={`border border-black px-1 py-[2px] align-middle [overflow-wrap:anywhere] whitespace-pre-wrap ${
+                    day.isSchoolHoliday ? 'bg-amber-100' : ''
+                  }`}
+                >
+                  {day.schoolHolidayBoundaryLabel ? (
+                    <span className="block font-semibold text-amber-950">
+                      {day.schoolHolidayBoundaryLabel}
+                    </span>
+                  ) : null}
+                  {day.note ? (
+                    <span
+                      className={
+                        day.schoolHolidayBoundaryLabel
+                          ? 'mt-px block'
+                          : undefined
+                      }
+                    >
+                      {day.note}
+                    </span>
+                  ) : null}
                 </td>
               </tr>
             );

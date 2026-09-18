@@ -193,6 +193,15 @@ gekürzt noch mit Auslassungspunkten abgeschnitten. Text bricht nach unten um;
 sehr lange Wörter dürfen erforderlichenfalls innerhalb des Wortes umbrechen.
 Ohne Bemerkung bleibt die Zelle leer.
 
+Während der feststehenden Brandenburger Schulferien erhält die Bemerkungszelle
+einen gelben Hintergrund. Der erste Tag zeigt beispielsweise
+`Beginn Sommerferien`, der letzte `Ende Sommerferien`; an den Tagen dazwischen
+genügt die durchgehende gelbe Kennzeichnung. Ein eintägiger Ferienzeitraum zeigt
+seine Ferienbezeichnung einmalig. Eine vorhandene Benutzerbemerkung steht
+getrennt unterhalb des automatisch abgeleiteten Hinweises. Dadurch ist der
+Ferienzeitraum auch ohne zusätzliche Legende und unabhängig von alleiniger
+Farberkennung nachvollziehbar.
+
 Die Bemerkungsspalte verwendet `18 %` der Tabellenbreite. Datum und
 Rufbereitschaft verwenden jeweils `8 %`; die verbleibende Breite wird
 gleichmäßig auf die Mitarbeiterspalten verteilt. Tageszeilen bleiben durch

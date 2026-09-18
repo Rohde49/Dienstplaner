@@ -37,6 +37,23 @@ zwischen Dokumentation, Code und Oberfläche werden ausdrücklich festgehalten.
 Dabei werden auch besonders lange Inhalte der Kompaktansicht und eine
 tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
 
+## Spätere Erweiterungsmöglichkeiten
+
+### Schulferientermine durch Benutzer aktualisieren
+
+Die feststehenden Brandenburger Schulferien werden zunächst zentral und offline
+mit der Anwendung ausgeliefert. Eine spätere Erweiterung kann es Benutzern
+ermöglichen, neu veröffentlichte offizielle Termine selbst zu importieren oder
+zu pflegen, ohne eine neue Anwendungsversion zu benötigen.
+
+Vor einer Umsetzung sind insbesondere Quelle und Dateiformat, die Validierung
+von Zeiträumen, der Umgang mit bereits vorhandenen Daten, verständliche
+Fehlermeldungen sowie die Abgrenzung zu schulabhängigen variablen Ferientagen zu
+klären. Als mögliche Eingabe kommen die von der Kultusministerkonferenz
+bereitgestellten Kalenderdateien in Betracht. Bis dahin erfolgt jede
+Erweiterung der Terminliste kontrolliert im Quellcode und wird mit Tests sowie
+einer aktualisierten Quellenangabe ausgeliefert.
+
 ## Planungsgrundsätze
 
 Vor der Umsetzung eines größeren Arbeitspakets werden:

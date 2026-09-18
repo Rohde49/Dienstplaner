@@ -61,6 +61,7 @@ insbesondere:
 - Plantitel, Monat/Jahr und Speicherdatum,
 - die kompakte Monatsplantabelle,
 - Feiertagslegende,
+- gelb gekennzeichnete Brandenburger Schulferien mit sichtbarem Beginn und Ende,
 - die Abschlusszeilen `Ist`, `Soll` und `h/Woche` sowie
 - der Bereich `Datum` und `Freigabe / Unterschrift`.
 
@@ -131,7 +132,8 @@ Die erzeugte PDF-Datei muss:
 - visuell und inhaltlich der Kompaktansicht entsprechen,
 - alle vorgesehenen Inhalte vollständig und lesbar enthalten,
 - Mitarbeiter, Tage und Planungseinträge eindeutig zuordnen,
-- Wochenenden und Feiertage nicht ausschließlich über Farbe kennzeichnen,
+- Wochenenden, Feiertage und Schulferien nicht ausschließlich über Farbe
+  kennzeichnen,
 - auf einem üblichen PDF-Betrachter ohne externe Ressourcen funktionieren und
 - bei identischem gespeicherten Planstand fachlich identische Inhalte liefern.
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import {
+  formatSchoolHolidayBoundaryLabel,
   formatDuration,
   formatTimeDifference,
   getTargetCountStatus,
@@ -202,6 +203,15 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
               const rowClasses = isSelected
                 ? 'bg-orange-100'
                 : getDayClasses(calendarDay.isHoliday, calendarDay.isWeekend);
+              const schoolHolidayNames = calendarDay.schoolHolidays.map(
+                (schoolHoliday) => schoolHoliday.name,
+              );
+              const schoolHolidayBoundaryLabel =
+                formatSchoolHolidayBoundaryLabel(calendarDay.schoolHolidays);
+              const noteCellClasses =
+                !isSelected && calendarDay.isSchoolHoliday
+                  ? 'bg-amber-100'
+                  : rowClasses;
               const onCallEmployee = planDay?.onCallEmployeeId
                 ? employeesById.get(planDay.onCallEmployeeId)
                 : undefined;
@@ -339,12 +349,19 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                     )}
                   </td>
                   <td
-                    className={`border-app-border border-l-app-border-strong text-app-muted sticky right-0 z-10 w-48 max-w-48 min-w-48 border-b border-l-2 p-1 text-center ${rowClasses}`}
+                    title={
+                      schoolHolidayNames.length > 0
+                        ? `Schulferien Brandenburg: ${schoolHolidayNames.join(', ')}`
+                        : undefined
+                    }
+                    className={`border-app-border border-l-app-border-strong text-app-muted sticky right-0 z-10 w-48 max-w-48 min-w-48 border-b border-l-2 p-1 text-center ${noteCellClasses}`}
                   >
                     {editablePlan && planDay && onDraftChange ? (
                       <DayNoteCellPopover
                         date={calendarDay.date}
                         note={planDay.note}
+                        schoolHolidayNames={schoolHolidayNames}
+                        schoolHolidayBoundaryLabel={schoolHolidayBoundaryLabel}
                         onApply={(note) =>
                           onDraftChange(
                             setDraftDayNote(editablePlan, planDay.id, note),
@@ -353,7 +370,22 @@ export function PlanningTable({ document, onDraftChange }: PlanningTableProps) {
                       />
                     ) : (
                       <span className="block px-2 py-1 text-center [overflow-wrap:anywhere] whitespace-pre-wrap">
-                        {planDay?.note ?? ''}
+                        {schoolHolidayBoundaryLabel ? (
+                          <span className="block font-semibold text-amber-900">
+                            {schoolHolidayBoundaryLabel}
+                          </span>
+                        ) : null}
+                        {planDay?.note ? (
+                          <span
+                            className={
+                              schoolHolidayBoundaryLabel
+                                ? 'mt-0.5 block'
+                                : undefined
+                            }
+                          >
+                            {planDay.note}
+                          </span>
+                        ) : null}
                       </span>
                     )}
                   </td>

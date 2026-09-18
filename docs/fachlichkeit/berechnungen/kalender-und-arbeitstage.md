@@ -14,6 +14,8 @@ Dienstplaners.
 - Samstag und Sonntag gelten als Wochenende.
 - Wochenenden und Feiertage bleiben planbar. Sie werden gekennzeichnet und bei
   davon abhängigen Berechnungen berücksichtigt.
+- Schulferien bleiben ebenfalls planbar. Sie dienen ausschließlich als
+  visuelle Planungshilfe und verändern keine Berechnung.
 
 ## Gesetzliche Feiertage in Brandenburg
 
@@ -47,6 +49,32 @@ Nicht automatisch berücksichtigt werden:
 
 Wird ein einmaliger Sonderfeiertag für die Dienstplanung relevant, muss die
 Kalendergrundlage der Anwendung ausdrücklich aktualisiert werden.
+
+## Schulferien in Brandenburg
+
+Die feststehenden Brandenburger Schulferien werden offline aus der
+[Anlage 1 der VV Schulbetrieb](https://bravors.brandenburg.de/sixcms/media.php/66/VV-Schulbetrieb-Anlage-1.pdf)
+abgeleitet. Hinterlegt sind die veröffentlichten Schuljahre `2022/23` bis
+`2029/30`.
+
+- Berücksichtigt werden Herbst-, Weihnachts-, Winter-, Oster-, Pfingst- und
+  Sommerferien, soweit sie landesweit feststehen.
+- Variable Ferientage werden nicht automatisch berücksichtigt, weil die
+  jeweilige Schulkonferenz abweichende Termine festlegen darf.
+- Jeder Kalendertag innerhalb eines veröffentlichten Ferienzeitraums wird als
+  Schulferientag gekennzeichnet. Das schließt Wochenenden und gesetzliche
+  Feiertage innerhalb des Zeitraums ein.
+- Der erste und letzte Ferientag werden zusätzlich als Beginn beziehungsweise
+  Ende des Ferienzeitraums ausgewiesen. Ein eintägiger Ferienzeitraum erhält
+  eine einzelne Bezeichnung.
+- Schulferien verändern weder `isWorkingDay`, die kalendarische
+  Arbeitstagszahl noch Soll-, Ist- oder Differenzwerte.
+
+Ab dem letzten vollständig hinterlegten Schuljahr weist die Planungsseite auf
+die notwendige Aktualisierung hin. Für Monate außerhalb des veröffentlichten
+Datenzeitraums meldet sie mit roter Fehlersignalisierung, dass
+Ferienmarkierungen fehlen können. Neue offizielle Termine müssen bis zu einer
+späteren Importfunktion zentral in der Anwendung ergänzt werden.
 
 ## Kalendarische Arbeitstage
 

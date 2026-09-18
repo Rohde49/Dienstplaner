@@ -22,6 +22,19 @@ export {
 export type { CalendarDay, IsoWeekday } from './calendar';
 
 export {
+  BRANDENBURG_SCHOOL_HOLIDAY_COVERAGE,
+  formatSchoolHolidayBoundaryLabel,
+  getBrandenburgSchoolHolidays,
+  getSchoolHolidayCoverageStatus,
+} from './brandenburgSchoolHolidays';
+
+export type {
+  BrandenburgSchoolHolidayDay,
+  BrandenburgSchoolHolidayName,
+  SchoolHolidayCoverageStatus,
+} from './brandenburgSchoolHolidays';
+
+export {
   TARGET_FREE_WEEKEND_DAY_COUNT,
   calculateEmptyMonthlyPlanEvaluation,
   calculateMonthlyPlanEvaluation,

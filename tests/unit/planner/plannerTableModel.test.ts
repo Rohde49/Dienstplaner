@@ -82,4 +82,24 @@ describe('Planungstabellenmodell', () => {
     expect(model.employees[0].evaluation.targetWorkingMinutes).toBe(10_296);
     expect(model.days[0].planDay?.id).toBe(plan.days[0].id);
   });
+
+  it('reicht Schulferien als abgeleitete Kalenderinformation weiter', () => {
+    const state = completePlannerTeamLoad(
+      createInitialPlannerPageState(new Date(2026, 9, 15)),
+      [createEmployee('10000000-0000-4000-8000-000000000001')],
+    );
+
+    const model = createPlannerTableModel(state.document);
+    const firstHoliday = model.days.find(
+      (day) => day.calendarDay.date === '2026-10-19',
+    );
+
+    expect(firstHoliday?.calendarDay).toMatchObject({
+      isSchoolHoliday: true,
+      schoolHolidays: [
+        { name: 'Herbstferien', isFirstDay: true, isLastDay: false },
+      ],
+    });
+    expect(firstHoliday?.planDay).toBeNull();
+  });
 });

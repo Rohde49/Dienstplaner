@@ -2,6 +2,7 @@ import {
   calculateMonthlyPlanEvaluation,
   createMonthCalendar,
   formatDuration,
+  formatSchoolHolidayBoundaryLabel,
 } from '../../../shared/calculations';
 import {
   monthlyPlanSchema,
@@ -33,6 +34,9 @@ export type CompactPlanDay = {
   fullDateLabel: string;
   isWeekend: boolean;
   isHoliday: boolean;
+  isSchoolHoliday: boolean;
+  schoolHolidayNames: readonly string[];
+  schoolHolidayBoundaryLabel: string | null;
   entries: Readonly<Record<string, CompactPlanEntry | null>>;
   onCallEmployeeName: string | null;
   note: string | null;
@@ -149,6 +153,13 @@ export function createCompactPlanModel(
         fullDateLabel: `${weekdayName} ${formattedDate}`,
         isWeekend: calendarDay.isWeekend,
         isHoliday: calendarDay.isHoliday,
+        isSchoolHoliday: calendarDay.isSchoolHoliday,
+        schoolHolidayNames: calendarDay.schoolHolidays.map(
+          (schoolHoliday) => schoolHoliday.name,
+        ),
+        schoolHolidayBoundaryLabel: formatSchoolHolidayBoundaryLabel(
+          calendarDay.schoolHolidays,
+        ),
         entries: Object.fromEntries(
           employees.map((employee) => {
             const entry = entriesByEmployeeId.get(employee.id);

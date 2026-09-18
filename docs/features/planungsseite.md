@@ -260,6 +260,14 @@ im farbigen Kopfbereich einheitlich grau.
 - Wochenendzeilen erhalten eine graue beziehungsweise dunklere Kennzeichnung.
 - Feiertagszeilen werden rot gekennzeichnet und nennen den Feiertag auch
   textlich.
+- Während der feststehenden Brandenburger Schulferien wird ausschließlich die
+  Bemerkungszelle gelb hervorgehoben. Am ersten und letzten Ferientag steht dort
+  automatisch beispielsweise `Beginn Sommerferien` beziehungsweise
+  `Ende Sommerferien`; dazwischen bleibt die Zelle ohne zusätzlichen
+  Ferientext gelb. Ein eintägiger Zeitraum zeigt nur seine Ferienbezeichnung.
+- Automatische Ferienhinweise gehören nicht zur gespeicherten Tagesbemerkung.
+  Eine vorhandene Bemerkung erscheint getrennt unterhalb des Hinweises und
+  bleibt normal bearbeitbar.
 - Treffen mehrere Feiertagsbezeichnungen auf ein Datum zu, bleiben alle
   sichtbar.
 - Ein Feiertag hat bei einer Überschneidung Vorrang vor der
@@ -273,14 +281,21 @@ Kalendertagszeile orange hervor. Die Hervorhebung bleibt nach einer Änderung
 des Planentwurfs bestehen. Die Auswahl einer Zelle in einer anderen Zeile
 verschiebt sie dorthin; ein Klick auf das Datum der hervorgehobenen Zeile hebt
 sie auf. Während der Auswahl hat die Hervorhebung Vorrang vor dem normalen
-Wochenend- oder Feiertagshintergrund. Wochentag und Feiertagsname bleiben
-weiterhin textlich erkennbar.
+Wochenend-, Feiertags- oder Schulferienhintergrund. Wochentag, Feiertagsname
+und gegebenenfalls Ferienbeginn oder -ende bleiben weiterhin textlich
+erkennbar.
 
 Nur bedienbare Zellen erhalten beim Darüberfahren mit der Maus einen blauen
 Hintergrund. Dadurch bleibt der Hoverzustand auch auf Wochenendzeilen sichtbar.
 
 Die fachlichen Kalender- und Feiertagsregeln stehen unter
 [Kalender und Arbeitstage](../fachlichkeit/berechnungen/kalender-und-arbeitstage.md).
+
+Die Planungsseite weist unabhängig von Plan- oder Kompaktansicht rechtzeitig
+darauf hin, wenn das letzte hinterlegte Schuljahr erreicht ist. Für Monate, die
+nur teilweise vom zentralen Ferien-Datenzeitraum abgedeckt sind, erscheint eine
+gelbe Warnung. Fehlen für den Monat sämtliche verlässlichen Schulferiendaten,
+weist eine rote Fehlermeldung auf möglicherweise fehlende Markierungen hin.
 
 ## Planungseintrag setzen, ersetzen und entfernen
 
