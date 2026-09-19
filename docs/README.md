@@ -69,6 +69,7 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 - Aktueller Stand:
   - [Roadmap](./planung/roadmap.md)
+  - [Auslieferung](./planung/auslieferung.md)
   - [Gesamtprüfung: Dokumentationsabgleich](./planung/gesamtpruefung-dokumentationsabgleich.md)
 - Zukunftsvorhaben:
   - [Hinweise zu Zukunftsvorhaben](./planung/zukunft/README.md)
