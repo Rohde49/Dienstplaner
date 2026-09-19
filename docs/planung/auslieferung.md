@@ -12,22 +12,34 @@ Umsetzungsplan und später die Abnahme der Auslieferung fest. Es beschreibt den
 laufenden Arbeitsstand. Dauerhafte Produkt-, Architektur- oder Qualitätsregeln
 werden nach ihrer Bestätigung in den jeweils zuständigen Dokumenten gepflegt.
 
-### Umsetzungsstand vom 19. September 2026
+### Umsetzungsstand vom 19. September 2026, 18:37 Uhr
 
 - Die erste Umsetzungsetappe zur Datenzuverlässigkeit und den zugehörigen
   Repository-/IPC-Tests ist mit Commit `9bdcfdd` abgeschlossen.
 - Die vereinfachte Darstellung unerwarteter technischer IPC-Fehler, die
   dauerhaften Daten- und Testregeln, die MIT- und Fremdlizenzunterlagen, die
-  feste Installer-Identität sowie die Übergabe- und Nachweisvorlagen sind im
-  anschließenden Arbeitsstand umgesetzt und noch nicht als Release-Kandidat
-  committet.
+  feste Installer-Identität sowie die Übergabe- und Nachweisvorlagen sind mit
+  Commit `e531df4` umgesetzt.
+- Commit `6bcefeb` nimmt die Chromium-Lizenz ausdrücklich als installierte
+  Ressource auf, nachdem die erste Squirrel-Paketprüfung gezeigt hatte, dass
+  die Datei aus dem Programm-Wurzelverzeichnis nicht automatisch in das
+  `.nupkg` übernommen wird.
 - `npm run licenses:check`, `npm test` mit 32 Testdateien und 381 Tests,
   `npm run typecheck`, `npm run lint`, `npm run format:check` und
   `git diff --check` waren für diesen Arbeitsstand erfolgreich.
 - `npm audit --omit=dev` meldete für den abgefragten Stand keine bekannte
   Schwachstelle in den Produktionsabhängigkeiten.
-- Paketierung, Installer-Build und installierte Abnahme wurden noch nicht
-  ausgeführt. Der Auslieferungsbefund H-03 bleibt deshalb offen.
+- Paket und Squirrel-Installer wurden aus dem vollständigen Commit
+  `6bcefeb3d3133bb2fdb567a4f2c8922e1838a548` erfolgreich für Windows x64
+  gebaut. Version, Architektur, ASAR, Squirrel-Metadaten sowie Projekt-,
+  Fremd-, Electron- und Chromium-Lizenzdateien wurden kontrolliert. Die
+  `Setup.exe` besitzt die SHA-256-Prüfsumme
+  `4B9578F356702562D513D26B001A7054C2B771E5607F81797CA027E4C5A84286`.
+- Das private Release-Archiv liegt unter
+  `E:\Programmieren\Projects\Dienstplaner-Archiv`. Jeremy führt Installation,
+  Systemänderungen und die praktische Abnahme anhand der
+  [Installations- und Pilotabnahme](../qualitaet/installations-und-pilotabnahme.md)
+  selbst durch. Bis zu deren erfolgreichem Abschluss bleibt H-03 offen.
 
 ## Ziel
 
@@ -368,9 +380,9 @@ bleiben außerhalb des bestätigten Prototypumfangs.
 1. **Interne Aufbewahrung:** Zusätzlich zum USB-Stick wird eine unveränderte
    interne Kopie des vollständigen Releases außerhalb des kurzlebigen
    `out/`-Ordners aufbewahrt.
-2. **Archivort:** Der konkrete private Archivordner wird erst bei der
-   Umsetzung festgelegt und liegt außerhalb des Git-Repositorys.
-   Binärartefakte werden nicht in Git aufgenommen.
+2. **Archivort:** Der private Archivordner ist
+   `E:\Programmieren\Projects\Dienstplaner-Archiv` und liegt außerhalb des
+   Git-Repositorys. Binärartefakte werden nicht in Git aufgenommen.
 3. **Interne Artefakte:** Intern werden `Setup.exe`, `.nupkg`, `RELEASES`,
    Release-Nachweis, Lizenzunterlagen und Prüfsummendatei gemeinsam
    aufbewahrt.

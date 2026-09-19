@@ -66,6 +66,7 @@ den jeweils zuständigen Dokumenten festgehalten.
 - [Datenhaltung](./architektur/datenhaltung.md)
 - [Gestaltungsgrundsätze](./oberflaeche/gestaltungsgrundsaetze.md)
 - [Teststrategie](./qualitaet/teststrategie.md)
+- [Installations- und Pilotabnahme](./qualitaet/installations-und-pilotabnahme.md)
 
 ### Planung
 
