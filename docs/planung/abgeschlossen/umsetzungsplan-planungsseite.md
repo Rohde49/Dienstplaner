@@ -1,23 +1,35 @@
 # Umsetzungsplan Planungsseite
 
+## Status
+
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 15. September 2026, 03:34 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `36875be`
+
+Die Planungsseite wurde umgesetzt und abgenommen. Dieser Plan bleibt als
+historische Prüfliste und als Abschlussnachweis erhalten. Für den aktuellen
+Projektstatus sind die Roadmap und der Quellcode, für das dauerhafte
+Zielverhalten die zuständigen Fach- und Feature-Dokumente maßgeblich.
+
 ## Zweck und Pflege
 
-Dieser Plan zeigt den überprüften Umsetzungsstand der Planungsseite und teilt
-die noch offene Arbeit in aufeinander aufbauende, einzeln abnehmbare Abschnitte.
-Er wiederholt keine fachlichen Detailregeln.
+Dieser Plan dokumentiert den damaligen Ausgangsstand und die inzwischen
+abgeschlossene Umsetzung der Planungsseite in aufeinander aufbauenden, einzeln
+abnehmbaren Abschnitten. Er wiederholt keine fachlichen Detailregeln.
 
 Maßgeblich bleiben:
 
-- die [Planungsseite](../features/planungsseite.md),
-- das [Datenmodell](../fachlichkeit/datenmodell.md),
-- die [Datenhaltung](../architektur/datenhaltung.md),
+- die [Planungsseite](../../features/planungsseite.md),
+- das [Datenmodell](../../fachlichkeit/datenmodell.md),
+- die [Datenhaltung](../../architektur/datenhaltung.md),
 - die Regeln für
-  [Planungseinträge](../fachlichkeit/berechnungen/planungseintraege.md),
-  [Tageskennzahlen](../fachlichkeit/berechnungen/tageskennzahlen.md),
-  [Monatskennzahlen](../fachlichkeit/berechnungen/monatskennzahlen.md) und die
-  [Soll-Ist-Auswertung](../fachlichkeit/berechnungen/soll-ist-auswertung.md),
-- die [Gestaltungsgrundsätze](../oberflaeche/gestaltungsgrundsaetze.md) und
-- die [Teststrategie](../qualitaet/teststrategie.md).
+  [Planungseinträge](../../fachlichkeit/berechnungen/planungseintraege.md),
+  [Tageskennzahlen](../../fachlichkeit/berechnungen/tageskennzahlen.md),
+  [Monatskennzahlen](../../fachlichkeit/berechnungen/monatskennzahlen.md) und die
+  [Soll-Ist-Auswertung](../../fachlichkeit/berechnungen/soll-ist-auswertung.md),
+- die [Gestaltungsgrundsätze](../../oberflaeche/gestaltungsgrundsaetze.md) und
+- die [Teststrategie](../../qualitaet/teststrategie.md).
 
 `[x]` bedeutet: im aktuellen Quellcode vorhanden und für diesen Stand geprüft.
 `[ ]` bedeutet: noch umzusetzen oder erneut zu prüfen. Eine Checkbox wird erst
@@ -55,8 +67,9 @@ wiederverwendet und nicht im Renderer nachgebaut.
 - [x] Hauptfenster maximiert und mit der Mindestgröße `1024 × 700` Pixel
       eingerichtet.
 
-Die Planungsansicht im Renderer ist weiterhin ein Platzhalter. Die folgenden
-Abschnitte beschreiben die noch offene Feature-Umsetzung.
+Zum damaligen Ausgangsstand war die Planungsansicht im Renderer noch ein
+Platzhalter. Die folgenden Abschnitte dokumentieren die anschließend
+abgeschlossene Feature-Umsetzung.
 
 ## Abschnitt 1: Seitenzustand und Monatsvorschau
 
@@ -200,7 +213,7 @@ Die Planungsseite gilt als abgeschlossen, wenn:
 
 - [x] alle sieben Implementierungsabschnitte abgenommen sind,
 - [x] keine wesentliche Abweichung zur Feature-Dokumentation offen ist und
-- [x] die [Roadmap](roadmap.md) aktualisiert wurde.
+- [x] die [Roadmap](../roadmap.md) aktualisiert wurde.
 
 Auswertung, Kompaktansicht und PDF-Export bleiben eigenständige Features. Die
 weitere Arbeit an der integrierten Dokumentvorschau wird im

@@ -2,15 +2,26 @@
 
 ## Status
 
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 16. September 2026, 17:43 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `3520495`
+
 Die fachliche, gestalterische und technische Abstimmung ist abgeschlossen. Die
 bestätigten Ergebnisse wurden in die zuständigen Dokumente unter `docs/`
 übernommen. Für das dauerhafte Zielverhalten ist nun insbesondere die
-[Kompaktansicht](../features/kompaktansicht.md) maßgeblich; die weitere Arbeit
-steuert der [Umsetzungsplan](umsetzungsplan-kompaktansicht.md).
+[Kompaktansicht](../../features/kompaktansicht.md) maßgeblich. Der ebenfalls
+abgeschlossene [Umsetzungsplan](umsetzungsplan-kompaktansicht.md) dokumentiert
+die anschließende Umsetzung.
 
 Dieses Dokument bleibt als nachvollziehbares Entscheidungsprotokoll erhalten.
 Konkrete Schriftgrößen, Spaltenbreiten und Skalierungsgrenzen werden wie
 vereinbart erst am sichtbaren A4-Prototyp entschieden.
+
+Aussagen über einen „späteren“ oder deaktivierten PDF-Export dokumentieren den
+damaligen Abstimmungsstand. Der PDF-Export wurde danach umgesetzt; für seinen
+aktuellen Umfang ist die
+[Feature-Dokumentation](../../features/pdf-export.md) maßgeblich.
 
 ## Zweck dieses Dokuments
 

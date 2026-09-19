@@ -2,10 +2,18 @@
 
 ## Status
 
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 18. September 2026, 19:25 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `a088bd0`
+
 Der Auswertungsdialog ist mit zwölf berechneten Kennzahlen umgesetzt. Als
 bestätigte Erweiterung kommt darunter ein dauerhaft im Monatsplan gespeicherter
 manueller Zeitübertrag mit Bezugsmonat hinzu. Die berechneten Kennzahlen bleiben
 unverändert und der Übertrag fließt in keine Formel ein.
+
+Dieser Plan bleibt als historischer Abschlussnachweis erhalten. Für das
+dauerhafte Zielverhalten ist die Feature-Dokumentation maßgeblich.
 
 ## Ziel und Umfang
 
@@ -60,9 +68,9 @@ ungespeicherter Entwurf wird als solcher gekennzeichnet.
 ### 1. Fachlichen Anzeigeumfang abgleichen
 
 Die hier festgehaltenen Entscheidungen mit der
-[Feature-Dokumentation](../features/auswertung.md) abgleichen und deren
+[Feature-Dokumentation](../../features/auswertung.md) abgleichen und deren
 abweichenden Auswertungskreis und Kennzahlenumfang ausdrücklich anpassen. Die
-verbindlichen [Berechnungsregeln](../fachlichkeit/berechnungen/soll-ist-auswertung.md)
+verbindlichen [Berechnungsregeln](../../fachlichkeit/berechnungen/soll-ist-auswertung.md)
 bleiben maßgeblich. „Anzahl Arbeitstage“ meint die bereits berechnete
 kalendarische Arbeitstagszahl des Monats.
 
@@ -118,5 +126,5 @@ werden getrennt festgehalten.
   positive, negative und ausgeglichene Werte werden je Erzieher im Monatsplan
   gespeichert, farblich signalisiert und nicht verrechnet.
 
-Die [Feature-Dokumentation](../features/auswertung.md) wurde vor der Umsetzung
+Die [Feature-Dokumentation](../../features/auswertung.md) wurde vor der Umsetzung
 an diese Entscheidungen angepasst und beschreibt den abgenommenen Stand.

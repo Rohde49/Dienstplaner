@@ -2,11 +2,19 @@
 
 ## Status
 
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 17. September 2026, 17:27 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `609c6a4`
+
 Die fachliche, gestalterische und technische
 [Abstimmung](abstimmung-pdf-export.md) ist abgeschlossen. Alle Arbeitspakete
 sind umgesetzt sowie technisch und visuell geprüft. Der PDF-Export ist in der
 Kompaktansicht verfügbar und wurde mit einem repräsentativen Plan sowie dem
 Grenzfall mit neun Mitarbeitern und 31 Tagen abgenommen.
+
+Dieser Plan bleibt als historischer Abschlussnachweis erhalten. Für das
+dauerhafte Zielverhalten ist die Feature-Dokumentation maßgeblich.
 
 ## Ziel und Abgrenzung
 
@@ -25,10 +33,10 @@ Nicht Bestandteil dieses Plans sind:
 
 Verbindlich bleiben:
 
-- das [PDF-Export-Feature](../features/pdf-export.md),
-- das Dokumentlayout der [Kompaktansicht](../features/kompaktansicht.md),
-- die [Gestaltungsgrundsätze](../oberflaeche/gestaltungsgrundsaetze.md) und
-- die [Teststrategie](../qualitaet/teststrategie.md).
+- das [PDF-Export-Feature](../../features/pdf-export.md),
+- das Dokumentlayout der [Kompaktansicht](../../features/kompaktansicht.md),
+- die [Gestaltungsgrundsätze](../../oberflaeche/gestaltungsgrundsaetze.md) und
+- die [Teststrategie](../../qualitaet/teststrategie.md).
 
 ## Vorhandene Grundlage
 

@@ -2,10 +2,21 @@
 
 ## Status
 
+- **Status:** Zukunftsvorhaben
+- **Plan erstellt am:** 18. September 2026, 23:12 Uhr
+- **Erstellungsnachweis:** Commit `51ff908`
+- **Als Zukunftsvorhaben eingeordnet am:** 19. September 2026, 14:20 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Umsetzungstermin:** Nicht festgelegt
+
 Dieser Plan beschreibt die abgestimmte Richtung und die noch erforderlichen
 Entscheidungen. Die Lizenzumstellung ist noch nicht umgesetzt. Insbesondere
 gilt im Projekt derzeit weiterhin die widersprüchliche Ausgangslage aus dem
 MIT-Eintrag in `package.json` und einer fehlenden Lizenzdatei.
+
+Die zeitliche Einordnung als Zukunftsvorhaben hebt die Voraussetzungen nicht
+auf: Vor einer kommerziellen oder breiten externen Auslieferung muss dieser
+Plan vollständig geprüft und umgesetzt werden.
 
 ## Ziel und Abgrenzung
 

@@ -20,17 +20,19 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 ## Aufbau
 
-| Bereich         | Enthaltene Informationen                                        | Nicht enthalten                                           |
-| --------------- | --------------------------------------------------------------- | --------------------------------------------------------- |
-| `projekt/`      | Zielbild, Projektumfang und dauerhafte Rahmenbedingungen        | Arbeitsstand einzelner Features                           |
-| `fachlichkeit/` | Fachliches Datenmodell und verbindliche Berechnungsregeln       | Oberflächenabläufe und technische Umsetzung               |
-| `features/`     | Fachlicher Zweck und gewünschtes Verhalten einzelner Funktionen | Fortschritt, Reihenfolge und technische Detailpläne       |
-| `architektur/`  | Dauerhafte technische Entscheidungen und Verantwortungsgrenzen  | Quellcodeinventare und kurzlebige Implementierungsdetails |
-| `oberflaeche/`  | Übergreifende Gestaltungs- und Bediengrundsätze                 | Wiederholungen einzelner Feature-Abläufe                  |
-| `qualitaet/`    | Teststrategie und projektweite Qualitätsgrundsätze              | Momentane Testergebnisse und Testzahlen                   |
-| `planung/`      | Aktueller Stand, Prioritäten und Reihenfolge der Arbeitspakete  | Fachliche Regeln und ausformulierte Feature-Inhalte       |
-| `referenzen/`   | Nicht verbindliche Untersuchungen fremder oder älterer Systeme  | Anforderungen und Entscheidungen des aktuellen Projekts   |
-| `README.md`     | Wegweiser und Zuständigkeiten der Dokumentation                 | Fachliche oder technische Projektinformationen            |
+| Bereich                  | Enthaltene Informationen                                        | Nicht enthalten                                           |
+| ------------------------ | --------------------------------------------------------------- | --------------------------------------------------------- |
+| `projekt/`               | Zielbild, Projektumfang und dauerhafte Rahmenbedingungen        | Arbeitsstand einzelner Features                           |
+| `fachlichkeit/`          | Fachliches Datenmodell und verbindliche Berechnungsregeln       | Oberflächenabläufe und technische Umsetzung               |
+| `features/`              | Fachlicher Zweck und gewünschtes Verhalten einzelner Funktionen | Fortschritt, Reihenfolge und technische Detailpläne       |
+| `architektur/`           | Dauerhafte technische Entscheidungen und Verantwortungsgrenzen  | Quellcodeinventare und kurzlebige Implementierungsdetails |
+| `oberflaeche/`           | Übergreifende Gestaltungs- und Bediengrundsätze                 | Wiederholungen einzelner Feature-Abläufe                  |
+| `qualitaet/`             | Teststrategie und projektweite Qualitätsgrundsätze              | Momentane Testergebnisse und Testzahlen                   |
+| `planung/`               | Aktueller Stand, Prioritäten und Reihenfolge der Arbeitspakete  | Fachliche Regeln und ausformulierte Feature-Inhalte       |
+| `planung/zukunft/`       | Bewusst zurückgestellte, bereits konkretisierte Vorhaben        | Aktueller Projektstatus und lose Ideensammlungen          |
+| `planung/abgeschlossen/` | Historische Umsetzungspläne und Entscheidungsnachweise          | Aktueller Projektstatus und dauerhaftes Zielverhalten     |
+| `referenzen/`            | Nicht verbindliche Untersuchungen fremder oder älterer Systeme  | Anforderungen und Entscheidungen des aktuellen Projekts   |
+| `README.md`              | Wegweiser und Zuständigkeiten der Dokumentation                 | Fachliche oder technische Projektinformationen            |
 
 ## Einstiegspunkte
 
@@ -65,11 +67,20 @@ den jeweils zuständigen Dokumenten festgehalten.
 
 ### Planung
 
-- [Umsetzungsplan proprietäre Lizenzierung](./planung/umsetzungsplan-proprietaere-lizenzierung.md)
-- [Umsetzungsplan Kompaktansicht](./planung/umsetzungsplan-kompaktansicht.md)
-- [Umsetzungsplan Auswertungsdialog](./planung/umsetzungsplan-auswertungsdialog.md)
-- [Abstimmung PDF-Export](./planung/abstimmung-pdf-export.md)
-- [Umsetzungsplan PDF-Export](./planung/umsetzungsplan-pdf-export.md)
+- Aktueller Stand:
+  - [Roadmap](./planung/roadmap.md)
+  - [Gesamtprüfung: Dokumentationsabgleich](./planung/gesamtpruefung-dokumentationsabgleich.md)
+- Zukunftsvorhaben:
+  - [Hinweise zu Zukunftsvorhaben](./planung/zukunft/README.md)
+  - [Umsetzungsplan proprietäre Lizenzierung](./planung/zukunft/umsetzungsplan-proprietaere-lizenzierung.md)
+- Abgeschlossene Planung:
+  - [Hinweise zu abgeschlossenen Plänen](./planung/abgeschlossen/README.md)
+  - [Abstimmung Kompaktansicht](./planung/abgeschlossen/abstimmung-kompaktansicht.md)
+  - [Umsetzungsplan Kompaktansicht](./planung/abgeschlossen/umsetzungsplan-kompaktansicht.md)
+  - [Umsetzungsplan Auswertungsdialog](./planung/abgeschlossen/umsetzungsplan-auswertungsdialog.md)
+  - [Abstimmung PDF-Export](./planung/abgeschlossen/abstimmung-pdf-export.md)
+  - [Umsetzungsplan PDF-Export](./planung/abgeschlossen/umsetzungsplan-pdf-export.md)
+  - [Umsetzungsplan Planungsseite](./planung/abgeschlossen/umsetzungsplan-planungsseite.md)
 
 ## Pflegegrundsätze
 
@@ -81,6 +92,19 @@ den jeweils zuständigen Dokumenten festgehalten.
   umgesetzt ist, ergibt sich aus Quellcode und Roadmap.
 - Implementierungsstand, Prioritäten und Reihenfolge werden ausschließlich in
   der Roadmap gepflegt.
+- Planungsdokumente erhalten in ihrem Statusabschnitt die für ihren
+  Lebenszyklus geeigneten Angaben. Dazu gehören mindestens der Status und,
+  soweit verlässlich bekannt, Datum, Uhrzeit, Zeitzone und zugehöriger Commit
+  der Erstellung, Einordnung oder des Abschlusses. Nicht belegbare Zeitpunkte
+  werden nicht nachträglich geschätzt.
+- Ein Dokument unter `planung/zukunft/` beschreibt ein bewusst
+  zurückgestelltes Vorhaben. Die Einordnung löst darin genannte
+  Voraussetzungen nicht auf und ist keine Zusage für einen Umsetzungstermin.
+- Ein Dokument unter `planung/abgeschlossen/` bleibt als historischer
+  Entscheidungs- oder Abschlussnachweis erhalten. Gegenwartsformulierungen,
+  frühere Ausgangslagen und Checklisten darin sind keine konkurrierende
+  Statusquelle; maßgeblich sind Roadmap, Quellcode sowie die zuständigen Fach-
+  und Feature-Dokumente.
 - Feature-Dokumente beschreiben Zweck, gewünschtes Verhalten, Grenzen und noch
   offene fachliche Entscheidungen, aber keinen Umsetzungsfortschritt.
 - Technische Schnittstellen, konkrete Schemas und der tatsächlich umgesetzte

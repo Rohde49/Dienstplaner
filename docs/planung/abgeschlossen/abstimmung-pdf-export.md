@@ -1,19 +1,29 @@
 # Abstimmung zum PDF-Export
 
+## Status
+
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 17. September 2026, 15:20 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `7d765fb`
+
+Die Abstimmung ist abgeschlossen. Dieses Dokument bleibt als historisches
+Entscheidungsprotokoll erhalten. Für das dauerhafte Zielverhalten sind die
+zuständigen Feature-Dokumente maßgeblich.
+
 ## Zweck und Pflege
 
 Diese Datei hält die fachliche, gestalterische und technische Abstimmung zum
-PDF-Export sowie die Herleitung der Entscheidungen fest. Während der
-Abstimmung werden bestätigte Festlegungen hier fortlaufend ergänzt.
+PDF-Export sowie die Herleitung der Entscheidungen fest.
 
-Nach Abschluss der Abstimmung werden die verbindlichen Ergebnisse in die
+Nach Abschluss der Abstimmung wurden die verbindlichen Ergebnisse in die
 zuständigen Feature- und Architekturdokumente übernommen. Die anschließende
-Umsetzung wird in einem eigenen Umsetzungsplan in kleine, prüfbare Schritte
+Umsetzung wurde in einem eigenen Umsetzungsplan in kleine, prüfbare Schritte
 geteilt.
 
 Der aktuelle Quellcode bleibt für den tatsächlichen Implementierungsstand
 maßgeblich. Das bestehende A4-Dokumentlayout der
-[Kompaktansicht](../features/kompaktansicht.md) bildet die verbindliche
+[Kompaktansicht](../../features/kompaktansicht.md) bildet die verbindliche
 Darstellungsgrundlage.
 
 ## Bestätigte Entscheidungen
@@ -185,5 +195,5 @@ Darstellungsgrundlage.
 ## Abschluss der Abstimmung
 
 Alle fachlichen, gestalterischen und technischen Entscheidungsblöcke für die
-erste einseitige PDF-Ausgabe sind bestätigt. Die Umsetzung folgt dem
-[Umsetzungsplan PDF-Export](umsetzungsplan-pdf-export.md).
+erste einseitige PDF-Ausgabe sind bestätigt. Die anschließende Umsetzung ist
+im [Umsetzungsplan PDF-Export](umsetzungsplan-pdf-export.md) dokumentiert.

@@ -2,9 +2,16 @@
 
 ## Status
 
+- **Status:** Abgeschlossen
+- **Abschluss dokumentiert am:** 16. September 2026, 22:02 Uhr
+- **Zeitzone:** Europe/Berlin
+- **Abschlussnachweis:** Commit `de98f8d`
+
 Die erste Kompaktansicht ist umgesetzt sowie fachlich, gestalterisch und
 technisch abgenommen. Dieser Plan bleibt als abgeschlossene Prüfliste und als
-Grundlage für den späteren PDF-Export erhalten.
+historischer Abschlussnachweis erhalten. Er diente zugleich als Grundlage für
+den anschließend umgesetzten PDF-Export. Aussagen über einen „späteren“ oder
+deaktivierten Export beschreiben ausschließlich den damaligen Ausgangsstand.
 
 ## Zweck und Pflege
 
@@ -14,11 +21,11 @@ Darstellungsregeln des Features.
 
 Maßgeblich bleiben:
 
-- die [Kompaktansicht](../features/kompaktansicht.md),
-- die [Planungsseite](../features/planungsseite.md),
-- der spätere [PDF-Export](../features/pdf-export.md),
-- die [Gestaltungsgrundsätze](../oberflaeche/gestaltungsgrundsaetze.md),
-- die [Teststrategie](../qualitaet/teststrategie.md) und
+- die [Kompaktansicht](../../features/kompaktansicht.md),
+- die [Planungsseite](../../features/planungsseite.md),
+- der [PDF-Export](../../features/pdf-export.md),
+- die [Gestaltungsgrundsätze](../../oberflaeche/gestaltungsgrundsaetze.md),
+- die [Teststrategie](../../qualitaet/teststrategie.md) und
 - die gemeinsamen fachlichen Berechnungsregeln.
 
 Das [Abstimmungsprotokoll](abstimmung-kompaktansicht.md) dokumentiert die

@@ -43,7 +43,7 @@ tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
 
 Die Umstellung auf eine proprietäre Lizenz ist als zukünftiges Arbeitspaket
 vorgesehen und wird derzeit nicht umgesetzt. Der bereits erstellte
-[Umsetzungsplan](umsetzungsplan-proprietaere-lizenzierung.md) hält die
+[Umsetzungsplan](zukunft/umsetzungsplan-proprietaere-lizenzierung.md) hält die
 erforderlichen Entscheidungen und technischen Schritte fest und bleibt bis zur
 späteren Wiederaufnahme unverändert erhalten.
 
