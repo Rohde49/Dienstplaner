@@ -4,14 +4,14 @@
 
 - **Status:** Offene Befundliste
 - **Ursprünglicher Abgleich:** 19. September 2026, Commit `51ff908`
-- **Letzte Fortschreibung:** 19. September 2026, 14:20 Uhr
+- **Letzte Fortschreibung:** 19. September 2026, 17:10 Uhr
 - **Zeitzone:** Europe/Berlin
-- **Offene Befunde:** 10 von ursprünglich 13
+- **Offene Befunde:** 1 von ursprünglich 13
 
-Die Fortschreibung vom 19. September 2026 ordnet Zukunftsvorhaben und
-abgeschlossene Planungsunterlagen eindeutig ein. Dadurch sind M-06, M-07 und
-N-02 erledigt. Die übrigen Befunde wurden dadurch nicht inhaltlich geprüft
-oder verändert.
+Die Fortschreibungen vom 19. September 2026 ordnen Zukunftsvorhaben und
+abgeschlossene Planungsunterlagen eindeutig ein und dokumentieren die im Zuge
+der Auslieferung umgesetzten Daten-, Fehler-, Test- und Lizenzentscheidungen.
+Offen bleibt ausschließlich der praktische Nachweis des finalen Installers.
 
 ## Zusammenfassung
 
@@ -23,13 +23,14 @@ Referenzmaterial behandelt und nicht als Anforderung verwendet.
 
 Die implementierten Fachregeln für Kalender, Zeitwerte, Planungseinträge,
 Monatskennzahlen, Soll/Ist, Snapshots und die reguläre JSON-Datenhaltung stimmen
-weitgehend mit den zuständigen Fach- und Feature-Dokumenten überein. Die
-wesentlichen offenen Abweichungen betreffen Daten- und Release-Versionierung,
-die tatsächlich ausführbare UI-/Electron-Testabdeckung, Auslieferung und
-Lizenzierung, einzelne Fehler- und Barrierefreiheitszusagen sowie veraltete
-Planungsstände.
+weitgehend mit den zuständigen Fach- und Feature-Dokumenten überein. Der einzige
+noch offene Befund betrifft die tatsächliche Erzeugung und praktische Abnahme
+des finalen Installers. Alle übrigen ursprünglich erfassten Abweichungen wurden
+umgesetzt oder durch ausdrückliche und dokumentierte Produktentscheidungen
+sachlich geschlossen.
 
-Die vier vorhandenen Projektprüfungen wurden für diesen Abgleich ausgeführt:
+Die vier vorhandenen Projektprüfungen wurden für den ursprünglichen Abgleich
+ausgeführt:
 
 - `npm test`: erfolgreich, 27 Testdateien und 355 Tests,
 - `npm run typecheck`: erfolgreich,
@@ -44,29 +45,41 @@ gefunden.
 
 ## Nach Priorität sortierte Übersicht
 
-| Priorität | Befunde       | Davon offen | Kernauswirkung                                                                                                                                       |
-| --------- | ------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hoch      | H-01 bis H-04 | 4           | Nicht erfüllter Mindest-Testumfang, ungeklärte Datenmigration, nicht aktuell nachgewiesene Auslieferung und offene rechtliche Auslieferungsgrundlage |
-| Mittel    | M-01 bis M-07 | 5           | Widersprüchliche Zeitregel, mögliche Teilzustände beim Löschen, rohe Fehlermeldungen, farbabhängige Statusinformation und Testlücken                 |
-| Niedrig   | N-01 bis N-02 | 1           | Abweichende Farbpflege                                                                                                                               |
+| Priorität | Befunde       | Davon offen | Kernauswirkung                                                                                       |
+| --------- | ------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| Hoch      | H-01 bis H-04 | 1           | Die Auslieferung des finalen, installierten Release-Kandidaten ist noch praktisch nachzuweisen       |
+| Mittel    | M-01 bis M-07 | 0           | Alle Befunde wurden umgesetzt oder durch eine ausdrückliche Produktentscheidung sachlich geschlossen |
+| Niedrig   | N-01 bis N-02 | 0           | Alle Befunde wurden dokumentarisch geklärt                                                           |
 
 ## Hohe Priorität
 
-- [ ] **H-01 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Der geforderte UI- und Electron-Kernablauf ist nicht automatisiert vorhanden.**
+- [x] **H-01 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Der geforderte UI- und Electron-Kernablauf ist nicht automatisiert vorhanden.**
   - **Betroffener Bereich:** Teststrategie, Benutzerabläufe, Verlustschutz und Barrierearmut.
   - **Priorität / mögliche Auswirkung:** Hoch. Fehler in gerenderten React-Komponenten, Fokusführung, Dialogverkettung, Tastaturbedienung oder im echten IPC-/Fensterablauf können von der vollständig grünen Testsuite unentdeckt bleiben.
   - **Dokumentierte Aussage:** `docs/qualitaet/teststrategie.md:57-74` fordert Interaktionstests für sichtbares Komponentenverhalten und mindestens einen durchgängigen Kernablauf in der tatsächlich gebauten Electron-Anwendung.
   - **Tatsächlicher Stand:** `vitest.config.mts:3-8` verwendet ausschließlich die Node-Umgebung und `tests/unit/**/*.test.ts`. `tests/unit/planner/plannerWorkflow.test.ts:1-22` und `:70-90` verbinden Repository und reine Zustandsfunktionen direkt, rendern aber weder React noch starten sie Electron. `tests/unit/mainWindow.test.ts` arbeitet mit Electron-Mocks.
   - **Abweichung:** Der als Mindestumfang beschriebene reale Anwendungsablauf ist kein Bestandteil der ausführbaren Testsuite. Vorhanden ist ein wertvoller isolierter Integrationsablauf, aber kein UI- oder gebauter Electron-End-to-End-Test.
   - **Empfehlung:** **Quellcode prüfen.** Einen kleinen, stabilen Testumfang für kritische gerenderte Interaktionen und einen echten gebauten Electron-Kernablauf festlegen und umsetzen; falls dies bewusst nur manuell erfolgen soll, die Teststrategie entsprechend eindeutig anpassen.
+  - **Sachlich geschlossen am 19. September 2026:** Für `1.0.0` wird bewusst
+    keine neue umfangreiche UI- oder Electron-End-to-End-Infrastruktur
+    eingeführt. Die Teststrategie grenzt die automatisierte Node-Suite nun klar
+    von der verpflichtenden manuellen Abnahme des gebauten und installierten
+    Electron-Kernablaufs ab. Deren tatsächlicher Nachweis bleibt Teil der noch
+    offenen Auslieferungsprüfung H-03.
 
-- [ ] **H-02 – Fehlende oder unklare Dokumentation: Für Schemawechsel und vorhandene Benutzerdaten fehlt eine Migrations- beziehungsweise Kompatibilitätsstrategie.**
+- [x] **H-02 – Fehlende oder unklare Dokumentation: Für Schemawechsel und vorhandene Benutzerdaten fehlt eine Migrations- beziehungsweise Kompatibilitätsstrategie.**
   - **Betroffener Bereich:** Datenmodell, Datenhaltung, Versionierung und spätere Programmupdates.
   - **Priorität / mögliche Auswirkung:** Hoch. Nach einer ausgelieferten Aktualisierung können Daten einer älteren Schema-Version vollständig als ungültig gelten, obwohl das Produktziel dauerhafte lokale Daten vorsieht.
   - **Dokumentierte Aussage:** `docs/projekt/zielbild-und-rahmenbedingungen.md:51-58` verlangt dauerhaft erhaltene gespeicherte Daten. `docs/architektur/datenhaltung.md:71-83` beschreibt strikte Vollvalidierung, legt aber weder Migrationen noch unterstützte Vorgängerversionen oder ein Upgrade-Verfahren fest.
   - **Tatsächlicher Stand:** `src/shared/schemas/employee.ts:72-78`, `src/shared/schemas/entryType.ts:215-221` und `src/shared/schemas/monthlyPlanStorage.ts:5-11` akzeptieren jeweils ausschließlich `schemaVersion: 3`. `tests/unit/employees/employeeSchema.test.ts:87-119` und `tests/unit/entry-types/entryTypeSchema.test.ts:241-276` sichern die Ablehnung älterer Versionen ausdrücklich ab.
   - **Abweichung:** Die technische Versionsgrenze ist eindeutig, das gewünschte Verhalten beim Update einer bestehenden Installation jedoch nicht entschieden oder dokumentiert.
   - **Empfehlung:** **Fachliche Entscheidung treffen.** Vor der Auslieferung festlegen, ob alte Daten migriert, nur bestimmte Vorgängerversionen unterstützt oder bewusst abgelehnt werden; anschließend Datenhaltung, Tests und Releaseprozess konsistent dokumentieren.
+  - **Erledigt am 19. September 2026:** `schemaVersion: 3` ist als erster
+    unterstützter Stand von `1.0.0` festgelegt. Vor jeder späteren Freigabe muss
+    die Kompatibilität mit der zuletzt ausgelieferten Version nachgewiesen oder
+    eine getestete Migration bereitgestellt werden. Die Datenhaltung beschreibt
+    außerdem externe Sicherung, Wiederherstellung, Gerätewechsel und den Erhalt
+    beschädigter oder inkompatibler Dateien.
 
 - [ ] **H-03 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die Auslieferung des aktuellen Stands ist nicht nachgewiesen.**
   - **Betroffener Bereich:** Paketierung, Installer, Versionierung und Auslieferungsabnahme.
@@ -76,13 +89,22 @@ gefunden.
   - **Abweichung:** Die technische Grundlage ist vorhanden, aber der Installer belegt nicht den aktuellen Stand. Außerdem bleibt unklar, wann die Produktversion erhöht wird und welche Prüfungen einen auslieferbaren Build kennzeichnen.
   - **Empfehlung:** **Quellcode prüfen.** In einer eigenen Auslieferungssitzung `package` und `make` für den aktuellen Commit ausführen, Paketinhalt sowie Installieren, Starten, Aktualisieren, Deinstallieren und Datenerhalt prüfen und das Ergebnis mit Commit und Version dokumentieren.
 
-- [ ] **H-04 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die bestätigte proprietäre Ausrichtung ist technisch und rechtlich noch nicht umgesetzt.**
+- [x] **H-04 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die bestätigte proprietäre Ausrichtung ist technisch und rechtlich noch nicht umgesetzt.**
   - **Betroffener Bereich:** Lizenzierung, Fremdlizenzen, Anwendungshinweise und Installer.
   - **Priorität / mögliche Auswirkung:** Hoch vor kommerzieller oder breiter externer Auslieferung; für eine rein interne Entwicklungsfassung derzeit geringer.
   - **Dokumentierte Aussage:** `docs/planung/zukunft/umsetzungsplan-proprietaere-lizenzierung.md` kennzeichnet die Umstellung ausdrücklich als offen und führt die noch offenen Lizenz-, Hinweis-, UI-, Paketierungs- und Prüfschritte auf. `docs/planung/roadmap.md:42-52` ordnet sie als spätere Erweiterung ein.
   - **Tatsächlicher Stand:** `package.json:25` nennt weiterhin `MIT`. Im Projektstamm fehlen die im Plan vorgesehenen Dateien `LICENSE`, `THIRD_PARTY_NOTICES` und ein Projekt-`README.md`; `forge.config.ts:7-13` nimmt dafür keine eigenen Ressourcen auf.
   - **Abweichung:** Dies ist kein versteckter Widerspruch, sondern ein korrekt dokumentierter, aber auslieferungsrelevanter Sollstand. Eine breit verteilte aktuelle Version würde die bestätigte proprietäre Zielrichtung noch nicht widerspruchsfrei abbilden.
   - **Empfehlung:** **Fachliche Entscheidung treffen.** Vor einer entsprechenden Auslieferung Rechteinhaber, Empfängerkreis und Nutzungsumfang bestätigen und danach den vorhandenen Umsetzungsplan vollständig abarbeiten.
+  - **Sachlich geschlossen am 19. September 2026:** Die frühere proprietäre
+    Zielrichtung gilt nicht für Version `1.0.0`. Diese Pilotversion wird unter
+    MIT mit Jeremy Louis Rohde als Rechteinhaber ausgeliefert. `LICENSE`, die
+    reproduzierbar erzeugte `THIRD_PARTY_NOTICES.txt`, die Paketmetadaten und
+    die zusätzlichen Packager-Ressourcen bilden diese Entscheidung ab. Eine
+    mögliche spätere proprietäre Version bleibt ein eigenes Zukunftsvorhaben
+    und kann die bereits gewährten Rechte an `1.0.0` nicht zurücknehmen. Ob die
+    Unterlagen im finalen Paket tatsächlich enthalten sind, wird zusammen mit
+    H-03 am gebauten Release-Kandidaten geprüft.
 
 ## Mittlere Priorität
 
@@ -110,13 +132,19 @@ gefunden.
     keinen unlesbaren Planstand erzeugt und die Zugriffsqueue anschließend
     weiterarbeitet.
 
-- [ ] **M-03 – Bestätigter Widerspruch: Technische Fehlermeldungen werden in mehreren Bereichen ungefiltert als einzige Erklärung angezeigt.**
+- [x] **M-03 – Bestätigter Widerspruch: Technische Fehlermeldungen werden in mehreren Bereichen ungefiltert als einzige Erklärung angezeigt.**
   - **Betroffener Bereich:** Team, Eintragsarten, Planladen/-speichern und allgemeines Fehlerverhalten.
   - **Priorität / mögliche Auswirkung:** Mittel. IPC-, Zod- oder Dateisystemdetails können unverständlich in der Oberfläche erscheinen und die dokumentierte handlungsorientierte Rückmeldung verfehlen.
   - **Dokumentierte Aussage:** `docs/oberflaeche/gestaltungsgrundsaetze.md:208-225` und `docs/features/planungsseite.md:438-446` verlangen verständliche, ursachennahe Meldungen; technische Rohmeldungen dürfen nicht die einzige Erklärung sein.
   - **Tatsächlicher Stand:** `src/renderer/features/team/TeamPage.tsx:20-24`, `src/renderer/features/entry-types/EntryTypesPage.tsx:38-55`, `src/renderer/features/planner/LoadMonthlyPlanDialog.tsx:44-45` und `src/renderer/features/planner/PlannerPage.tsx:84-87,258-265` übernehmen bei jedem `Error` unmittelbar `error.message`. Nur der PDF-Export besitzt in `src/renderer/features/planner/plannerPdfExport.ts:48-70` eine gezielte Übersetzung technischer Fehler.
   - **Abweichung:** Für die meisten IPC-Vorgänge ist die technische Meldung zugleich die einzige sichtbare Erklärung; eine konsistente Übersetzung oder ein ergänzender benutzerbezogener Kontext fehlt.
   - **Empfehlung:** **Quellcode prüfen.** Eine kleine gemeinsame Fehlerübersetzung für erwartbare Fehlerklassen einführen und technische Details höchstens ergänzend behandeln.
+  - **Erledigt am 19. September 2026:** Eine gemeinsame
+    Renderer-Fehlerübersetzung entfernt technische Electron-Hüllen, erhält
+    verständliche fachliche Meldungen und ersetzt Datei-, Validierungs-, IPC-
+    und typische Laufzeitdetails durch vorgangsspezifische Hinweise. Verdeckte
+    technische Originale werden für die Fehlersuche protokolliert; gezielte
+    Unit-Tests sichern die Abgrenzung ab.
 
 - [x] **M-04 – Bestätigter Widerspruch: Zielstatus freier Tage wird in der Auswertung nur über Farbe vermittelt.**
   - **Betroffener Bereich:** Auswertungsdialog, Gestaltungsgrundsätze und Barrierearmut.
@@ -164,13 +192,18 @@ gefunden.
 
 ## Niedrige Priorität
 
-- [ ] **N-01 – Bestätigter Widerspruch: Semantische Farben werden nicht durchgängig zentral gepflegt.**
+- [x] **N-01 – Bestätigter Widerspruch: Semantische Farben werden nicht durchgängig zentral gepflegt.**
   - **Betroffener Bereich:** Gestaltungsgrundsätze, Planungstabelle und Auswertung.
   - **Priorität / mögliche Auswirkung:** Niedrig bis mittel. Anpassungen an Kontrast oder Farbbedeutung können mehrere verstreute Komponenten erfordern und dabei inkonsistent werden.
   - **Dokumentierte Aussage:** `docs/oberflaeche/gestaltungsgrundsaetze.md:99-123` verlangt zentrale konkrete Farben und eine Trennung semantischer Statusfarben von Mitarbeiterfarben.
   - **Tatsächlicher Stand:** Die globalen Komponenten verwenden überwiegend `app-*`-Tokens aus `src/renderer/styles/index.css`. `src/renderer/features/planner/PlanningTable.tsx:43-57,89-115,204-213` und `src/renderer/features/planner/EvaluationDialog.tsx:118-137,462-535` verwenden daneben direkte Tailwind-Farben wie `red`, `green`, `blue`, `orange`, `amber` und `slate` für fachliche Zustände und Flächen.
   - **Abweichung:** Der zentrale Ansatz ist vorhanden, wird in den komplexen Planungsansichten aber nicht konsequent eingehalten. Feste Schwarz-/Weiß-/Druckfarben des A4-Dokuments sind davon getrennt zu bewerten.
   - **Empfehlung:** **Quellcode prüfen.** Wiederkehrende semantische Anwendungsfarben zentralisieren oder in der Gestaltungsdokumentation klar festlegen, welche dokument- beziehungsweise featuregebundenen Farben bewusst direkt bleiben.
+  - **Sachlich geschlossen am 19. September 2026:** Die
+    Gestaltungsgrundsätze verlangen weiterhin zentrale Tokens für
+    wiederkehrende globale Farbbedeutungen, erlauben aber dokumentierte
+    funktions- oder dokumentgebundene Einzelfarben. Ein pauschaler Umbau der
+    komplexen Planungsansichten ist für `1.0.0` daher nicht erforderlich.
 
 - [x] **N-02 – Fehlende oder unklare Dokumentation: Statusverantwortung und Wegweiser stimmen nicht mit dem tatsächlichen Dokumentbestand überein.**
   - **Betroffener Bereich:** Dokumentationsstruktur und Pflegeprozess.

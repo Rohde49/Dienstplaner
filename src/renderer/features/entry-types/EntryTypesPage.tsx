@@ -26,6 +26,7 @@ import {
   IconButton,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { DeleteEntryTypeDialog } from './DeleteEntryTypeDialog';
 import { EntryTypeDialog } from './EntryTypeDialog';
 import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
@@ -34,24 +35,6 @@ import {
   swapEntryType,
   type EntryTypeDropPosition,
 } from './entryTypeOrder';
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Die Planungseinträge konnten nicht geladen werden.';
-}
-
-function getStatusErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Status konnte nicht gespeichert werden.';
-}
-
-function getReorderErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Die Reihenfolge konnte nicht gespeichert werden.';
-}
 
 type DropTarget = {
   entryTypeId: string;
@@ -121,7 +104,12 @@ export function EntryTypesPage() {
       const loadedEntryTypes = await window.dienstplaner.entryTypes.list();
       setEntryTypes(loadedEntryTypes);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Die Eintragsarten konnten nicht geladen werden.',
+          context: 'Eintragsarten konnten nicht geladen werden',
+        }),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +144,13 @@ export function EntryTypesPage() {
         ),
       );
     } catch (error) {
-      toast.error(getStatusErrorMessage(error));
+      toast.error(
+        getUserFacingIpcErrorMessage(error, {
+          fallback:
+            'Der Status der Eintragsart konnte nicht gespeichert werden.',
+          context: 'Eintragsartenstatus konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setStatusUpdatingIds((currentIds) => {
         const nextIds = new Set(currentIds);
@@ -202,7 +196,13 @@ export function EntryTypesPage() {
       );
     } catch (error) {
       setEntryTypes(previousEntryTypes);
-      toast.error(getReorderErrorMessage(error));
+      toast.error(
+        getUserFacingIpcErrorMessage(error, {
+          fallback:
+            'Die Reihenfolge der Eintragsarten konnte nicht gespeichert werden.',
+          context: 'Eintragsartenreihenfolge konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setReorderingEntryTypeId(null);
     }

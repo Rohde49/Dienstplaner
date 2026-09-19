@@ -28,6 +28,7 @@ import {
   Select,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { CALCULATION_TYPE_LABELS } from './calculationTypeLabels';
 
 type EntryTypeDialogProps = {
@@ -211,12 +212,6 @@ function calculateAttendanceDuration(formState: EntryTypeFormState): string {
   return Number.isSafeInteger(attendanceMinutes)
     ? formatDuration(attendanceMinutes)
     : '';
-}
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Planungseintrag konnte nicht gespeichert werden.';
 }
 
 /** Zeigt das Formular zum Anlegen oder Bearbeiten einer Eintragsart an. */
@@ -451,7 +446,12 @@ export function EntryTypeDialog({
       setOpen(false);
       resetForm();
     } catch (error) {
-      setSubmissionError(getErrorMessage(error));
+      setSubmissionError(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Die Eintragsart konnte nicht gespeichert werden.',
+          context: 'Eintragsart konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setIsSaving(false);
     }

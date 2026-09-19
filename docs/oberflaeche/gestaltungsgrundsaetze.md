@@ -108,9 +108,17 @@ Globale Komponenten verwenden semantische Farbbedeutungen wie:
 - Fehler und
 - gefährliche Aktion.
 
-Die konkrete Farbe wird zentral definiert und nicht in jeder Komponente neu
-festgelegt. Dadurch bleibt beispielsweise eine Warnung unabhängig von der
-verwendeten Komponente als Warnung erkennbar.
+Wiederkehrende globale Farbbedeutungen werden zentral definiert und nicht in
+jeder Komponente neu festgelegt. Dadurch bleibt beispielsweise eine Warnung
+unabhängig von der verwendeten Komponente als Warnung erkennbar.
+
+Einzelne fach- oder dokumentgebundene Farben dürfen direkt an der zuständigen
+Darstellung bleiben, wenn ihre Bedeutung dort eindeutig dokumentiert ist und
+sie nicht als wiederverwendbarer globaler Status auftreten. Dazu gehören
+beispielsweise besondere Flächen der Planungsauswertung und feste Druckfarben
+des A4-Dokuments. Werden dieselben Bedeutungen in mehreren unabhängigen
+Komponenten wiederverwendet, sind sie in zentrale semantische Tokens zu
+überführen.
 
 Für Farben gelten folgende Regeln:
 
@@ -223,6 +231,12 @@ Bei wahrnehmbaren Lade-, Speicher-, Lösch- oder Exportvorgängen wird ein
 Beschäftigtzustand angezeigt. Fehler erscheinen möglichst nahe an ihrer Ursache
 und bieten, wenn sinnvoll, einen erneuten Versuch an. Technische Rohmeldungen
 sind nicht die einzige Erklärung für den Benutzer.
+
+Verständliche fachliche Meldungen aus der Anwendung bleiben erhalten. Bei
+unerwarteten Datei-, Validierungs- oder IPC-Fehlern zeigt die Oberfläche
+stattdessen einen zum betroffenen Vorgang passenden Hinweis. Das technische
+Original wird für die Fehlersuche protokolliert, aber nicht ungefiltert als
+Benutzermeldung ausgegeben.
 
 Häufige kleinteilige Planungsschritte erzeugen keine eigene
 Erfolgsbenachrichtigung. Ihre Wirkung wird direkt am bearbeiteten Inhalt und über

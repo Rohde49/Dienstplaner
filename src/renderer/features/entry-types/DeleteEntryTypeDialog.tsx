@@ -13,18 +13,13 @@ import {
   Button,
   IconButton,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 
 type DeleteEntryTypeDialogProps = {
   entryType: EntryType;
   disabled?: boolean;
   onDeleted: (entryTypeId: string) => void;
 };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Planungseintrag konnte nicht gelöscht werden.';
-}
 
 /** Fragt vor dem endgültigen Löschen einer Eintragsart nach Bestätigung. */
 export function DeleteEntryTypeDialog({
@@ -55,7 +50,12 @@ export function DeleteEntryTypeDialog({
       toast.success(`${entryType.code} – ${entryType.name} wurde gelöscht.`);
       setOpen(false);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Die Eintragsart konnte nicht gelöscht werden.',
+          context: 'Eintragsart konnte nicht gelöscht werden',
+        }),
+      );
     } finally {
       setIsDeleting(false);
     }

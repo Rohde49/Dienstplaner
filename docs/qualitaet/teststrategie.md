@@ -62,12 +62,16 @@ gemeinsam geprüft werden müssen.
 
 ### Oberfläche und Benutzerabläufe
 
-Interaktionstests prüfen sichtbares Verhalten einzelner Seiten und Komponenten,
-beispielsweise Eingabefehler, Dialogentscheidungen, Auswahlzustände und den
-Schutz ungespeicherter Änderungen.
+Automatisierte Tests prüfen die von der Oberfläche getrennte Zustands- und
+Ablauflogik, beispielsweise Eingabefehler, Dialogentscheidungen,
+Auswahlzustände und den Schutz ungespeicherter Änderungen. Die Testsuite von
+`1.0.0` läuft bewusst in einer Node-Umgebung und rendert keine vollständigen
+React-Seiten und startet keine gebaute Electron-Anwendung.
 
-Mindestens ein durchgängiger Kernablauf soll zusätzlich in der tatsächlich
-gebauten Electron-Anwendung geprüft werden:
+Für `1.0.0` wird keine zusätzliche umfangreiche UI- oder
+End-to-End-Testinfrastruktur eingeführt. Stattdessen ist mindestens ein
+durchgängiger manueller Kernablauf in der tatsächlich gebauten und installierten
+Electron-Anwendung ein verbindlicher Bestandteil der Release-Abnahme:
 
 1. Stammdaten anlegen,
 2. einen Monatsplan erstellen,
@@ -75,9 +79,11 @@ gebauten Electron-Anwendung geprüft werden:
 4. den Plan speichern und
 5. ihn nach einem Neustart wieder laden.
 
-Solche Ablauftests ergänzen die kleineren Tests. Sie ersetzen sie nicht, weil
-fachliche Grenzfälle darin nur schwer gezielt und verständlich geprüft werden
-können.
+Diese manuelle Abnahme wird mit Release-Version, Quellcommit, Prüfumgebung und
+Ergebnis dokumentiert. Sie ergänzt die automatisierten Tests, ersetzt sie aber
+nicht, weil fachliche Grenzfälle darin nur schwer gezielt und reproduzierbar
+geprüft werden können. Bei späteren Versionen wird erneut bewertet, ob das
+veränderte Risiko eine automatisierte UI- oder Electron-Abdeckung erfordert.
 
 ### Manuelle Sichtprüfung
 

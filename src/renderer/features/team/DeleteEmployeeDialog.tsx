@@ -13,18 +13,13 @@ import {
   Button,
   IconButton,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 
 type DeleteEmployeeDialogProps = {
   employee: Employee;
   disabled?: boolean;
   onDeleted: (employeeId: string) => void;
 };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Mitarbeiter konnte nicht gelöscht werden.';
-}
 
 /** Fragt vor dem endgültigen Löschen eines Mitarbeiters nach Bestätigung. */
 export function DeleteEmployeeDialog({
@@ -60,7 +55,12 @@ export function DeleteEmployeeDialog({
 
       setOpen(false);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Mitarbeiter konnte nicht gelöscht werden.',
+          context: 'Mitarbeiter konnte nicht gelöscht werden',
+        }),
+      );
     } finally {
       setIsDeleting(false);
     }

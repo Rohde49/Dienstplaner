@@ -14,6 +14,7 @@ import {
   Spinner,
   Textarea,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { formatOnCallName } from './formatOnCallName';
 
 type PlannerPopoverContentProps = {
@@ -152,9 +153,10 @@ export function PlanEntryCellPopover({
       setLoadStatus('ready');
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'Die Planungseinträge konnten nicht geladen werden.',
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Die Eintragsarten konnten nicht geladen werden.',
+          context: 'Eintragsarten für die Planung konnten nicht geladen werden',
+        }),
       );
       setLoadStatus('error');
     }

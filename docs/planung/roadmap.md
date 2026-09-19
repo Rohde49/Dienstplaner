@@ -44,8 +44,10 @@ tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
 Die Umstellung auf eine proprietäre Lizenz ist als zukünftiges Arbeitspaket
 vorgesehen und wird derzeit nicht umgesetzt. Der bereits erstellte
 [Umsetzungsplan](zukunft/umsetzungsplan-proprietaere-lizenzierung.md) hält die
-erforderlichen Entscheidungen und technischen Schritte fest und bleibt bis zur
-späteren Wiederaufnahme unverändert erhalten.
+zu prüfenden Entscheidungen und technischen Schritte fest. Version `1.0.0`
+wird unabhängig davon unter MIT ausgeliefert und bleibt dauerhaft unter dieser
+Lizenz nutzbar. Vor einer späteren Wiederaufnahme wird der Zukunftsplan anhand
+der dann vorgesehenen Version neu entschieden.
 
 Vor einem kommerziellen oder breiten externen Vertrieb müssen insbesondere der
 Rechteinhaber und Nutzungsumfang festgelegt, die Fremdlizenzen vollständig

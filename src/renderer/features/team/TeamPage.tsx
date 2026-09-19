@@ -19,6 +19,7 @@ import {
   IconButton,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { EMPLOYEE_COLOR_STYLES } from '../../styles/employeeColors';
 import { DeleteEmployeeDialog } from './DeleteEmployeeDialog';
 import { EmployeeDialog } from './EmployeeDialog';
@@ -28,24 +29,6 @@ import {
   type EmployeeDropPosition,
 } from './employeeOrder';
 import { formatWeeklyWorkingTime } from './employeeWorkingTime';
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Die Mitarbeiterdaten konnten nicht geladen werden.';
-}
-
-function getStatusErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Status konnte nicht gespeichert werden.';
-}
-
-function getReorderErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Die Reihenfolge konnte nicht gespeichert werden.';
-}
 
 type DropTarget = {
   employeeId: string;
@@ -78,7 +61,12 @@ export function TeamPage() {
       const loadedEmployees = await window.dienstplaner.employees.list();
       setEmployees(loadedEmployees);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Die Mitarbeiterdaten konnten nicht geladen werden.',
+          context: 'Mitarbeiter konnten nicht geladen werden',
+        }),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +100,12 @@ export function TeamPage() {
         ),
       );
     } catch (error) {
-      toast.error(getStatusErrorMessage(error));
+      toast.error(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Mitarbeiterstatus konnte nicht gespeichert werden.',
+          context: 'Mitarbeiterstatus konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setStatusUpdatingIds((currentIds) => {
         const nextIds = new Set(currentIds);
@@ -158,7 +151,13 @@ export function TeamPage() {
       );
     } catch (error) {
       setEmployees(previousEmployees);
-      toast.error(getReorderErrorMessage(error));
+      toast.error(
+        getUserFacingIpcErrorMessage(error, {
+          fallback:
+            'Die Reihenfolge der Mitarbeiter konnte nicht gespeichert werden.',
+          context: 'Mitarbeiterreihenfolge konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setReorderingEmployeeId(null);
     }

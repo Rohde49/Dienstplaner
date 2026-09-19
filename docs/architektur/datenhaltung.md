@@ -83,6 +83,27 @@ Die konkreten Zod-Schemas und ihre Pflichtfelder werden ausschließlich im
 Quellcode gepflegt. Das fachliche Modell und seine dauerhaften Invarianten sind
 in [Datenmodell](../fachlichkeit/datenmodell.md) beschrieben.
 
+## Daten- und Anwendungsversionen
+
+Die mit Version `1.0.0` ausgelieferte `schemaVersion: 3` ist der erste offiziell
+unterstützte Datenstand. Ältere, nur während der Entwicklung verwendete
+Schema-Versionen gehören nicht zum unterstützten Pilotumfang und werden von
+`1.0.0` nicht migriert.
+
+Vor jeder späteren Programmfreigabe wird der Datenstand der zuletzt tatsächlich
+ausgelieferten Version mit den neuen Schemas verglichen:
+
+1. Bleibt das Schema unverändert, wird das Lesen und erneute Speichern des
+   bestehenden Datenstands gezielt geprüft.
+2. Ändert sich das Schema, wird vor der Auslieferung eine nachvollziehbare
+   Migration mit Sicherungs- und Fehlerfällen umgesetzt und getestet.
+3. Ist die Kompatibilität nicht eindeutig nachgewiesen, darf die neue Version
+   nicht freigegeben werden.
+
+Eine höhere Programmversion allein verändert oder löscht keine Benutzerdaten.
+Beschädigte oder nicht unterstützte Dateien werden nicht stillschweigend durch
+einen leeren Bestand ersetzt.
+
 ## Schreiben und Sicherung
 
 Ein Schreibvorgang folgt diesen Schutzschritten:
@@ -123,6 +144,28 @@ bestehende Schnittstelle eine gültige Sicherung automatisch. Beschädigte Daten
 dürfen niemals stillschweigend durch einen leeren Zustand ersetzt und
 anschließend überschrieben werden.
 
+## Externe Sicherung und Wiederherstellung
+
+Die internen `.backup`-Dateien ersetzen keine vom Benutzer kontrollierte
+Sicherung. Vor einem manuellen Programmupdate wird die Anwendung geschlossen
+und der vollständige Ordner `dienstplaner-data` auf einen getrennten,
+persönlich kontrollierten Datenträger kopiert.
+
+Für eine Wiederherstellung oder einen Gerätewechsel gilt:
+
+1. Die Anwendung bleibt während des Kopierens geschlossen.
+2. Der vorhandene Datenordner wird vor einer Ersetzung zusätzlich erhalten.
+3. Der gesicherte Ordner wird vollständig übernommen; einzelne Haupt- und
+   Sicherungsdateien aus unterschiedlichen Ständen werden nicht vermischt.
+4. Nach dem Start werden Stammdaten und mindestens ein gespeicherter Monatsplan
+   kontrolliert.
+
+Eine reguläre Programmaktualisierung oder Deinstallation soll den fachlichen
+Datenordner nicht entfernen. Dieses Verhalten wird für jede ausgelieferte
+Installer-Version praktisch geprüft. Ist ein Datenstand beschädigt oder
+inkompatibel, bleiben die Dateien zur Untersuchung und möglichen
+Wiederherstellung erhalten.
+
 ## Nebenläufigkeit
 
 Zugriffe auf denselben fachlichen Datenbestand werden innerhalb des Main Process
@@ -160,7 +203,8 @@ Die Dienstplanablage wahrt zusätzlich folgende Grenzen:
 Nicht Bestandteil dieser Architekturentscheidung sind:
 
 - eine Datenbank oder Cloud-Synchronisation,
-- ein vollständiges Sicherungs-, Export- oder Archivierungskonzept,
+- ein automatisches, versioniertes oder cloudbasiertes Sicherungs- und
+  Archivierungssystem,
 - die Ablage von PDF- oder Druckausgaben als Primärdaten,
 - separat gespeicherte Berechnungsergebnisse, die aus einem Dienstplan erneut
   ermittelt werden können, und

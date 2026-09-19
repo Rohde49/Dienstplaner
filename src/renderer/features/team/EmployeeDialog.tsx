@@ -22,6 +22,7 @@ import {
   Select,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { EMPLOYEE_COLOR_OPTIONS } from '../../styles/employeeColors';
 import { getFirstAvailableEmployeeColorKey } from './employeeColorSelection';
 
@@ -94,12 +95,6 @@ function focusFirstInvalidField(errors: EmployeeFormErrors): void {
   window.setTimeout(() => {
     document.getElementById(fieldId)?.focus();
   }, 0);
-}
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Mitarbeiter konnte nicht gespeichert werden.';
 }
 
 /** Zeigt das Formular zum Anlegen oder Bearbeiten eines Mitarbeiters an. */
@@ -223,7 +218,12 @@ export function EmployeeDialog({
       setOpen(false);
       resetForm();
     } catch (error) {
-      setSubmissionError(getErrorMessage(error));
+      setSubmissionError(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Mitarbeiter konnte nicht gespeichert werden.',
+          context: 'Mitarbeiter konnte nicht gespeichert werden',
+        }),
+      );
     } finally {
       setIsSaving(false);
     }

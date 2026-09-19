@@ -16,6 +16,7 @@ import {
   EmptyState,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { DeleteMonthlyPlanDialog } from './DeleteMonthlyPlanDialog';
 import { PLANNER_MONTHS } from './plannerState';
 
@@ -39,10 +40,6 @@ const dateFormatter = new Intl.DateTimeFormat('de-DE', {
 
 function formatTimestamp(timestamp: string): string {
   return dateFormatter.format(new Date(timestamp));
-}
-
-function getErrorMessage(error: unknown, fallback: string): string {
-  return error instanceof Error ? error.message : fallback;
 }
 
 /** Zeigt alle gespeicherten Monatspläne unabhängig vom gewählten Zeitraum. */
@@ -78,10 +75,11 @@ export function LoadMonthlyPlanDialog({
       setListState((currentState) => ({
         status: 'error',
         plans: currentState.plans,
-        error: getErrorMessage(
-          error,
-          'Die gespeicherten Dienstpläne konnten nicht geladen werden.',
-        ),
+        error: getUserFacingIpcErrorMessage(error, {
+          fallback:
+            'Die gespeicherten Dienstpläne konnten nicht geladen werden.',
+          context: 'Dienstplanliste konnte nicht geladen werden',
+        }),
       }));
     }
   }
@@ -117,7 +115,10 @@ export function LoadMonthlyPlanDialog({
       onLoaded(result, () => setOpen(false));
     } catch (error) {
       setLoadError(
-        getErrorMessage(error, 'Der Dienstplan konnte nicht geladen werden.'),
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Dienstplan konnte nicht geladen werden.',
+          context: 'Dienstplan konnte nicht geladen werden',
+        }),
       );
     } finally {
       setLoadingPlanId(null);

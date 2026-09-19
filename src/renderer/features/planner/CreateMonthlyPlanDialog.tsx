@@ -17,6 +17,7 @@ import {
   Input,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { PLANNER_MONTHS, type PlannerPeriod } from './plannerState';
 
 type CreateMonthlyPlanDialogProps = {
@@ -25,12 +26,6 @@ type CreateMonthlyPlanDialogProps = {
   onRequestOpen: (openDialog: () => void) => void;
   onCreated: (plan: MonthlyPlan) => void;
 };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Dienstplan konnte nicht angelegt werden.';
-}
 
 /** Erfasst den verpflichtenden Titel und legt den Monatsplan unmittelbar an. */
 export function CreateMonthlyPlanDialog({
@@ -104,7 +99,12 @@ export function CreateMonthlyPlanDialog({
       setOpen(false);
       resetForm();
     } catch (error) {
-      setSubmissionError(getErrorMessage(error));
+      setSubmissionError(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Dienstplan konnte nicht angelegt werden.',
+          context: 'Dienstplan konnte nicht angelegt werden',
+        }),
+      );
     } finally {
       setIsCreating(false);
     }

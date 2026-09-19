@@ -37,6 +37,8 @@ den jeweils zuständigen Dokumenten festgehalten.
 ## Einstiegspunkte
 
 - [Zielbild und Rahmenbedingungen](./projekt/zielbild-und-rahmenbedingungen.md)
+- [Lizenzierung](./projekt/lizenzierung.md)
+- [Release-Vorlagen](../release/README.md)
 - [Roadmap](./planung/roadmap.md)
 
 ### Fachlichkeit

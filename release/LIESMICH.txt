@@ -1,0 +1,101 @@
+DIENSTPLANER 1.0.0 – PRIVATE PILOTVERSION
+=========================================
+
+Diese Anwendung ist eine private Pilotversion für einen einzelnen Nutzer.
+Sie arbeitet vollständig lokal und benötigt keine Internetverbindung. Beim
+ersten Start sind keine Mitarbeitenden, Eintragsarten oder Monatspläne
+vorhanden.
+
+Voraussetzungen
+---------------
+
+- Windows 11 auf einem 64-Bit-PC
+- Nutzung mit dem Windows-Benutzerkonto, unter dem die Anwendung installiert
+  wurde
+- Persönliche Übergabe durch Jeremy Louis Rohde
+
+Installation
+------------
+
+1. Öffne auf dem USB-Stick den Ordner "Dienstplaner-1.0.0-Pilot".
+2. Starte "Dienstplaner-1.0.0 Setup.exe".
+3. Windows kann warnen, weil der private Installer nicht digital signiert ist.
+   Fahre nur fort, wenn Jeremy dir genau diesen USB-Stick persönlich übergeben
+   hat und die unten eingetragene Prüfsumme mit der Datei übereinstimmt.
+4. Deaktiviere oder umgehe keinen vorhandenen Viren- oder Echtzeitschutz.
+5. Starte Dienstplaner anschließend über die angelegte Verknüpfung.
+
+Freigegebene Installationsdatei
+-------------------------------
+
+Datei: Dienstplaner-1.0.0 Setup.exe
+SHA-256: <VOR_DER_UEBERGABE_EINTRAGEN>
+
+Die Prüfsumme zeigt, ob die Datei unverändert kopiert wurde. Sie ist kein
+Nachweis dafür, dass eine Datei frei von Schadsoftware ist.
+
+Speicherung und Datensicherung
+------------------------------
+
+Alle Stammdaten und Monatspläne bleiben lokal im Windows-Benutzerverzeichnis
+des Haupt-PCs. Sie liegen nicht auf dem USB-Stick und werden nicht automatisch
+in eine Cloud übertragen.
+
+Vor einer Aktualisierung oder einem Rechnerwechsel:
+
+1. Dienstplaner vollständig schließen.
+2. Im Windows-Explorer "%APPDATA%\Dienstplaner" öffnen.
+3. Den vollständigen Ordner "dienstplaner-data" auf einen getrennten,
+   persönlich kontrollierten Datenträger kopieren.
+4. Nach dem Kopieren prüfen, ob im gesicherten Ordner die JSON-Dateien und der
+   Unterordner "plans" vorhanden sind.
+
+Nicht einzelne Dateien aus verschiedenen Sicherungsständen vermischen. Die
+Dateien mit der Endung ".backup" gehören zum Datenbestand und müssen ebenfalls
+mitkopiert werden.
+
+Manuelle Aktualisierung
+-----------------------
+
+Es gibt keine automatische Update-Funktion. Eine spätere freigegebene Version
+wird wieder mit ihrer neuen Setup-Datei installiert. Vorher immer die oben
+beschriebene Datensicherung anlegen. Nur eine von Jeremy ausdrücklich
+freigegebene Version verwenden.
+
+Deinstallation
+--------------
+
+Die Anwendung kann über die Windows-Einstellungen deinstalliert werden. Der
+fachliche Datenordner soll dabei erhalten bleiben und bei einer späteren
+Neuinstallation wieder verwendet werden. Vor der Deinstallation trotzdem eine
+eigene Sicherung anlegen.
+
+Wer auch die persönlichen Dienstplandaten endgültig entfernen möchte, muss den
+Ordner "dienstplaner-data" nach einer Kontrolle der Sicherung bewusst selbst
+löschen. Dieser Schritt kann nicht rückgängig gemacht werden.
+
+Bekannte Grenzen dieser Pilotversion
+------------------------------------
+
+- vorgesehen für einen festen Haupt-PC und ein Windows-Benutzerkonto
+- keine gemeinsame Nutzung oder Synchronisation zwischen mehreren PCs
+- keine Cloud-Sicherung und keine automatische Datensicherung
+- keine automatischen Updates
+- nicht digital signierter Installer; Windows kann deshalb warnen
+- ausschließlich private Pilotnutzung, keine öffentliche Bereitstellung
+- spätere Fehlerkorrekturen oder Erweiterungen erfolgen nur nach gesonderter
+  Absprache; es besteht keine allgemeine Support- oder Updatezusage
+
+Bei einem unerwarteten Fehler die Anwendung schließen, keine Datendateien
+verändern und Jeremy den ausgeführten Arbeitsschritt sowie die sichtbare
+Fehlermeldung mitteilen.
+
+Lizenzen
+--------
+
+Der eigene Programmcode dieser Version steht unter der MIT-Lizenz. Der
+Übergabeordner enthält "Dienstplaner-LICENSE.txt" und
+"THIRD_PARTY_NOTICES.txt" mit den zugehörigen Lizenzhinweisen.
+
+Rechteinhaber und Ansprechpartner:
+Jeremy Louis Rohde

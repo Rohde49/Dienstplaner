@@ -35,6 +35,7 @@ import {
   Select,
   Spinner,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import {
   PLANNER_MONTHS,
   beginPlannerTeamLoad,
@@ -80,12 +81,6 @@ type PlannerPageProps = {
   onNavigate: (page: AppPage) => void;
   onRegisterProtection: (handler: PlannerProtectionHandler | null) => void;
 };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Die Vorschau konnte nicht geladen werden.';
-}
 
 function getTargetCountBadgeClass(actual: number, target: number): string {
   const status = getTargetCountStatus(actual, target);
@@ -138,7 +133,13 @@ export function PlannerPage({
       setState((currentState) => completePlannerTeamLoad(currentState, team));
     } catch (error) {
       setState((currentState) =>
-        failPlannerTeamLoad(currentState, getErrorMessage(error)),
+        failPlannerTeamLoad(
+          currentState,
+          getUserFacingIpcErrorMessage(error, {
+            fallback: 'Die Vorschau konnte nicht geladen werden.',
+            context: 'Mitarbeiter für die Planung konnten nicht geladen werden',
+          }),
+        ),
       );
     }
   }, []);
@@ -259,9 +260,10 @@ export function PlannerPage({
       setState((currentState) =>
         failPlannerSave(
           currentState,
-          error instanceof Error
-            ? error.message
-            : 'Der Dienstplan konnte nicht gespeichert werden.',
+          getUserFacingIpcErrorMessage(error, {
+            fallback: 'Der Dienstplan konnte nicht gespeichert werden.',
+            context: 'Dienstplan konnte nicht gespeichert werden',
+          }),
         ),
       );
       return false;
@@ -291,6 +293,10 @@ export function PlannerPage({
         toast.success('PDF wurde gespeichert.');
       }
     } catch (error) {
+      console.error(
+        '[Dienstplaner] PDF konnte nicht gespeichert werden',
+        error,
+      );
       setPdfExportErrorMessage(getPdfExportErrorMessage(error));
     } finally {
       setPdfExportStatus('idle');

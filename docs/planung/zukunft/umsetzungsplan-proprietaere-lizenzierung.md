@@ -2,28 +2,31 @@
 
 ## Status
 
-- **Status:** Zukunftsvorhaben
+- **Status:** Zukunftsvorhaben – vor einer Wiederaufnahme neu zu entscheiden
 - **Plan erstellt am:** 18. September 2026, 23:12 Uhr
 - **Erstellungsnachweis:** Commit `51ff908`
 - **Als Zukunftsvorhaben eingeordnet am:** 19. September 2026, 14:20 Uhr
 - **Zeitzone:** Europe/Berlin
 - **Umsetzungstermin:** Nicht festgelegt
 
-Dieser Plan beschreibt die abgestimmte Richtung und die noch erforderlichen
-Entscheidungen. Die Lizenzumstellung ist noch nicht umgesetzt. Insbesondere
-gilt im Projekt derzeit weiterhin die widersprüchliche Ausgangslage aus dem
-MIT-Eintrag in `package.json` und einer fehlenden Lizenzdatei.
+Dieser Plan beschreibt eine mögliche proprietäre Lizenzierung einer späteren
+Programmversion. Er gilt ausdrücklich nicht für die Pilotversion `1.0.0`:
+Diese wird unter der MIT-Lizenz ausgeliefert. Bereits unter MIT eingeräumte
+Rechte an `1.0.0` können durch eine spätere Lizenzentscheidung nicht
+nachträglich zurückgenommen werden.
 
-Die zeitliche Einordnung als Zukunftsvorhaben hebt die Voraussetzungen nicht
-auf: Vor einer kommerziellen oder breiten externen Auslieferung muss dieser
-Plan vollständig geprüft und umgesetzt werden.
+Vor der Wiederaufnahme muss neu entschieden werden, ob und ab welcher späteren
+Version proprietäre Bedingungen gelten sollen. Eine kommerzielle oder breite
+externe Auslieferung benötigt unabhängig vom gewählten Lizenzmodell eine neue
+rechtliche und technische Prüfung.
 
 ## Ziel und Abgrenzung
 
-Der selbst entwickelte Quellcode und die selbst erstellten Projektbestandteile
-des Dienstplaners werden proprietär lizenziert. Dritte erhalten nur die in den
-Lizenzbedingungen ausdrücklich eingeräumten Nutzungsrechte. Alle übrigen
-Rechte verbleiben beim Rechteinhaber.
+Der nach `1.0.0` neu entwickelte und rechtlich entsprechend kontrollierte
+Quellcode könnte in einer klar bezeichneten späteren Version proprietär
+lizenziert werden. Dritte erhielten für diese Version nur die in den dann
+geltenden Lizenzbedingungen ausdrücklich eingeräumten Nutzungsrechte. Die
+MIT-Lizenz von `1.0.0` bliebe davon unberührt.
 
 Die proprietäre Lizenzierung des eigenen Codes ändert die Lizenzen der
 eingebundenen Fremdsoftware nicht. Deren Hinweise, Lizenztexte und sonstige
@@ -41,12 +44,15 @@ Nicht Bestandteil dieses Arbeitspakets sind:
 Eine proprietäre Lizenz regelt erlaubte Nutzungen, verhindert aber nicht
 technisch das Kopieren oder Untersuchen einer ausgelieferten Anwendung.
 
-## Verbindliche Grundentscheidung
+## Aktuell verbindliche Grenzen
 
-- [x] Der eigene Projektcode soll nicht als Open-Source-Software freigegeben
-      werden.
-- [x] Die bisherige MIT-Kennzeichnung soll durch eine proprietäre
-      Kennzeichnung ersetzt werden.
+- [x] Version `1.0.0` wird unter MIT ausgeliefert und bleibt dauerhaft unter
+      dieser Lizenz nutzbar.
+- [ ] Eine proprietäre Lizenzierung einer konkret benannten späteren Version
+      muss vor ihrer Umsetzung erneut bestätigt werden.
+- [ ] Eine spätere Lizenzänderung darf nur Bestandteile erfassen, für die der
+      Rechteinhaber die erforderlichen Rechte besitzt, und darf keine
+      rückwirkende Änderung der MIT-Lizenz von `1.0.0` behaupten.
 - [x] Fremdlizenzen bleiben unberührt und werden sichtbar von der Lizenz des
       Dienstplaners getrennt.
 - [x] Die Anwendung bleibt vollständig lokal und offline; die Lizenzierung
@@ -54,7 +60,7 @@ technisch das Kopieren oder Untersuchen einer ausgelieferten Anwendung.
 
 ## Vorhandene Ausgangslage
 
-- `package.json` enthält aktuell `"license": "MIT"`.
+- `package.json` enthält für die geplante Pilotversion `"license": "MIT"`.
 - `package.json` enthält `"private": true`; dies verhindert eine
   versehentliche npm-Veröffentlichung, ist aber keine Lizenzregelung.
 - Im Projektstamm existieren weder `LICENSE` noch `COPYING`, `NOTICE` oder eine
@@ -118,8 +124,9 @@ individuelle Rechtsberatung.
 
 ## Arbeitspaket 1: Eigene Lizenz und Projektmetadaten
 
-**Ziel:** Das Repository weist den eigenen Code eindeutig und widerspruchsfrei
-als proprietär aus.
+**Ziel:** Der Quellstand der konkret freigegebenen späteren Version weist die
+für diese Version geltende proprietäre Lizenz eindeutig und widerspruchsfrei
+aus, ohne die Lizenzhistorie von `1.0.0` umzudeuten.
 
 - [ ] Im Projektstamm eine maßgebliche `LICENSE`-Datei mit dem bestätigten
       Rechteinhaber, dem Copyright-Jahr 2026 und den freigegebenen
@@ -140,9 +147,9 @@ als proprietär aus.
       `docs/projekt/lizenzierung.md` dokumentieren; dieser Umsetzungsplan bleibt
       der Arbeits- und Abschlussnachweis.
 
-**Abnahme:** Im Repository existiert genau eine eindeutige Lizenzierung des
-eigenen Codes. Es gibt keine Aussage mehr, die den Dienstplaner selbst als
-MIT- oder Open-Source-Projekt ausweist.
+**Abnahme:** Der Quellstand und die Artefakte der späteren Version weisen deren
+Lizenz eindeutig aus. Historische MIT-Stände und ihre Lizenztexte bleiben
+unverändert nachvollziehbar.
 
 ## Arbeitspaket 2: Fremdsoftware und Hinweise
 

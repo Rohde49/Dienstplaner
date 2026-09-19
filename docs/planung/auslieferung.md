@@ -2,7 +2,7 @@
 
 ## Status
 
-- **Status:** Umsetzung freigegeben
+- **Status:** Umsetzung läuft
 - **Beginn der Abstimmung:** 19. September 2026, 14:47 Uhr
 - **Zeitzone:** Europe/Berlin
 - **Ausgangsstand:** Commit `5e8a9ce`
@@ -11,6 +11,23 @@ Dieses Dokument hält die Entscheidungen, den daraus abgeleiteten
 Umsetzungsplan und später die Abnahme der Auslieferung fest. Es beschreibt den
 laufenden Arbeitsstand. Dauerhafte Produkt-, Architektur- oder Qualitätsregeln
 werden nach ihrer Bestätigung in den jeweils zuständigen Dokumenten gepflegt.
+
+### Umsetzungsstand vom 19. September 2026
+
+- Die erste Umsetzungsetappe zur Datenzuverlässigkeit und den zugehörigen
+  Repository-/IPC-Tests ist mit Commit `9bdcfdd` abgeschlossen.
+- Die vereinfachte Darstellung unerwarteter technischer IPC-Fehler, die
+  dauerhaften Daten- und Testregeln, die MIT- und Fremdlizenzunterlagen, die
+  feste Installer-Identität sowie die Übergabe- und Nachweisvorlagen sind im
+  anschließenden Arbeitsstand umgesetzt und noch nicht als Release-Kandidat
+  committet.
+- `npm run licenses:check`, `npm test` mit 32 Testdateien und 381 Tests,
+  `npm run typecheck`, `npm run lint`, `npm run format:check` und
+  `git diff --check` waren für diesen Arbeitsstand erfolgreich.
+- `npm audit --omit=dev` meldete für den abgefragten Stand keine bekannte
+  Schwachstelle in den Produktionsabhängigkeiten.
+- Paketierung, Installer-Build und installierte Abnahme wurden noch nicht
+  ausgeführt. Der Auslieferungsbefund H-03 bleibt deshalb offen.
 
 ## Ziel
 

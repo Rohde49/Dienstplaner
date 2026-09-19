@@ -13,6 +13,7 @@ import {
   Button,
   IconButton,
 } from '../../components/ui';
+import { getUserFacingIpcErrorMessage } from '../../errors/userFacingIpcError';
 import { PLANNER_MONTHS } from './plannerState';
 
 type DeleteMonthlyPlanDialogProps = {
@@ -21,12 +22,6 @@ type DeleteMonthlyPlanDialogProps = {
   onDeletingChange: (isDeleting: boolean) => void;
   onDeleted: (planId: string) => void;
 };
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : 'Der Dienstplan konnte nicht gelöscht werden.';
-}
 
 /** Fragt vor dem endgültigen Löschen eines vollständigen Monatsplans nach. */
 export function DeleteMonthlyPlanDialog({
@@ -61,7 +56,12 @@ export function DeleteMonthlyPlanDialog({
       toast.success(`${plan.title} wurde gelöscht.`);
       setOpen(false);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(
+        getUserFacingIpcErrorMessage(error, {
+          fallback: 'Der Dienstplan konnte nicht gelöscht werden.',
+          context: 'Dienstplan konnte nicht gelöscht werden',
+        }),
+      );
     } finally {
       setIsDeleting(false);
       onDeletingChange(false);

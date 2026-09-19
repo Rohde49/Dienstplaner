@@ -16,6 +16,7 @@ const electronMocks = vi.hoisted(() => {
   return {
     app: {
       quit: vi.fn(),
+      setAppUserModelId: vi.fn(),
       whenReady: vi.fn(() => ({
         then: vi.fn((callback: () => void) => {
           readyCallback = callback;
@@ -116,6 +117,9 @@ describe('Electron-Hauptfenster', () => {
     );
     expect(electronMocks.maximize).toHaveBeenCalledOnce();
     expect(electronMocks.show).toHaveBeenCalledOnce();
+    expect(electronMocks.app.setAppUserModelId).toHaveBeenCalledWith(
+      'com.squirrel.Dienstplaner.Dienstplaner',
+    );
     expect(electronMocks.maximize.mock.invocationCallOrder[0]).toBeLessThan(
       electronMocks.show.mock.invocationCallOrder[0],
     );

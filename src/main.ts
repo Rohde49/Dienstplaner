@@ -11,6 +11,8 @@ if (started) {
   app.quit();
 }
 
+app.setAppUserModelId('com.squirrel.Dienstplaner.Dienstplaner');
+
 /** Erstellt und öffnet das abgesicherte Hauptfenster der Anwendung. */
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
