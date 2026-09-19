@@ -41,17 +41,21 @@ darf das Skript ersatzweise einen ausdrücklich gekennzeichneten MIT-Text
 erzeugen. Dieser Sonderfall bleibt in den Fremdlizenzhinweisen sichtbar.
 
 Electron bringt zusätzlich seine eigene Lizenz und die Chromium-Hinweise
-`LICENSES.chromium.html` in das Anwendungspaket ein. Diese von Electron
-erzeugten Dateien werden beim finalen Paket- und Installer-Build gesondert
-kontrolliert; sie werden nicht durch `THIRD_PARTY_NOTICES.txt` ersetzt.
+`LICENSES.chromium.html` in das Anwendungspaket ein. Da Squirrel die
+Chromium-HTML-Datei aus dem Wurzelverzeichnis nicht automatisch in sein
+Installationspaket übernimmt, wird dieselbe mit Electron gelieferte Datei
+zusätzlich als Ressource aufgenommen. Beide Lizenzarten werden beim finalen
+Paket- und Installer-Build gesondert kontrolliert; sie werden nicht durch
+`THIRD_PARTY_NOTICES.txt` ersetzt.
 
 ## Auslieferung
 
-`LICENSE` und `THIRD_PARTY_NOTICES.txt` werden über die
-Electron-Packager-Konfiguration als zusätzliche Ressourcen in die installierte
-Anwendung aufgenommen. Dieselben geprüften Texte werden außerdem mit dem
-USB-Übergabepaket bereitgestellt. Eine eigene Seite für rechtliche Hinweise in
-der Oberfläche gehört nicht zum privaten Pilotumfang.
+`LICENSE`, `THIRD_PARTY_NOTICES.txt` und die mit Electron gelieferte
+`LICENSES.chromium.html` werden über die Electron-Packager-Konfiguration als
+zusätzliche Ressourcen in die installierte Anwendung aufgenommen. Die eigene
+Lizenz und die Fremdlizenzhinweise werden außerdem mit dem USB-Übergabepaket
+bereitgestellt. Eine eigene Seite für rechtliche Hinweise in der Oberfläche
+gehört nicht zum privaten Pilotumfang.
 
 ## Mögliche spätere Lizenzänderung
 

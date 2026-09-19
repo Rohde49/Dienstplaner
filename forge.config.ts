@@ -7,7 +7,11 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    extraResource: ['LICENSE', 'THIRD_PARTY_NOTICES.txt'],
+    extraResource: [
+      'LICENSE',
+      'THIRD_PARTY_NOTICES.txt',
+      'node_modules/electron/dist/LICENSES.chromium.html',
+    ],
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({ name: 'Dienstplaner' })],
