@@ -131,6 +131,11 @@ bereits dauerhaft gespeichert wurde.
 - Die Anzahl freier Samstage und die Anzahl freier Sonntage werden jeweils mit
   dem festen Zielwert `2` verglichen und nach derselben Ampellogik dargestellt.
   Der feste Zielwert erhält keine zusätzliche Anzeige in der Werkzeugleiste.
+- Für die Pilotversion `1.0.0` bleibt diese Zielkennzeichnung bewusst
+  ausschließlich farblich. Eine zusätzliche Statusangabe durch Text, Symbol
+  oder Hilfstechnologie wird nicht ergänzt. Dies ist eine ausdrücklich
+  akzeptierte Ausnahme vom allgemeinen Gestaltungsgrundsatz, Status nicht nur
+  über Farbe zu vermitteln.
 - Ein exakter Ausgleich wird ohne Vorzeichen angezeigt.
 - Die im Monatsplan gespeicherte Mitarbeiterfarbe kennzeichnet den jeweiligen
   Tabellenkopf wie in der Planungstabelle.

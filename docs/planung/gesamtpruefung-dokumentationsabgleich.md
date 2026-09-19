@@ -86,21 +86,29 @@ gefunden.
 
 ## Mittlere Priorität
 
-- [ ] **M-01 – Bestätigter Widerspruch: Negative gespeicherte Minutenwerte sind zugleich verboten und vorgesehen.**
+- [x] **M-01 – Bestätigter Widerspruch: Negative gespeicherte Minutenwerte sind zugleich verboten und vorgesehen.**
   - **Betroffener Bereich:** Fachregel für Zeitwerte und manueller Zeitübertrag.
   - **Priorität / mögliche Auswirkung:** Mittel. Die widersprüchliche Grundregel kann bei späteren Validierungen, Importen oder Berechnungen zu einer falschen Ablehnung gültiger Zeitüberträge führen.
   - **Dokumentierte Aussage:** `docs/fachlichkeit/berechnungen/zeitbasis-und-rundung.md:9-18` erlaubt negative Minutenwerte ausschließlich für berechnete Differenzen. Dagegen erlaubt `docs/features/auswertung.md:84-103` ausdrücklich negative, im Monatsplan gespeicherte manuelle Zeitüberträge.
   - **Tatsächlicher Stand:** `src/shared/schemas/monthlyPlan.ts:136-153` definiert den gespeicherten Zeitübertrag als vorzeichenbehafteten sicheren Ganzzahlwert bis `Number.MIN_SAFE_INTEGER`; die Schema- und Entwurfstests decken negative Werte ab.
   - **Abweichung:** Der Code und das Auswertungsfeature sind untereinander konsistent, die übergreifende Zeitbasis formuliert die zulässigen Ausnahmen jedoch zu eng.
   - **Empfehlung:** **Dokumentation anpassen.** Negative Werte auch für ausdrücklich vorzeichenbehaftete gespeicherte Fachwerte wie den manuellen Zeitübertrag zulassen und von nichtnegativen Arbeitszeitdauern abgrenzen.
+  - **Erledigt am 19. September 2026:** Die Zeitbasis unterscheidet nun
+    nichtnegative Arbeitszeitdauern von ausdrücklich vorzeichenbehafteten
+    Fachwerten und nennt den manuellen Zeitübertrag als zulässige Ausnahme.
 
-- [ ] **M-02 – Bestätigter Widerspruch: Ein fehlgeschlagenes Planlöschen kann einen technischen Teilzustand hinterlassen.**
+- [x] **M-02 – Bestätigter Widerspruch: Ein fehlgeschlagenes Planlöschen kann einen technischen Teilzustand hinterlassen.**
   - **Betroffener Bereich:** Datenhaltung, Fehler- und Wiederherstellungsverhalten beim Löschen.
   - **Priorität / mögliche Auswirkung:** Mittel. Bei einem einseitigen Dateisystemfehler kann nach einer als fehlgeschlagen gemeldeten Löschung nur noch Haupt- oder Sicherungsdatei vorhanden sein; der nächste Ladevorgang kann dadurch einen anderen Wiederherstellungsstatus zeigen.
   - **Dokumentierte Aussage:** `docs/architektur/datenhaltung.md:144-153` behandelt Haupt- und Sicherungsdatei beim Löschen gemeinsam in einem serialisierten Vorgang. `docs/qualitaet/teststrategie.md:166-181` verlangt, dass ein fehlgeschlagener Vorgang keinen teilweise gespeicherten Zustand hinterlässt.
   - **Tatsächlicher Stand:** `src/main/storage/monthlyPlansRepository.ts:333-357` löscht beide Dateien parallel mit zwei unabhängigen `rm`-Aufrufen in `Promise.all`. Schlägt genau einer davon fehl, wird der andere nicht zurückgerollt. Die Repositorytests prüfen erfolgreiches Löschen und „nicht gefunden“, aber keinen einseitigen Löschfehler.
   - **Abweichung:** Die Zugriffe sind serialisiert, das Dateipaar wird beim Löschen jedoch nicht als wiederherstellbare Einheit behandelt. Diese Aussage ist aus dem Fehlerpfad des Codes abgeleitet; ein entsprechender Laufzeitfehler wurde in dieser Sitzung nicht künstlich ausgelöst.
   - **Empfehlung:** **Quellcode prüfen.** Gewünschte Fehlersemantik festlegen und durch einen gezielten Fehlerfalltest absichern; je nach Entscheidung Löschablauf, Wiederholbarkeit oder Dokumentation der verbleibenden Datei anpassen.
+  - **Erledigt am 19. September 2026:** Sicherung und Hauptdatei werden nun
+    nacheinander gelöscht, wobei die gültige Hauptdatei zuletzt entfernt wird.
+    Gezielte Fehlerfalltests belegen, dass ein Fehler an beiden Löschgrenzen
+    keinen unlesbaren Planstand erzeugt und die Zugriffsqueue anschließend
+    weiterarbeitet.
 
 - [ ] **M-03 – Bestätigter Widerspruch: Technische Fehlermeldungen werden in mehreren Bereichen ungefiltert als einzige Erklärung angezeigt.**
   - **Betroffener Bereich:** Team, Eintragsarten, Planladen/-speichern und allgemeines Fehlerverhalten.
@@ -110,21 +118,31 @@ gefunden.
   - **Abweichung:** Für die meisten IPC-Vorgänge ist die technische Meldung zugleich die einzige sichtbare Erklärung; eine konsistente Übersetzung oder ein ergänzender benutzerbezogener Kontext fehlt.
   - **Empfehlung:** **Quellcode prüfen.** Eine kleine gemeinsame Fehlerübersetzung für erwartbare Fehlerklassen einführen und technische Details höchstens ergänzend behandeln.
 
-- [ ] **M-04 – Bestätigter Widerspruch: Zielstatus freier Tage wird in der Auswertung nur über Farbe vermittelt.**
+- [x] **M-04 – Bestätigter Widerspruch: Zielstatus freier Tage wird in der Auswertung nur über Farbe vermittelt.**
   - **Betroffener Bereich:** Auswertungsdialog, Gestaltungsgrundsätze und Barrierearmut.
   - **Priorität / mögliche Auswirkung:** Mittel. Benutzer ohne zuverlässige Farbwahrnehmung erhalten für „unter Ziel“, „Ziel erreicht“ und „über Ziel“ keine gleichwertige Statusangabe.
   - **Dokumentierte Aussage:** `docs/oberflaeche/gestaltungsgrundsaetze.md:99-123` und `:242-253` verlangen, Statusfarben durch Text, Symbol oder Struktur zu ergänzen. `docs/features/auswertung.md:124-134` definiert die Ampellogik und hält zugleich fest, dass der feste Zielwert `2` nicht zusätzlich angezeigt wird.
   - **Tatsächlicher Stand:** `src/renderer/features/planner/EvaluationDialog.tsx:55-74` gibt in den drei Frei-Zeilen nur den Ist-Zähler aus. `:128-168` übersetzt den Vergleich ausschließlich in gelbe, grüne oder rote CSS-Klassen; es gibt dort weder sichtbaren Statustext noch einen entsprechenden zugänglichen Namen.
   - **Abweichung:** Zahl und Zeilenname bleiben sichtbar, der eigentliche Vergleichsstatus und bei Wochenendtagen sogar der zugrunde liegende Zielwert sind jedoch nur über die Farbe erkennbar.
   - **Empfehlung:** **Quellcode prüfen.** Zielwert oder Vergleichsstatus sichtbar beziehungsweise mindestens assistiv verfügbar ergänzen und die Feature-Dokumentation anschließend auf dieselbe Darstellung bringen.
+  - **Sachlich geschlossen am 19. September 2026:** Die vorhandene rein
+    farbliche Kennzeichnung ist eine bewusste Produktentscheidung und bleibt in
+    `1.0.0` unverändert. Die Feature-Dokumentation weist sie ausdrücklich als
+    akzeptierte Ausnahme der privaten Pilotversion aus; es wurde keine
+    Oberflächenänderung vorgenommen.
 
-- [ ] **M-05 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Wichtige Persistenz- und Nebenläufigkeitstests fehlen.**
+- [x] **M-05 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Wichtige Persistenz- und Nebenläufigkeitstests fehlen.**
   - **Betroffener Bereich:** Mitarbeiter- und Eintragsarten-Repositories, IPC-Grenzen und serialisierte Zugriffe.
   - **Priorität / mögliche Auswirkung:** Mittel. Regressionen bei vollständigen Stammdatenschreibvorgängen, Reihenfolge, IPC-Registrierung oder tatsächlich konkurrierenden Änderungen werden nicht gezielt erkannt.
   - **Dokumentierte Aussage:** `docs/qualitaet/teststrategie.md:40-55` nennt Stammdatenkonsistenz, Erhaltung von Reihenfolgen und serielles Verarbeiten konkurrierender Änderungen als besonders wichtige Integrationstests.
   - **Tatsächlicher Stand:** Die Suite enthält `tests/unit/storage/jsonFileStore.test.ts` und `tests/unit/monthly-plan/repository.test.ts`, aber keine Repositorytests für `src/main/storage/employeesRepository.ts` oder `src/main/storage/entryTypesRepository.ts` und keine Tests der drei fachlichen IPC-Registrierungen. Die vorhandenen `Promise.all`-Verwendungen in Tests dienen dem Aufräumen beziehungsweise paralleler Plananlage, prüfen aber keine definierte Reihenfolge konkurrierender Updates.
   - **Abweichung:** Die gemeinsame Speichertechnik und das Monatsplan-Repository sind gut abgesichert; die dokumentierte Breite für Stammdaten, IPC und Nebenläufigkeit wird trotzdem nicht erreicht.
   - **Empfehlung:** **Quellcode prüfen.** Wenige risikobasierte Repository-/IPC-Tests ergänzen, insbesondere für Reihenfolge, Sicherungswiederherstellung und zwei gleichzeitig angestoßene Änderungen.
+  - **Erledigt am 19. September 2026:** Mitarbeiter- und
+    Eintragsarten-Repositories sind nun isoliert testbar. Neue dateibasierte
+    Tests decken Ändern, Reihenfolge, Neustart, Sicherungswiederherstellung und
+    gleichzeitig angestoßene Schreibvorgänge ab. Schmale Vertragstests prüfen
+    zusätzlich alle fachlichen IPC-Registrierungen und ihre Argumentübergabe.
 
 - [x] **M-06 – Möglicherweise veralteter Planungs- oder Statushinweis: Der Planungsseitenplan bezeichnet die fertige Seite weiterhin als Platzhalter.**
   - **Betroffener Bereich:** Funktionsumfang, Roadmap und Planungsdokumentation.

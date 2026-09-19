@@ -2,7 +2,7 @@
 
 ## Status
 
-- **Status:** In Abstimmung
+- **Status:** Umsetzung freigegeben
 - **Beginn der Abstimmung:** 19. September 2026, 14:47 Uhr
 - **Zeitzone:** Europe/Berlin
 - **Ausgangsstand:** Commit `5e8a9ce`
@@ -413,8 +413,9 @@ Widerspruch aufdeckt.
 ## Umsetzungsplan
 
 Der folgende Plan ist die technische Übersetzung der bestätigten Entscheidungen.
-Er enthält noch keine Freigabe zur Umsetzung. Die Arbeit beginnt erst nach einer
-gemeinsamen Prüfung und ausdrücklichen Bestätigung dieses Plans.
+Jeremy Louis Rohde hat ihn nach gemeinsamer Prüfung am 19. September 2026 zur
+Umsetzung freigegeben. Die Arbeit erfolgt weiterhin in den beschriebenen kleinen
+und überprüfbaren Etappen.
 
 ### Technischer Ist-Abgleich
 
@@ -441,14 +442,17 @@ gemeinsamen Prüfung und ausdrücklichen Bestätigung dieses Plans.
    Ausnahme für übernommene negative Zeitwerte in Einklang gebracht.
 2. Das Löschen eines Monatsplans wird so abgesichert und getestet, dass ein
    Teilfehler nicht unbemerkt einen schwer verständlichen Restzustand erzeugt.
-3. Technische Fehler aus Datei- und IPC-Zugriffen erhalten für Benutzer
-   verständliche Meldungen. Die technischen Einzelheiten bleiben für die
-   Fehlersuche verfügbar, werden aber nicht ungefiltert als Hauptmeldung
-   angezeigt.
-4. Zustände, die bisher wesentlich über Farbe vermittelt werden, erhalten eine
-   zusätzliche verständliche Text- oder Hilfstechnologie-Kennzeichnung. Vor
-   dieser sichtbaren Oberflächenänderung wird Jeremy eine kleine nummerierte
-   Auswahl zur konkreten Darstellung vorgelegt.
+3. Bereits verständliche fachliche Fehlermeldungen bleiben erhalten.
+   Unerwartete technische Fehler aus Datei-, Validierungs- und IPC-Zugriffen
+   erhalten stattdessen eine zum jeweiligen Vorgang passende, verständliche
+   Meldung. Das technische Original wird für die Fehlersuche protokolliert,
+   aber nicht ungefiltert in der Oberfläche angezeigt. Diese Abgrenzung wurde
+   am 19. September 2026 ausdrücklich bestätigt.
+4. Die farbliche Kennzeichnung der Freie-Tage-Zielwerte bleibt in `1.0.0`
+   bewusst unverändert. Eine zusätzliche Text-, Symbol- oder
+   Hilfstechnologie-Kennzeichnung wird nicht ergänzt. Die Abweichung vom
+   allgemeinen Gestaltungsgrundsatz wird als ausdrücklich akzeptierte
+   Einschränkung der Pilotversion dokumentiert.
 5. Für die Datenablagen von Mitarbeitenden und Eintragstypen sowie für relevante
    gleichzeitige Schreibzugriffe werden gezielte Tests ergänzt. Eine neue große
    End-to-End-Testinfrastruktur wird nicht eingeführt.

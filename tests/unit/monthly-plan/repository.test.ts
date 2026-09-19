@@ -2,7 +2,7 @@ import { access, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { MonthlyPlansRepository } from '../../../src/main/storage/monthlyPlansRepository';
 import { createMonthlyPlan } from '../../../src/main/domain/monthlyPlanFactory';
@@ -62,6 +62,7 @@ async function createTestRepository(
     createEmployee('10000000-0000-4000-8000-000000000001'),
   ],
   entryTypes: EntryType[] = [],
+  removeFile?: (filePath: string) => Promise<void>,
 ): Promise<{
   directory: string;
   repository: MonthlyPlansRepository;
@@ -75,6 +76,7 @@ async function createTestRepository(
       dataDirectoryPath: directory,
       loadEmployees: async () => employees,
       loadEntryTypes: async () => entryTypes,
+      removeFile,
     }),
   };
 }
@@ -544,6 +546,81 @@ describe('Monatsplan-Repository', () => {
     await expect(
       repository.remove('00000000-0000-4000-8000-000000000001'),
     ).rejects.toThrow('nicht gefunden');
+  });
+
+  it('lässt die Hauptdatei unangetastet, wenn die Sicherung nicht gelöscht werden kann', async () => {
+    let blockedPath = '';
+    const removeFile = vi.fn(async (filePath: string) => {
+      if (filePath === blockedPath) {
+        throw new Error('Simulierter Dateifehler');
+      }
+
+      await rm(filePath, { force: true });
+    });
+    const { directory, repository } = await createTestRepository(
+      undefined,
+      undefined,
+      removeFile,
+    );
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const savedPlan = await repository.save(plan);
+    const filePath = path.join(directory, 'plans', `${plan.id}.json`);
+    blockedPath = `${filePath}.backup`;
+
+    await expect(repository.remove(plan.id)).rejects.toThrow(
+      'Simulierter Dateifehler',
+    );
+
+    await expect(access(filePath)).resolves.toBeUndefined();
+    await expect(access(`${filePath}.backup`)).resolves.toBeUndefined();
+    await expect(repository.get(plan.id)).resolves.toEqual({
+      plan: savedPlan,
+      recoveryWarning: null,
+    });
+    expect(removeFile).toHaveBeenCalledTimes(1);
+  });
+
+  it('behält einen weiterhin ladbaren Hauptstand, wenn dessen Löschen fehlschlägt', async () => {
+    let blockedPath = '';
+    const removeFile = vi.fn(async (filePath: string) => {
+      if (filePath === blockedPath) {
+        throw new Error('Simulierter Dateifehler');
+      }
+
+      await rm(filePath, { force: true });
+    });
+    const { directory, repository } = await createTestRepository(
+      undefined,
+      undefined,
+      removeFile,
+    );
+    const plan = await repository.create({
+      year: 2026,
+      month: 9,
+      title: 'Septemberplan',
+    });
+    const savedPlan = await repository.save(plan);
+    const filePath = path.join(directory, 'plans', `${plan.id}.json`);
+    blockedPath = filePath;
+
+    await expect(repository.remove(plan.id)).rejects.toThrow(
+      'Simulierter Dateifehler',
+    );
+
+    await expect(access(filePath)).resolves.toBeUndefined();
+    await expect(access(`${filePath}.backup`)).rejects.toMatchObject({
+      code: 'ENOENT',
+    });
+    await expect(repository.get(plan.id)).resolves.toEqual({
+      plan: savedPlan,
+      recoveryWarning: null,
+    });
+    expect(removeFile).toHaveBeenNthCalledWith(1, `${filePath}.backup`);
+    expect(removeFile).toHaveBeenNthCalledWith(2, filePath);
   });
 
   it('verwendet bei einer fremden Plan-ID in der Hauptdatei die passende Sicherung', async () => {

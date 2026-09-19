@@ -148,8 +148,12 @@ Die Dienstplanablage wahrt zusätzlich folgende Grenzen:
   Snapshots und ändern sich nicht rückwirkend mit den Stammdaten.
 - Zusammenfassungen für Übersichten werden aus den Plandateien abgeleitet und
   nicht als zusätzlicher paralleler Datenbestand geführt.
-- Beim Löschen eines Plans werden Haupt- und Sicherungsdatei gemeinsam als ein
-  serialisierter Vorgang behandelt.
+- Beim Löschen eines Plans werden Sicherungs- und Hauptdatei in einem
+  serialisierten Vorgang entfernt. Die Sicherung wird zuerst und die gültige
+  Hauptdatei zuletzt gelöscht. Scheitert das Löschen der Sicherung, bleibt die
+  Hauptdatei unangetastet. Scheitert anschließend das Löschen der Hauptdatei,
+  bleibt der Plan weiterhin aus dieser Hauptdatei ladbar und der Löschvorgang
+  kann wiederholt werden.
 
 ## Abgrenzung
 

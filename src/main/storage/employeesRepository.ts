@@ -10,160 +10,187 @@ import {
 } from '../../shared/schemas';
 import { JsonFileStore } from './jsonFileStore';
 
-const employeeStore = new JsonFileStore<EmployeesFile>({
-  fileName: 'employees.json',
-  schema: employeesFileSchema,
-  createDefault: () => ({
-    schemaVersion: 3,
-    updatedAt: new Date().toISOString(),
-    employees: [],
-  }),
-});
+type EmployeesRepositoryOptions = {
+  dataDirectoryPath?: string;
+};
 
-let accessQueue: Promise<void> = Promise.resolve();
+/** Verwaltet Mitarbeiter in einer validierten und gesicherten JSON-Datei. */
+export class EmployeesRepository {
+  private readonly store: JsonFileStore<EmployeesFile>;
+  private accessQueue: Promise<void> = Promise.resolve();
 
-/**
- * Führt Schreibvorgänge nacheinander aus.
- * Dadurch überschreiben sich gleichzeitige Änderungen nicht gegenseitig.
- */
-function runAccess<T>(operation: () => Promise<T>): Promise<T> {
-  const result = accessQueue.then(operation);
-
-  accessQueue = result.then(
-    (): void => undefined,
-    (): void => undefined,
-  );
-
-  return result;
-}
-
-/** Lädt alle gespeicherten Mitarbeiter. */
-export async function listEmployees(): Promise<Employee[]> {
-  return runAccess(async () => {
-    const file = await employeeStore.read();
-    return file.employees;
-  });
-}
-
-/** Prüft die Eingaben und speichert einen neuen Mitarbeiter. */
-export function createEmployee(input: unknown): Promise<Employee> {
-  return runAccess(async () => {
-    const validatedInput = employeeInputSchema.parse(input);
-    const file = await employeeStore.read();
-    const timestamp = new Date().toISOString();
-
-    const employee: Employee = {
-      ...validatedInput,
-      id: randomUUID(),
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    };
-
-    await employeeStore.write({
-      ...file,
-      updatedAt: timestamp,
-      employees: [...file.employees, employee],
+  constructor({ dataDirectoryPath }: EmployeesRepositoryOptions = {}) {
+    this.store = new JsonFileStore<EmployeesFile>({
+      fileName: 'employees.json',
+      schema: employeesFileSchema,
+      createDefault: () => ({
+        schemaVersion: 3,
+        updatedAt: new Date().toISOString(),
+        employees: [],
+      }),
+      dataDirectoryPath,
     });
+  }
 
-    return employee;
-  });
-}
+  /** Führt Zugriffe nacheinander aus, damit sie sich nicht überschreiben. */
+  private runAccess<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.accessQueue.then(operation);
 
-/** Prüft und aktualisiert einen vorhandenen Mitarbeiter. */
-export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
-  return runAccess(async () => {
-    const validatedId = employeeIdSchema.parse(id);
-    const validatedInput = employeeInputSchema.parse(input);
-    const file = await employeeStore.read();
-
-    const employeeIndex = file.employees.findIndex(
-      (employee) => employee.id === validatedId,
+    this.accessQueue = result.then(
+      (): void => undefined,
+      (): void => undefined,
     );
 
-    if (employeeIndex === -1) {
-      throw new Error('Der Mitarbeiter wurde nicht gefunden.');
-    }
+    return result;
+  }
 
-    const timestamp = new Date().toISOString();
-    const existingEmployee = file.employees[employeeIndex];
-
-    const updatedEmployee: Employee = {
-      ...existingEmployee,
-      ...validatedInput,
-      id: validatedId,
-      updatedAt: timestamp,
-    };
-
-    const employees = [...file.employees];
-    employees[employeeIndex] = updatedEmployee;
-
-    await employeeStore.write({
-      ...file,
-      updatedAt: timestamp,
-      employees,
+  /** Lädt alle gespeicherten Mitarbeiter. */
+  list(): Promise<Employee[]> {
+    return this.runAccess(async () => {
+      const file = await this.store.read();
+      return file.employees;
     });
+  }
 
-    return updatedEmployee;
-  });
-}
+  /** Prüft die Eingaben und speichert einen neuen Mitarbeiter. */
+  create(input: unknown): Promise<Employee> {
+    return this.runAccess(async () => {
+      const validatedInput = employeeInputSchema.parse(input);
+      const file = await this.store.read();
+      const timestamp = new Date().toISOString();
 
-/** Speichert die vollständige Reihenfolge aller vorhandenen Mitarbeiter. */
-export function reorderEmployees(orderedIds: unknown): Promise<Employee[]> {
-  return runAccess(async () => {
-    const validatedIds = employeeOrderSchema.parse(orderedIds);
-    const file = await employeeStore.read();
+      const employee: Employee = {
+        ...validatedInput,
+        id: randomUUID(),
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
 
-    if (validatedIds.length !== file.employees.length) {
-      throw new Error(
-        'Die Reihenfolge muss alle Mitarbeiter genau einmal enthalten.',
-      );
-    }
-
-    const employeesById = new Map(
-      file.employees.map((employee) => [employee.id, employee]),
-    );
-    const employees = validatedIds.map((id) => {
-      const employee = employeesById.get(id);
-
-      if (employee === undefined) {
-        throw new Error(
-          'Die Reihenfolge enthält einen unbekannten Mitarbeiter.',
-        );
-      }
+      await this.store.write({
+        ...file,
+        updatedAt: timestamp,
+        employees: [...file.employees, employee],
+      });
 
       return employee;
     });
+  }
 
-    const timestamp = new Date().toISOString();
+  /** Prüft und aktualisiert einen vorhandenen Mitarbeiter. */
+  update(id: unknown, input: unknown): Promise<Employee> {
+    return this.runAccess(async () => {
+      const validatedId = employeeIdSchema.parse(id);
+      const validatedInput = employeeInputSchema.parse(input);
+      const file = await this.store.read();
 
-    await employeeStore.write({
-      ...file,
-      updatedAt: timestamp,
-      employees,
+      const employeeIndex = file.employees.findIndex(
+        (employee) => employee.id === validatedId,
+      );
+
+      if (employeeIndex === -1) {
+        throw new Error('Der Mitarbeiter wurde nicht gefunden.');
+      }
+
+      const timestamp = new Date().toISOString();
+      const existingEmployee = file.employees[employeeIndex];
+
+      const updatedEmployee: Employee = {
+        ...existingEmployee,
+        ...validatedInput,
+        id: validatedId,
+        updatedAt: timestamp,
+      };
+
+      const employees = [...file.employees];
+      employees[employeeIndex] = updatedEmployee;
+
+      await this.store.write({
+        ...file,
+        updatedAt: timestamp,
+        employees,
+      });
+
+      return updatedEmployee;
     });
+  }
 
-    return employees;
-  });
+  /** Speichert die vollständige Reihenfolge aller vorhandenen Mitarbeiter. */
+  reorder(orderedIds: unknown): Promise<Employee[]> {
+    return this.runAccess(async () => {
+      const validatedIds = employeeOrderSchema.parse(orderedIds);
+      const file = await this.store.read();
+
+      if (validatedIds.length !== file.employees.length) {
+        throw new Error(
+          'Die Reihenfolge muss alle Mitarbeiter genau einmal enthalten.',
+        );
+      }
+
+      const employeesById = new Map(
+        file.employees.map((employee) => [employee.id, employee]),
+      );
+      const employees = validatedIds.map((id) => {
+        const employee = employeesById.get(id);
+
+        if (employee === undefined) {
+          throw new Error(
+            'Die Reihenfolge enthält einen unbekannten Mitarbeiter.',
+          );
+        }
+
+        return employee;
+      });
+
+      const timestamp = new Date().toISOString();
+
+      await this.store.write({
+        ...file,
+        updatedAt: timestamp,
+        employees,
+      });
+
+      return employees;
+    });
+  }
+
+  /** Entfernt einen Mitarbeiter dauerhaft aus der Datendatei. */
+  remove(id: unknown): Promise<void> {
+    return this.runAccess(async () => {
+      const validatedId = employeeIdSchema.parse(id);
+      const file = await this.store.read();
+
+      const employees = file.employees.filter(
+        (employee) => employee.id !== validatedId,
+      );
+
+      if (employees.length === file.employees.length) {
+        throw new Error('Der Mitarbeiter wurde nicht gefunden.');
+      }
+
+      await this.store.write({
+        ...file,
+        updatedAt: new Date().toISOString(),
+        employees,
+      });
+    });
+  }
 }
 
-/** Entfernt einen Mitarbeiter dauerhaft aus der Datendatei. */
-export function deleteEmployee(id: unknown): Promise<void> {
-  return runAccess(async () => {
-    const validatedId = employeeIdSchema.parse(id);
-    const file = await employeeStore.read();
+const employeesRepository = new EmployeesRepository();
 
-    const employees = file.employees.filter(
-      (employee) => employee.id !== validatedId,
-    );
+export const listEmployees = (): Promise<Employee[]> =>
+  employeesRepository.list();
 
-    if (employees.length === file.employees.length) {
-      throw new Error('Der Mitarbeiter wurde nicht gefunden.');
-    }
+export const createEmployee = (input: unknown): Promise<Employee> =>
+  employeesRepository.create(input);
 
-    await employeeStore.write({
-      ...file,
-      updatedAt: new Date().toISOString(),
-      employees,
-    });
-  });
-}
+export const updateEmployee = (
+  id: unknown,
+  input: unknown,
+): Promise<Employee> => employeesRepository.update(id, input);
+
+export const reorderEmployees = (orderedIds: unknown): Promise<Employee[]> =>
+  employeesRepository.reorder(orderedIds);
+
+export const deleteEmployee = (id: unknown): Promise<void> =>
+  employeesRepository.remove(id);

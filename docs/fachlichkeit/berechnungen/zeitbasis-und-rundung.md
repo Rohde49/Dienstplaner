@@ -8,12 +8,14 @@ werden durch den aktuellen Quellcode bestimmt.
 
 Alle Arbeitszeitdauern werden intern in ganzen Minuten geführt.
 
-- Gespeicherte Zeitdauern sind nichtnegative ganze Minutenwerte.
+- Gespeicherte Arbeitszeitdauern sind nichtnegative ganze Minutenwerte.
 - Sekunden und Bruchteile von Minuten werden nicht gespeichert.
 - Berechnungen mit Prozentsätzen dürfen vorübergehend Bruchteile einer Minute
   ergeben. Das Ergebnis wird anschließend nach der für die Berechnung
   festgelegten Regel gerundet.
-- Negative Minutenwerte sind nur für berechnete Differenzen zulässig.
+- Negative Minutenwerte sind für berechnete Differenzen und für ausdrücklich
+  vorzeichenbehaftete Fachwerte wie den manuellen Zeitübertrag zulässig. Reine
+  Arbeitszeitdauern bleiben nichtnegativ.
 - Angaben in Stunden und Minuten werden vor einer Berechnung in Minuten
   umgerechnet.
 

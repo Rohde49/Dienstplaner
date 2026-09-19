@@ -43,11 +43,17 @@ Integrationstests prüfen mehrere Verantwortlichkeiten gemeinsam. Besonders
 wichtig sind:
 
 - Erzeugen, Speichern, Laden und Löschen von Monatsplänen,
+- Erzeugen, Ändern, Sortieren und Löschen von Mitarbeitenden und
+  Eintragsarten,
 - erneutes Validieren veränderter Planungsdaten an der Speichergrenze,
 - Erhaltung von UUIDs, Snapshots und Reihenfolgen,
 - serielles Verarbeiten konkurrierender Änderungen,
 - Sicherungsdatei, Wiederherstellung und erneutes Speichern sowie
 - verständliches Scheitern bei ungültigen oder beschädigten Dateien.
+
+Die IPC-Registrierungen der fachlichen Datenspeicher werden ergänzend als
+schmaler Vertragstest geprüft: Jeder öffentliche Kanal muss die Anfrage mit den
+unveränderten Argumenten an die zuständige Speicherfunktion weiterleiten.
 
 Dateibasierte Tests verwenden echte Dateien in einem eigens erzeugten
 temporären Verzeichnis. Sie ersetzen die Dateizugriffe nicht vollständig durch

@@ -31,6 +31,7 @@ type MonthlyPlansRepositoryOptions = {
   dataDirectoryPath?: string;
   loadEmployees?: () => Promise<Employee[]>;
   loadEntryTypes?: () => Promise<EntryType[]>;
+  removeFile?: (filePath: string) => Promise<void>;
 };
 
 function isFileNotFound(error: unknown): boolean {
@@ -65,16 +66,19 @@ export class MonthlyPlansRepository {
   private readonly configuredDataDirectoryPath?: string;
   private readonly loadEmployees: () => Promise<Employee[]>;
   private readonly loadEntryTypes: () => Promise<EntryType[]>;
+  private readonly removeFile: (filePath: string) => Promise<void>;
   private accessQueue: Promise<void> = Promise.resolve();
 
   constructor({
     dataDirectoryPath,
     loadEmployees = listEmployees,
     loadEntryTypes = listEntryTypes,
+    removeFile = async (filePath) => rm(filePath, { force: true }),
   }: MonthlyPlansRepositoryOptions = {}) {
     this.configuredDataDirectoryPath = dataDirectoryPath;
     this.loadEmployees = loadEmployees;
     this.loadEntryTypes = loadEntryTypes;
+    this.removeFile = removeFile;
   }
 
   private get dataDirectoryPath(): string {
@@ -349,10 +353,13 @@ export class MonthlyPlansRepository {
         throw new Error('Der Monatsplan wurde nicht gefunden.');
       }
 
-      await Promise.all([
-        rm(filePath, { force: true }),
-        rm(backupPath, { force: true }),
-      ]);
+      if (backupExists) {
+        await this.removeFile(backupPath);
+      }
+
+      if (primaryExists) {
+        await this.removeFile(filePath);
+      }
     });
   }
 }
