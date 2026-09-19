@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import {
   employeeIdSchema,
   employeeInputSchema,
+  employeeOrderSchema,
   employeesFileSchema,
   type Employee,
   type EmployeesFile,
@@ -103,6 +104,45 @@ export function updateEmployee(id: unknown, input: unknown): Promise<Employee> {
     });
 
     return updatedEmployee;
+  });
+}
+
+/** Speichert die vollständige Reihenfolge aller vorhandenen Mitarbeiter. */
+export function reorderEmployees(orderedIds: unknown): Promise<Employee[]> {
+  return runAccess(async () => {
+    const validatedIds = employeeOrderSchema.parse(orderedIds);
+    const file = await employeeStore.read();
+
+    if (validatedIds.length !== file.employees.length) {
+      throw new Error(
+        'Die Reihenfolge muss alle Mitarbeiter genau einmal enthalten.',
+      );
+    }
+
+    const employeesById = new Map(
+      file.employees.map((employee) => [employee.id, employee]),
+    );
+    const employees = validatedIds.map((id) => {
+      const employee = employeesById.get(id);
+
+      if (employee === undefined) {
+        throw new Error(
+          'Die Reihenfolge enthält einen unbekannten Mitarbeiter.',
+        );
+      }
+
+      return employee;
+    });
+
+    const timestamp = new Date().toISOString();
+
+    await employeeStore.write({
+      ...file,
+      updatedAt: timestamp,
+      employees,
+    });
+
+    return employees;
   });
 }
 

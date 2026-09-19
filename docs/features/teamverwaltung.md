@@ -11,7 +11,8 @@ Die Teamverwaltung ermöglicht:
 - alle gespeicherten Mitarbeiter anzuzeigen,
 - neue Mitarbeiter anzulegen,
 - vorhandene Mitarbeiter zu bearbeiten,
-- Mitarbeiter zu aktivieren oder zu deaktivieren und
+- Mitarbeiter zu aktivieren oder zu deaktivieren,
+- die sichtbare Reihenfolge der Mitarbeiter festzulegen und
 - Mitarbeiter nach ausdrücklicher Bestätigung dauerhaft zu löschen.
 
 Sie bearbeitet keine Monatspläne. Änderungen an den Stammdaten dürfen bereits
@@ -81,6 +82,14 @@ Solange keine Mitarbeiter vorhanden sind, wird ein verständlicher Leerzustand
 angezeigt. Können die Daten nicht geladen werden, wird der Fehler angezeigt und
 ein erneuter Ladeversuch angeboten.
 
+Die Reihenfolge lässt sich über den Ziehgriff am linken Rand einer Tabellenzeile
+verändern. Während des Ziehens kennzeichnet eine Einfügelinie die Zielposition.
+Als Tastaturalternative verschieben die Pfeiltasten den Mitarbeiter, wenn sein
+Ziehgriff fokussiert ist. Die neue Reihenfolge wird dauerhaft gespeichert und
+gilt für Vorschauen sowie für anschließend neu angelegte Monatspläne. Inaktive
+Mitarbeiter behalten ihren Platz in der Gesamtreihenfolge; neue Mitarbeiter
+werden am Ende ergänzt.
+
 ## Mitarbeiter anlegen
 
 Beim Anlegen werden alle erforderlichen Stammdaten erfasst. Ein neuer
@@ -96,9 +105,10 @@ Vorgang nicht gespeichert werden, wird kein neuer Mitarbeiter in die Übersicht
 
 ## Mitarbeiter bearbeiten
 
-Vorname, Nachname, Rolle, Wochenarbeitszeit, Farbe und Aktivierungsstatus können
-nachträglich geändert werden. Die UUID und der Erstellungszeitpunkt bleiben
-erhalten; der Änderungszeitpunkt wird durch die Anwendung aktualisiert.
+Vorname, Nachname, Rolle, Wochenarbeitszeit und Farbe können nachträglich
+geändert werden. Die UUID, der Erstellungszeitpunkt und der aktuelle Status
+bleiben erhalten; der Änderungszeitpunkt wird durch die Anwendung aktualisiert.
+Der Status wird direkt in der Übersicht geändert.
 
 Schlägt das Speichern fehl, wird der Fehler im geöffneten Dialog angezeigt. Die
 zuletzt dauerhaft gespeicherten Stammdaten bleiben maßgeblich.
@@ -107,6 +117,11 @@ zuletzt dauerhaft gespeicherten Stammdaten bleiben maßgeblich.
 
 Inaktive Mitarbeiter bleiben vollständig in der Teamverwaltung erhalten. Sie
 können weiterhin bearbeitet, wieder aktiviert oder gelöscht werden.
+
+Der sichtbare Status in der Übersicht ist gleichzeitig die Schaltfläche zum
+Aktivieren oder Deaktivieren. Während der Änderung ist nur die betroffene Zeile
+gesperrt. Schlägt das Speichern fehl, bleibt der vorherige Status erhalten und
+eine Fehlermeldung wird angezeigt.
 
 Der Status wirkt sich ausschließlich auf die Anlage neuer Monatspläne aus:
 

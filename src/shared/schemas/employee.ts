@@ -19,6 +19,25 @@ export type EmployeeColorKey = z.infer<typeof employeeColorKeySchema>;
 
 export const employeeIdSchema = z.string().uuid();
 
+/** Prüft eine duplikatfreie Reihenfolge gültiger Mitarbeiter-IDs. */
+export const employeeOrderSchema = z
+  .array(employeeIdSchema)
+  .superRefine((ids, context) => {
+    const knownIds = new Set<string>();
+
+    ids.forEach((id, index) => {
+      if (knownIds.has(id)) {
+        context.addIssue({
+          code: 'custom',
+          path: [index],
+          message: 'Jede Mitarbeiter-ID darf nur einmal enthalten sein.',
+        });
+      }
+
+      knownIds.add(id);
+    });
+  });
+
 /** Enthält alle fachlich zulässigen Mitarbeiterrollen. */
 export const EMPLOYEE_ROLES = [
   'Erzieher',
@@ -96,4 +115,5 @@ export const employeesFileSchema = z
 export type EmployeeRole = z.infer<typeof employeeRoleSchema>;
 export type Employee = z.infer<typeof employeeSchema>;
 export type EmployeeInput = z.infer<typeof employeeInputSchema>;
+export type EmployeeOrder = z.infer<typeof employeeOrderSchema>;
 export type EmployeesFile = z.infer<typeof employeesFileSchema>;

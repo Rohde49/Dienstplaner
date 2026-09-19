@@ -29,6 +29,8 @@ const dienstplanerApi: DienstplanerApi = {
     create: (input) => ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.create, input),
     update: (id, input) =>
       ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.update, id, input),
+    reorder: (orderedIds) =>
+      ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.reorder, orderedIds),
     remove: (id) => ipcRenderer.invoke(EMPLOYEE_IPC_CHANNELS.remove, id),
   },
   entryTypes: {

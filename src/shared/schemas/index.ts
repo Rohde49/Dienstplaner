@@ -3,6 +3,7 @@ export {
   EMPLOYEE_ROLES,
   employeeColorKeySchema,
   employeeInputSchema,
+  employeeOrderSchema,
   employeeSchema,
   employeeIdSchema,
   employeeRoleSchema,
@@ -13,6 +14,7 @@ export type {
   Employee,
   EmployeeColorKey,
   EmployeeInput,
+  EmployeeOrder,
   EmployeeRole,
   EmployeesFile,
 } from './employee';

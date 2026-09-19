@@ -1,6 +1,7 @@
 import type {
   Employee,
   EmployeeInput,
+  EmployeeOrder,
   EntryType,
   EntryTypeInput,
   EntryTypeOrder,
@@ -17,6 +18,7 @@ export type EmployeesApi = {
   list: () => Promise<Employee[]>;
   create: (input: EmployeeInput) => Promise<Employee>;
   update: (id: string, input: EmployeeInput) => Promise<Employee>;
+  reorder: (orderedIds: EmployeeOrder) => Promise<Employee[]>;
   remove: (id: string) => Promise<void>;
 };
 

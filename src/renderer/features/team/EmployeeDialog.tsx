@@ -38,7 +38,6 @@ type EmployeeFormState = {
   role: EmployeeRole | '';
   weeklyWorkingHours: string;
   colorKey: EmployeeColorKey;
-  active: boolean;
 };
 
 type EmployeeFormErrors = Partial<Record<keyof EmployeeFormState, string>>;
@@ -55,7 +54,6 @@ function createInitialFormState(
       role: employee.role,
       weeklyWorkingHours: formatDuration(employee.weeklyWorkingMinutes),
       colorKey: employee.colorKey,
-      active: employee.active,
     };
   }
 
@@ -65,7 +63,6 @@ function createInitialFormState(
     role: '',
     weeklyWorkingHours: '',
     colorKey: getFirstAvailableEmployeeColorKey(usedColorKeys),
-    active: true,
   };
 }
 
@@ -75,7 +72,6 @@ const schemaPathToFormField: Record<string, keyof EmployeeFormState> = {
   role: 'role',
   weeklyWorkingMinutes: 'weeklyWorkingHours',
   colorKey: 'colorKey',
-  active: 'active',
 };
 
 const formFieldIds: Partial<Record<keyof EmployeeFormState, string>> = {
@@ -176,7 +172,7 @@ export function EmployeeDialog({
       role: formState.role,
       weeklyWorkingMinutes: weeklyWorkingMinutes ?? Number.NaN,
       colorKey: formState.colorKey,
-      active: formState.active,
+      active: employee?.active ?? true,
     });
 
     if (!validationResult.success) {
@@ -238,7 +234,7 @@ export function EmployeeDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
       <DialogContent
-        title={employee ? 'Mitarbeiter bearbeiten' : 'Mitarbeiter hinzufügen'}
+        title={employee ? 'Mitarbeiter bearbeiten' : 'Mitarbeiter anlegen'}
         description={
           employee
             ? 'Passe die Daten des Mitarbeiters für die Dienstplanung an.'
@@ -412,26 +408,6 @@ export function EmployeeDialog({
                 })}
               </div>
             </fieldset>
-
-            <label className="border-app-border flex items-start gap-3 rounded-md border p-3">
-              <input
-                className="accent-app-primary mt-0.5 size-4"
-                type="checkbox"
-                checked={formState.active}
-                onChange={(event) =>
-                  updateField('active', event.target.checked)
-                }
-              />
-
-              <span>
-                <span className="text-app-text block text-sm font-medium">
-                  Aktiv
-                </span>
-                <span className="text-app-muted mt-0.5 block text-xs">
-                  Der Mitarbeiter wird bei neuen Dienstplänen berücksichtigt.
-                </span>
-              </span>
-            </label>
           </div>
 
           <div className="border-app-border bg-app-surface-muted flex shrink-0 justify-end gap-2 border-t px-6 py-4">

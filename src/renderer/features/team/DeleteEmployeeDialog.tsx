@@ -16,6 +16,7 @@ import {
 
 type DeleteEmployeeDialogProps = {
   employee: Employee;
+  disabled?: boolean;
   onDeleted: (employeeId: string) => void;
 };
 
@@ -28,6 +29,7 @@ function getErrorMessage(error: unknown): string {
 /** Fragt vor dem endgültigen Löschen eines Mitarbeiters nach Bestätigung. */
 export function DeleteEmployeeDialog({
   employee,
+  disabled = false,
   onDeleted,
 }: DeleteEmployeeDialogProps) {
   const [open, setOpen] = useState(false);
@@ -71,7 +73,8 @@ export function DeleteEmployeeDialog({
       <AlertDialogTrigger asChild>
         <IconButton
           label={`${employeeName} löschen`}
-          className="text-app-danger hover:bg-app-danger-subtle hover:text-app-danger-hover"
+          disabled={disabled}
+          className="border-app-danger-border bg-app-danger-subtle !text-app-danger hover:!bg-app-danger-border hover:!text-app-danger-hover !size-8 border"
         >
           <Trash2 aria-hidden="true" size={17} />
         </IconButton>

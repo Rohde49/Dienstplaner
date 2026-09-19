@@ -5,6 +5,7 @@ import {
   createEmployee,
   deleteEmployee,
   listEmployees,
+  reorderEmployees,
   updateEmployee,
 } from '../storage/employeesRepository';
 
@@ -19,6 +20,10 @@ export function registerEmployeeIpcHandlers(): void {
   ipcMain.handle(
     EMPLOYEE_IPC_CHANNELS.update,
     (_event, id: unknown, input: unknown) => updateEmployee(id, input),
+  );
+
+  ipcMain.handle(EMPLOYEE_IPC_CHANNELS.reorder, (_event, orderedIds: unknown) =>
+    reorderEmployees(orderedIds),
   );
 
   ipcMain.handle(EMPLOYEE_IPC_CHANNELS.remove, (_event, id: unknown) =>
