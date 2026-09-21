@@ -4,7 +4,7 @@
 
 - **Status:** Offene Befundliste
 - **Ursprünglicher Abgleich:** 19. September 2026, Commit `51ff908`
-- **Letzte Fortschreibung:** 19. September 2026, 17:10 Uhr
+- **Letzte Fortschreibung:** 21. September 2026, 12:54 Uhr
 - **Zeitzone:** Europe/Berlin
 - **Offene Befunde:** 1 von ursprünglich 13
 
@@ -88,6 +88,16 @@ gefunden.
   - **Tatsächlicher Stand:** `package.json:4-12` definiert Version `1.0.0` sowie `package`- und `make`-Skripte; `forge.config.ts:7-13` konfiguriert ASAR und Squirrel. Das lokal vorhandene, ignorierte Artefakt `out/make/squirrel.windows/x64/Dienstplaner-1.0.0 Setup.exe` stammt vom 18. August 2026 und liegt damit vor den aktuellen Funktionsänderungen und dem geprüften Commit vom 18. September 2026. Ein automatisierter Paket-/Installer-Smoke-Test und eine dauerhafte Release- oder Versionsrichtlinie sind nicht vorhanden.
   - **Abweichung:** Die technische Grundlage ist vorhanden, aber der Installer belegt nicht den aktuellen Stand. Außerdem bleibt unklar, wann die Produktversion erhöht wird und welche Prüfungen einen auslieferbaren Build kennzeichnen.
   - **Empfehlung:** **Quellcode prüfen.** In einer eigenen Auslieferungssitzung `package` und `make` für den aktuellen Commit ausführen, Paketinhalt sowie Installieren, Starten, Aktualisieren, Deinstallieren und Datenerhalt prüfen und das Ergebnis mit Commit und Version dokumentieren.
+  - **Zwischenstand am 21. September 2026:** Paket und Squirrel-Installer wurden
+    aus Commit `6bcefeb3d3133bb2fdb567a4f2c8922e1838a548` für Windows x64
+    erfolgreich erzeugt und technisch kontrolliert. Jeremy bestätigte
+    Installation, Start, Kernablauf, Neustart, erneutes Ausführen des
+    Installers, externe Sicherung und Wiederherstellung, Deinstallation mit
+    Datenerhalt sowie Neuinstallation als erfolgreich. Auch die Bedienung des
+    Kernablaufs durch den Pilotnutzer verlief ohne gemeldete Auffälligkeit. Der
+    Jeremy erteilte am 21. September 2026 die endgültige Freigabe; der geprüfte
+    Build-Commit ist mit `v1.0.0` gekennzeichnet. Der Befund bleibt nur noch bis
+    zur geprüften USB-Übergabe formal offen.
 
 - [x] **H-04 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die bestätigte proprietäre Ausrichtung ist technisch und rechtlich noch nicht umgesetzt.**
   - **Betroffener Bereich:** Lizenzierung, Fremdlizenzen, Anwendungshinweise und Installer.
