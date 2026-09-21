@@ -2,16 +2,17 @@
 
 ## Status
 
-- **Status:** Offene Befundliste
+- **Status:** Abgeschlossen
 - **Ursprünglicher Abgleich:** 19. September 2026, Commit `51ff908`
-- **Letzte Fortschreibung:** 21. September 2026, 12:54 Uhr
+- **Letzte Fortschreibung:** 21. September 2026, 13:02 Uhr
 - **Zeitzone:** Europe/Berlin
-- **Offene Befunde:** 1 von ursprünglich 13
+- **Offene Befunde:** 0 von ursprünglich 13
 
 Die Fortschreibungen vom 19. September 2026 ordnen Zukunftsvorhaben und
 abgeschlossene Planungsunterlagen eindeutig ein und dokumentieren die im Zuge
 der Auslieferung umgesetzten Daten-, Fehler-, Test- und Lizenzentscheidungen.
-Offen bleibt ausschließlich der praktische Nachweis des finalen Installers.
+Alle ursprünglich erfassten Befunde sind umgesetzt oder durch ausdrückliche
+und dokumentierte Produktentscheidungen sachlich geschlossen.
 
 ## Zusammenfassung
 
@@ -23,11 +24,10 @@ Referenzmaterial behandelt und nicht als Anforderung verwendet.
 
 Die implementierten Fachregeln für Kalender, Zeitwerte, Planungseinträge,
 Monatskennzahlen, Soll/Ist, Snapshots und die reguläre JSON-Datenhaltung stimmen
-weitgehend mit den zuständigen Fach- und Feature-Dokumenten überein. Der einzige
-noch offene Befund betrifft die tatsächliche Erzeugung und praktische Abnahme
-des finalen Installers. Alle übrigen ursprünglich erfassten Abweichungen wurden
-umgesetzt oder durch ausdrückliche und dokumentierte Produktentscheidungen
-sachlich geschlossen.
+weitgehend mit den zuständigen Fach- und Feature-Dokumenten überein. Der finale
+Installer wurde erzeugt, technisch kontrolliert und praktisch abgenommen.
+Installation, Produktabläufe, Datenerhalt, Pilotbedienung und USB-Übergabe sind
+nachgewiesen; damit besteht kein offener Befund mehr.
 
 Die vier vorhandenen Projektprüfungen wurden für den ursprünglichen Abgleich
 ausgeführt:
@@ -47,7 +47,7 @@ gefunden.
 
 | Priorität | Befunde       | Davon offen | Kernauswirkung                                                                                       |
 | --------- | ------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| Hoch      | H-01 bis H-04 | 1           | Die Auslieferung des finalen, installierten Release-Kandidaten ist noch praktisch nachzuweisen       |
+| Hoch      | H-01 bis H-04 | 0           | Alle hohen Befunde sind umgesetzt oder durch bestätigte Release-Entscheidungen geschlossen           |
 | Mittel    | M-01 bis M-07 | 0           | Alle Befunde wurden umgesetzt oder durch eine ausdrückliche Produktentscheidung sachlich geschlossen |
 | Niedrig   | N-01 bis N-02 | 0           | Alle Befunde wurden dokumentarisch geklärt                                                           |
 
@@ -81,7 +81,7 @@ gefunden.
     außerdem externe Sicherung, Wiederherstellung, Gerätewechsel und den Erhalt
     beschädigter oder inkompatibler Dateien.
 
-- [ ] **H-03 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die Auslieferung des aktuellen Stands ist nicht nachgewiesen.**
+- [x] **H-03 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die Auslieferung des aktuellen Stands ist nicht nachgewiesen.**
   - **Betroffener Bereich:** Paketierung, Installer, Versionierung und Auslieferungsabnahme.
   - **Priorität / mögliche Auswirkung:** Hoch für eine Weitergabe. Eine grüne Quellcodeprüfung belegt weder Paketinhalt noch Installation, Start, Deinstallation oder Datenerhalt der tatsächlich ausgelieferten Anwendung.
   - **Dokumentierte Aussage:** `docs/projekt/zielbild-und-rahmenbedingungen.md:62-71` verlangt die Auslieferung über einen Installer. `docs/planung/roadmap.md:22-29` führt Paketierung, Installer und Prüfung auf einem geeigneten System als aktuellen Schwerpunkt.
@@ -94,10 +94,15 @@ gefunden.
     Installation, Start, Kernablauf, Neustart, erneutes Ausführen des
     Installers, externe Sicherung und Wiederherstellung, Deinstallation mit
     Datenerhalt sowie Neuinstallation als erfolgreich. Auch die Bedienung des
-    Kernablaufs durch den Pilotnutzer verlief ohne gemeldete Auffälligkeit. Der
+    Kernablaufs durch den Pilotnutzer verlief ohne gemeldete Auffälligkeit.
     Jeremy erteilte am 21. September 2026 die endgültige Freigabe; der geprüfte
-    Build-Commit ist mit `v1.0.0` gekennzeichnet. Der Befund bleibt nur noch bis
-    zur geprüften USB-Übergabe formal offen.
+    Build-Commit ist mit `v1.0.0` gekennzeichnet.
+  - **Erledigt am 21. September 2026:** Der freigegebene Pilotordner wurde auf
+    den privaten USB-Stick kopiert. Jeremy bestätigte, dass dort nur die
+    freigegebene Version sichtbar ist, keine Benutzerdaten enthalten sind und
+    die SHA-256-Prüfsumme der `Setup.exe` vor und nach dem Kopieren
+    übereinstimmt. Damit sind Build, Abnahme, Freigabe, Archivierung und
+    Übergabe nachgewiesen.
 
 - [x] **H-04 – Dokumentation beschreibt noch nicht umgesetztes Verhalten: Die bestätigte proprietäre Ausrichtung ist technisch und rechtlich noch nicht umgesetzt.**
   - **Betroffener Bereich:** Lizenzierung, Fremdlizenzen, Anwendungshinweise und Installer.

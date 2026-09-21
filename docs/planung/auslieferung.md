@@ -2,7 +2,7 @@
 
 ## Status
 
-- **Status:** Version `1.0.0` freigegeben; USB-Übergabe ausstehend
+- **Status:** Version `1.0.0` ausgeliefert
 - **Beginn der Abstimmung:** 19. September 2026, 14:47 Uhr
 - **Zeitzone:** Europe/Berlin
 - **Ausgangsstand:** Commit `5e8a9ce`
@@ -56,9 +56,10 @@ werden nach ihrer Bestätigung in den jeweils zuständigen Dokumenten gepflegt.
   endgültige Freigabe. Der geprüfte Build-Commit
   `6bcefeb3d3133bb2fdb567a4f2c8922e1838a548` ist mit dem annotierten Git-Tag
   `v1.0.0` gekennzeichnet.
-- Nur die USB-Übergabe einschließlich des erneuten Prüfsummenvergleichs steht
-  noch aus. Bis zu deren Abschluss bleibt H-03 formal offen und die Version
-  wird noch nicht als vollständig übergeben bezeichnet.
+- Jeremy bestätigte am 21. September 2026 außerdem die USB-Übergabe. Auf dem
+  Übergabemedium liegt nur der freigegebene Pilotordner; die SHA-256-Prüfsumme
+  der `Setup.exe` stimmte vor und nach dem Kopieren überein. Damit sind die
+  Auslieferungskriterien erfüllt und H-03 ist geschlossen.
 
 ## Ziel
 
