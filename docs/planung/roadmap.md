@@ -18,24 +18,20 @@ abgeschlossen wurde.
 - [Kompaktansicht](../features/kompaktansicht.md)
 - [Auswertung](../features/auswertung.md)
 - [PDF-Export](../features/pdf-export.md)
+- [Auslieferung der Pilotversion 1.0.0](abgeschlossen/auslieferung-1.0.0.md)
+- [Gesamtprüfung und Dokumentationsabgleich](abgeschlossen/gesamtpruefung-dokumentationsabgleich-1.0.0.md)
 
 ## Aktueller Schwerpunkt
 
-### Auslieferung
+Derzeit ist kein weiteres Umsetzungspaket als aktueller Schwerpunkt bestätigt.
+Die Pilotversion `1.0.0` wurde vollständig geprüft, freigegeben, archiviert und
+übergeben. Der zugehörige Quellstand ist mit `v1.0.0` gekennzeichnet; der
+Abschlussabgleich enthält keinen offenen Befund.
 
-Die Anwendung wird als Windows-Anwendung paketiert und über einen Installer
-bereitgestellt. Die Installation und der lokale Betrieb werden auf einem dafür
-geeigneten System geprüft.
-
-## Anschließende Arbeitspakete
-
-### Abschluss und Gesamtprüfung
-
-Zum Abschluss werden die wesentlichen Benutzerabläufe, Berechnungen,
-Speicherabläufe und Fehlerfälle gemeinsam geprüft. Verbleibende Abweichungen
-zwischen Dokumentation, Code und Oberfläche werden ausdrücklich festgehalten.
-Dabei werden auch besonders lange Inhalte der Kompaktansicht und eine
-tatsächlich ausgelöste Sicherungswiederherstellung nochmals betrachtet.
+Ein neuer Schwerpunkt wird erst nach einer eigenen Priorisierung festgelegt.
+Beobachtungen aus dem Pilotbetrieb werden bis dahin als konkrete Fehler- oder
+Änderungsanfrage bewertet und erweitern den abgeschlossenen Umfang von `1.0.0`
+nicht rückwirkend.
 
 ## Spätere Erweiterungsmöglichkeiten
 

@@ -8,9 +8,11 @@
 - **Ausgangsstand:** Commit `5e8a9ce`
 
 Dieses Dokument hält die Entscheidungen, den daraus abgeleiteten
-Umsetzungsplan und später die Abnahme der Auslieferung fest. Es beschreibt den
-laufenden Arbeitsstand. Dauerhafte Produkt-, Architektur- oder Qualitätsregeln
-werden nach ihrer Bestätigung in den jeweils zuständigen Dokumenten gepflegt.
+Umsetzungsplan und die Abnahme der Auslieferung fest. Es ist der historische
+Entscheidungs- und Abschlussnachweis für Version `1.0.0`; frühere
+Gegenwartsformulierungen in den Entscheidungs- und Arbeitspaketen beschreiben
+den damaligen Planungsstand. Dauerhafte Produkt-, Architektur- oder
+Qualitätsregeln stehen in den jeweils zuständigen Dokumenten.
 
 ### Umsetzungsstand vom 19. September 2026, 18:37 Uhr
 
@@ -38,7 +40,7 @@ werden nach ihrer Bestätigung in den jeweils zuständigen Dokumenten gepflegt.
 - Das private Release-Archiv liegt unter
   `E:\Programmieren\Projects\Dienstplaner-Archiv`. Jeremy führt Installation,
   Systemänderungen und die praktische Abnahme anhand der
-  [Installations- und Pilotabnahme](../qualitaet/installations-und-pilotabnahme.md)
+  [Installations- und Pilotabnahme](./installations-und-pilotabnahme-1.0.0.md)
   selbst durch.
 - Jeremy meldete am 21. September 2026 alle vorgesehenen Installations-,
   Produkt- und Datenerhaltungsprüfungen als erfolgreich und ohne

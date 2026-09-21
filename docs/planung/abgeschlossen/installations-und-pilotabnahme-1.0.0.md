@@ -1,5 +1,16 @@
 # Installations- und Pilotabnahme
 
+## Status
+
+- **Status:** Abgeschlossen
+- **Abnahme:** 21. September 2026
+- **Version:** `1.0.0`
+- **Ergebnis:** Alle vorgesehenen Installations-, Produkt-, Datenerhaltungs-
+  und Pilotprüfungen waren erfolgreich.
+
+Dieses Dokument bewahrt die tatsächlich verwendete Prüfanleitung als
+historischen Nachweis. Die folgenden Schritte sind keine noch offene Aufgabe.
+
 ## Zweck und Verantwortlichkeit
 
 Diese Anleitung führt Jeremy Louis Rohde Schritt für Schritt durch die manuelle
@@ -23,9 +34,9 @@ Prüfschritte werden ausschließlich erfundene Testdaten verwendet.
 - **Privates Release-Archiv:**
   `E:\Programmieren\Projects\Dienstplaner-Archiv`
 
-Der Kandidat ist technisch gebaut und sein Paketinhalt wurde kontrolliert. Die
-folgenden Schritte sind der noch fehlende praktische Nachweis auf dem von
-Jeremy ausgewählten Windows-11-Testsystem.
+Der Kandidat wurde technisch gebaut und sein Paketinhalt kontrolliert. Die
+folgende Prüfliste wurde anschließend auf dem von Jeremy ausgewählten
+Windows-11-Testsystem vollständig und erfolgreich durchgeführt.
 
 ## 1. Testsystem vorbereiten
 
@@ -220,6 +231,6 @@ Die Prüfung wird abgebrochen und die Version nicht freigegeben, wenn:
 - ein Kernablauf nicht verwendbar ist oder
 - eine sonstige Abweichung als Release-Blocker bewertet wird.
 
-Nicht blockierende Auffälligkeiten werden im Release-Nachweis dokumentiert und
-vor der Übergabe ausdrücklich bewertet. Erst danach erfolgt die endgültige
+Nicht blockierende Auffälligkeiten wurden im Release-Nachweis dokumentiert und
+vor der Übergabe ausdrücklich bewertet. Danach erfolgten die endgültige
 Freigabe, Archivierung und Kennzeichnung mit `v1.0.0`.

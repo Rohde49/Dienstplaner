@@ -64,8 +64,8 @@ gefunden.
     keine neue umfangreiche UI- oder Electron-End-to-End-Infrastruktur
     eingeführt. Die Teststrategie grenzt die automatisierte Node-Suite nun klar
     von der verpflichtenden manuellen Abnahme des gebauten und installierten
-    Electron-Kernablaufs ab. Deren tatsächlicher Nachweis bleibt Teil der noch
-    offenen Auslieferungsprüfung H-03.
+    Electron-Kernablaufs ab. Deren tatsächlicher Nachweis wurde anschließend
+    im Rahmen der abgeschlossenen Auslieferungsprüfung H-03 erbracht.
 
 - [x] **H-02 – Fehlende oder unklare Dokumentation: Für Schemawechsel und vorhandene Benutzerdaten fehlt eine Migrations- beziehungsweise Kompatibilitätsstrategie.**
   - **Betroffener Bereich:** Datenmodell, Datenhaltung, Versionierung und spätere Programmupdates.
@@ -118,7 +118,7 @@ gefunden.
     die zusätzlichen Packager-Ressourcen bilden diese Entscheidung ab. Eine
     mögliche spätere proprietäre Version bleibt ein eigenes Zukunftsvorhaben
     und kann die bereits gewährten Rechte an `1.0.0` nicht zurücknehmen. Ob die
-    Unterlagen im finalen Paket tatsächlich enthalten sind, wird zusammen mit
+    Unterlagen im finalen Paket tatsächlich enthalten sind, wurde zusammen mit
     H-03 am gebauten Release-Kandidaten geprüft.
 
 ## Mittlere Priorität

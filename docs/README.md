@@ -66,14 +66,11 @@ den jeweils zuständigen Dokumenten festgehalten.
 - [Datenhaltung](./architektur/datenhaltung.md)
 - [Gestaltungsgrundsätze](./oberflaeche/gestaltungsgrundsaetze.md)
 - [Teststrategie](./qualitaet/teststrategie.md)
-- [Installations- und Pilotabnahme](./qualitaet/installations-und-pilotabnahme.md)
 
 ### Planung
 
 - Aktueller Stand:
   - [Roadmap](./planung/roadmap.md)
-  - [Auslieferung](./planung/auslieferung.md)
-  - [Gesamtprüfung: Dokumentationsabgleich](./planung/gesamtpruefung-dokumentationsabgleich.md)
 - Zukunftsvorhaben:
   - [Hinweise zu Zukunftsvorhaben](./planung/zukunft/README.md)
   - [Umsetzungsplan proprietäre Lizenzierung](./planung/zukunft/umsetzungsplan-proprietaere-lizenzierung.md)
@@ -85,6 +82,9 @@ den jeweils zuständigen Dokumenten festgehalten.
   - [Abstimmung PDF-Export](./planung/abgeschlossen/abstimmung-pdf-export.md)
   - [Umsetzungsplan PDF-Export](./planung/abgeschlossen/umsetzungsplan-pdf-export.md)
   - [Umsetzungsplan Planungsseite](./planung/abgeschlossen/umsetzungsplan-planungsseite.md)
+  - [Auslieferung der Pilotversion 1.0.0](./planung/abgeschlossen/auslieferung-1.0.0.md)
+  - [Installations- und Pilotabnahme 1.0.0](./planung/abgeschlossen/installations-und-pilotabnahme-1.0.0.md)
+  - [Gesamtprüfung: Dokumentationsabgleich 1.0.0](./planung/abgeschlossen/gesamtpruefung-dokumentationsabgleich-1.0.0.md)
 
 ## Pflegegrundsätze
 

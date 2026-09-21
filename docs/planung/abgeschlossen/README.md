@@ -15,3 +15,8 @@ Dokuments sind im Kontext seines dokumentierten Abschlusszeitpunkts zu lesen.
 Jedes Dokument nennt dafür im Statusabschnitt mindestens den Status sowie,
 soweit verlässlich belegbar, Datum, Uhrzeit, Zeitzone und Commit des
 Abschlusses.
+
+Hier liegen neben abgeschlossenen Feature-Plänen auch die zusammengehörigen
+Entscheidungs-, Prüf- und Abnahmenachweise der ausgelieferten Pilotversion
+`1.0.0`. Der aktuelle Projektstatus und ein möglicher nächster Schwerpunkt
+werden weiterhin ausschließlich in der [Roadmap](../roadmap.md) gepflegt.
